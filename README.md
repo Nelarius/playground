@@ -14,7 +14,7 @@ same way as the Linux compilation does.
 
 ## TODO
 * Iterators for entities containing certain components
---* Iterator should point to the desired entity; `Entity::component` should be used for component access
+  * Iterator should point to the desired entity; `Entity::component` should be used for component access
 * Destructor for EntityManager using these iterators
 * Quaternion math
 * Rendering matrices use Matrix4f
