@@ -8,31 +8,6 @@
 
 namespace ce {
 
-template<typename T> T Dot( const Vector2<T>& lhs, const Vector2<T>& rhs ) {
-    return lhs.x*rhs.x + lhs.y*rhs.y;
-}
-
-template<typename T> T Dot( const Vector3<T>& lhs, const Vector3<T>& rhs ) {
-    return lhs.x*rhs.x + lhs.y*rhs.y + lhs.z*rhs.z;
-}
-
-template<typename T> T L2Norm( const Vector3<T>& vec ) {
-    return sqrt( vec.x*vec.x + vec.y*vec.y + vec.z*vec.z );
-}
-
-template<typename T> T Length( const Vector3<T>& vec ) {
-    return sqrt( vec.x*vec.x + vec.y*vec.y + vec.z*vec.z );
-}
-
-template<typename T> T SquaredLength( const Vector3<T>& vec ){
-    return vec.x*vec.x + vec.y*vec.y + vec.z*vec.z;
-}
-
-template<typename T> Vector3<T> Cross( const Vector3<T>& lhs, const Vector3<T>& rhs ) {
-    //
-}
-
-// doesn't make sense to have this as a template, as the plane uses floats
 inline Matrix4f Mirror( const Planef& plane ) {
     const Vector3f& n = plane.normal();
     float k = plane.constant();
