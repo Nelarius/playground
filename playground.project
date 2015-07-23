@@ -122,6 +122,14 @@
       <File Name="src/test/EntityManagerTest.cpp" ExcludeProjConfig="Debug"/>
       <File Name="src/test/MemoryPoolTest.cpp" ExcludeProjConfig="Debug"/>
     </VirtualDirectory>
+    <VirtualDirectory Name="math">
+      <File Name="src/math/Include.h"/>
+      <File Name="src/math/Matrix.h"/>
+      <File Name="src/math/Operations.h"/>
+      <File Name="src/math/Plane.h"/>
+      <File Name="src/math/Quaternion.h"/>
+      <File Name="src/math/Vector.h"/>
+    </VirtualDirectory>
   </VirtualDirectory>
   <VirtualDirectory Name="project">
     <File Name="Makefile"/>
