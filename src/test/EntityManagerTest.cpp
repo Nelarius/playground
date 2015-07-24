@@ -69,4 +69,41 @@ SUITE(EntityManagerTest) {
         entity.destroy();
         CHECK( !entity.isValid() );
     }
+    
+    TEST_FIXTURE( EntityManagerFixture, AfterCreatingOneIteratorBehavesAsExpected ) {
+        auto entity = entities.create();
+        auto begin = entities.join().begin();
+        auto end = entities.join().end();
+        CHECK( begin != end );
+        ++begin;
+        CHECK( begin == end );
+    }
+    
+    TEST_FIXTURE( EntityManagerFixture, IteratorWithComponentToEntityWithoutComponentBehavesAsExpected ) {
+        auto entity = entities.create();
+        auto begin = entities.join<TestStruct>().begin();
+        auto end = entities.join<TestStruct>().end();
+        CHECK( begin == end );
+    }
+    
+    TEST_FIXTURE( EntityManagerFixture, IteratorWithComponentToEntityWithComponentBehavesAsExpected ) {
+        auto entity = entities.create();
+        entity.assign<TestStruct>();
+        auto begin = entities.join<TestStruct>().begin();
+        auto end = entities.join<TestStruct>().end();
+        CHECK( begin != end );
+    }
+    
+    TEST_FIXTURE( EntityManagerFixture, IteratorIsAtEndAfterEntityWithComponentsCreatedAndDestroyed ) {
+        auto entity = entities.create();
+        entity.assign<TestStruct>( 5 );
+        CHECK( false );
+    }
+    
+    TEST_FIXTURE( EntityManagerFixture, IteratorIsAtEndAfterEntityWithoutComponentsCreatedAndDestroyed ) {
+        auto entity = entities.create();
+        auto begin = entities.join().begin();
+        auto end = entities.join().end();
+        CHECK( false );
+    }
 }

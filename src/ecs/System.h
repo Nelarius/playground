@@ -13,7 +13,7 @@ class SystemManager;
  * @author Muszynski Johann M
  * @date 06/10/15
  * @file System.h
- * @brief Prefer to use 
+ * @brief 
  */
 class BaseSystem {
     public:

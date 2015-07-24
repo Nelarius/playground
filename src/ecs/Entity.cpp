@@ -78,6 +78,10 @@ Entity EntityManager::create() {
     return Entity( this, Id( index, version ) );
 }
 
+EntityManager::View EntityManager::join() {
+    return View{ this };
+}
+
 void EntityManager::accommodateEntity_( uint32_t index ) {
     for ( auto& pool : componentPools_ ) {
         pool->reserve( index + 1 );

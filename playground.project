@@ -125,9 +125,9 @@
     </VirtualDirectory>
   </VirtualDirectory>
   <VirtualDirectory Name="project">
-    <File Name="Makefile"/>
     <File Name="README.md"/>
     <File Name="src/config.lua"/>
+    <File Name="Makefile"/>
   </VirtualDirectory>
   <Settings Type="Executable">
     <GlobalSettings>
