@@ -5,9 +5,7 @@
 #include "manager/MeshManager.h"
 #include "system/Debug.h"
 #include "system/Render.h"
-#include "system/Physics2d.h"
-#include "system/Collision.h"
-#include "component/Components.h"
+#include "component/Include.h"
 #include "utils/Log.h"
 #include "utils/Assert.h"
 extern "C" {
@@ -31,9 +29,7 @@ GameState::GameState( Context& context, AppStateStack& stack )
 :   AppState( context, stack ) {
 	systems_.add<ce::system::Render>( context );
 	systems_.add<ce::system::Debug>();
-    systems_.add<ce::system::Physics2d>( context );
-    systems_.add<ce::system::Collision>();
-	systems_.configure();
+    systems_.configure();
 }
 
 void GameState::parseScene_() {    
@@ -150,8 +146,6 @@ void GameState::activate() {
 }
 
 bool GameState::update( float dt ) {
-    systems_.update<ce::system::Physics2d>( double( dt ) );
-    systems_.update<ce::system::Collision>( double( dt ) );
     return false;
 }
 

@@ -41,15 +41,11 @@
       <File Name="src/app/Window.h" ExcludeProjConfig="Test"/>
     </VirtualDirectory>
     <VirtualDirectory Name="component">
-      <File Name="src/component/Body.h" ExcludeProjConfig="Test"/>
       <File Name="src/component/Camera.h" ExcludeProjConfig="Test"/>
-      <File Name="src/component/CircleCollider.h" ExcludeProjConfig="Test"/>
-      <File Name="src/component/Components.h" ExcludeProjConfig="Test"/>
-      <File Name="src/component/DirectionalLight.h" ExcludeProjConfig="Test"/>
       <File Name="src/component/Renderable.h" ExcludeProjConfig="Test"/>
       <File Name="src/component/Script.h" ExcludeProjConfig="Test"/>
       <File Name="src/component/Transform.h" ExcludeProjConfig="Test"/>
-      <File Name="src/component/WallCollider.h" ExcludeProjConfig="Test"/>
+      <File Name="src/component/Include.h"/>
     </VirtualDirectory>
     <VirtualDirectory Name="manager">
       <File Name="src/manager/MeshManager.cpp" ExcludeProjConfig="Test"/>
@@ -101,14 +97,11 @@
       <File Name="src/ecs/System.h" ExcludeProjConfig="Debug"/>
       <File Name="src/ecs/Id.h"/>
       <File Name="src/ecs/Component.cpp"/>
+      <File Name="src/ecs/Include.h"/>
     </VirtualDirectory>
     <VirtualDirectory Name="system">
-      <File Name="src/system/Collision.cpp" ExcludeProjConfig="Test"/>
-      <File Name="src/system/Collision.h" ExcludeProjConfig="Test"/>
       <File Name="src/system/Debug.cpp" ExcludeProjConfig="Test"/>
       <File Name="src/system/Debug.h" ExcludeProjConfig="Test"/>
-      <File Name="src/system/Physics2d.cpp" ExcludeProjConfig="Test"/>
-      <File Name="src/system/Physics2d.h" ExcludeProjConfig="Test"/>
       <File Name="src/system/Render.cpp" ExcludeProjConfig="Test"/>
       <File Name="src/system/Render.h" ExcludeProjConfig="Test"/>
     </VirtualDirectory>

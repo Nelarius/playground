@@ -1,7 +1,7 @@
 
 CC=g++
 
-LINKER_INCLUDES = -LC:/dev/SDL2-devel-2.0.3-mingw/SDL2-2.0.3/lib/x86 -LC:/dev/glew-1.12.0/glew-1.12.0/lib -LC:/dev/lua/build
+LINKER_INCLUDES = -LC:/dev/SDL2-devel-2.0.3-mingw/SDL2-2.0.3/lib/x86 -LC:/dev/glew-1.12.0/glew-1.12.0/lib -LC:/dev/lua/build -LC:/dev/entityx
 
 CFLAGS = -std=gnu++14 -Wall -O2 -DDEBUG -DGLM_FORCE_RADIANS
 
@@ -12,10 +12,10 @@ EXECUTABLE =
 TEST_EXECUTABLE = 
 
 ifeq ($(OS),Windows_NT)
-	CFLAGS += -I./src -IC:/dev/glm -IC:/dev/glew-1.12.0/glew-1.12.0/include -IC:/dev/SDL2-devel-2.0.3-mingw/SDL2-2.0.3/x86_64-w64-mingw32/include -IC:/dev/boost_1_58_0 -I:C/dev/lua/src -IC:/dev/LuaBridge/Source
-	LDFLAGS += -lopengl32 -lglew32 -lmingw32 -lSDL2main -lSDL2 -lyaml-cpp $(LINKER_INCLUDES)
+	CFLAGS += -I./src -IC:/dev/glm -IC:/dev/glew-1.12.0/include -IC:/dev/SDL2-devel-2.0.3-mingw/SDL2-2.0.3/x86_64-w64-mingw32/include -IC:/dev/entityx -IC:/dev/lua/src -IC:/dev/boost_1_58_0 -I:C/dev/lua/src -IC:/dev/LuaBridge/Source
+	LDFLAGS += -lopengl32 -lglew32 -lmingw32 -lSDL2main -lSDL2 -llua -lentityx $(LINKER_INCLUDES)
 	EXECUTABLE += Build/app.exe
-	TEST_EXECTUTABLE += Build/test.exe
+	TEST_EXECUTABLE += Build/test.exe
 else
 	UNAME_S := $(shell uname -s)
     ifeq ($(UNAME_S),Linux)
@@ -44,16 +44,17 @@ OBJ = src/Main.o \
 	src/opengl/Interface.o \
 	src/manager/MeshManager.o \
 	src/manager/ShaderManager.o \
-	src/system/Collision.o \
 	src/system/Debug.o \
-	src/system/Physics2d.o \
 	src/system/Render.o \
 	src/utils/Random.o \
 	
 TESTOBJ = src/Test.o \
 	src/test/EntityManagerTest.o \
+	src/ecs/Entity.o \
+	src/ecs/Pool.o \
 
 all: $(EXECUTABLE)
+	make test
 	cp src/config.lua Build/
 	cp -r src/data Build/
 	./Build/test
@@ -71,6 +72,6 @@ test: $(TESTOBJ)
 .PHONY: clean
 
 clean:
-	rm $(OBJ) $(EXECUTABLE)
+	rm $(OBJ) $(EXECUTABLE) $(TEST_EXECUTABLE) $(TESTOBJ)
 	rm Build/config.lua
 	rm -r Build/data
