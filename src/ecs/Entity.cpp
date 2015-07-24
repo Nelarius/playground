@@ -60,8 +60,9 @@ EntityManager::EntityManager( uint32_t poolSize )
 }
 
 EntityManager::~EntityManager() {
-    // the destructors of the remaining components in the memory pools need to be called
-    
+    for ( auto entity: join() ) {
+        entity.destroy();
+    }
 }
 
 Entity EntityManager::create() {

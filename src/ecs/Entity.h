@@ -186,7 +186,7 @@ class EntityManager {
                 }
                 Entity operator*() { return Entity( owner_, Id( index_, owner_->entityVersions_[index_] ) ); }
                 
-            private:
+            private:                
                 EntityManager*              owner_;
                 std::uint32_t               index_;
                 std::vector<std::uint32_t>  componentIndices_;
@@ -198,6 +198,7 @@ class EntityManager {
          * @date 24/07/15
          * @file Entity.h
          * @brief A view of entities containing none or more components.
+         * Use this to get the iterators that you want.
          */
         class View {
             public:
@@ -232,17 +233,34 @@ class EntityManager {
                  * Note that by calling this method, the view is returned to the unfiltered state.
                  */
                 Iterator begin() {
-                    return Iterator( owner_, 0u, std::move( componentIndices_ ));
+                    return Iterator( owner_, windForward_(), std::move( componentIndices_ ));
                 }
                 Iterator end() { return Iterator( owner_, owner_->componentMasks_.size() ); }
             
             private:
+                bool indexContainsComponents_( uint32_t index ) const {
+                    for ( uint32_t i: componentIndices_ ) {
+                        if ( !owner_->componentMasks_[index].test(i) ) {
+                            return false;
+                        }
+                    }
+                    return true;
+                }
+                uint32_t windForward_() const {
+                    if ( componentIndices_.size() == 0u ) {
+                        return 0u;
+                    }
+                    uint32_t index = 0u;
+                    while ( !indexContainsComponents_( index ) && index < owner_->componentMasks_.size() ) {
+                        index++;
+                    }
+                    return index;
+                }
                 
                 EntityManager*          owner_;
                 // these elements index into EntityManager::componentPools_ and 
                 // the component masks in EntityManager::componentMasks_
                 std::vector<uint32_t>   componentIndices_;
-                
         };
         
         /**
@@ -261,6 +279,7 @@ class EntityManager {
         
     private:
         friend class Entity;
+        template<typename C> friend class ComponentHandle;
         
         void destroy_( Id id );
         bool isValid_( Id id ) const;
@@ -320,7 +339,7 @@ bool ComponentHandle<C>::operator!=( const ComponentHandle<C>& rhs ) const {
 template<typename C>
 ComponentHandle<C> Entity::component() const {
     ASSERT( isValid(), "Entity::component> Try to access component of an invalid entity." );
-    return ComponentHandle<C>{ this, id_ };
+    return ComponentHandle<C>{ manager_, id_ };
 }
 
 template<typename C, typename... Args>

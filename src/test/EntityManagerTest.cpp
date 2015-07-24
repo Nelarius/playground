@@ -94,6 +94,18 @@ SUITE(EntityManagerTest) {
         CHECK( begin != end );
     }
     
+    TEST_FIXTURE( EntityManagerFixture, ComponentHasCorrectValueAfterGettingPointerFromComponent ) {
+        Entity entity = entities.create();
+        entity.assign<TestStruct>( 5 );
+        CHECK_EQUAL( 5, entity.component<TestStruct>()->x );
+    }
+    
+    TEST_FIXTURE( EntityManagerFixture, ComponentHasCorrectValueImmediatelyAfterAssignment ) {
+        auto entity = entities.create();
+        ce::ecs::ComponentHandle<TestStruct> component = entity.assign<TestStruct>( 5 );
+        CHECK_EQUAL( 5, component->x );
+    }
+    
     TEST_FIXTURE( EntityManagerFixture, IteratorIsAtEndAfterEntityWithComponentsCreatedAndDestroyed ) {
         auto entity = entities.create();
         entity.assign<TestStruct>( 5 );

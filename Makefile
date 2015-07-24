@@ -50,6 +50,7 @@ OBJ = src/Main.o \
 	
 TESTOBJ = src/Test.o \
 	src/test/EntityManagerTest.o \
+	src/ecs/Component.o \
 	src/ecs/Entity.o \
 	src/ecs/Pool.o \
 
