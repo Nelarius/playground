@@ -4,6 +4,7 @@
 #include "math/Vector.h"
 
 namespace ce {
+namespace math {
 
 template<typename T>
 struct Matrix2 {
@@ -373,5 +374,7 @@ using CMMatrix2f = CMMatrix2<float>;
 using CMMatrix3f = CMMatrix3<float>;
 using CMMatrix4f = CMMatrix4<float>;
 
+    
+}   // math
 }   // ce
 

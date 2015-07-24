@@ -5,6 +5,7 @@
 #include "math/Matrix.h"
 
 namespace ce {
+namespace math {
 
 template<typename T>
 class Plane {
@@ -69,5 +70,6 @@ class Plane {
 using Planef = Plane<float>;
 using Planed = Plane<double>;
 
-}
+}   // math
+}   // ce
 

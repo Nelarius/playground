@@ -6,6 +6,7 @@
 #include <cmath>
 
 namespace ce {
+namespace math {
 
 template<typename T, typename Derived, int N>
 struct BaseVector {
@@ -264,6 +265,8 @@ using Vector4d = Vector4<double>;
 template<int N> using Vectorf = Vector<float, N>;
 template<int N> using Vectord = Vector<double, N>;
 
+
+}   // math
 }   // ce
 
 

@@ -7,6 +7,7 @@
 #include <cmath>
 
 namespace ce {
+namespace math {
 
 inline Matrix4f Mirror( const Planef& plane ) {
     const Vector3f& n = plane.normal();
@@ -45,5 +46,7 @@ Matrix4<T> Translate( const Vector3<T>& v ) {
     };
 }
 
+
+}   // math
 }   // ce
 
