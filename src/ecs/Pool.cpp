@@ -25,7 +25,7 @@ std::size_t BasePool::chunks() const {
 }
 
 void BasePool::reserve( std::size_t n ) {
-    while ( capacity_ < n ) {
+    while ( capacity_ <= n ) {
         char* chunk = new char[ elementSize_ * chunkSize_ ];
         blocks_.push_back( chunk );
         capacity_ += chunkSize_;
@@ -33,11 +33,15 @@ void BasePool::reserve( std::size_t n ) {
 }
 
 void* BasePool::at( std::size_t i ) {
-    ASSERT( i < capacity_, "BasePool::get> invalid positional argument." );
+    if ( i >= capacity_ ) {
+        reserve( i );
+    }
     return blocks_[ i / chunkSize_ ] + ( i % chunkSize_ ) * elementSize_;
 }
 
 const void* BasePool::at( std::size_t i ) const {
-    ASSERT( i < capacity_, "BasePool::get> invalid positional argument." );
+    if ( i >= capacity_ ) {
+        reserve( i );
+    }
     return blocks_[ i / chunkSize_ ] + ( i % chunkSize_ ) * elementSize_;
 }

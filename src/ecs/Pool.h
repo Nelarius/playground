@@ -52,7 +52,16 @@ class BasePool {
          */
         void reserve( std::size_t n );
         /**
-         * @brief 
+         * @brief Get the pointer to the n:th element in the chunk.
+         * @param The n:th element, as if the chunk of memory were an array.
+         * When n is larger than the current capacity, the memory pool will resize itself,
+         * instead of causing a segfault or shutting the program down. The reason for this is
+         * the design of the main user of this class: EntityManager.
+         * 
+         * EntityManager does not create a memory pool for a specific type, until that type of
+         * component is assigned for the first time. When we do the assignment, it is easy to
+         * simply create the pool (done in EntityManager::accommodateComponent_), and then immediately
+         * use placement new to create the component.
          */
         virtual void* at( std::size_t n );
         virtual const void* at( std::size_t n ) const;
@@ -65,7 +74,7 @@ class BasePool {
         std::vector<char*>  blocks_{};
         std::size_t         elementSize_;
         std::size_t         chunkSize_; // the number of elements in a chunk
-        std::size_t         capacity_{ 0u };
+        std::size_t         capacity_{ 0u };    // corresponds to the size
 };
 
 /**

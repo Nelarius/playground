@@ -41,7 +41,7 @@ class GameState : public AppState {
         void parseScene_();
         
         // FIELDS
-		// these could be possibly moved to AppState
+        // these could be possibly moved to AppState
         ex::EventManager    events_{};
         ex::EntityManager   entities_{ events_ };
         ex::SystemManager   systems_{ entities_, events_ };        
