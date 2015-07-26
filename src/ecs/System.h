@@ -1,70 +1,86 @@
 
 #pragma once
 
+#include "ecs/Component.h"
+#include "utils/Assert.h"
+#include <unordered_map>
+#include <memory>
 #include <cstddef>  // for std::size_t
+#include <cstdint>
 
 namespace ce {
 namespace ecs {
-
-class SystemManager;
-
-/**
- * @class BaseSystem
- * @author Muszynski Johann M
- * @date 06/10/15
- * @file System.h
- * @brief 
- */
+    
 class BaseSystem {
     public:
-        using Family = std::size_t;
-        
         BaseSystem() = default;
-        virtual ~BaseSystem() = default;
         
-        BaseSystem( const BaseSystem& )             = delete;
-        BaseSystem& operator=( const BaseSystem& )  = delete;
-        BaseSystem( BaseSystem&& )                  = delete;
-        BaseSystem& operator=( BaseSystem&& )       = delete;
-        
-        /**
-         * @brief 
-         */
         virtual void configure() = 0;
-        /**
-         * @brief Apply the behavior of the system.
-         * @param dt
-         */
         virtual void update( float dt ) = 0;
-        
-    private:
-        Family familyCounter;   // should this be private?
+    protected:
+        static uint32_t familyCounter_;
 };
 
-Family BaseSystem::familyCounter = 0u;
-
-/**
- * @class System
- * @author Muszynski Johann M
- * @date 06/10/15
- * @file System.h
- * @brief Use this class for implementing systems.
- */
-template<typename Derived> 
+template<typename S>
 class System: public BaseSystem {
     public:
-        System();
-        virtual ~System();
-        
-    private:
-        // friend class SystemManager;
-        
-        static Family family() {
-            static Family family{ familyCounter++ };
-            return family;
+        System()    = default;
+    
+        static uint32_t family() {
+            static uint32_t f{ familyCounter_++ };
+            return f;
         }
-
 };
+
+class SystemManager {
+    public:
+        SystemManager() = default;
+        
+        template<typename S, typename... Args>
+        std::shared_ptr<S> add( Args&&... args);
+        
+        template<typename S>
+        std::shared_ptr<S> system();
+        
+        template<typename S>
+        void configure();
+        template<typename S>
+        void update( float dt );
+    
+    private:
+        std::unordered_map<uint32_t, std::shared_ptr<BaseSystem>>   systems_{};
+};
+
+/////////////////////////////////////////////////////////////////////////////
+// SystemManager implementation
+/////////////////////////////////////////////////////////////////////////////
+template<typename S, typename... Args>
+std::shared_ptr<S> SystemManager::add( Args&&... args ) {
+    std::shared_ptr<S> s( new S( std::forward<Args>( args )... ) );
+    systems_.insert( std::make_pair( S::family(), s ) );
+    return s;
+}
+
+template<typename S>
+std::shared_ptr<S> SystemManager::system() {
+    auto it = systems_.find( S::family() );
+    ASSERT( it != systems_.end(), "SystemManager::system> system not added yet!" );
+    std::shared_ptr<S>( std::static_pointer_cast<S>( it->second ) );
+}
+
+template<typename S>
+void SystemManager::configure() {
+    auto it = systems_.find( S::family() );
+    ASSERT( it != systems_.end(), "SystemManager::configure> system not added yet!" );
+    it->configure();
+}
+
+template<typename S>
+void SystemManager::update( float dt ) {
+    auto it = systems_.find( S::family() );
+    ASSERT( it != systems_.end(), "SystemManager::update> system not added yet!" );
+    it->update( dt );
+}
 
 }   // namespace ecs
 }   // namespace ce 

@@ -15,7 +15,7 @@ same way as the Linux compilation does.
 ## TODO
 * Iterators for entities containing certain components
   * `EntityManager::freeList_`should be a set, `Iterator::operator++` should try to find the index in the set before returning
-* Destructor for EntityManager using these iterators
+* Add component query to entities
 * Bind Vector, and Matrix to Lua
   * Add Vectors to input script to describe colors
 * Quaternion math

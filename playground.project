@@ -98,6 +98,7 @@
       <File Name="src/ecs/Id.h"/>
       <File Name="src/ecs/Component.cpp"/>
       <File Name="src/ecs/Include.h"/>
+      <File Name="src/ecs/System.cpp"/>
     </VirtualDirectory>
     <VirtualDirectory Name="system">
       <File Name="src/system/Debug.cpp" ExcludeProjConfig="Test"/>
