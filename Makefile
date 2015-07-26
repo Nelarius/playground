@@ -34,7 +34,7 @@ OBJ = src/Main.o \
 	src/app/AppStateStack.o \
 	src/ecs/Pool.o \
 	src/ecs/Entity.o \
-	src/ecs/Component.o \
+	src/ecs/TypeCount.o \
 	src/ecs/System.o \
 	src/lua/LuaState.o \
 	src/opengl/Shader.o \
@@ -52,7 +52,7 @@ OBJ = src/Main.o \
 	
 TESTOBJ = src/Test.o \
 	src/test/EntityManagerTest.o \
-	src/ecs/Component.o \
+	src/ecs/TypeCount.o \
 	src/ecs/Entity.o \
 	src/ecs/Pool.o \
 	src/ecs/System.o \
