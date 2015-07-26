@@ -16,6 +16,13 @@ SUITE(EntityManagerTest) {
             ce::ecs::EntityManager entities;
     };
     
+    class EntityFixture {
+        public:
+            EntityFixture() : entities(), entity( entities.create() ) {}
+            EntityManager entities;
+            Entity entity;
+    };
+    
     TEST( AfterCreateSizeIsOne ) {
         EntityManager entities{};
         Entity entity = entities.create();
@@ -117,5 +124,20 @@ SUITE(EntityManagerTest) {
         auto begin = entities.join().begin();
         auto end = entities.join().end();
         CHECK( false );
+    }
+    
+    TEST_FIXTURE( EntityFixture, EntityHasReturnsTrueWhenComponentAssigned ) {
+        entity.assign<TestStruct>();
+        CHECK( entity.has<TestStruct>() );
+    }
+    
+    TEST_FIXTURE( EntityFixture, EntityHasReturnsFalseWhenComponentNotAssigned ) {
+        CHECK_EQUAL( false, entity.has<TestStruct>() );
+    }
+    
+    TEST_FIXTURE( EntityFixture, EntityHasReturnsFalseAfterComponentAssignedAndRemoved ) {
+        entity.assign<TestStruct>();
+        entity.remove<TestStruct>();
+        CHECK_EQUAL( false, entity.has<TestStruct>() );
     }
 }

@@ -26,8 +26,6 @@ class EntityManager;
  * - the component is removed from the host entity
  * - the host entity is destroyed
  */
-// EntityManager being a template variable is a really regrettable workaround
-// for the circular reference between ComponentHandle and EntityManager :/
 template<typename C>
 class ComponentHandle {
     public:
@@ -80,17 +78,34 @@ class Entity {
          * @return True if this handle is still valid, false otherwise.
          */
         bool isValid() const;
-        
         /**
          * @brief Get this handle's id.
          * @return 
          */
         Id id();
-        
+        /**
+         * @brief Assign a component of type C to this entity.
+         * @return A component handle, which acts like a pointer to the assigned component.
+         */
         template<typename C, typename... Args>
         ComponentHandle<C> assign( Args&& ... args );
+        /**
+         * @brief Remove a component of type C from this entity.
+         */
+        template<typename C>
+        void remove();
+        /**
+         * @brief Get a component of type C assigned to this entity.
+         * @return A component handle, which acts like a pointer to the assigned component.
+         */
         template<typename C>
         ComponentHandle<C> component() const;
+        /**
+         * @brief Check if this entity has an assigned component of type C.
+         * @return True, if component of type C has been assigned, false otherwise.
+         */
+        template<typename C>
+        bool has() const;
         
     private:
         // friend of EntityManager 
@@ -293,9 +308,11 @@ class EntityManager {
         ComponentHandle<C> assign_( Id id, Args&&... args ); 
         
         template<typename C>
-        void remove_( Id id );
+        void remove_( Id id );  // remove a component
         template<typename C>
         C* component_( Id id );    // the component getter
+        template<typename C>
+        bool hasComponent_( Id id ) const;
         
         const uint32_t                              PoolSize_{ 64 };
         uint32_t                                    indexCounter_{ 0u };
@@ -345,7 +362,22 @@ ComponentHandle<C> Entity::component() const {
 template<typename C, typename... Args>
 ComponentHandle<C> Entity::assign( Args&& ... args) {
     ASSERT( isValid(), "Entity::assign> Try to assign component to an invalid entity." );
-    return manager_->assign_<C>( id_, std::forward<Args>( args ) ... );
+    return manager_->assign_<C>( id_, std::forward<Args>( args )... );
+}
+
+template<typename C>
+void Entity::remove() {
+    if ( !isValid() ) {
+        LOG(ce::LogLevel::Error) << "Tried to remove component from invalid entity.";
+        return;
+    }
+    manager_->remove_<C>( id_ );
+}
+
+template<typename C>
+bool Entity::has() const {
+    ASSERT( isValid(), "Entity::has> Checking components on an invalid entity." );
+    return manager_->hasComponent_<C>( id_ );
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -405,8 +437,15 @@ void EntityManager::remove_( Id id ) {
 template<typename C>
 C* EntityManager::component_( Id id ) {
     ASSERT( isValid_( id ), "EntityManager::component_> tried to get component of an invalid entity" );
-    const int family = Component<C>::family();
+    const unsigned family = Component<C>::family();
     return static_cast<C*>( componentPools_[family]->at( id.index() ) );
+}
+
+template<typename C>
+bool EntityManager::hasComponent_( Id id ) const {
+    ASSERT( isValid_( id ), "EntityManager::hasComponent_> tried to check component of an invalid entity" );
+    const unsigned family = Component<C>::family();
+    return componentMasks_[id.index()].test( family );
 }
 
 }   // namespace ecs
