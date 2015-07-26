@@ -71,15 +71,15 @@ class Program {
         void setUniform( const GLchar*, const glm::vec2& ) const;
         void setUniform( const GLchar*, const glm::vec3& ) const;
         void setUniform( const GLchar*, const glm::vec4& ) const;
-        void setUniform( const GLchar*, const ce::Vector2f& ) const;
-        void setUniform( const GLchar*, const ce::Vector3f& ) const;
-        void setUniform( const GLchar*, const ce::Vector4f& ) const;
+        void setUniform( const GLchar*, const ce::math::Vector2f& ) const;
+        void setUniform( const GLchar*, const ce::math::Vector3f& ) const;
+        void setUniform( const GLchar*, const ce::math::Vector4f& ) const;
 
         /// A wrapper for glUniformMatrix*fv
         void setUniform( const GLchar*, const glm::mat3&, GLboolean transpose = GL_FALSE ) const;
         void setUniform( const GLchar*, const glm::mat4&, GLboolean transpose = GL_FALSE ) const;
-        void setUniform( const GLchar*, const ce::Matrix3f& ) const;
-        void setUniform( const GLchar*, const ce::Matrix4f& ) const;
+        void setUniform( const GLchar*, const ce::math::Matrix3f& ) const;
+        void setUniform( const GLchar*, const ce::math::Matrix4f& ) const;
         
     private:
         GLuint  object_{ 0u };

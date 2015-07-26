@@ -4,10 +4,10 @@ using ce::ecs::BasePool;
 
 BasePool::BasePool( std::size_t elementSize, std::size_t chunkSize )
 :   blocks_(),
-    elementSize_( elementSize ),
-    chunkSize_( chunkSize ),
+    ElementSize_( elementSize ),
+    ChunkSize_( chunkSize ),
     capacity_( 0u ) {
-    this->reserve( chunkSize_ );
+    this->reserve( ChunkSize_ );
 }
 
 BasePool::~BasePool() {
@@ -26,9 +26,9 @@ std::size_t BasePool::chunks() const {
 
 void BasePool::reserve( std::size_t n ) {
     while ( capacity_ <= n ) {
-        char* chunk = new char[ elementSize_ * chunkSize_ ];
+        char* chunk = new char[ ElementSize_ * ChunkSize_ ];
         blocks_.push_back( chunk );
-        capacity_ += chunkSize_;
+        capacity_ += ChunkSize_;
     }
 }
 
@@ -36,12 +36,6 @@ void* BasePool::at( std::size_t i ) {
     if ( i >= capacity_ ) {
         reserve( i );
     }
-    return blocks_[ i / chunkSize_ ] + ( i % chunkSize_ ) * elementSize_;
+    return blocks_[ i / ChunkSize_ ] + ( i % ChunkSize_ ) * ElementSize_;
 }
 
-const void* BasePool::at( std::size_t i ) const {
-    if ( i >= capacity_ ) {
-        reserve( i );
-    }
-    return blocks_[ i / chunkSize_ ] + ( i % chunkSize_ ) * elementSize_;
-}

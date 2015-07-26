@@ -175,17 +175,17 @@ void Program::setUniform( const GLchar* name, const glm::vec4& v ) const
     glUniform4fv( uniform(name), 1, glm::value_ptr( v ) );
 }
 
-void Program::setUniform( const GLchar* name, const ce::Vector2f& v ) const {
+void Program::setUniform( const GLchar* name, const ce::math::Vector2f& v ) const {
     ASSERT( isInUse(), "Program::setUniform(Vector2f)> program not in use" );
     glUniform2fv( uniform(name), 1, v.data );
 }
 
-void Program::setUniform( const GLchar* name, const ce::Vector3f& v ) const {
+void Program::setUniform( const GLchar* name, const ce::math::Vector3f& v ) const {
     ASSERT( isInUse(), "Program::setUniform(Vector3f)> program not in use" );
     glUniform3fv( uniform(name), 1, v.data );
 }
 
-void Program::setUniform( const GLchar* name, const ce::Vector4f& v ) const {
+void Program::setUniform( const GLchar* name, const ce::math::Vector4f& v ) const {
     ASSERT( isInUse(), "Program::setUniform(Vector4f)> program not in use" );
     glUniform4fv( uniform(name), 1, v.data );
 }
@@ -200,14 +200,14 @@ void Program::setUniform( const GLchar* name, const glm::mat4& m, GLboolean tran
     glUniformMatrix4fv( uniform(name), 1, transpose, glm::value_ptr( m ) );
 }
 
-void Program::setUniform( const GLchar* name, const ce::Matrix3f& M ) const {
+void Program::setUniform( const GLchar* name, const ce::math::Matrix3f& M ) const {
     ASSERT( isInUse(), "Program::setUniform(Matrix3f)> program not in use" );
-    ce::CMMatrix3f N { M };
+    ce::math::CMMatrix3f N { M };
     glUniformMatrix3fv( uniform(name), 1, false, N.data );
 }
 
-void Program::setUniform( const GLchar* name, const ce::Matrix4f& M ) const {
+void Program::setUniform( const GLchar* name, const ce::math::Matrix4f& M ) const {
     ASSERT( isInUse(), "Program::setUniform(Matrix4f)> program not in use" );
-    ce::CMMatrix4f N { M };
+    ce::math::CMMatrix4f N { M };
     glUniformMatrix4fv( uniform(name), 1, false, N.data );
 }
