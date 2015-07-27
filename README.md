@@ -16,6 +16,7 @@ same way as the Linux compilation does.
 * Iterators for entities containing certain components
   * `EntityManager::componentMasks_` should set an extra bit to indicate whether this entity is on the free list.
   * `EntityManager::Iterator` should look at this to see if it should continue.
+* EntityManager should assert all errors, get rid of soft error logging. Wrong behavior should not be tolerated.
 * Bind Vector, and Matrix to Lua
   * Add Vectors to input script to describe colors
 * Quaternion math
