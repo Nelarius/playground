@@ -90,17 +90,17 @@
     <File Name="src/StateIdentifiers.h" ExcludeProjConfig="Test"/>
     <VirtualDirectory Name="ecs">
       <File Name="src/ecs/Component.h" ExcludeProjConfig="Debug"/>
-      <File Name="src/ecs/Entity.cpp" ExcludeProjConfig="Debug"/>
-      <File Name="src/ecs/Entity.h" ExcludeProjConfig="Debug"/>
-      <File Name="src/ecs/Pool.cpp" ExcludeProjConfig="Debug"/>
-      <File Name="src/ecs/Pool.h" ExcludeProjConfig="Debug"/>
-      <File Name="src/ecs/System.h" ExcludeProjConfig="Debug"/>
+      <File Name="src/ecs/Entity.cpp" ExcludeProjConfig=""/>
+      <File Name="src/ecs/Entity.h" ExcludeProjConfig=""/>
+      <File Name="src/ecs/Pool.cpp" ExcludeProjConfig=""/>
+      <File Name="src/ecs/Pool.h" ExcludeProjConfig=""/>
+      <File Name="src/ecs/System.h" ExcludeProjConfig=""/>
       <File Name="src/ecs/Id.h"/>
       <File Name="src/ecs/Include.h"/>
       <File Name="src/ecs/System.cpp"/>
-      <File Name="src/ecs/TypeCount.h"/>
-      <File Name="src/ecs/TypeCount.cpp"/>
       <File Name="src/ecs/Event.h"/>
+      <File Name="src/ecs/Component.cpp"/>
+      <File Name="src/ecs/Event.cpp"/>
     </VirtualDirectory>
     <VirtualDirectory Name="system">
       <File Name="src/system/Debug.cpp" ExcludeProjConfig="Test"/>
@@ -125,6 +125,9 @@
       <File Name="src/math/Plane.h"/>
       <File Name="src/math/Quaternion.h"/>
       <File Name="src/math/Vector.h"/>
+    </VirtualDirectory>
+    <VirtualDirectory Name="3rdparty">
+      <File Name="src/3rdparty/SimpleSignal.h"/>
     </VirtualDirectory>
   </VirtualDirectory>
   <VirtualDirectory Name="project">

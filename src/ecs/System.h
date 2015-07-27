@@ -2,6 +2,8 @@
 #pragma once
 
 #include "ecs/Component.h"
+#include "ecs/Event.h"
+#include "ecs/Entity.h"
 #include "utils/Assert.h"
 #include <unordered_map>
 #include <memory>
@@ -10,10 +12,11 @@
 
 namespace ce {
 namespace ecs {
-    
+
 class BaseSystem {
     public:
-        BaseSystem() = default;
+        BaseSystem()            = default;
+        virtual ~BaseSystem()    = default;
         
         virtual void configure() = 0;
         virtual void update( float dt ) = 0;
@@ -24,7 +27,8 @@ class BaseSystem {
 template<typename S>
 class System: public BaseSystem {
     public:
-        System()    = default;
+        System()            = default;
+        virtual ~System()   = default;
     
         static uint32_t family() {
             static uint32_t f{ familyCounter_++ };
@@ -35,6 +39,7 @@ class System: public BaseSystem {
 class SystemManager {
     public:
         SystemManager() = default;
+        ~SystemManager() = default;
         
         template<typename S, typename... Args>
         std::shared_ptr<S> add( Args&&... args);
