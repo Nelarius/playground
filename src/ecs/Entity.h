@@ -82,7 +82,7 @@ class Entity {
          * @brief Get this handle's id.
          * @return 
          */
-        Id id();
+        Id id() const;
         /**
          * @brief Assign a component of type C to this entity.
          * @return A component handle, which acts like a pointer to the assigned component.

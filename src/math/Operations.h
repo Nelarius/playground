@@ -3,6 +3,7 @@
 
 #include "math/Vector.h"
 #include "math/Matrix.h"
+#include "math/Plane.h"
 #include "utils/Log.h"
 #include <cmath>
 

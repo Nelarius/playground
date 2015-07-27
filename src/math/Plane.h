@@ -26,7 +26,7 @@ class Plane {
          * @return true, if on the positive side, false otherwise.
          */
         bool isOnPositiveSide( const Vector3<T>& v ) const {
-            ce::Matrix3<T> m{ v, first_, second_ };
+            Matrix3<T> m{ v, first_, second_ };
             if ( m.determinant() > 0.0f ) {
                 return true;
             }
@@ -38,7 +38,7 @@ class Plane {
          * @return true, if on the negative side, false otherwise.
          */
         bool isOnNegativeSide( const Vector3<T>& v ) const {
-            ce::Matrix3<T> m{ v, first_, second_ };
+            Matrix3<T> m{ v, first_, second_ };
             if ( m.determinant() < 0.0f ) {
                 return true;
             }

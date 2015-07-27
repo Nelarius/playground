@@ -2,7 +2,7 @@
 
 ## Compiling
 
-The source code uses GCC pragmas.
+The source code uses GCC pragmas and C++14.
 
 ### Linux
 Run `make test` to build the tests, and then `make all` to build the program, copy resources and run all the tests.
@@ -14,8 +14,8 @@ same way as the Linux compilation does.
 
 ## TODO
 * Iterators for entities containing certain components
-  * `EntityManager::freeList_`should be a set, `Iterator::operator++` should try to find the index in the set before returning
-* Add component query to entities
+  * `EntityManager::componentMasks_` should set an extra bit to indicate whether this entity is on the free list.
+  * `EntityManager::Iterator` should look at this to see if it should continue.
 * Bind Vector, and Matrix to Lua
   * Add Vectors to input script to describe colors
 * Quaternion math
