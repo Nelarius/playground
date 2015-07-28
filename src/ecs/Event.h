@@ -78,6 +78,7 @@ class EventManager {
         void emit( Args&&... args );
         
     private:
+        // creates the signal for the event type
         inline void accommodate_( uint32_t family ) {
             if ( !signals_.isConstructed( family ) ) {
                 signals_.construct( family );

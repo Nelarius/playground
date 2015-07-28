@@ -25,6 +25,7 @@ same way as the Linux compilation does.
 * Script component should store a LuaRef to the script function being called.
   * EntityManager, EventManager, SystemManager, events, and components all need to be bound to Lua
   * the current context (entity id) needs to be bound to some Lua variable
+* Add R'lyeh's profit lib to profile execution times of critical methods
 
 
 ## Dependencies

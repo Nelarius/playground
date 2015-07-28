@@ -81,7 +81,10 @@ Entity EntityManager::create() {
         freeList_.pop_back();
         version = entityVersions_[index];    // versions are incremented in destroy
     }
-    return Entity( this, Id( index, version ) );
+    
+    Entity entity( this, Id( index, version ) );
+    mailMan_.emit<ce::ecs::EntityCreatedEvent>( entity );
+    return entity;
 }
 
 EntityManager::View EntityManager::join() {
@@ -101,6 +104,7 @@ void EntityManager::destroy_( Id id ) {
         LOG(ce::LogLevel::Warning) << "Tried to destroy invalid entity.";
         return;
     }
+    mailMan_.emit<ce::ecs::EntityDestroyedEvent>( Entity( this, id ) );
     uint32_t index = id.index();
     auto mask = componentMasks_[index];
     // we need to call the destructor of each component

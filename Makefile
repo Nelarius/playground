@@ -33,6 +33,7 @@ OBJ = src/Main.o \
 	src/app/AppState.o \
 	src/app/AppStateStack.o \
 	src/ecs/Pool.o \
+	src/ecs/Event.o \
 	src/ecs/Entity.o \
 	src/ecs/Component.o \
 	src/ecs/System.o \
@@ -54,6 +55,7 @@ TESTOBJ = src/Test.o \
 	src/test/EntityManagerTest.o \
 	src/ecs/Component.o \
 	src/ecs/Entity.o \
+	src/ecs/Event.o \
 	src/ecs/Pool.o \
 	src/ecs/System.o \
 

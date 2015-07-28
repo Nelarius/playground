@@ -119,6 +119,54 @@ class Entity {
 const uint32_t MaxComponents = 16u;
 
 /**
+ * @class EntityCreatedEvent
+ * @author Muszynski Johann M
+ * @date 28/07/15
+ * @file Entity.h
+ * @brief Emitted when an entity is created.
+ */
+struct EntityCreatedEvent {
+    Entity entity;
+};
+
+/**
+ * @class EntityDestroyedEvent
+ * @author Muszynski Johann M
+ * @date 28/07/15
+ * @file Entity.h
+ * @brief Emitted just before the entity is destroyed.
+ */
+struct EntityDestroyedEvent {
+    Entity entity;
+};
+
+/**
+ * @class ComponentAssignedEvent
+ * @author Muszynski Johann M
+ * @date 28/07/15
+ * @file Entity.h
+ * @brief Emitted when an entity is assigned to a component.
+ */
+template<typename C>
+struct ComponentAssignedEvent {
+    Entity entity;
+    ComponentHandle<C> component;
+};
+
+/**
+ * @class ComponentRemovedEvent
+ * @author Muszynski Johann M
+ * @date 28/07/15
+ * @file Entity.h
+ * @brief Emitted just before the component is removed.
+ */
+template<typename C>
+struct ComponentRemovedEvent {
+    Entity entity;
+    ComponentHandle<C> component;
+};
+
+/**
  * @class EntityManager
  * @author Nelarius
  * @date 06/14/15
@@ -420,6 +468,8 @@ ComponentHandle<C> EntityManager::assign_( Id id, Args&&... args ) {
         return ComponentHandle<C>{ this, id };
     }
     
+    mailMan_.emit<ComponentAssignedEvent<C>>( Entity{ this, id }, ComponentHandle<C>{ this, id } );
+    
     componentMasks_[id.index()].set( family );
     return ComponentHandle<C>{ this, id };
 }
@@ -430,6 +480,7 @@ void EntityManager::remove_( Id id ) {
         LOG(ce::LogLevel::Error) << "Tried to remove component from invalid entity.";
         return;
     }
+    mailMan_.emit<ComponentRemovedEvent<C>>( Entity { this, id }, ComponentHandle<C>{ this, id } );
     const int family = Component<C>::family();
     const uint32_t index = id.index();
     componentPools_[family]->destroy( index );
