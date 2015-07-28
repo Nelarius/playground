@@ -54,10 +54,15 @@ bool Entity::operator<( const Entity& rhs ) const {
 /////////////////////////////////////////////////////////////////////////////
 // EntityManager implementation
 /////////////////////////////////////////////////////////////////////////////
-EntityManager::EntityManager( uint32_t poolSize )
-:   PoolSize_( poolSize ) {
-    //
-}
+EntityManager::EntityManager( EventManager& eventManager, uint32_t poolSize )
+:   PoolSize_( poolSize ),
+    indexCounter_( 0u ),
+    componentPools_(),
+    componentMasks_(),
+    entityVersions_(),
+    freeList_(),
+    mailMan_( eventManager )
+    {}
 
 EntityManager::~EntityManager() {
     for ( auto entity: join() ) {

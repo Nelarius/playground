@@ -4,6 +4,7 @@
 #include "ecs/Id.h"
 #include "ecs/Pool.h"
 #include "ecs/Component.h"
+#include "ecs/Event.h"
 #include "utils/Log.h"
 #include <vector>
 #include <memory>
@@ -132,7 +133,7 @@ class EntityManager {
          * @brief Initialize with the number of elements to store in one chunk in the pool.
          * @param poolSize The number of elements reserved in one chunk of memory. 64 by default.
          */
-        EntityManager( uint32_t poolSize = 64 );
+        EntityManager( EventManager&, uint32_t poolSize = 64 );
         ~EntityManager();
         
         EntityManager( const EntityManager& )               = delete;
@@ -320,6 +321,7 @@ class EntityManager {
         std::vector<std::bitset<MaxComponents>>     componentMasks_{};
         std::vector<uint32_t>                       entityVersions_{};
         std::vector<uint32_t>                       freeList_{};
+        EventManager&                               mailMan_;
 };
 
 /////////////////////////////////////////////////////////////////////////////
@@ -400,7 +402,7 @@ EntityManager::View EntityManager::join() {
 template<typename C>
 void EntityManager::accommodateComponent_() {
     const unsigned family = Component<C>::family();
-    if ( family <= componentPools_.size() ) {
+    while( family >= componentPools_.size() ) {
         componentPools_.emplace_back( new Pool<C>( PoolSize_ ) );
     }
 }

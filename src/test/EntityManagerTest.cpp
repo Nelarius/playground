@@ -12,19 +12,22 @@ SUITE(EntityManagerTest) {
     
     class EntityManagerFixture {
         public:
-            EntityManagerFixture() : entities() {}
+            EntityManagerFixture() : events(), entities( events ) {}
+            ce::ecs::EventManager events;
             ce::ecs::EntityManager entities;
     };
     
     class EntityFixture {
         public:
-            EntityFixture() : entities(), entity( entities.create() ) {}
+            EntityFixture() : events(), entities( events ), entity( entities.create() ) {}
+            ce::ecs::EventManager events;
             EntityManager entities;
             Entity entity;
     };
     
     TEST( AfterCreateSizeIsOne ) {
-        EntityManager entities{};
+        ce::ecs::EventManager events{};
+        EntityManager entities{ events };
         Entity entity = entities.create();
         CHECK_EQUAL( 1u, entities.size() );
     }
