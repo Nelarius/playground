@@ -2,7 +2,7 @@
 #pragma once
 
 #include "ecs/Id.h"
-#include "ecs/Pool.h"
+#include "utils/Pool.h"
 #include "ecs/Component.h"
 #include "ecs/Event.h"
 #include "utils/Log.h"

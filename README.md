@@ -17,6 +17,7 @@ same way as the Linux compilation does.
   * `EntityManager::componentMasks_` should set an extra bit to indicate whether this entity is on the free list.
   * `EntityManager::Iterator` should look at this to see if it should continue.
 * EntityManager should assert all errors, get rid of soft error logging. Wrong behavior should not be tolerated.
+* Do a benchmark to compare join<>() with EntityX component iteration
 * Bind Vector, and Matrix to Lua
   * Add Vectors to input script to describe colors
 * Quaternion math
@@ -26,6 +27,7 @@ same way as the Linux compilation does.
   * EntityManager, EventManager, SystemManager, events, and components all need to be bound to Lua
   * the current context (entity id) needs to be bound to some Lua variable
 * Add R'lyeh's profit lib to profile execution times of critical methods
+* Resource managers should switch over to using `ce::Bundle` instead of unique pointers.
 
 
 ## Dependencies

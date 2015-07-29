@@ -32,7 +32,6 @@ OBJ = src/Main.o \
 	src/app/Window.o \
 	src/app/AppState.o \
 	src/app/AppStateStack.o \
-	src/ecs/Pool.o \
 	src/ecs/Event.o \
 	src/ecs/Entity.o \
 	src/ecs/Component.o \
@@ -50,14 +49,15 @@ OBJ = src/Main.o \
 	src/system/Debug.o \
 	src/system/Render.o \
 	src/utils/Random.o \
+	src/utils/Pool.o \
 	
 TESTOBJ = src/Test.o \
 	src/test/EntityManagerTest.o \
 	src/ecs/Component.o \
 	src/ecs/Entity.o \
 	src/ecs/Event.o \
-	src/ecs/Pool.o \
 	src/ecs/System.o \
+	src/utils/Pool.o \
 
 all: $(EXECUTABLE)
 	make test

@@ -1,7 +1,7 @@
 
 #pragma once 
 
-#include "ecs/Pool.h"
+#include "utils/Pool.h"
 #include "3rdparty/SimpleSignal.h"
 #include "utils/Assert.h"
 #include "utils/Log.h"
