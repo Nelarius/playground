@@ -2,6 +2,7 @@
 #pragma once 
 
 #include "utils/Pool.h"
+#include "utils/Bundle.h"
 #include "3rdparty/SimpleSignal.h"
 #include "utils/Assert.h"
 #include "utils/Log.h"
@@ -11,7 +12,7 @@
 #include <cstdlib>
 
 using EventSignal = Simple::Signal<void(const void*)>;
-using SignalPool = ce::ecs::ManagedPool<EventSignal>;
+using SignalBundle = ce::Bundle<EventSignal>;
 
 namespace ce {
 namespace ecs {
@@ -78,13 +79,12 @@ class EventManager {
         void emit( Args&&... args );
         
     private:
-        // creates the signal for the event type
         inline void accommodate_( uint32_t family ) {
-            if ( !signals_.isConstructed( family ) ) {
-                signals_.construct( family );
+            while ( family >= signals_.size() ) {
+                signals_.emplace();
             }
         }
-        SignalPool  signals_{ 32 };
+        SignalBundle  signals_{};
 };
 
 template<typename E, typename S>
@@ -92,7 +92,7 @@ void EventManager::subscribe( S& system ) {
     const unsigned family = Event<E>::family();
     ASSERT( !system.isConnected_( family ), "EventManager::subscribe> system already subscribed to event!" );
     accommodate_( family );
-    std::size_t connection = static_cast<EventSignal*>(signals_.at(family))->connect( [&system]( const void* event ) -> void {
+    std::size_t connection = signals_[family].connect( [&system]( const void* event ) -> void {
         system.receive( *(static_cast<const E*>( event )) );
     });
     system.connect_( family, connection );
@@ -102,7 +102,7 @@ template<typename E, typename S>
 void EventManager::unsubscribe( S& system ) {
     const unsigned family = Event<E>::family();
     ASSERT( system.isConnected_( family ), "EventManager::unsubscribe> system not subscribed to event!" );
-    static_cast<EventSignal*>(signals_.at( family ))->disconnect( system.connection_ );
+    signals_[family].disconnect( system.connection_ );
     system.disconnect( family );
 }
 
@@ -111,7 +111,7 @@ void EventManager::emit( Args&&... args ) {
     const unsigned family = Event<E>::family();
     accommodate_( family );
     E event{ std::forward<Args>( args )... };
-    static_cast<EventSignal*>(signals_.at( family ))->emit( &event );
+    signals_[family].emit( &event );
 }
 
 }   // ecs

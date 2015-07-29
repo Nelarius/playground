@@ -1,6 +1,6 @@
-#include "ecs/Pool.h"
+#include "utils/Pool.h"
 
-using ce::ecs::BasePool;
+using ce::BasePool;
 
 BasePool::BasePool( std::size_t elementSize, std::size_t chunkSize )
 :   blocks_(),

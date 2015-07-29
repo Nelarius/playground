@@ -7,7 +7,6 @@
 #include <set>
 
 namespace ce {
-namespace ecs {
 
 /**
  * @class BasePool
@@ -104,54 +103,4 @@ class Pool: public BasePool {
         }
 };
 
-/**
- * @class ManagedPool
- * @author Muszynski Johann M
- * @date 27/07/15
- * @file Pool.h
- * @brief A memory pool, which keeps track of where objects are constructed, and destroys them when destructed.
- * This should be used with a large number of objects, due to the rising time
- * complexity of searching std::set<T>.
- */
-template<typename T>
-class ManagedPool: public BasePool {
-    public:
-        ManagedPool( std::size_t chunkSize = 64 )
-        :   BasePool( sizeof(T), chunkSize ),
-            indices_()
-            {}
-        virtual ~ManagedPool() {
-            std::set<std::size_t> indicesCopy = indices_;
-            for ( std::size_t i : indicesCopy ) {
-                this->destroy( i );
-            }
-        }
-        
-        template<typename... Args>
-        void construct( std::size_t n, Args&&... args ) {
-            if ( n >= capacity_ ) {
-                reserve( n );
-            }
-            new ( this->at( n ) ) T( std::forward<Args>( args )... );
-            indices_.insert( n );
-        }
-        
-        bool isConstructed( std::size_t n ) {
-            auto it = indices_.find( n );
-            return it == indices_.end() ? false : true;
-        }
-        
-        void destroy( std::size_t n ) override {
-            ASSERT( n < capacity_, "ManagedPool::destroy> invalid positional argument." );
-            T* ptr = static_cast<T*>( this->at( n ) );
-            ptr->~T();
-            indices_.erase( n );
-        }
-        
-    private:
-        std::set<std::size_t>   indices_{};
-
-};
-
-}   // namespace ecs
 }   // namespace ce
