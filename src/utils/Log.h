@@ -110,3 +110,11 @@ class Log {
 #define LOG(level) \
 if ( level > ce::Log::ReportingLevel() ) ; \
 else ce::Log().get( level )
+
+#define LOG_ERROR LOG(ce::LogLevel::Error)
+#define LOG_WARNING LOG(ce::LogLevel::Warning)
+#define LOG_INFO LOG(ce::LogLevel::Info)
+#define LOG_DEBUG LOG(ce::LogLevel::Debug)
+#define LOG_DEBUG2 LOG(ce::LogLevel::Debug2)
+#define LOG_DEBUG3 LOG(ce::LogLevel::Debug3)
+#define LOG_DEBUG4 LOG(ce::LogLevel::Debug4)
