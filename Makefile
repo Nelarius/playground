@@ -1,7 +1,7 @@
 
 CC=g++
 
-LINKER_INCLUDES = -LC:/dev/SDL2-devel-2.0.3-mingw/SDL2-2.0.3/lib/x86 -LC:/dev/glew-1.12.0/glew-1.12.0/lib -LC:/dev/lua/build -LC:/dev/entityx
+LINKER_INCLUDES = -LC:/dev/SDL2-2.0.3/build -LC:/dev/glew-1.12.0/glew-1.12.0/lib -LC:/dev/glew-1.10.0/lib -LC:/dev/lua/build -LC:/dev/entityx/build -LC:/dev/assimp/lib
 
 CFLAGS = -std=gnu++14 -Wall -O2 -DDEBUG -DGLM_FORCE_RADIANS
 
@@ -12,8 +12,8 @@ EXECUTABLE =
 TEST_EXECUTABLE = 
 
 ifeq ($(OS),Windows_NT)
-	CFLAGS += -I./src -IC:/dev/glm -IC:/dev/glew-1.12.0/include -IC:/dev/SDL2-devel-2.0.3-mingw/SDL2-2.0.3/x86_64-w64-mingw32/include -IC:/dev/entityx -IC:/dev/lua/src -IC:/dev/boost_1_58_0 -I:C/dev/lua/src -IC:/dev/LuaBridge/Source
-	LDFLAGS += -lopengl32 -lglew32 -lmingw32 -lSDL2main -lSDL2 -llua -lentityx $(LINKER_INCLUDES)
+	CFLAGS += -I./src -IC:/dev/glm -IC:/dev/glew-1.12.0/include -IC:/dev/glew-1.10.0/include -IC:/dev/SDL2-2.0.3/include -IC:/dev/entityx -IC:/dev/lua/src -IC:/dev/boost_1_58_0 -I:C/dev/lua/src -IC:/dev/LuaBridge/Source -IC:/dev/assimp/include -IC:/dev/unittest-cpp
+	LDFLAGS += -lopengl32 -lglew32 -lmingw32 -lSDL2main -lSDL2 -llua -lentityx -lassimp $(LINKER_INCLUDES)
 	EXECUTABLE += Build/app.exe
 	TEST_EXECUTABLE += Build/test.exe
 else
@@ -72,7 +72,7 @@ $(EXECUTABLE): $(OBJ)
 	$(CC) -o $(EXECUTABLE) $(OBJ) $(LDFLAGS)
 	
 test: $(TESTOBJ)
-	$(CC) -o $(TEST_EXECUTABLE) $(TESTOBJ) -lUnitTest++
+	$(CC) -o $(TEST_EXECUTABLE) $(TESTOBJ) -LC:/dev/unittest-cpp/build -lUnitTest++
 
 
 .PHONY: clean

@@ -8,11 +8,11 @@
 
 using ce::MeshManager;
 
-ce::BorrowedBufferObject MeshManager::get( const std::string& file ) {
+ce::BufferObject* MeshManager::get( const std::string& file ) {
     auto it = resources_.find( file );
     
     if ( it != resources_.end() ) {
-        return BorrowedBufferObject( it->second.get() );
+        return it->second;
     }
     
     #ifdef DEBUG
@@ -49,13 +49,14 @@ ce::BorrowedBufferObject MeshManager::get( const std::string& file ) {
             }
         }
     }
-    resources_.emplace( file, std::make_unique<ce::BufferObject>( GL_ARRAY_BUFFER ) );
-    ce::BufferObject* vbo = resources_.find( file )->second.get();
+    auto index = buffer_.emplace( GL_ARRAY_BUFFER );
+    resources_.emplace( file, &buffer_[index] );
+    ce::BufferObject* vbo = resources_.find( file )->second;
     vbo->dataStore(
         data.size(), sizeof(float), &data[0], GL_STATIC_DRAW
     );
     
-    return BorrowedBufferObject( vbo );
+    return vbo;
 }
 
 void MeshManager::clear() {

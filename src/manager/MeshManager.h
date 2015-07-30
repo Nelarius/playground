@@ -3,6 +3,7 @@
 
 #include "opengl/BufferObject.h"
 #include "utils/Borrowed.h"
+#include "utils/Bundle.h"
 #include <memory>
 #include <map>
 #include <utility>
@@ -31,18 +32,19 @@ class MeshManager {
          * @brief 
          * @param file The mesh file to get.
          */
-        BorrowedBufferObject    get( const std::string& file );
+        BufferObject*   get( const std::string& file );
         /**
          * @brief Clear all elements.
          */
-        void                    clear();
+        void            clear();
         /**
          * @brief Get the number of elements.
          */
-        std::size_t             size() const;
+        std::size_t     size() const;
         
     private:
-        std::map<const std::string, std::unique_ptr<BufferObject>>  resources_{};
+        Bundle<BufferObject>                        buffer_;
+        std::map<const std::string, BufferObject*>  resources_{};
 };
 
 }
