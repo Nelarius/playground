@@ -288,8 +288,7 @@ class EntityManager {
                 template<typename C1, typename C2, typename... Components>
                 void view() {
                     view<C1>();
-                    view<C2>();
-                    view<Components...>();
+                    view<C2, Components...>();  // recursive!
                 }
                 /**
                  * @brief Return an iterator to the beginning of the view.
@@ -442,9 +441,10 @@ EntityManager::View EntityManager::join() {
 
 template<typename C1, typename C2, typename... Components>
 EntityManager::View EntityManager::join() {
-    View view{ this };
-    view.view<C1, C2, Components...>();
-    return view;
+    View v{ this };
+    v.view<C1>();
+    v.view<C2, Components...>();
+    return v;
 }
 
 template<typename C>
