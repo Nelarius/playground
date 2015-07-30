@@ -13,10 +13,8 @@ Compiling on Windows is... tricky at the moment. You can edit the included Makef
 same way as the Linux compilation does.
 
 ## TODO
-* Iterators for entities containing certain components
-  * `EntityManager::componentMasks_` should set an extra bit to indicate whether this entity is on the free list.
-  * `EntityManager::Iterator` should look at this to see if it should continue.
 * EntityManager should assert all errors, get rid of soft error logging. Wrong behavior should not be tolerated.
+* Instead of looking at a vector of component indices, possible use std::array for some compile-time magic.
 * Do a benchmark to compare join<>() with EntityX component iteration
 * Bind Vector, and Matrix to Lua
   * Add Vectors to input script to describe colors

@@ -117,6 +117,7 @@ class Entity {
 // this should be a run-time adjustable
 // to do so, EntityManager needs to use the Cheshire Cat pattern
 const uint32_t MaxComponents = 16u;
+const uint32_t MaskElements = MaxComponents + 1u;
 
 /**
  * @class EntityCreatedEvent
@@ -235,22 +236,46 @@ class EntityManager {
                 bool operator==( const Iterator& rhs ) { return index_ == rhs.index_; }
                 bool operator!=( const Iterator& rhs ) { return index_ != rhs.index_; }
                 Iterator& operator++() { // prefix operator
-                    uint32_t stop = owner_->componentMasks_.size();
-                    bool incorrectComponents = false;
-                    do {
-                        index_++;
-                        for ( uint32_t family: componentIndices_ ) {
-                            if ( !owner_->componentMasks_[index_].test( family ) ) {
-                                incorrectComponents = true;
-                                break;
-                            }
-                        }
-                    } while ( incorrectComponents && index_ < stop );
+                    index_++;
+                    skip();
                     return *this;
                 }
                 Entity operator*() { return Entity( owner_, Id( index_, owner_->entityVersions_[index_] ) ); }
+                /**
+                 * @brief If the current index is invalid, or the components aren't present, skip forward to the next valid entity.
+                 */
+                void skip() {
+                    const uint32_t stop = owner_->componentMasks_.size();
+                    while ( index_ < stop && skipIndex_( index_ ) ) {
+                        index_++;
+                    }
+                }
                 
-            private:                
+            private:
+                inline bool indexContainsComponents_( uint32_t index ) const {
+                    if ( componentIndices_.size() == 0u ) {
+                        return true;
+                    }
+                    for ( uint32_t i: componentIndices_ ) {
+                        if ( !owner_->componentMasks_[index].test(i) ) {
+                            return false;
+                        }
+                    }
+                    return true;
+                }
+                inline bool indexIsValid_( uint32_t index ) const {
+                    if ( owner_->componentMasks_[index].test( MaxComponents ) ) {
+                        return false;
+                    }
+                    return true;
+                }
+                inline bool skipIndex_( uint32_t index ) const {
+                    if ( index >= owner_->componentMasks_.size() ) {
+                        return false;
+                    }
+                    return !( indexIsValid_( index ) && indexContainsComponents_( index ) );
+                }
+                
                 EntityManager*              owner_;
                 std::uint32_t               index_;
                 std::vector<std::uint32_t>  componentIndices_;
@@ -296,30 +321,13 @@ class EntityManager {
                  * Note that by calling this method, the view is returned to the unfiltered state.
                  */
                 Iterator begin() {
-                    return Iterator( owner_, windForward_(), std::move( componentIndices_ ));
+                    Iterator it{ owner_, 0u, std::move( componentIndices_ ) };
+                    it.skip();
+                    return it;
                 }
                 Iterator end() { return Iterator( owner_, owner_->componentMasks_.size() ); }
             
-            private:
-                bool indexContainsComponents_( uint32_t index ) const {
-                    for ( uint32_t i: componentIndices_ ) {
-                        if ( !owner_->componentMasks_[index].test(i) ) {
-                            return false;
-                        }
-                    }
-                    return true;
-                }
-                uint32_t windForward_() const {
-                    if ( componentIndices_.size() == 0u ) {
-                        return 0u;
-                    }
-                    uint32_t index = 0u;
-                    while ( !indexContainsComponents_( index ) && index < owner_->componentMasks_.size() ) {
-                        index++;
-                    }
-                    return index;
-                }
-                
+            private:                
                 EntityManager*          owner_;
                 // these elements index into EntityManager::componentPools_ and 
                 // the component masks in EntityManager::componentMasks_
@@ -365,7 +373,7 @@ class EntityManager {
         const uint32_t                              PoolSize_{ 64 };
         uint32_t                                    indexCounter_{ 0u };
         std::vector<std::unique_ptr<BasePool>>      componentPools_{};
-        std::vector<std::bitset<MaxComponents>>     componentMasks_{};
+        std::vector<std::bitset<MaskElements>>      componentMasks_{};
         std::vector<uint32_t>                       entityVersions_{};
         std::vector<uint32_t>                       freeList_{};
         EventManager&                               mailMan_;

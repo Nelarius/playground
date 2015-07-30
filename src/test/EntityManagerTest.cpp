@@ -119,14 +119,18 @@ SUITE(EntityManagerTest) {
     TEST_FIXTURE( EntityManagerFixture, IteratorIsAtEndAfterEntityWithComponentsCreatedAndDestroyed ) {
         auto entity = entities.create();
         entity.assign<TestStruct>( 5 );
-        CHECK( false );
+        entity.destroy();
+        auto begin = entities.join<TestStruct>().begin();
+        auto end = entities.join<TestStruct>().end();
+        CHECK( begin == end );
     }
     
-    TEST_FIXTURE( EntityManagerFixture, IteratorIsAtEndAfterEntityWithoutComponentsCreatedAndDestroyed ) {
+    TEST_FIXTURE( EntityManagerFixture, IteratorIsAtEndAfterEntityCreatedAndDestroyed ) {
         auto entity = entities.create();
+        entity.destroy();
         auto begin = entities.join().begin();
         auto end = entities.join().end();
-        CHECK( false );
+        CHECK( begin == end );
     }
     
     TEST_FIXTURE( EntityFixture, EntityHasReturnsTrueWhenComponentAssigned ) {

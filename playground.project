@@ -79,6 +79,9 @@
       <File Name="src/utils/Log.h"/>
       <File Name="src/utils/Random.cpp"/>
       <File Name="src/utils/Random.h"/>
+      <File Name="src/utils/Pool.cpp"/>
+      <File Name="src/utils/Pool.h"/>
+      <File Name="src/utils/Bundle.h"/>
     </VirtualDirectory>
     <VirtualDirectory Name="data">
       <File Name="src/data/ambient.frag.glsl"/>
@@ -92,8 +95,6 @@
       <File Name="src/ecs/Component.h" ExcludeProjConfig="Debug"/>
       <File Name="src/ecs/Entity.cpp" ExcludeProjConfig=""/>
       <File Name="src/ecs/Entity.h" ExcludeProjConfig=""/>
-      <File Name="src/ecs/Pool.cpp" ExcludeProjConfig=""/>
-      <File Name="src/ecs/Pool.h" ExcludeProjConfig=""/>
       <File Name="src/ecs/System.h" ExcludeProjConfig=""/>
       <File Name="src/ecs/Id.h"/>
       <File Name="src/ecs/Include.h"/>
@@ -121,10 +122,10 @@
     <VirtualDirectory Name="math">
       <File Name="src/math/Include.h"/>
       <File Name="src/math/Matrix.h"/>
-      <File Name="src/math/Operations.h"/>
       <File Name="src/math/Plane.h"/>
       <File Name="src/math/Quaternion.h"/>
       <File Name="src/math/Vector.h"/>
+      <File Name="src/math/Operations.h"/>
     </VirtualDirectory>
     <VirtualDirectory Name="3rdparty">
       <File Name="src/3rdparty/SimpleSignal.h"/>

@@ -80,6 +80,7 @@ Entity EntityManager::create() {
         index = freeList_.back();
         freeList_.pop_back();
         version = entityVersions_[index];    // versions are incremented in destroy
+        componentMasks_[index].set( ce::ecs::MaxComponents, false ); // resets the last bit signalling that the entity is now valid
     }
     
     Entity entity( this, Id( index, version ) );
@@ -106,14 +107,15 @@ void EntityManager::destroy_( Id id ) {
     }
     mailMan_.emit<ce::ecs::EntityDestroyedEvent>( Entity( this, id ) );
     uint32_t index = id.index();
-    auto mask = componentMasks_[index];
+    auto& mask = componentMasks_[index];
     // we need to call the destructor of each component
     for ( uint32_t i = 0; i < componentPools_.size(); i++ ) {
         if ( mask.test(i) ) {
             componentPools_[i]->destroy( index );
         }
     }
-    componentMasks_[index].reset();
+    mask.reset();
+    mask.set( ce::ecs::MaxComponents );   // this element tells the iterator to skip this entity
     entityVersions_[index]++;
     freeList_.push_back( index );
 }
