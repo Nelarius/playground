@@ -13,7 +13,7 @@ Compiling on Windows is... tricky at the moment. You can edit the included Makef
 same way as the Linux compilation does.
 
 ## TODO
-* EntityManager should assert all errors, get rid of soft error logging. Wrong behavior should not be tolerated.
+* Get rid of compiler warning for narrowing conversion in Bundle.h
 * Instead of looking at a vector of component indices, possible use std::array for some compile-time magic.
 * Do a benchmark to compare join<>() with EntityX component iteration
 * Bind Vector, and Matrix to Lua

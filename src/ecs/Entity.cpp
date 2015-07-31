@@ -101,10 +101,7 @@ void EntityManager::accommodateEntity_( uint32_t index ) {
 }
 
 void EntityManager::destroy_( Id id ) {
-    if ( !isValid_(id) ) {
-        LOG(ce::LogLevel::Warning) << "Tried to destroy invalid entity.";
-        return;
-    }
+    ASSERT( isValid_( id ), "Tried to destroy an invalid entity!" ); 
     mailMan_.emit<ce::ecs::EntityDestroyedEvent>( Entity( this, id ) );
     uint32_t index = id.index();
     auto& mask = componentMasks_[index];

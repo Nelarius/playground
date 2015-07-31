@@ -412,28 +412,21 @@ bool ComponentHandle<C>::operator!=( const ComponentHandle<C>& rhs ) const {
 /////////////////////////////////////////////////////////////////////////////
 template<typename C>
 ComponentHandle<C> Entity::component() const {
-    ASSERT( isValid(), "Entity::component> Try to access component of an invalid entity." );
     return ComponentHandle<C>{ manager_, id_ };
 }
 
 template<typename C, typename... Args>
 ComponentHandle<C> Entity::assign( Args&& ... args) {
-    ASSERT( isValid(), "Entity::assign> Try to assign component to an invalid entity." );
     return manager_->assign_<C>( id_, std::forward<Args>( args )... );
 }
 
 template<typename C>
 void Entity::remove() {
-    if ( !isValid() ) {
-        LOG(ce::LogLevel::Error) << "Tried to remove component from invalid entity.";
-        return;
-    }
     manager_->remove_<C>( id_ );
 }
 
 template<typename C>
 bool Entity::has() const {
-    ASSERT( isValid(), "Entity::has> Checking components on an invalid entity." );
     return manager_->hasComponent_<C>( id_ );
 }
 
@@ -465,7 +458,7 @@ void EntityManager::accommodateComponent_() {
 
 template<typename C, typename... Args>
 ComponentHandle<C> EntityManager::assign_( Id id, Args&&... args ) {
-    ASSERT( isValid_(id), "EntityManager::assign_> tried to assign component to invalid entity." );
+    ASSERT( isValid_(id), "Tried to assign component to invalid entity." );
     const int family = Component<C>::family();
     accommodateComponent_<C>(); // create a new component pool, if not already done
     new ( componentPools_[family]->at( id.index() ) ) C{ std::forward<Args>( args )... };
@@ -484,10 +477,7 @@ ComponentHandle<C> EntityManager::assign_( Id id, Args&&... args ) {
 
 template<typename C>
 void EntityManager::remove_( Id id ) {
-    if ( !isValid_( id ) ) {
-        LOG(ce::LogLevel::Error) << "Tried to remove component from invalid entity.";
-        return;
-    }
+    ASSERT( isValid_( id), "Tried to remove component from an invalid entity" );
     mailMan_.emit<ComponentRemovedEvent<C>>( Entity { this, id }, ComponentHandle<C>{ this, id } );
     const int family = Component<C>::family();
     const uint32_t index = id.index();
@@ -497,14 +487,14 @@ void EntityManager::remove_( Id id ) {
 
 template<typename C>
 C* EntityManager::component_( Id id ) {
-    ASSERT( isValid_( id ), "EntityManager::component_> tried to get component of an invalid entity" );
+    ASSERT( isValid_( id ), "Tried to access component on an invalid entity" );
     const unsigned family = Component<C>::family();
     return static_cast<C*>( componentPools_[family]->at( id.index() ) );
 }
 
 template<typename C>
 bool EntityManager::hasComponent_( Id id ) const {
-    ASSERT( isValid_( id ), "EntityManager::hasComponent_> tried to check component of an invalid entity" );
+    ASSERT( isValid_( id ), "Tried to check component of an invalid entity" );
     const unsigned family = Component<C>::family();
     return componentMasks_[id.index()].test( family );
 }
