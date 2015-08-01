@@ -37,6 +37,7 @@ OBJ = src/Main.o \
 	src/ecs/Component.o \
 	src/ecs/System.o \
 	src/lua/LuaState.o \
+	src/lua/BindLua.o \
 	src/opengl/Shader.o \
 	src/opengl/Program.o \
 	src/opengl/VertexArrayObject.o \

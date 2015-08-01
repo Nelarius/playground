@@ -13,11 +13,13 @@ Compiling on Windows is... tricky at the moment. You can edit the included Makef
 same way as the Linux compilation does.
 
 ## TODO
+* Read & render basic components
+  * Transform, Renderable, Camera, Script components need to be defined
+  * For script component, must create a pool of lua states
+  * visible components need to be described in Lua scene file
+  * 
 * Get rid of compiler warning for narrowing conversion in Bundle.h
-* Instead of looking at a vector of component indices, possible use std::array for some compile-time magic.
-* Do a benchmark to compare join<>() with EntityX component iteration
-* Bind Vector, and Matrix to Lua
-  * Add Vectors to input script to describe colors
+* Bind Matrix to Lua
 * Quaternion math
 * Rendering matrices use Matrix4f
 * Implement Transform component & rendering system using my math module
@@ -26,7 +28,6 @@ same way as the Linux compilation does.
   * the current context (entity id) needs to be bound to some Lua variable
 * Add R'lyeh's profit lib to profile execution times of critical methods
 * Resource managers should switch over to using `ce::Bundle` instead of unique pointers.
-
 
 ## Dependencies
 ### SDL2

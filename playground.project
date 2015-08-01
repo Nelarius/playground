@@ -86,6 +86,7 @@
     <VirtualDirectory Name="data">
       <File Name="src/data/ambient.frag.glsl"/>
       <File Name="src/data/ambient.vert.glsl"/>
+      <File Name="src/data/scene.lua"/>
     </VirtualDirectory>
     <File Name="src/GameState.cpp" ExcludeProjConfig="Test"/>
     <File Name="src/GameState.h" ExcludeProjConfig="Test"/>
@@ -113,6 +114,8 @@
       <File Name="src/lua/LuaError.h" ExcludeProjConfig="Test"/>
       <File Name="src/lua/LuaState.cpp" ExcludeProjConfig="Test"/>
       <File Name="src/lua/LuaState.h" ExcludeProjConfig="Test"/>
+      <File Name="src/lua/BindLua.h"/>
+      <File Name="src/lua/BindLua.cpp"/>
     </VirtualDirectory>
     <File Name="src/Test.cpp" ExcludeProjConfig="Debug"/>
     <VirtualDirectory Name="test">

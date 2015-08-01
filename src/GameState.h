@@ -3,10 +3,7 @@
 
 #include "app/AppState.h"
 #include "app/Context.h"
-#include <entityx/entityx.h>
 #include "manager/ShaderManager.h"
-
-namespace ex = entityx;
 
 union SDL_Event;
 
@@ -42,9 +39,9 @@ class GameState : public AppState {
         
         // FIELDS
         // these could be possibly moved to AppState
-        ex::EventManager    events_{};
-        ex::EntityManager   entities_{ events_ };
-        ex::SystemManager   systems_{ entities_, events_ };        
+        //ex::EventManager    events_{};
+        //ex::EntityManager   entities_{ events_ };
+        //ex::SystemManager   systems_{ entities_, events_ };        
 };
 
 }

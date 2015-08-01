@@ -98,6 +98,10 @@ struct Vector2: public BaseVector<T, Vector2<T>, 2> {
             i++;
         }
     }
+    Vector2( T x, T y ) {
+        data[0] = x;
+        data[1] = y;
+    }
     Vector2()                               = default;
     Vector2( const Vector2& )               = default;
     Vector2( Vector2&& )                    = default;
