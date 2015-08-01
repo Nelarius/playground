@@ -31,25 +31,26 @@ class Event: public BaseEvent {
         }
 };
 
-class EventManager;
+class EntityManager;
 
 class Receiver {
     public:
         Receiver()          = default;
         virtual ~Receiver() = default;
-
-    private:
-        friend class EventManager;
         
         inline void connect_( uint32_t family, std::size_t connection ) {
-            connection_ = connection;
-            connections_.insert( std::make_pair( family, true ) );
+            connections_.insert( std::make_pair( family, connection ) );
         }
         inline bool isConnected_( uint32_t family ) const {
             auto it = connections_.find( family );
             if ( it == connections_.end() ) {
                 return false;
             }
+            return true;
+        }
+        inline uint32_t connection_( uint32_t family ) const {
+            auto it = connections_.find( family );
+            ASSERT( it != connections_.end(), "No connection in Receiver!" );
             return it->second;
         }
         inline void disconnect_( uint32_t family ) {
@@ -57,11 +58,11 @@ class Receiver {
             if ( it != connections_.end() ) {
                 connections_.erase( it );
             }
-            connection_ = 0u;
         }
         
-        std::unordered_map<uint32_t, bool> connections_{};  // connections to event types
-        std::size_t connection_{ 0u };
+    private:
+        friend class EntityManager;
+        std::unordered_map<uint32_t, std::size_t> connections_{};  // connections to event types
 };
 
 class EventManager {
@@ -89,21 +90,23 @@ class EventManager {
 
 template<typename E, typename S>
 void EventManager::subscribe( S& system ) {
-    const unsigned family = Event<E>::family();
-    ASSERT( !system.isConnected_( family ), "EventManager::subscribe> system already subscribed to event!" );
+    Receiver& receiver = static_cast<Receiver&>( system );
+    const uint32_t family = Event<E>::family();
+    ASSERT( !receiver.isConnected_( family ), "EventManager::subscribe> system already subscribed to event!" );
     accommodate_( family );
     std::size_t connection = signals_[family].connect( [&system]( const void* event ) -> void {
         system.receive( *(static_cast<const E*>( event )) );
     });
-    system.connect_( family, connection );
+    receiver.connect_( family, connection );
 }
 
 template<typename E, typename S>
 void EventManager::unsubscribe( S& system ) {
-    const unsigned family = Event<E>::family();
-    ASSERT( system.isConnected_( family ), "EventManager::unsubscribe> system not subscribed to event!" );
-    signals_[family].disconnect( system.connection_ );
-    system.disconnect( family );
+    Receiver& receiver = static_cast<Receiver&> (system);
+    const uint32_t family = Event<E>::family();
+    ASSERT( receiver.isConnected_( family ), "EventManager::unsubscribe> system not subscribed to event!" );
+    signals_[family].disconnect( receiver.connection_( family ) );
+    receiver.disconnect_( family );
 }
 
 template<typename E, typename... Args>

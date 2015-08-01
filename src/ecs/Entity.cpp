@@ -35,6 +35,10 @@ void Entity::destroy() {
     }
 }
 
+ce::ecs::Id Entity::id() const {
+    return id_;
+}
+
 bool Entity::operator==( const Entity& rhs ) const {
     return manager_ == rhs.manager_ && id_ == rhs.id_;
 }

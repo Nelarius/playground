@@ -12,14 +12,17 @@
 
 namespace ce {
 namespace ecs {
+    
+class EntityManager;
+class EventManager;
 
 class BaseSystem {
     public:
         BaseSystem()            = default;
         virtual ~BaseSystem()    = default;
         
-        virtual void configure() = 0;
-        virtual void update( float dt ) = 0;
+        virtual void configure( EventManager& ) = 0;
+        virtual void update( EntityManager&, EventManager&, float dt ) = 0;
     protected:
         static uint32_t familyCounter_;
 };
@@ -29,6 +32,9 @@ class System: public BaseSystem {
     public:
         System()            = default;
         virtual ~System()   = default;
+        
+        //virtual void configure() {}
+        //virtual void update()
     
         static uint32_t family() {
             static uint32_t f{ familyCounter_++ };
@@ -38,7 +44,7 @@ class System: public BaseSystem {
 
 class SystemManager {
     public:
-        SystemManager() = default;
+        SystemManager( EventManager&, EntityManager& );
         ~SystemManager() = default;
         
         template<typename S, typename... Args>
@@ -53,7 +59,9 @@ class SystemManager {
         void update( float dt );
     
     private:
-        std::unordered_map<uint32_t, std::shared_ptr<BaseSystem>>   systems_{};
+        EventManager&   events_;
+        EntityManager&  entities_;
+        std::unordered_map<uint32_t, std::shared_ptr<BaseSystem>>   systems_;
 };
 
 /////////////////////////////////////////////////////////////////////////////
@@ -77,14 +85,14 @@ template<typename S>
 void SystemManager::configure() {
     auto it = systems_.find( S::family() );
     ASSERT( it != systems_.end(), "SystemManager::configure> system not added yet!" );
-    it->configure();
+    it->second->configure( events_ );
 }
 
 template<typename S>
 void SystemManager::update( float dt ) {
     auto it = systems_.find( S::family() );
     ASSERT( it != systems_.end(), "SystemManager::update> system not added yet!" );
-    it->update( dt );
+    it->second->update( events_, entities_, dt );
 }
 
 }   // namespace ecs
