@@ -31,13 +31,16 @@ class Event: public BaseEvent {
         }
 };
 
-class EntityManager;
+class EventManager;
 
 class Receiver {
     public:
         Receiver()          = default;
         virtual ~Receiver() = default;
+    
+        friend class EventManager;
         
+    private:
         inline void connect_( uint32_t family, std::size_t connection ) {
             connections_.insert( std::make_pair( family, connection ) );
         }
@@ -60,8 +63,6 @@ class Receiver {
             }
         }
         
-    private:
-        friend class EntityManager;
         std::unordered_map<uint32_t, std::size_t> connections_{};  // connections to event types
 };
 
