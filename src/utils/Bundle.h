@@ -23,7 +23,7 @@ namespace ce {
  * 
  * By default, 64 elements are stored in one block.
  */
-template<typename T>
+template<typename T, std::size_t N = 64>
 class Bundle {
     public:
         Bundle()                            = default;
@@ -59,7 +59,7 @@ class Bundle {
         }
         
     private:
-        Pool<T>     pool_{ 64 };
+        Pool<T>     pool_{ N };
         std::size_t position_{ 0u };
 };
 
