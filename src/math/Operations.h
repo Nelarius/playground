@@ -47,6 +47,50 @@ Matrix4<T> Translate( const Vector3<T>& v ) {
     };
 }
 
+/**
+ * @brief 
+ * @param near near plane, as a distance from the eye
+ * @param far far plane, as a distance from the eye
+ * @param fov The vertical field of view
+ * @param width
+ * @param height
+ * @return 
+ */
+template<typename T>
+Matrix4<T> Perspective( T near, T far, T fov, T width, T height ) {
+    return Matrix4<T> {
+        near / (width/2), 0, 0, 0,
+        0, near / (height/2), 0, 0,
+        0, 0, -(far + near) / (far - near), 2*(far * near) / (far - near),
+        0, 0, -1, 0
+    };
+}
+
+template<typename T>
+Matrix4<T> AsymmetricPerspective( T near, T far, T fov, T aspect ) {
+    return Matrix4<T>{};
+}
+
+template<typename T>
+Matrix4<T> Orthographic() {
+    return Matrix4<T>{
+        
+    };
+}
+
+template<typename T>
+Matrix4<T> Model( const Vector3<T>& s, const Vector3<T>& t) {
+    // the composite model matrix is C = TRS
+    // where T is the translation matrix
+    // R is the rotation matrix 
+    // S is the scale matrix
+    return Translate( t ) * Scale( s );
+}
+
+template<typename T>
+Matrix4<T> Camera() {
+    return Matrix4<T> {};
+}
 
 }   // math
 }   // ce
