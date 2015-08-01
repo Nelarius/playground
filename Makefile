@@ -1,7 +1,22 @@
 
 CC=g++
 
-LINKER_INCLUDES = -LC:/dev/SDL2-2.0.3/build -LC:/dev/glew-1.12.0/glew-1.12.0/lib -LC:/dev/glew-1.10.0/lib -LC:/dev/lua/build -LC:/dev/entityx/build -LC:/dev/assimp/lib
+# there are for windows compilation
+SDL_LINK = C:/dev/SDL2-2.0.3/build
+SDL_COMP = C:/dev/SDL2-2.0.3/include
+
+GLEW_LINK = C:/dev/glew-1.12.0/lib
+GLEW_COMP = C:/dev/glew-1.12.0/include
+
+ASSIMP_LINK = C:/dev/assimp/lib
+ASSIMP_COMP = C:/dev/assimp/include
+
+LUA_LINK = C:/dev/lua/build
+LUA_COMP = C:/dev/lua/src
+
+LUABRIDGE_COMP = C:/dev/LuaBridge/Source
+
+LINKER_INCLUDES = -L $(SDL_LINK) -L $(GLEW_LINK) -LC:/dev/glew-1.10.0/lib -L $(LUA_LINK) -L $(ASSIMP_LINK)
 
 CFLAGS = -std=gnu++14 -Wall -O2 -DDEBUG -DGLM_FORCE_RADIANS
 
@@ -12,8 +27,8 @@ EXECUTABLE =
 TEST_EXECUTABLE = 
 
 ifeq ($(OS),Windows_NT)
-	CFLAGS += -I./src -IC:/dev/glm -IC:/dev/glew-1.12.0/include -IC:/dev/glew-1.10.0/include -IC:/dev/SDL2-2.0.3/include -IC:/dev/entityx -IC:/dev/lua/src -IC:/dev/boost_1_58_0 -I:C/dev/lua/src -IC:/dev/LuaBridge/Source -IC:/dev/assimp/include -IC:/dev/unittest-cpp
-	LDFLAGS += -lopengl32 -lglew32 -lmingw32 -lSDL2main -lSDL2 -llua -lentityx -lassimp $(LINKER_INCLUDES)
+	CFLAGS += -I./src -IC:/dev/glm -I $(GLEW_COMP) -I $(SDL_COMP) -I $(LUA_COMP) -I $(LUABRIDGE_COMP) -I $(ASSIMP_COMP) -IC:/dev/unittest-cpp
+	LDFLAGS += -lopengl32 -lglew32 -lmingw32 -lSDL2main -lSDL2 -llua -lassimp $(LINKER_INCLUDES)
 	EXECUTABLE += Build/app.exe
 	TEST_EXECUTABLE += Build/test.exe
 else
@@ -48,7 +63,6 @@ OBJ = src/Main.o \
 	src/manager/MeshManager.o \
 	src/manager/ShaderManager.o \
 	src/system/Debug.o \
-	src/system/Render.o \
 	src/utils/Random.o \
 	src/utils/Pool.o \
 	
