@@ -49,7 +49,7 @@ ce::BufferObject* MeshManager::get( const std::string& file ) {
             }
         }
     }
-    auto index = buffer_.emplace( GL_ARRAY_BUFFER );
+    auto index = buffer_.emplace<GLenum>( GL_ARRAY_BUFFER );
     resources_.emplace( file, &buffer_[index] );
     ce::BufferObject* vbo = resources_.find( file )->second;
     vbo->dataStore(
