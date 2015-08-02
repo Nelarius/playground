@@ -1,16 +1,17 @@
 # Playground
 
+----------
+
+
 ## Compiling
 
 The source code uses GCC pragmas and C++14.
 
 ### Linux
-Run `make test` to build the tests, and then `make all` to build the program, copy resources and run all the tests.
-The build will appear in the `./Build` folder.
+On Linux, once the dependencies have been installed, just run `make` to build the program and run the tests. The result will appear in the `./Build` folder.
 
 ### Windows
-Compiling on Windows is... tricky at the moment. You can edit the included Makefile in order to add the library locations. Other than that, it should work in the
-same way as the Linux compilation does.
+Compiling on Windows isn't a great experience at the moment. Your locations of the dependencies should be entered into the `*_COMP` and `*_LINK` fields. Once that has been done, the build is done the same way as on Linux.
 
 ## TODO
 * Read & render basic components
@@ -37,6 +38,8 @@ Happy bunny license, MIT license
 Feel free to use and redistribute, but include the license
 ### glew
 MIT license
-### Lua
+### Lua 5.2
 MIT license
+### Assimp
+### LuaBridge
 

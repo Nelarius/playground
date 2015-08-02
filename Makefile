@@ -15,6 +15,10 @@ LUA_LINK = C:/dev/lua/build
 LUA_COMP = C:/dev/lua/src
 
 LUABRIDGE_COMP = C:/dev/LuaBridge/Source
+GLM_COMP = C:/dev/glm
+
+CPPTEST_COMP = C:/dev/unittest-cpp
+CPPTEST_LINK = C:/dev/unittest-cpp/build
 
 LINKER_INCLUDES = -L $(SDL_LINK) -L $(GLEW_LINK) -L $(LUA_LINK) -L $(ASSIMP_LINK)
 
@@ -27,7 +31,7 @@ EXECUTABLE =
 TEST_EXECUTABLE = 
 
 ifeq ($(OS),Windows_NT)
-	CFLAGS += -I./src -IC:/dev/glm -I $(GLEW_COMP) -I $(SDL_COMP) -I $(LUA_COMP) -I $(LUABRIDGE_COMP) -I $(ASSIMP_COMP) -IC:/dev/unittest-cpp
+	CFLAGS += -I./src -I $(GLM_COMP) -I $(GLEW_COMP) -I $(SDL_COMP) -I $(LUA_COMP) -I $(LUABRIDGE_COMP) -I $(ASSIMP_COMP) -I $(CPPTEST_COMP)
 	LDFLAGS += -lopengl32 -lglew32 -lmingw32 -lSDL2main -lSDL2 -llua -lassimp $(LINKER_INCLUDES)
 	EXECUTABLE += Build/app.exe
 	TEST_EXECUTABLE += Build/test.exe
@@ -87,7 +91,7 @@ $(EXECUTABLE): $(OBJ)
 	$(CC) -o $(EXECUTABLE) $(OBJ) $(LDFLAGS)
 	
 test: $(TESTOBJ)
-	$(CC) -o $(TEST_EXECUTABLE) $(TESTOBJ) -LC:/dev/unittest-cpp/build -lUnitTest++
+	$(CC) -o $(TEST_EXECUTABLE) $(TESTOBJ) -L $(CPPTEST_LINK) -lUnitTest++
 
 
 .PHONY: clean
