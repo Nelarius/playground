@@ -11,7 +11,7 @@ The source code uses GCC pragmas and C++14.
 On Linux, once the dependencies have been installed, just run `make` to build the program and run the tests. The result will appear in the `./Build` folder.
 
 ### Windows
-Compiling on Windows isn't a great experience at the moment. Your locations of the dependencies should be entered into the `*_COMP` and `*_LINK` fields. Once that has been done, the build is done the same way as on Linux.
+Compiling on Windows isn't a great experience at the moment. Your locations of the dependencies should be entered into the `*_COMP` and `*_LINK` fields, at the beginning of the Makefile. Once that has been done, the build is done the same way as on Linux.
 
 ## TODO
 * Read & render basic components
@@ -41,5 +41,7 @@ MIT license
 ### Lua 5.2
 MIT license
 ### Assimp
+3-clause BSD license, do what you want, but include the license text.
 ### LuaBridge
+MIT license
 
