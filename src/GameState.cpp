@@ -4,7 +4,7 @@
 #include "opengl/VertexArrayObjectFactory.h"
 #include "manager/MeshManager.h"
 #include "system/Debug.h"
-#include "system/Render.h"
+//#include "system/Render.h"
 #include "component/Include.h"
 #include "utils/Log.h"
 #include "utils/Assert.h"
@@ -25,10 +25,13 @@ using ce::GameState;
 using ce::AppState;
 
 GameState::GameState( Context& context, AppStateStack& stack ) 
-:   AppState( context, stack ) {
-	/*systems_.add<ce::system::Render>( context );
+:   AppState( context, stack ),
+    events_(),
+    entities_( events_ ),
+    systems_( events_, entities_ ){
+	//systems_.add<ce::system::Render>( context );
 	systems_.add<ce::system::Debug>();
-    systems_.configure();*/
+    systems_.configure<ce::system::Debug>();
 }
 
 void GameState::parseScene_() {
@@ -45,7 +48,6 @@ void GameState::activate() {
     
     context_.shaderManager.addShader( "data/ambient.vert.glsl", GL_VERTEX_SHADER );
     context_.shaderManager.addShader( "data/ambient.frag.glsl", GL_FRAGMENT_SHADER );
-    context_.shaderManager.compile( "ambient" );
     
     parseScene_();
 }

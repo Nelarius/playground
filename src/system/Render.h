@@ -1,20 +1,18 @@
 
 #pragma once
 
-#include <entityx/entityx.h>
+#include "ecs/Include.h"
 #include "app/Context.h"
-
-namespace ex = entityx;
 
 namespace ce {
 namespace system {
 
-class Render : public ex::System<Render> {
+class Render : public ce::ecs::System<Render> {
     public:
         Render() = delete;
         explicit Render( Context& context );
         
-        void update( ex::EntityManager&, ex::EventManager&, ex::TimeDelta ) override;
+        void update( ce::ecs::EntityManager&, ce::ecs::EventManager&, float ) override;
     
     private:
         Context& context_;

@@ -16,7 +16,7 @@ LUA_COMP = C:/dev/lua/src
 
 LUABRIDGE_COMP = C:/dev/LuaBridge/Source
 
-LINKER_INCLUDES = -L $(SDL_LINK) -L $(GLEW_LINK) -LC:/dev/glew-1.10.0/lib -L $(LUA_LINK) -L $(ASSIMP_LINK)
+LINKER_INCLUDES = -L $(SDL_LINK) -L $(GLEW_LINK) -L $(LUA_LINK) -L $(ASSIMP_LINK)
 
 CFLAGS = -std=gnu++14 -Wall -O2 -DDEBUG -DGLM_FORCE_RADIANS
 

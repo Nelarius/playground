@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include "ecs/Include.h"
 #include "app/AppState.h"
 #include "app/Context.h"
 #include "manager/ShaderManager.h"
@@ -39,9 +40,9 @@ class GameState : public AppState {
         
         // FIELDS
         // these could be possibly moved to AppState
-        //ex::EventManager    events_{};
-        //ex::EntityManager   entities_{ events_ };
-        //ex::SystemManager   systems_{ entities_, events_ };        
+        ce::ecs::EventManager    events_;
+        ce::ecs::EntityManager   entities_;
+        ce::ecs::SystemManager   systems_;        
 };
 
 }

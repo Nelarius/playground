@@ -1,29 +1,24 @@
 
 #pragma once
 
-#include <entityx/entityx.h>
+#include "ecs/Include.h"
 #include "component/Include.h"
-
-namespace ex = entityx;
 
 namespace ce {
 namespace system {
 
-/*
- * This has to be a struct, or else the compiler can't find BaseReceiver...
- * */
-struct Debug : public ex::System<Debug>, ex::Receiver<Debug> {
+class Debug : public ce::ecs::System<Debug>, public ce::ecs::Receiver {
     public:	
-        void configure( ex::EventManager& events ) override;
-        void update( ex::EntityManager& entities, ex::EventManager& events, ex::TimeDelta dt ) override;
-        void receive( const ex::EntityCreatedEvent& created );
-        void receive( const ex::EntityDestroyedEvent& destroyed );
-        void receive( const ex::ComponentAddedEvent<component::Camera>& camera );
-        void receive( const ex::ComponentAddedEvent<component::Transform>& transform );
-        void receive( const ex::ComponentAddedEvent<component::Renderable>& renderable );
-        void receive( const ex::ComponentRemovedEvent<component::Camera>& camera );
-        void receive( const ex::ComponentRemovedEvent<component::Transform>& transform );
-        void receive( const ex::ComponentRemovedEvent<component::Renderable>& renderable );
+        void configure( ce::ecs::EventManager& events ) override;
+        void update( ce::ecs::EntityManager& entities, ce::ecs::EventManager& events, float dt ) override;
+        void receive( const ce::ecs::EntityCreatedEvent& created );
+        void receive( const ce::ecs::EntityDestroyedEvent& destroyed );
+        void receive( const ce::ecs::ComponentAssignedEvent<component::Camera>& camera );
+        void receive( const ce::ecs::ComponentAssignedEvent<component::Transform>& transform );
+        void receive( const ce::ecs::ComponentAssignedEvent<component::Renderable>& renderable );
+        void receive( const ce::ecs::ComponentRemovedEvent<component::Camera>& camera );
+        void receive( const ce::ecs::ComponentRemovedEvent<component::Transform>& transform );
+        void receive( const ce::ecs::ComponentRemovedEvent<component::Renderable>& renderable );
 };
 
 

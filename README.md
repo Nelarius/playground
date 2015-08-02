@@ -17,8 +17,7 @@ same way as the Linux compilation does.
   * Transform, Renderable, Camera, Script components need to be defined
   * For script component, must create a pool of lua states
   * visible components need to be described in Lua scene file
-  * 
-* Get rid of compiler warning for narrowing conversion in Bundle.h
+  * create a simple scene in C++ to test systems and components
 * Bind Matrix to Lua
 * Quaternion math
 * Rendering matrices use Matrix4f
@@ -35,11 +34,7 @@ zlib license
 Feel free to do anything you want with it, so long as you don't misrepresent who wrote the original software, license must be included
 ### glm
 Happy bunny license, MIT license
-The happy bunny license is the MIT license, except that you're discouraged to use it for
-military purposes...
 Feel free to use and redistribute, but include the license
-### EntityX
-MIT license
 ### glew
 MIT license
 ### Lua

@@ -8,6 +8,7 @@
 #include <cmath>
 
 using ce::system::Render;
+using ce::ecs::Entity;
 
 namespace {
     
@@ -15,7 +16,7 @@ namespace {
     const float RadsToDegrees = 180.0f / 3.141592653f;
     const float Pi = 3.141592653f;
     
-    glm::mat4 ModelMatrixFromTransform( const ex::ComponentHandle<ce::component::Transform>& t ) {
+    glm::mat4 ModelMatrixFromTransform( const ce::ecs::ComponentHandle<ce::component::Transform>& t ) {
         /*
          * The composite model matrix is C = TRS
          * */
@@ -32,9 +33,9 @@ Render::Render( ce::Context& context )
     {}
 
 void Render::update(
-    ex::EntityManager& entities,
-    ex::EventManager& events,
-    ex::TimeDelta dt 
+    ce::ecs::EntityManager& entities,
+    ce::ecs::EventManager& events,
+    float dt 
 ) {
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
@@ -43,11 +44,9 @@ void Render::update(
     /*
      * Iterate over cameras here, find the active one
      * */
-    ex::ComponentHandle<ce::component::Camera>    camera;
-    ex::ComponentHandle<ce::component::Transform> transform;
-    #pragma GCC diagnostic push
-    #pragma GCC diagnostic ignored "-Wunused-but-set-variable"
-    for ( ex::Entity entity: entities.entities_with_components( transform, camera ) ) {
+    for ( Entity entity: entities.join<ce::component::Transform, ce::component::Camera>() ) {
+        auto camera = entity->component<ce::component::Camera>();
+        auto transform = entity->compnent<ce::component::Transform>();
         if ( camera->active ) {
             glm::mat4 view = ModelMatrixFromTransform( transform );
             glm::mat4 proj;
@@ -60,15 +59,13 @@ void Render::update(
             break;
         }
     }
-    #pragma GCC diagnostic pop
     
      /*
       * Then, iterate over renderables
       * */
-    ex::ComponentHandle<ce::component::Renderable> renderable;
-    #pragma GCC diagnostic push
-    #pragma GCC diagnostic ignored "-Wunused-but-set-variable"
-    for ( ex::Entity entity: entities.entities_with_components( transform, renderable ) ) {
+    for ( Entity entity: entities.join<ce::component::Transform, ce::component::Renderable>() ) {
+        auto renderable = entity.component<ce::component::Renderable>();
+        auto transform = entity.component<ce::component::Transform>();
         auto shader = renderable->shader;
         shader->use();
         shader->setUniform( 
@@ -86,7 +83,5 @@ void Render::update(
         renderable->vao.unbind();
         shader->stopUsing();
     }
-    #pragma GCC diagnostic pop
-    
 }
 
