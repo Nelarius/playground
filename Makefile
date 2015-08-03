@@ -63,7 +63,6 @@ OBJ = src/Main.o \
 	src/opengl/VertexArrayObjectFactory.o \
 	src/opengl/BufferObject.o \
 	src/opengl/Texture.o \
-	src/opengl/Interface.o \
 	src/manager/MeshManager.o \
 	src/manager/ShaderManager.o \
 	src/system/Debug.o \

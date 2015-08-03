@@ -34,8 +34,8 @@ struct Renderable {
     Renderable() = default;
     ~Renderable() = default;
     Renderable(
-        BorrowedBufferObject vbo,
-        BorrowedProgram prog,
+        BufferObject* vbo,
+        Program* prog,
         const VertexArrayObject& vao,
         const std::unordered_map<std::string, float>& unif
     )
@@ -46,8 +46,8 @@ struct Renderable {
         {}
     
     // a borrowed pointer is not managed here
-    BorrowedBufferObject                    vbo{ nullptr };
-    BorrowedProgram                         shader{ nullptr };
+    BufferObject*                           vbo{ nullptr };
+    Program*                                shader{ nullptr };
     VertexArrayObject                       vao{ 0 };
     std::unordered_map<std::string, float>  uniforms{ 10 }; // initialize with the number of initial buckets, to save on allocation time
 };

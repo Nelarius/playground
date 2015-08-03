@@ -43,7 +43,7 @@ class MeshManager {
         std::size_t     size() const;
         
     private:
-        Bundle<BufferObject>                        buffer_;
+        Bundle<BufferObject>                        buffer_{};
         std::map<const std::string, BufferObject*>  resources_{};
 };
 

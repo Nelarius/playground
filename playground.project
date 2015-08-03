@@ -57,8 +57,6 @@
       <File Name="src/opengl/BufferObject.cpp" ExcludeProjConfig="Test"/>
       <File Name="src/opengl/BufferObject.h" ExcludeProjConfig="Test"/>
       <File Name="src/opengl/Enum.h" ExcludeProjConfig="Test"/>
-      <File Name="src/opengl/Interface.cpp" ExcludeProjConfig="Test"/>
-      <File Name="src/opengl/Interface.h" ExcludeProjConfig="Test"/>
       <File Name="src/opengl/Program.cpp" ExcludeProjConfig="Test"/>
       <File Name="src/opengl/Program.h" ExcludeProjConfig="Test"/>
       <File Name="src/opengl/Shader.cpp" ExcludeProjConfig="Test"/>
@@ -87,6 +85,8 @@
       <File Name="src/data/ambient.frag.glsl"/>
       <File Name="src/data/ambient.vert.glsl"/>
       <File Name="src/data/scene.lua"/>
+      <File Name="src/data/diffuse.frag.glsl"/>
+      <File Name="src/data/diffuse.vert.glsl"/>
     </VirtualDirectory>
     <File Name="src/GameState.cpp" ExcludeProjConfig="Test"/>
     <File Name="src/GameState.h" ExcludeProjConfig="Test"/>

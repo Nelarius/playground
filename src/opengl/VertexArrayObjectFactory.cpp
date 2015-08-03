@@ -1,11 +1,13 @@
 #include "opengl/VertexArrayObjectFactory.h"
 #include "opengl/Enum.h"
+#include "opengl/BufferObject.h"
+#include "opengl/Program.h"
 #include "utils/Log.h"
 #include "utils/Assert.h"
 
 using ce::VertexArrayObjectFactory; 
 
-VertexArrayObjectFactory::VertexArrayObjectFactory( ce::BorrowedBufferObject buffer, ce::BorrowedProgram program )
+VertexArrayObjectFactory::VertexArrayObjectFactory( ce::BufferObject* buffer, ce::Program* program )
 :   attributeQueue_(),
     standardAttributeQueue_(),
     buffer_( buffer ),

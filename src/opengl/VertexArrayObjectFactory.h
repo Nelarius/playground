@@ -12,6 +12,9 @@
 
 namespace ce {
 
+class BufferObject;
+class Program;
+    
 /**
  * @class VertexArrayObjectFactory
  * @author Johann
@@ -28,7 +31,7 @@ class VertexArrayObjectFactory {
          * @param buffer The buffer object to use as the data source.
          * @param shader The shader in which the attributes lie.
          */
-        explicit VertexArrayObjectFactory( BorrowedBufferObject buffer, BorrowedProgram shader );
+        explicit VertexArrayObjectFactory( BufferObject* buffer, Program* shader );
         ~VertexArrayObjectFactory() = default;
         
         /**
@@ -101,8 +104,8 @@ class VertexArrayObjectFactory {
         
         std::vector<Attribute>  attributeQueue_{};
         std::vector<Attribute>  standardAttributeQueue_{};
-        BorrowedBufferObject    buffer_;
-        BorrowedProgram         program_;
+        BufferObject*           buffer_;
+        Program*                program_;
 
 };
 
