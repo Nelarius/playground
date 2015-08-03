@@ -27,7 +27,6 @@ Compiling on Windows isn't a great experience at the moment. Your locations of t
   * EntityManager, EventManager, SystemManager, events, and components all need to be bound to Lua
   * the current context (entity id) needs to be bound to some Lua variable
 * Add R'lyeh's profit lib to profile execution times of critical methods
-* Resource managers should switch over to using `ce::Bundle` instead of unique pointers.
 
 ## Dependencies
 ### SDL2
