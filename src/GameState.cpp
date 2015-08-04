@@ -4,7 +4,7 @@
 #include "opengl/VertexArrayObjectFactory.h"
 #include "manager/MeshManager.h"
 #include "system/Debug.h"
-//#include "system/Render.h"
+#include "system/Render.h"
 #include "component/Include.h"
 #include "utils/Log.h"
 #include "utils/Assert.h"
@@ -29,7 +29,7 @@ GameState::GameState( Context& context, AppStateStack& stack )
     events_(),
     entities_( events_ ),
     systems_( events_, entities_ ){
-	//systems_.add<ce::system::Render>( context );
+	systems_.add<ce::system::Render>( context );
 	systems_.add<ce::system::Debug>();
     systems_.configure<ce::system::Debug>();
 }
@@ -48,6 +48,8 @@ void GameState::activate() {
     
     context_.shaderManager.addShader( "data/ambient.vert.glsl", GL_VERTEX_SHADER );
     context_.shaderManager.addShader( "data/ambient.frag.glsl", GL_FRAGMENT_SHADER );
+    
+    auto entity = entities_.create();
     
     parseScene_();
 }
@@ -68,6 +70,6 @@ void GameState::render( float dt ) {
     /*
      * Iterate over Renderable components here
      * */
-	//systems_.update<ce::system::Render>( double (dt) );
+	systems_.update<ce::system::Render>( dt );
 }
 

@@ -29,7 +29,8 @@ namespace {
 }
 
 Render::Render( ce::Context& context )
-:   context_{ context }
+:   System<Render>(),
+    context_{ context }
     {}
 
 void Render::update(
@@ -45,8 +46,8 @@ void Render::update(
      * Iterate over cameras here, find the active one
      * */
     for ( Entity entity: entities.join<ce::component::Transform, ce::component::Camera>() ) {
-        auto camera = entity->component<ce::component::Camera>();
-        auto transform = entity->compnent<ce::component::Transform>();
+        auto camera = entity.component<ce::component::Camera>();
+        auto transform = entity.component<ce::component::Transform>();
         if ( camera->active ) {
             glm::mat4 view = ModelMatrixFromTransform( transform );
             glm::mat4 proj;

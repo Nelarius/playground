@@ -33,8 +33,8 @@ class System: public BaseSystem {
         System()            = default;
         virtual ~System()   = default;
         
-        //virtual void configure() {}
-        //virtual void update()
+        virtual void configure( EventManager& ) {}
+        virtual void update( EntityManager&, EventManager&, float dt ) {}
     
         static uint32_t family() {
             static uint32_t f{ familyCounter_++ };
@@ -92,7 +92,7 @@ template<typename S>
 void SystemManager::update( float dt ) {
     auto it = systems_.find( S::family() );
     ASSERT( it != systems_.end(), "SystemManager::update> system not added yet!" );
-    it->second->update( events_, entities_, dt );
+    it->second->update( entities_, events_, dt );
 }
 
 }   // namespace ecs
