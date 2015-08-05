@@ -45,8 +45,8 @@ void Render::update(
     /*
      * Iterate over cameras here, find the active one
      * */
-    for ( Entity entity: entities.join<pg::component::Transform, ce::component::Camera>() ) {
-        auto camera = entity.component<ce::component::Camera>();
+    for ( Entity entity: entities.join<pg::component::Transform, pg::component::Camera>() ) {
+        auto camera = entity.component<pg::component::Camera>();
         auto transform = entity.component<pg::component::Transform>();
         if ( camera->active ) {
             glm::mat4 view = ModelMatrixFromTransform( transform );

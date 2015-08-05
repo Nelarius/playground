@@ -1,7 +1,7 @@
 
 #pragma once
 
-namespace ce  {
+namespace pg  {
 namespace component {
 
 struct Camera {
@@ -27,4 +27,4 @@ struct Camera {
 
 
 }   //namespace component
-}   //namespace ce
+}   //namespace pg
