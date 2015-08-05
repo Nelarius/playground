@@ -24,15 +24,15 @@ class LuaState {
             return luaState_;
         }
         
-        lua_State* get();
+        lua_State* get() const;
     
     private:
         void retain_();
         void release_();
         void loadMinimal_();
         
-        lua_State*  luaState_{ nullptr };
-        unsigned*   refCount_{ nullptr };
+        mutable lua_State*  luaState_{ nullptr };
+        unsigned*           refCount_{ nullptr };
 };
     
 }   // ce

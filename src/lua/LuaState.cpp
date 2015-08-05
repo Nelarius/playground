@@ -70,7 +70,7 @@ void LuaState::execute( const std::string& file ) {
     }
 }
 
-lua_State* LuaState::get() {
+lua_State* LuaState::get() const {
     return luaState_;
 }
 
@@ -92,12 +92,12 @@ void LuaState::loadMinimal_() {
     lua_call( luaState_, 1, 0 );
 }
 
-void LuaState::release_() {
+void LuaState::retain_() {
     ASSERT( refCount_, "LuaState::retain> invalid reference count!" );
     *refCount_ += 1u;
 }
 
-void LuaState::retain_() {
+void LuaState::release_() {
     if ( refCount_ ) {
         *refCount_ -= 1u;
         if ( *refCount_ == 0u ) {
