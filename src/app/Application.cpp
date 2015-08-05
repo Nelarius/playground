@@ -86,7 +86,7 @@ void Application::run() {
 }
 
 void Application::initialize_() {
-    ce::LuaState lua{ false };
+    pg::LuaState lua{ false };
     lua.execute( "config.lua" );
     
     luabridge::LuaRef targetFrameRate = luabridge::getGlobal( lua.get(), "targetFrameRate" );
