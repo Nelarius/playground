@@ -4,7 +4,7 @@
 #include "math/Vector.h"
 #include "math/Matrix.h"
 
-namespace ce {
+namespace pg {
 namespace math {
 
 template<typename T>

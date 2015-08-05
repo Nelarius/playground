@@ -9,7 +9,7 @@ extern "C" {
     #include <lauxlib.h>
 }
 
-using ce::LuaState;
+using pg::LuaState;
 
 LuaState::LuaState( bool loadMinimal )
 :   luaState_( luaL_newstate() ),
@@ -65,7 +65,7 @@ void LuaState::execute( const std::string& file ) {
     luaL_loadfile( luaState_, file.c_str() );
     int res = lua_pcall( luaState_, 0, LUA_MULTRET, 0 );
     if ( res ) {
-        LOG( ce::LogLevel::Error ) << ce::CodeToString( res ) << " " <<  lua_tostring( luaState_, -1 );
+        LOG( ce::LogLevel::Error ) << pg::CodeToString( res ) << " " <<  lua_tostring( luaState_, -1 );
         // stack trace should go here somehow
     }
 }

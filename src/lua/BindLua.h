@@ -7,7 +7,7 @@ extern "C" {
     #include <lauxlib.h>
 }
 
-namespace ce {
+namespace pg {
     
 void BindAll( lua_State* );
 void BindVector( lua_State* );

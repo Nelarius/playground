@@ -3,7 +3,7 @@
 
 #include "math/Vector.h"
 
-namespace ce {
+namespace pg {
 namespace math {
 
 template<typename T>

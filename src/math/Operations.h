@@ -7,7 +7,7 @@
 #include "utils/Log.h"
 #include <cmath>
 
-namespace ce {
+namespace pg {
 namespace math {
 
 inline Matrix4f Mirror( const Planef& plane ) {

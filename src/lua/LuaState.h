@@ -6,7 +6,7 @@ extern "C" {
 }
 #include <string>
 
-namespace ce {
+namespace pg {
 
 class LuaState {
     public:

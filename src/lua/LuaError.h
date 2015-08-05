@@ -6,7 +6,7 @@ extern "C" {
     #include <lua.h>
 }
 
-namespace ce {
+namespace pg {
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wreturn-type"

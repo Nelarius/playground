@@ -5,7 +5,7 @@
 #include <initializer_list>
 #include <cmath>
 
-namespace ce {
+namespace pg {
 namespace math {
 
 template<typename T, typename Derived, int N>
