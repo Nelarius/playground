@@ -14,10 +14,10 @@ class Debug : public ce::ecs::System<Debug>, public ce::ecs::Receiver {
         void receive( const ce::ecs::EntityCreatedEvent& created );
         void receive( const ce::ecs::EntityDestroyedEvent& destroyed );
         void receive( const ce::ecs::ComponentAssignedEvent<component::Camera>& camera );
-        void receive( const ce::ecs::ComponentAssignedEvent<component::Transform>& transform );
+        void receive( const ce::ecs::ComponentAssignedEvent<pg::component::Transform>& transform );
         void receive( const ce::ecs::ComponentAssignedEvent<component::Renderable>& renderable );
         void receive( const ce::ecs::ComponentRemovedEvent<component::Camera>& camera );
-        void receive( const ce::ecs::ComponentRemovedEvent<component::Transform>& transform );
+        void receive( const ce::ecs::ComponentRemovedEvent<pg::component::Transform>& transform );
         void receive( const ce::ecs::ComponentRemovedEvent<component::Renderable>& renderable );
 };
 

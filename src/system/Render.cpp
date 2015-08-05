@@ -16,16 +16,16 @@ namespace {
     const float RadsToDegrees = 180.0f / 3.141592653f;
     const float Pi = 3.141592653f;
     
-    glm::mat4 ModelMatrixFromTransform( const ce::ecs::ComponentHandle<ce::component::Transform>& t ) {
+    glm::mat4 ModelMatrixFromTransform( const ce::ecs::ComponentHandle<pg::component::Transform>& t ) {
         /*
          * The composite model matrix is C = TRS
          * */
-        glm::mat4 scale = glm::scale( glm::mat4(), t->scale );
-        glm::mat4 rotate = glm::mat4_cast( t->rotation );
-        glm::mat4 translate = glm::translate( glm::mat4(), t->position );
+        glm::mat4 scale = glm::scale( glm::mat4(), glm::vec3( t->scale.x, t->scale.y, t->scale.z ) );
+        //glm::mat4 rotate = glm::mat4_cast( t->rotation );
+        glm::mat4 rotate = glm::mat4();
+        glm::mat4 translate = glm::translate( glm::mat4(), glm::vec3( t->position.x, t->position.y, t->position.z ) );
         return translate * rotate * scale;
     }
-    
 }
 
 Render::Render( ce::Context& context )
@@ -45,9 +45,9 @@ void Render::update(
     /*
      * Iterate over cameras here, find the active one
      * */
-    for ( Entity entity: entities.join<ce::component::Transform, ce::component::Camera>() ) {
+    for ( Entity entity: entities.join<pg::component::Transform, ce::component::Camera>() ) {
         auto camera = entity.component<ce::component::Camera>();
-        auto transform = entity.component<ce::component::Transform>();
+        auto transform = entity.component<pg::component::Transform>();
         if ( camera->active ) {
             glm::mat4 view = ModelMatrixFromTransform( transform );
             glm::mat4 proj;
@@ -64,9 +64,9 @@ void Render::update(
      /*
       * Then, iterate over renderables
       * */
-    for ( Entity entity: entities.join<ce::component::Transform, ce::component::Renderable>() ) {
+    for ( Entity entity: entities.join<pg::component::Transform, ce::component::Renderable>() ) {
         auto renderable = entity.component<ce::component::Renderable>();
-        auto transform = entity.component<ce::component::Transform>();
+        auto transform = entity.component<pg::component::Transform>();
         auto shader = renderable->shader;
         shader->use();
         shader->setUniform( 

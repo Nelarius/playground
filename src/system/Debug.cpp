@@ -8,10 +8,10 @@ void Debug::configure( ecs::EventManager& events ) {
     events.subscribe<ce::ecs::EntityDestroyedEvent>( *this );
     events.subscribe<ce::ecs::EntityCreatedEvent>( *this );
     events.subscribe<ce::ecs::ComponentAssignedEvent<ce::component::Camera>>( *this );
-    events.subscribe<ce::ecs::ComponentAssignedEvent<ce::component::Transform>>( *this );
+    events.subscribe<ce::ecs::ComponentAssignedEvent<pg::component::Transform>>( *this );
     events.subscribe<ce::ecs::ComponentAssignedEvent<ce::component::Renderable>>( *this );
     events.subscribe<ce::ecs::ComponentRemovedEvent<ce::component::Camera>>( *this );
-    events.subscribe<ce::ecs::ComponentRemovedEvent<ce::component::Transform>>( *this );
+    events.subscribe<ce::ecs::ComponentRemovedEvent<pg::component::Transform>>( *this );
     events.subscribe<ce::ecs::ComponentRemovedEvent<ce::component::Renderable>>( *this );
 }
 
@@ -29,7 +29,7 @@ void Debug::receive( const ce::ecs::ComponentAssignedEvent<ce::component::Camera
 	LOG_INFO << "Camera component added to Entity " << event.entity.id().index() << "." << event.entity.id().version();
 }
 
-void Debug::receive( const ce::ecs::ComponentAssignedEvent<ce::component::Transform>& event ) {
+void Debug::receive( const ce::ecs::ComponentAssignedEvent<pg::component::Transform>& event ) {
 	LOG_INFO << "Transform component added to Entity " << event.entity.id().index() << "." << event.entity.id().version();
 }
 
@@ -41,7 +41,7 @@ void Debug::receive( const ce::ecs::ComponentRemovedEvent<ce::component::Camera>
 	LOG_INFO << "Camera component removed from Entity " << event.entity.id().index() << "." << event.entity.id().version();
 }
 
-void Debug::receive( const ce::ecs::ComponentRemovedEvent<ce::component::Transform>& event ) {
+void Debug::receive( const ce::ecs::ComponentRemovedEvent<pg::component::Transform>& event ) {
 	LOG_INFO << "Transform component removed from Entity " << event.entity.id().index() << "." << event.entity.id().version();
 }
 
