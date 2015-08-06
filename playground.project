@@ -44,8 +44,8 @@
       <File Name="src/component/Camera.h" ExcludeProjConfig="Test"/>
       <File Name="src/component/Renderable.h" ExcludeProjConfig="Test"/>
       <File Name="src/component/Script.h" ExcludeProjConfig="Test"/>
-      <File Name="src/component/Transform.h" ExcludeProjConfig="Test"/>
       <File Name="src/component/Include.h"/>
+      <File Name="src/component/Transform.h"/>
     </VirtualDirectory>
     <VirtualDirectory Name="manager">
       <File Name="src/manager/MeshManager.cpp" ExcludeProjConfig="Test"/>

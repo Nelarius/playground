@@ -7,10 +7,10 @@
 
 The source code uses GCC pragmas and C++14.
 
-### Linux
+#### Linux
 On Linux, once the dependencies have been installed, just run `make` to build the program and run the tests. The result will appear in the `./Build` folder.
 
-### Windows
+#### Windows
 Compiling on Windows isn't a great experience at the moment. Your locations of the dependencies should be entered into the `*_COMP` and `*_LINK` fields, at the beginning of the Makefile. Once that has been done, the build is done the same way as on Linux.
 
 ## Usage
@@ -77,25 +77,93 @@ camera = {
 
 #### A small scene
 
-In the root folder of 
+A small data demonstration:
+
+`data/scene.lua`:
+
+```lua
+entities = {
+    {
+        script = "data/template.lua",
+        transform = {
+            position = pg.Vector3f( 0.0, 0.0, 0.0 )
+            scale = pg.Vector3f( 1.0, 1.0, 1.0 )
+        },
+        camera = {
+            fov =           1.15,
+            near_plane =    0.1,
+            far_plane =     1000.0,
+            perspective =   true,
+            active =        true
+        }
+    }
+}
+```
+
+`data/template.lua`:
+
+```lua
+
+v = pg.Vector3f( 10, 0.0, 0.0 )
+
+-- this gets called just after the component is assigned
+function activate()
+    print( entity:hasTransform() )
+end
+
+-- this gets called in the update loop
+function update( dt )
+    ds = pg.Vector3f( v.x*dt, v.y*dt, v.z*dt )
+    -- this really isn't optimum
+    -- but so far I have no luck in binding custom methods to __add, and __mul
+    entity.transform.position.x = entity.transform.position.x + ds.x
+    entity.transform.position.y = entity.transform.position.y + ds.y
+    entity.transform.position.z = entity.transform.position.z + ds.z
+end
+
+--  this gets called just before the component is removed
+function deactivate()
+    print("Script gonna hang up now!")
+end
+```
+
+`config.lua`:
+
+```lua
+
+targetFrameRate = 60.0
+
+window = {
+    width = 800,
+    height = 600,
+    name = "Playground engine",
+    opengl = {
+        major = 3,
+        minor = 3,
+        stencil_bits = 8,
+        depth_bits = 24,
+        multisample_buffers = 1,
+        multisample_samples = 4
+    }
+}
+
+```
 
 ## Scripting
 
 ## TODO
 * Read & render basic components
-  * Transform, Renderable, Camera, Script components need to be defined
-  * For script component, must create a pool of lua states
   * visible components need to be described in Lua scene file
   * create a simple scene in C++ to test systems and components
 * Bind Matrix to Lua
 * Quaternion math
 * Rendering matrices use Matrix4f
 * Implement Transform component & rendering system using my math module
-* Script component should store a LuaRef to the script function being called.
-  * EntityManager, EventManager, SystemManager, events, and components all need to be bound to Lua
-  * the current context (entity id) needs to be bound to some Lua variable
+* Scripting system needs context, managers, and ECS subsystems to be bound
+  * Entity needs to be bound in such a way that we have direct access to component pointers
+* GameState, and other app states should be a part of app.
+* Bundle has iterators
 * Add R'lyeh's profit lib to profile execution times of critical methods
-* Vanity: change from namespace ce to pg
 
 ## Dependencies
 ### SDL2

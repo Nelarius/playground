@@ -9,6 +9,10 @@ print("Now creating scene.")
 entities = {
     {
         script = "data/template.lua",
+        transform = {
+            position = pg.Vector3f( 0.0, 0.0, 0.0 )
+            scale = pg.Vector3f( 1.0, 1.0, 1.0 )
+        },
         camera = {
             fov =           1.15,
             near_plane =    0.1,

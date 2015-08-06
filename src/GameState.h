@@ -8,7 +8,7 @@
 
 union SDL_Event;
 
-namespace ce {
+namespace pg {
 
 class AppStateStack;
 
@@ -36,13 +36,13 @@ class GameState : public AppState {
     
     private:
         // METHODS
-        void parseScene_();
+        void loadScene_();
         
         // FIELDS
         // these could be possibly moved to AppState
-        ce::ecs::EventManager    events_;
-        ce::ecs::EntityManager   entities_;
-        ce::ecs::SystemManager   systems_;        
+        ecs::EventManager    events_;
+        ecs::EntityManager   entities_;
+        ecs::SystemManager   systems_;        
 };
 
 }
