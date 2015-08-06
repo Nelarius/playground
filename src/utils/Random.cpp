@@ -35,7 +35,7 @@ float Randf( float a, float b ) {
 }
 
 float Randf() {
-    return ce::Randf( 0.0f, 1.0f );
+    return Randf( 0.0f, 1.0f );
 }
 
 double Randd( double a, double b ) {
