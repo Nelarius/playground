@@ -6,7 +6,7 @@
 #include <cstdlib>
 #include <cstdint>
 
-namespace ce {
+namespace pg {
 
 /**
  * @class Bundle

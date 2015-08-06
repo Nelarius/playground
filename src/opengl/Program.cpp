@@ -4,8 +4,8 @@
 #include <iostream>
 #include <cstdlib>  //for std::exit
 
-using ce::Program;
-using ce::Shader;
+namespace pg {
+namespace opengl {
 
 Program::Program( const std::vector<std::unique_ptr<Shader>>& shaders ) {
     this->link( shaders );
@@ -211,3 +211,6 @@ void Program::setUniform( const GLchar* name, const pg::math::Matrix4f& M ) cons
     pg::math::CMMatrix4f N { M };
     glUniformMatrix4fv( uniform(name), 1, false, N.data );
 }
+
+}   // opengl
+}   // pg

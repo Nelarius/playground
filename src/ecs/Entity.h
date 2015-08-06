@@ -12,7 +12,7 @@
 #include <cstdint>
 #include <bitset>
 
-namespace ce {
+namespace pg {
 namespace ecs {
 
 class EntityManager;

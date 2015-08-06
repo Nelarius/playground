@@ -3,11 +3,15 @@
 #include "ecs/Entity.h"
 #include "ecs/Event.h"
 
-uint32_t ce::ecs::BaseSystem::familyCounter_ = 0u;
+namespace pg {
+namespace ecs {
 
-using ce::ecs::SystemManager;
+uint32_t BaseSystem::familyCounter_ = 0u;
 
-SystemManager::SystemManager( ce::ecs::EventManager& events, ce::ecs::EntityManager& entities )
+SystemManager::SystemManager( EventManager& events, EntityManager& entities )
 :   events_( events ),
     entities_( entities )
     {}
+
+}
+}

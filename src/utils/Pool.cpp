@@ -1,6 +1,6 @@
 #include "utils/Pool.h"
 
-using ce::BasePool;
+namespace pg {
 
 BasePool::BasePool( std::size_t elementSize, std::size_t chunkSize )
 :   blocks_(),
@@ -39,3 +39,7 @@ void* BasePool::at( std::size_t i ) {
     return blocks_[ i / ChunkSize_ ] + ( i % ChunkSize_ ) * ElementSize_;
 }
 
+
+
+
+}

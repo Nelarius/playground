@@ -1,8 +1,9 @@
 #include "opengl/BufferObject.h"
 #include "opengl/Enum.h"
 
-using ce::BufferObject;
-
+namespace pg {
+namespace opengl {
+    
 BufferObject::BufferObject( GLenum type )
     :   type_( type ) {
     glGenBuffers( 1, &object_ );
@@ -31,7 +32,7 @@ void BufferObject::unmapBuffer() {
 }
 
 void BufferObject::bind() {
-    glGetIntegerv( ce::GetBindingTarget( type_ ), &old_ );
+    glGetIntegerv( GetBindingTarget( type_ ), &old_ );
     glBindBuffer( type_, object_ );
 }
 
@@ -54,3 +55,7 @@ GLsizei BufferObject::size() const {
 GLsizeiptr BufferObject::count() const {
     return count_;
 }
+
+
+}   // opengl
+}   // pg

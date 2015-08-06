@@ -2,8 +2,8 @@
 #include "utils/Assert.h"
 #include "utils/Log.h"
 
-using ce::ecs::Entity;
-using ce::ecs::EntityManager;
+namespace pg {
+namespace ecs {
 
 /////////////////////////////////////////////////////////////////////////////
 // Entity implementation
@@ -35,7 +35,7 @@ void Entity::destroy() {
     }
 }
 
-ce::ecs::Id Entity::id() const {
+Id Entity::id() const {
     return id_;
 }
 
@@ -84,11 +84,11 @@ Entity EntityManager::create() {
         index = freeList_.back();
         freeList_.pop_back();
         version = entityVersions_[index];    // versions are incremented in destroy
-        componentMasks_[index].set( ce::ecs::MaxComponents, false ); // resets the last bit signalling that the entity is now valid
+        componentMasks_[index].set( MaxComponents, false ); // resets the last bit signalling that the entity is now valid
     }
     
     Entity entity( this, Id( index, version ) );
-    mailMan_.emit<ce::ecs::EntityCreatedEvent>( entity );
+    mailMan_.emit<EntityCreatedEvent>( entity );
     return entity;
 }
 
@@ -106,7 +106,7 @@ void EntityManager::accommodateEntity_( uint32_t index ) {
 
 void EntityManager::destroy_( Id id ) {
     ASSERT( isValid_( id ), "Tried to destroy an invalid entity!" ); 
-    mailMan_.emit<ce::ecs::EntityDestroyedEvent>( Entity( this, id ) );
+    mailMan_.emit<EntityDestroyedEvent>( Entity( this, id ) );
     uint32_t index = id.index();
     auto& mask = componentMasks_[index];
     // we need to call the destructor of each component
@@ -116,7 +116,7 @@ void EntityManager::destroy_( Id id ) {
         }
     }
     mask.reset();
-    mask.set( ce::ecs::MaxComponents );   // this element tells the iterator to skip this entity
+    mask.set( MaxComponents );   // this element tells the iterator to skip this entity
     entityVersions_[index]++;
     freeList_.push_back( index );
 }
@@ -139,3 +139,5 @@ std::size_t EntityManager::size() const {
     return entityVersions_.size() - freeList_.size();
 }
 
+}
+}

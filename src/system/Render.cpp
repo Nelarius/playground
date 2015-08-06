@@ -7,16 +7,13 @@
 
 #include <cmath>
 
-using ce::system::Render;
-using ce::ecs::Entity;
-
 namespace {
     
     const float DegreesToRads = 3.141592653f / 180.0f;
     const float RadsToDegrees = 180.0f / 3.141592653f;
     const float Pi = 3.141592653f;
     
-    glm::mat4 ModelMatrixFromTransform( const ce::ecs::ComponentHandle<pg::component::Transform>& t ) {
+    glm::mat4 ModelMatrixFromTransform( const pg::ecs::ComponentHandle<pg::component::Transform>& t ) {
         /*
          * The composite model matrix is C = TRS
          * */
@@ -28,14 +25,17 @@ namespace {
     }
 }
 
-Render::Render( ce::Context& context )
+namespace pg {
+namespace system {
+
+Render::Render( pg::Context& context )
 :   System<Render>(),
     context_{ context }
     {}
 
 void Render::update(
-    ce::ecs::EntityManager& entities,
-    ce::ecs::EventManager& events,
+    ecs::EntityManager& entities,
+    ecs::EventManager& events,
     float dt 
 ) {
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
@@ -45,9 +45,9 @@ void Render::update(
     /*
      * Iterate over cameras here, find the active one
      * */
-    for ( Entity entity: entities.join<pg::component::Transform, pg::component::Camera>() ) {
-        auto camera = entity.component<pg::component::Camera>();
-        auto transform = entity.component<pg::component::Transform>();
+    for ( ecs::Entity entity: entities.join<component::Transform, component::Camera>() ) {
+        auto camera = entity.component<component::Camera>();
+        auto transform = entity.component<component::Transform>();
         if ( camera->active ) {
             glm::mat4 view = ModelMatrixFromTransform( transform );
             glm::mat4 proj;
@@ -64,9 +64,9 @@ void Render::update(
      /*
       * Then, iterate over renderables
       * */
-    for ( Entity entity: entities.join<pg::component::Transform, ce::component::Renderable>() ) {
-        auto renderable = entity.component<ce::component::Renderable>();
-        auto transform = entity.component<pg::component::Transform>();
+    for ( ecs::Entity entity: entities.join<component::Transform, component::Renderable>() ) {
+        auto renderable = entity.component<component::Renderable>();
+        auto transform = entity.component<component::Transform>();
         auto shader = renderable->shader;
         shader->use();
         shader->setUniform( 
@@ -86,3 +86,5 @@ void Render::update(
     }
 }
 
+}
+}

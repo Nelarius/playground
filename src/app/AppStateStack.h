@@ -11,7 +11,7 @@
 #include <utility>
 #include <functional>
 
-namespace ce {
+namespace pg {
     
 namespace states {
     enum Action {
@@ -60,12 +60,13 @@ public:
 
 };
 
-}
+
 
 template<typename T>
-void ce::AppStateStack::registerState( ce::states::Id id ) {
+void AppStateStack::registerState( states::Id id ) {
     factories_.insert( std::make_pair( id, [this](){
-        return std::unique_ptr<ce::AppState>( new T( context_, *this) );
+        return std::unique_ptr<AppState>( new T( context_, *this) );
     } ) );
 }
 
+}

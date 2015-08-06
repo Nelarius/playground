@@ -87,6 +87,7 @@
       <File Name="src/data/scene.lua"/>
       <File Name="src/data/diffuse.frag.glsl"/>
       <File Name="src/data/diffuse.vert.glsl"/>
+      <File Name="src/data/template.lua"/>
     </VirtualDirectory>
     <File Name="src/GameState.cpp" ExcludeProjConfig="Test"/>
     <File Name="src/GameState.h" ExcludeProjConfig="Test"/>
@@ -109,6 +110,8 @@
       <File Name="src/system/Debug.h" ExcludeProjConfig="Test"/>
       <File Name="src/system/Render.cpp" ExcludeProjConfig="Test"/>
       <File Name="src/system/Render.h" ExcludeProjConfig="Test"/>
+      <File Name="src/system/Scripter.cpp"/>
+      <File Name="src/system/Scripter.h"/>
     </VirtualDirectory>
     <VirtualDirectory Name="lua">
       <File Name="src/lua/LuaError.h" ExcludeProjConfig="Test"/>

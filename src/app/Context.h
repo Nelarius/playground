@@ -6,7 +6,7 @@
 #include "manager/MeshManager.h"
 #include "manager/ShaderManager.h"
 
-namespace ce {
+namespace pg {
 
 struct Mouse {
     Mouse() = default;

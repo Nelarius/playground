@@ -19,7 +19,7 @@ extern "C" {
 
 #include <iostream>
 
-using ce::Application;
+namespace pg {
 
 namespace {
     std::chrono::duration<float, std::ratio<1,1>> TargetDeltaTime{ 0.016667f };
@@ -95,7 +95,7 @@ void Application::initialize_() {
     
     TargetDeltaTime = std::chrono::duration<float, std::ratio<1,1>>( 1.0f /  targetFrameRate.cast<float>() );
     
-    ce::WindowSettings settings{};
+    WindowSettings settings{};
     settings.width = window["width"].cast<int>();
     settings.height = window["height"];
     settings.name = window["name"].cast<std::string>();
@@ -110,8 +110,8 @@ void Application::initialize_() {
     
     context_.window = &window_;
     
-    stateStack_.registerState<ce::GameState>( ce::states::Game );
-    stateStack_.pushState( ce::states::Game );
+    stateStack_.registerState<GameState>( states::Game );
+    stateStack_.pushState( states::Game );
 }
 
 void Application::updateContext_() {
@@ -141,4 +141,4 @@ void Application::updateContext_() {
 
 
 
-
+}

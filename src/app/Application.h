@@ -6,7 +6,7 @@
 #include "app/AppStateStack.h"
 #include <memory>
 
-namespace ce {
+namespace pg {
 
 /**
  * @class Application

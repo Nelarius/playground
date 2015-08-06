@@ -10,7 +10,7 @@
 #include <cstddef>  // for std::size_t
 #include <cstdint>
 
-namespace ce {
+namespace pg {
 namespace ecs {
     
 class EntityManager;

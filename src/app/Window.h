@@ -4,7 +4,7 @@
 #include <SDL2/SDL_video.h>
 #include <string>
 
-namespace ce {
+namespace pg {
 
 struct WindowSettings {
     WindowSettings() = default;

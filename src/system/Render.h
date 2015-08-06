@@ -4,15 +4,15 @@
 #include "ecs/Include.h"
 #include "app/Context.h"
 
-namespace ce {
+namespace pg {
 namespace system {
 
-class Render : public ce::ecs::System<Render> {
+class Render : public ecs::System<Render> {
     public:
         Render() = delete;
         explicit Render( Context& context );
         
-        void update( ce::ecs::EntityManager&, ce::ecs::EventManager&, float ) override;
+        void update( ecs::EntityManager&, ecs::EventManager&, float ) override;
     
     private:
         Context& context_;

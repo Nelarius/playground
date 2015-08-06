@@ -3,7 +3,7 @@
 
 #include <cstdint>
 
-namespace ce {
+namespace pg {
 namespace ecs {
 
 class BaseComponent {

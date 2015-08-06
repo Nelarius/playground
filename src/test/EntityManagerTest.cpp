@@ -1,8 +1,8 @@
 #include "ecs/Entity.h"
 #include <UnitTest++/UnitTest++.h>
 
-using ce::ecs::EntityManager;
-using ce::ecs::Entity;
+using pg::ecs::EntityManager;
+using pg::ecs::Entity;
 
 struct TestStruct {
     int x;
@@ -13,20 +13,20 @@ SUITE(EntityManagerTest) {
     class EntityManagerFixture {
         public:
             EntityManagerFixture() : events(), entities( events ) {}
-            ce::ecs::EventManager events;
-            ce::ecs::EntityManager entities;
+            pg::ecs::EventManager events;
+            pg::ecs::EntityManager entities;
     };
     
     class EntityFixture {
         public:
             EntityFixture() : events(), entities( events ), entity( entities.create() ) {}
-            ce::ecs::EventManager events;
+            pg::ecs::EventManager events;
             EntityManager entities;
             Entity entity;
     };
     
     TEST( AfterCreateSizeIsOne ) {
-        ce::ecs::EventManager events{};
+        pg::ecs::EventManager events{};
         EntityManager entities{ events };
         Entity entity = entities.create();
         CHECK_EQUAL( 1u, entities.size() );
@@ -112,7 +112,7 @@ SUITE(EntityManagerTest) {
     
     TEST_FIXTURE( EntityManagerFixture, ComponentHasCorrectValueImmediatelyAfterAssignment ) {
         auto entity = entities.create();
-        ce::ecs::ComponentHandle<TestStruct> component = entity.assign<TestStruct>( 5 );
+        pg::ecs::ComponentHandle<TestStruct> component = entity.assign<TestStruct>( 5 );
         CHECK_EQUAL( 5, component->x );
     }
     

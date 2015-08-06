@@ -1,8 +1,9 @@
 #include "opengl/Shader.h"
 #include "utils/Assert.h"
 
-using ce::Shader;
-
+namespace pg {
+namespace opengl {
+    
 Shader::Shader( const std::string& shaderCode, GLenum shaderType ) {
     //create the shader object, returns 0 on error
     object_ = glCreateShader( shaderType );
@@ -39,3 +40,6 @@ Shader::~Shader() {
 GLuint Shader::object() const {
     return object_;
 }
+
+}   // opengl
+}   // pg

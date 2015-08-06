@@ -3,7 +3,8 @@
 
 #include <GL/glew.h>
 
-namespace ce {
+namespace pg {
+namespace opengl {
 
 /// @brief A wrapper for an OpenGL buffer object, living on GPU memory.
 class BufferObject {
@@ -77,6 +78,6 @@ class BufferObject {
         GLint       old_{ 0u };
 };
 
-
+}
 }
 

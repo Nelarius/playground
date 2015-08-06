@@ -2,10 +2,10 @@
 #include <utils/File.h>
 #include <utils/Assert.h>
 
-using ce::ShaderManager;
+namespace pg {
 
 void ShaderManager::addShader( const std::string file, GLenum type ) {
-    shaderStages_.emplace_back( new Shader( ce::FileToString( file ), type ) );
+    shaderStages_.emplace_back( new opengl::Shader( ce::FileToString( file ), type ) );
 }
 
 void ShaderManager::compile( const std::string& tag ) {
@@ -15,7 +15,7 @@ void ShaderManager::compile( const std::string& tag ) {
     shaderStages_.clear();
 }
 
-ce::Program* ShaderManager::get( const std::string& tag ) {
+opengl::Program* ShaderManager::get( const std::string& tag ) {
     auto it = resources_.find( tag );
     
     #ifdef DEBUG
@@ -30,4 +30,6 @@ ce::Program* ShaderManager::get( const std::string& tag ) {
 void ShaderManager::clear() {
     resources_.clear();
     shaderStages_.clear();
+}
+
 }

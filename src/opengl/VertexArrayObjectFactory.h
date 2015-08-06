@@ -10,8 +10,9 @@
 #include <string>
 #include <cstdlib>  //for std::size_t
 
-namespace ce {
-
+namespace pg {
+namespace opengl {
+    
 class BufferObject;
 class Program;
     
@@ -109,5 +110,5 @@ class VertexArrayObjectFactory {
 
 };
 
-}
-
+}   // opengl
+}   // pg

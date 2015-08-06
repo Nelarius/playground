@@ -5,9 +5,11 @@
 #include "utils/Log.h"
 #include "utils/Assert.h"
 
-using ce::VertexArrayObjectFactory; 
+namespace pg {
+namespace opengl {
+    
 
-VertexArrayObjectFactory::VertexArrayObjectFactory( ce::BufferObject* buffer, ce::Program* program )
+VertexArrayObjectFactory::VertexArrayObjectFactory( BufferObject* buffer, Program* program )
 :   attributeQueue_(),
     standardAttributeQueue_(),
     buffer_( buffer ),
@@ -34,7 +36,7 @@ void VertexArrayObjectFactory::addAttribute(
     );
 }
 
-void VertexArrayObjectFactory::addStandardAttribute( ce::VertexAttribute attribute ) {
+void VertexArrayObjectFactory::addStandardAttribute( VertexAttribute attribute ) {
     if ( !attributeQueue_.empty() ) {
         LOG( ce::LogLevel::Error ) << "Adding standard and custom attributes to the same vertex array object is prohibited!";
         return;
@@ -43,28 +45,28 @@ void VertexArrayObjectFactory::addStandardAttribute( ce::VertexAttribute attribu
     glGetIntegerv( GL_CURRENT_PROGRAM, &program );
     
     switch( attribute ) {
-        case ce::VertexAttribute::Vertex: {
+        case VertexAttribute::Vertex: {
             //GLint attrib = glGetAttribLocation( program, "vertex" );
             standardAttributeQueue_.emplace_back(
                 "vertex", 3, GL_FLOAT, GL_FALSE, 0, 0u
             );
             break;
         }
-        case ce::VertexAttribute::Normal: {
+        case VertexAttribute::Normal: {
             //GLint attrib = glGetAttribLocation( program, "normal" );
             standardAttributeQueue_.emplace_back(
                 "normal", 3, GL_FLOAT, GL_FALSE, 0, 0u
             );
             break;
         }
-        case ce::VertexAttribute::Color: {
+        case VertexAttribute::Color: {
             //GLint attrib = glGetAttribLocation( program, "color" );
             standardAttributeQueue_.emplace_back(
                 "color", 3, GL_FLOAT, GL_FALSE, 0, 0u 
             );
             break;
         }
-        case ce::VertexAttribute::UVCoordinate: {
+        case VertexAttribute::UVCoordinate: {
             //GLint attrib = glGetAttribLocation( program, "uvcoordinate" );
             standardAttributeQueue_.emplace_back(
                 "uvcoordinate", 2, GL_FLOAT, GL_FALSE, 0, 0u
@@ -76,7 +78,7 @@ void VertexArrayObjectFactory::addStandardAttribute( ce::VertexAttribute attribu
     }
 }
 
-ce::VertexArrayObject VertexArrayObjectFactory::getVao() {
+VertexArrayObject VertexArrayObjectFactory::getVao() {
     buffer_->bind();
     program_->use();
     
@@ -84,9 +86,9 @@ ce::VertexArrayObject VertexArrayObjectFactory::getVao() {
     // of elements used. Hence, we need to get the number of elements per
     // index needs to be deduced from the stride.
     int elements =  standardAttributeQueue_.empty() ? 
-                    attributeQueue_[0].stride / ce::SizeOfGlType( attributeQueue_[0].type ) :
+                    attributeQueue_[0].stride / SizeOfGlType( attributeQueue_[0].type ) :
                     accumulateAttributes_( standardAttributeQueue_ );
-    ce::VertexArrayObject vao{ elements };
+    VertexArrayObject vao{ elements };
     if ( !standardAttributeQueue_.empty() ) {
         vao.bind();
         enableStandardAttributes_();
@@ -161,3 +163,6 @@ int VertexArrayObjectFactory::accumulateAttributes_( const std::vector<VertexArr
     }
     return accumulator;
 }
+
+}   // opengl
+}   // pg

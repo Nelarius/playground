@@ -6,8 +6,8 @@
 #include <iostream>
 #include <cstdlib>
 
-using ce::Window;
-using ce::WindowSettings;
+using pg::Window;
+using pg::WindowSettings;
 
 Window::Window()
     :   window_( nullptr ),

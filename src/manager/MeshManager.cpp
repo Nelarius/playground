@@ -6,9 +6,9 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
-using ce::MeshManager;
+namespace pg {
 
-ce::BufferObject* MeshManager::get( const std::string& file ) {
+opengl::BufferObject* MeshManager::get( const std::string& file ) {
     auto it = resources_.find( file );
     
     if ( it != resources_.end() ) {
@@ -51,7 +51,7 @@ ce::BufferObject* MeshManager::get( const std::string& file ) {
     }
     auto index = buffer_.emplace<GLenum>( GL_ARRAY_BUFFER );
     resources_.emplace( file, &buffer_[index] );
-    ce::BufferObject* vbo = resources_.find( file )->second;
+    opengl::BufferObject* vbo = resources_.find( file )->second;
     vbo->dataStore(
         data.size(), sizeof(float), &data[0], GL_STATIC_DRAW
     );
@@ -65,4 +65,7 @@ void MeshManager::clear() {
 
 std::size_t MeshManager::size() const {
     return resources_.size();
+}
+
+
 }

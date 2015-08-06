@@ -5,7 +5,8 @@
 #include <GL/glew.h>
 #include <cstdlib>  // for std::size_t 
 
-namespace ce {
+namespace pg {
+namespace opengl {
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wreturn-type"
@@ -70,5 +71,5 @@ inline std::size_t SizeOfGlType( GLenum type ) {
 }
 #pragma GCC diagnostic pop
 
-}
-
+}   // opengl 
+}   // pg

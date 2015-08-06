@@ -12,9 +12,9 @@
 #include <cstdlib>
 
 using EventSignal = Simple::Signal<void(const void*)>;
-using SignalBundle = ce::Bundle<EventSignal>;
+using SignalBundle = pg::Bundle<EventSignal>;
 
-namespace ce {
+namespace pg {
 namespace ecs {
 
 class BaseEvent {

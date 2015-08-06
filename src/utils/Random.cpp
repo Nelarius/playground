@@ -15,29 +15,34 @@ std::minstd_rand& global_urng() {
 
 }
 
-void ce::Randomize() {
+namespace pg {
+
+void Randomize() {
     std::random_device rd{};
     global_urng().seed( rd() );
 }
 
-std::int32_t ce::Randi( std::int32_t a, std::int32_t b ) {
+std::int32_t Randi( std::int32_t a, std::int32_t b ) {
     static std::uniform_int_distribution<> d{};
     using parm_t = decltype(d)::param_type;
     return d( global_urng(), parm_t{ a, b } );
 }
 
-float ce::Randf( float a, float b ) {
+float Randf( float a, float b ) {
     static std::uniform_real_distribution<> d{};
     using parm_t = decltype(d)::param_type;
     return d( global_urng(), parm_t{ a, b } );
 }
 
-float ce::Randf() {
+float Randf() {
     return ce::Randf( 0.0f, 1.0f );
 }
 
-double ce::Randd( double a, double b ) {
+double Randd( double a, double b ) {
     static std::uniform_real_distribution<> d{};
     using parm_t = decltype(d)::param_type;
     return d( global_urng(), parm_t{ a, b } );
+}
+
+
 }

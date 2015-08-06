@@ -4,7 +4,7 @@
 #include "app/Context.h"
 #include "StateIdentifiers.h"
 
-namespace ce {
+namespace pg {
 
 class AppStateStack;
 

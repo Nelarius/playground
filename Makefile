@@ -62,11 +62,11 @@ OBJ = src/Main.o \
 	src/opengl/VertexArrayObject.o \
 	src/opengl/VertexArrayObjectFactory.o \
 	src/opengl/BufferObject.o \
-	src/opengl/Texture.o \
 	src/manager/MeshManager.o \
 	src/manager/ShaderManager.o \
 	src/system/Render.o \
 	src/system/Debug.o \
+	src/system/Scripter.o \
 	src/utils/Random.o \
 	src/utils/Pool.o \
 	

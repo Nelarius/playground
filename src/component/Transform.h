@@ -12,5 +12,5 @@ struct Transform {
 };
 
 }   //namespace component
-}   //namespace ce
+}   //namespace pg
 

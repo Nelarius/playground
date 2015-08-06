@@ -4,8 +4,9 @@
 #include <GL/glew.h>
 #include <memory>
 
-namespace ce {
-
+namespace pg {
+namespace opengl {
+    
 /// \brief Contains an OpenGL shader object.
 class Shader {
     public:
@@ -28,4 +29,4 @@ class Shader {
 };
 
 }
-
+}

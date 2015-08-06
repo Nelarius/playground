@@ -3,7 +3,7 @@
 
 #include <cstdint>
 
-namespace ce {
+namespace pg {
 
     /// \brief Seed the generator with a random sequence drawn from the system's random device.
     /// The underlying generator is the new Park-Miller minimum standard linear congruential generator.

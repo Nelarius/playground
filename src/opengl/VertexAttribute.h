@@ -1,7 +1,8 @@
 
 #pragma once
 
-namespace ce {
+namespace pg {
+namespace opengl {
     
     enum VertexAttribute {
         Vertex          = 0,
@@ -11,4 +12,5 @@ namespace ce {
         Count           = 4
     };
     
+}
 }

@@ -9,7 +9,7 @@
 #include <unordered_map>
 #include <memory>
 
-namespace ce {
+namespace pg {
 
 class ShaderManager {
     public:        
@@ -36,7 +36,7 @@ class ShaderManager {
          * @brief Get the shader with the given tag.
          * @param tag
          */
-        Program*    get( const std::string& tag );
+        opengl::Program*    get( const std::string& tag );
         
         /**
          * @brief Delete all contained shaders.
@@ -44,9 +44,9 @@ class ShaderManager {
         void            clear();
         
     private:
-        Bundle<Program, 16>                             buffer_{};
-        std::unordered_map<std::string, Program*> resources_{};
-        std::vector<std::unique_ptr<Shader>>            shaderStages_{};
+        Bundle<opengl::Program, 16>                       buffer_{};
+        std::unordered_map<std::string, opengl::Program*> resources_{};
+        std::vector<std::unique_ptr<opengl::Shader>>      shaderStages_{};
 
 };
 

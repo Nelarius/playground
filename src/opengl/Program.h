@@ -8,8 +8,9 @@
 #include <vector>
 #include <memory>
 
-namespace ce {
-
+namespace pg {
+namespace opengl {
+    
 /// @brief A wrapper around an OpenGL shader object.
 /// 
 /// The shader can be linked at construction time from a vector of individually compiled shader objects,
@@ -86,5 +87,6 @@ class Program {
 };
 
 
-}   //namespace ce
+}   // opengl
+}   // pg
 

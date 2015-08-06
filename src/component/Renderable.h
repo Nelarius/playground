@@ -9,7 +9,7 @@
 #include <unordered_map>
 #include <string>
 
-namespace ce {
+namespace pg {
 namespace component {
 
 /*
@@ -30,7 +30,7 @@ namespace component {
  * @file Renderable.h
  * @brief 
  */
-struct Renderable {
+/*struct Renderable {
     Renderable() = default;
     ~Renderable() = default;
     Renderable(
@@ -46,10 +46,17 @@ struct Renderable {
         {}
     
     // a borrowed pointer is not managed here
-    BufferObject*                           vbo{ nullptr };
-    Program*                                shader{ nullptr };
-    VertexArrayObject                       vao{ 0 };
+    opengl::BufferObject*                   vbo{ nullptr };
+    opengl::Program*                        shader{ nullptr };
+    opengl::VertexArrayObject               vao{ 0 };
     std::unordered_map<std::string, float>  uniforms{ 10 }; // initialize with the number of initial buckets, to save on allocation time
+};*/
+
+struct Renderable {
+    opengl::BufferObject* vbo;
+    opengl::Program* shader;
+    opengl::VertexArrayObject vao;
+    std::unordered_map<std::string, float>  uniforms;
 };
 
 

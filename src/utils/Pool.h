@@ -6,7 +6,7 @@
 #include <vector>
 #include <set>
 
-namespace ce {
+namespace pg {
 
 /**
  * @class BasePool
@@ -103,4 +103,4 @@ class Pool: public BasePool {
         }
 };
 
-}   // namespace ce
+}   // namespace pg

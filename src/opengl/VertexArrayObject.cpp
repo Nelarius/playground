@@ -2,8 +2,8 @@
 #include "utils/Assert.h"
 #include "utils/Log.h"
 
-using ce::VertexArrayObject;
-
+namespace pg {
+namespace opengl {
 VertexArrayObject::VertexArrayObject( int elements )
 :   object_( 0u ),
     old_( 0 ),
@@ -90,3 +90,7 @@ void VertexArrayObject::release_() {
     }
 }
 
+
+
+}
+}

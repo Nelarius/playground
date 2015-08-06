@@ -6,8 +6,9 @@
 #include <vector>
 #include <cstdlib>
 
-namespace ce {
-
+namespace pg {
+namespace opengl {
+    
 /**
  * @class VertexArrayObject
  * @author Johann
@@ -53,5 +54,5 @@ class VertexArrayObject {
         unsigned*   refCount_{ nullptr };
 };
 
-}
-
+}   // opengl 
+}   // pg

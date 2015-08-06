@@ -10,9 +10,7 @@
 #include <string>
 #include <cstddef>
 
-namespace ce {
-
-typedef Borrowed<BufferObject>  BorrowedBufferObject;
+namespace pg {
 
 /**
  * @class MeshManager
@@ -32,7 +30,7 @@ class MeshManager {
          * @brief 
          * @param file The mesh file to get.
          */
-        BufferObject*   get( const std::string& file );
+        opengl::BufferObject*   get( const std::string& file );
         /**
          * @brief Clear all elements.
          */
@@ -43,8 +41,8 @@ class MeshManager {
         std::size_t     size() const;
         
     private:
-        Bundle<BufferObject>                        buffer_{};
-        std::map<const std::string, BufferObject*>  resources_{};
+        Bundle<opengl::BufferObject>                        buffer_{};
+        std::map<const std::string, opengl::BufferObject*>  resources_{};
 };
 
 }
