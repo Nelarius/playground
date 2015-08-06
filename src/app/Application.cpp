@@ -1,17 +1,12 @@
 #include "app/Application.h"
 #include "GameState.h"
 #include "lua/LuaState.h"
+#include "lua/LuaBridge.h"
 #include "utils/Assert.h"
 #include "utils/File.h"
 #include "utils/Log.h"
 #include <SDL2/SDL_mouse.h>
 #include <GL/glew.h>
-extern "C" {
-    #include <lua.h>
-    #include <lualib.h>
-    #include <lauxlib.h>
-}
-#include <LuaBridge/LuaBridge.h>
 #include <string>
 #include <chrono>
 #include <thread>
