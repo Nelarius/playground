@@ -10,7 +10,7 @@ entities = {
     {
         script = "data/template.lua",
         transform = {
-            position = pg.Vector3f( 0.0, 0.0, 0.0 )
+            position = pg.Vector3f( 0.0, 0.0, 0.0 ),
             scale = pg.Vector3f( 1.0, 1.0, 1.0 )
         },
         camera = {

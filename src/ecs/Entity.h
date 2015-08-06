@@ -101,6 +101,9 @@ class Entity {
          */
         template<typename C>
         ComponentHandle<C> component() const;
+        
+        template<typename C>
+        C* componentPointer() const;
         /**
          * @brief Check if this entity has an assigned component of type C.
          * @return True, if component of type C has been assigned, false otherwise.
@@ -126,7 +129,7 @@ class LuaEntity: public Entity {
         
         template<typename C>
         C* componentPointer();
-}; 
+};
 
 // this should be a run-time adjustable
 // to do so, EntityManager needs to use the Cheshire Cat pattern
@@ -443,6 +446,11 @@ void Entity::remove() {
 template<typename C>
 bool Entity::has() const {
     return manager_->hasComponent_<C>( id_ );
+}
+
+template<typename C>
+C* Entity::componentPointer() const {
+    return manager_->component_<C>( id_ );
 }
 
 /////////////////////////////////////////////////////////////////////////////

@@ -66,8 +66,8 @@ void BindComponent( lua_State* l ) {
             .endClass()
             .beginClass<component::Camera>( "Camera" )
                 .addData( "fov", &component::Camera::verticalFov )
-                .addData( "near_plane", &component::Camera::nearPlane )
-                .addData( "far_plane", &component::Camera::farPlane )
+                .addData( "nearPlane", &component::Camera::nearPlane )
+                .addData( "farPlane", &component::Camera::farPlane )
                 .addData( "viewPerspective", &component::Camera::viewPerspective )
                 .addData( "active", &component::Camera::active )
             .endClass()
@@ -77,10 +77,11 @@ void BindComponent( lua_State* l ) {
 void BindEntity( lua_State* l ) {
     lb::getGlobalNamespace( l )
         .beginNamespace( "pg" )
-            .beginClass<ecs::LuaEntity>( "Entity" )
-                .addFunction( "hasRenderable", &ecs::LuaEntity::has<component::Renderable> )
-                .addFunction( "hasTransform", &ecs::LuaEntity::has<component::Transform> )
-                .addFunction( "hasCamera", &ecs::LuaEntity::has<component::Camera> )
+            .beginClass<ecs::Entity>( "LuaEntity" )
+                .addFunction( "isValid", &ecs::Entity::isValid )
+                .addFunction( "hasTransform", &ecs::Entity::has<component::Transform> )
+                .addFunction( "hasCamera", &ecs::Entity::has<component::Camera> )
+                .addProperty( "transform", &ecs::Entity::componentPointer<component::Transform> )
             .endClass()
         .endNamespace();
 }

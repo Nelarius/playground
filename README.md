@@ -1,5 +1,7 @@
 # Playground
 
+A small, experimental, data-driven, entity-component-based, OpenGL-enabled, Lua-scripted game engine. See below for a small programming example.
+
 ----------
 
 
@@ -77,7 +79,7 @@ camera = {
 
 #### A small scene
 
-A small data demonstration:
+Here is a small example of how to build a simple scene.
 
 `data/scene.lua`:
 
@@ -86,7 +88,7 @@ entities = {
     {
         script = "data/template.lua",
         transform = {
-            position = pg.Vector3f( 0.0, 0.0, 0.0 )
+            position = pg.Vector3f( 0.0, 0.0, 0.0 ),
             scale = pg.Vector3f( 1.0, 1.0, 1.0 )
         },
         camera = {
@@ -149,7 +151,9 @@ window = {
 
 ```
 
-## Scripting
+## Scripting interface
+
+Here is a list of functions and variables available for use in the script component.
 
 ## TODO
 * Read & render basic components
@@ -161,6 +165,7 @@ window = {
 * Implement Transform component & rendering system using my math module
 * Scripting system needs context, managers, and ECS subsystems to be bound
   * Entity needs to be bound in such a way that we have direct access to component pointers
+  * There needs to be read/write access for the components.
 * GameState, and other app states should be a part of app.
 * Bundle has iterators
 * Add R'lyeh's profit lib to profile execution times of critical methods

@@ -47,8 +47,8 @@ void GameState::loadScene_() {
             std::string scriptFile = table["script"].cast<std::string>();
             LuaState lua{ false };
             BindAll( lua.get() );
-            //lb::push<ecs::LuaEntity>( lua.get(), ecs::LuaEntity( entity ) );
-            //lua_setglobal( lua.get(), "entity" );
+            lb::push( lua.get(), entity );
+            lua_setglobal( lua.get(), "entity" );
             lua.execute( scriptFile );
             entity.assign<component::Script>( lua );
         }   // script component
@@ -56,7 +56,7 @@ void GameState::loadScene_() {
             //
         }   // camera component
         if ( table["transform"] ) {
-            entity.assign<pg::component::Transform>(
+            entity.assign<component::Transform>(
                 std::initializer_list<float>{ 0.0f, 0.0f, 0.0f },
                 std::initializer_list<float>{ 1.0f, 1.0f, 1.0f }
             );
