@@ -1,17 +1,16 @@
 
 #pragma once
 
-extern "C" {
-    #include <lua.h>
-    #include <lualib.h>
-    #include <lauxlib.h>
-}
-#include <LuaBridge/LuaBridge.h>
+#include "lua/LuaState.h"
+#include "lua/LuaBridge.h"
 
-namespace ce {
+namespace pg {
+namespace component {
 
 struct Script {
-    //
+    LuaState state;
 };
 
+
+}
 }

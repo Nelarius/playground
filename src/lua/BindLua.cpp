@@ -1,54 +1,88 @@
 #include "lua/BindLua.h"
 #include "math/Vector.h"
-#include <LuaBridge/LuaBridge.h>
+#include "component/Include.h"
+#include "ecs/Include.h"
 
-void pg::BindAll( lua_State* l ) {
-    pg::BindVector( l );
+namespace pg {
+
+void BindAll( lua_State* l ) {
+    BindVector( l );
+    BindComponent( l );
+    BindEntity( l );
 }
 
-void pg::BindVector( lua_State* l ) {
+void BindVector( lua_State* l ) {
     luabridge::getGlobalNamespace( l )
         .beginNamespace( "pg" )
-            .beginClass<pg::math::Vector2f>( "Vector2f" )
+            .beginClass<math::Vector2f>( "Vector2f" )
                 .addConstructor<void(*)( float, float )>()
-                .addData( "x", &pg::math::Vector2f::x )
-                .addData( "y", &pg::math::Vector2f::y )
-                .addData( "r", &pg::math::Vector2f::r )
-                .addData( "g", &pg::math::Vector2f::g )
+                .addData( "x", &math::Vector2f::x )
+                .addData( "y", &math::Vector2f::y )
+                .addData( "r", &math::Vector2f::r )
+                .addData( "g", &math::Vector2f::g )
                 .addFunction( "l2norm", &pg::math::Vector2f::l2norm )
                 .addFunction( "normalize", &pg::math::Vector2f::normalize )
                 .addFunction( "length", &pg::math::Vector2f::length )
                 .addFunction( "squaredLength", &pg::math::Vector2f::squaredLength )
             .endClass()
-            .beginClass<pg::math::Vector3f>( "Vector3f" )
+            .beginClass<math::Vector3f>( "Vector3f" )
                 .addConstructor<void(*)( float, float, float )>()
-                .addData( "x", &pg::math::Vector3f::x )
-                .addData( "y", &pg::math::Vector3f::y )
-                .addData( "z", &pg::math::Vector3f::z )
-                .addData( "r", &pg::math::Vector3f::r )
-                .addData( "g", &pg::math::Vector3f::g )
-                .addData( "b", &pg::math::Vector3f::b )
-                .addFunction( "l2norm", &pg::math::Vector3f::l2norm )
-                .addFunction( "normalize", &pg::math::Vector3f::normalize )
-                .addFunction( "length", &pg::math::Vector3f::length )
-                .addFunction( "squaredLength", &pg::math::Vector3f::squaredLength )
-                .addFunction( "cross", &pg::math::Vector3f::cross )
+                .addData( "x", &math::Vector3f::x )
+                .addData( "y", &math::Vector3f::y )
+                .addData( "z", &math::Vector3f::z )
+                .addData( "r", &math::Vector3f::r )
+                .addData( "g", &math::Vector3f::g )
+                .addData( "b", &math::Vector3f::b )
+                .addFunction( "l2norm", &math::Vector3f::l2norm )
+                .addFunction( "normalize", &math::Vector3f::normalize )
+                .addFunction( "length", &math::Vector3f::length )
+                .addFunction( "squaredLength", &math::Vector3f::squaredLength )
+                .addFunction( "cross", &math::Vector3f::cross )
             .endClass()
-            .beginClass<pg::math::Vector4f>( "Vector4f" )
+            .beginClass<math::Vector4f>( "Vector4f" )
                 .addConstructor<void(*)( float, float, float, float )>()
-                .addData( "x", &pg::math::Vector4f::x )
-                .addData( "y", &pg::math::Vector4f::y )
-                .addData( "z", &pg::math::Vector4f::z )
-                .addData( "w", &pg::math::Vector4f::w )
-                .addData( "r", &pg::math::Vector4f::r )
-                .addData( "g", &pg::math::Vector4f::g )
-                .addData( "b", &pg::math::Vector4f::b )
-                .addData( "a", &pg::math::Vector4f::a )
-                .addFunction( "l2norm", &pg::math::Vector4f::l2norm )
-                .addFunction( "normalize", &pg::math::Vector4f::normalize )
-                .addFunction( "length", &pg::math::Vector4f::length )
-                .addFunction( "squaredLength", &pg::math::Vector4f::squaredLength )
+                .addData( "x", &math::Vector4f::x )
+                .addData( "y", &math::Vector4f::y )
+                .addData( "z", &math::Vector4f::z )
+                .addData( "w", &math::Vector4f::w )
+                .addData( "r", &math::Vector4f::r )
+                .addData( "g", &math::Vector4f::g )
+                .addData( "b", &math::Vector4f::b )
+                .addData( "a", &math::Vector4f::a )
+                .addFunction( "l2norm", &math::Vector4f::l2norm )
+                .addFunction( "normalize", &math::Vector4f::normalize )
+                .addFunction( "length", &math::Vector4f::length )
+                .addFunction( "squaredLength", &math::Vector4f::squaredLength )
             .endClass()
         .endNamespace();
-        
+}
+
+void BindComponent( lua_State* l ) {
+    lb::getGlobalNamespace( l )
+        .beginNamespace( "pg" )
+            .beginClass<component::Transform>( "Transform" )
+                .addData( "position", &component::Transform::position )
+                .addData( "scale", &component::Transform::scale )
+            .endClass()
+            .beginClass<component::Camera>( "Camera" )
+                .addData( "fov", &component::Camera::verticalFov )
+                .addData( "near_plane", &component::Camera::nearPlane )
+                .addData( "far_plane", &component::Camera::farPlane )
+                .addData( "viewPerspective", &component::Camera::viewPerspective )
+                .addData( "active", &component::Camera::active )
+            .endClass()
+        .endNamespace();
+}
+
+void BindEntity( lua_State* l ) {
+    lb::getGlobalNamespace( l )
+        .beginNamespace( "pg" )
+            .beginClass<ecs::LuaEntity>( "Entity" )
+                .addFunction( "hasRenderable", &ecs::LuaEntity::has<component::Renderable> )
+                .addFunction( "hasTransform", &ecs::LuaEntity::has<component::Transform> )
+                .addFunction( "hasCamera", &ecs::LuaEntity::has<component::Camera> )
+            .endClass()
+        .endNamespace();
+}
+
 }

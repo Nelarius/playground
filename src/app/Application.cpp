@@ -84,9 +84,9 @@ void Application::initialize_() {
     pg::LuaState lua{ false };
     lua.execute( "config.lua" );
     
-    luabridge::LuaRef targetFrameRate = luabridge::getGlobal( lua.get(), "targetFrameRate" );
-    luabridge::LuaRef window = luabridge::getGlobal( lua.get(), "window" );
-    luabridge::LuaRef opengl = window["opengl"];
+    lb::LuaRef targetFrameRate = lb::getGlobal( lua.get(), "targetFrameRate" );
+    lb::LuaRef window = lb::getGlobal( lua.get(), "window" );
+    lb::LuaRef opengl = window["opengl"];
     
     TargetDeltaTime = std::chrono::duration<float, std::ratio<1,1>>( 1.0f /  targetFrameRate.cast<float>() );
     

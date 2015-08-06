@@ -16,9 +16,11 @@ class Debug : public ecs::System<Debug>, public ecs::Receiver {
         void receive( const ecs::ComponentAssignedEvent<component::Camera>& camera );
         void receive( const ecs::ComponentAssignedEvent<component::Transform>& transform );
         void receive( const ecs::ComponentAssignedEvent<component::Renderable>& renderable );
+        void receive( const ecs::ComponentAssignedEvent<component::Script>& script );
         void receive( const ecs::ComponentRemovedEvent<component::Camera>& camera );
         void receive( const ecs::ComponentRemovedEvent<component::Transform>& transform );
         void receive( const ecs::ComponentRemovedEvent<component::Renderable>& renderable );
+        void receive( const ecs::ComponentRemovedEvent<component::Script>& script );
 };
 
 

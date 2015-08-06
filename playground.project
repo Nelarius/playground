@@ -119,6 +119,7 @@
       <File Name="src/lua/LuaState.h" ExcludeProjConfig="Test"/>
       <File Name="src/lua/BindLua.h"/>
       <File Name="src/lua/BindLua.cpp"/>
+      <File Name="src/lua/LuaBridge.h"/>
     </VirtualDirectory>
     <File Name="src/Test.cpp" ExcludeProjConfig="Debug"/>
     <VirtualDirectory Name="test">

@@ -59,7 +59,7 @@ class Entity {
         Entity( Entity&& )                  = default;
         Entity& operator=( const Entity& )  = default;
         Entity& operator=( Entity&& )       = default;
-        ~Entity()                           = default;
+        virtual ~Entity()                   = default;
         
         bool operator==( const Entity& ) const;
         bool operator!=( const Entity& ) const;
@@ -108,11 +108,25 @@ class Entity {
         template<typename C>
         bool has() const;
         
-    private:
+    protected:
         // friend of EntityManager 
         EntityManager*  manager_{ nullptr };
         Id              id_{ Invalid };
 };
+
+class LuaEntity: public Entity {
+    public:
+        LuaEntity( const Entity& );
+        LuaEntity()                               = delete;
+        LuaEntity( const LuaEntity& )             = default;
+        LuaEntity( LuaEntity&& )                  = default;
+        LuaEntity& operator=( const LuaEntity& )  = default;
+        LuaEntity& operator=( LuaEntity&& )       = default;
+        virtual ~LuaEntity()                      = default;
+        
+        template<typename C>
+        C* componentPointer();
+}; 
 
 // this should be a run-time adjustable
 // to do so, EntityManager needs to use the Cheshire Cat pattern
@@ -350,6 +364,7 @@ class EntityManager {
         
     private:
         friend class Entity;
+        friend class LuaEntity;
         template<typename C> friend class ComponentHandle;
         
         void destroy_( Id id );
@@ -428,6 +443,15 @@ void Entity::remove() {
 template<typename C>
 bool Entity::has() const {
     return manager_->hasComponent_<C>( id_ );
+}
+
+/////////////////////////////////////////////////////////////////////////////
+// LuaEntity implementation
+/////////////////////////////////////////////////////////////////////////////
+
+template<typename C>
+C* LuaEntity::componentPointer() {
+    return manager_->component_<C>( id_ );
 }
 
 /////////////////////////////////////////////////////////////////////////////

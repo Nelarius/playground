@@ -3,7 +3,7 @@
 
 int main( int argc, char** argv ) {
     
-    ce::Application app{};
+    pg::Application app{};
     app.run();
     
     return 0;

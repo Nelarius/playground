@@ -1,12 +1,14 @@
 
 
+
 -- this gets called just after the component is assigned
 function activate()
-    print("Hello, this is script speaking!")
+    print( entity:hasTransform() )
 end
 
 -- this gets called in the update loop
 function update( dt )
+    -- comment
 end
 
 --  this gets called just before the component is removed
