@@ -5,7 +5,7 @@
 namespace pg {
 
 void ShaderManager::addShader( const std::string file, GLenum type ) {
-    shaderStages_.emplace_back( new opengl::Shader( ce::FileToString( file ), type ) );
+    shaderStages_.emplace_back( new opengl::Shader( pg::FileToString( file ), type ) );
 }
 
 void ShaderManager::compile( const std::string& tag ) {

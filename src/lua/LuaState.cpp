@@ -58,7 +58,7 @@ LuaState::~LuaState() {
 }
 
 void LuaState::execute( const std::string& file ) {
-    if ( !ce::FileExists( file ) ) {
+    if ( !pg::FileExists( file ) ) {
         LOG(ce::LogLevel::Error) << "LuaState::execute> No such file " << file;
         return;
     }

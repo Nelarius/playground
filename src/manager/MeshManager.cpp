@@ -16,7 +16,7 @@ opengl::BufferObject* MeshManager::get( const std::string& file ) {
     }
     
     #ifdef DEBUG
-    ASSERT( ce::FileExists( file ), std::string("error: no such mesh file: " ) + file );
+    ASSERT( pg::FileExists( file ), std::string("error: no such mesh file: " ) + file );
     #endif
     
     Assimp::Importer importer;
