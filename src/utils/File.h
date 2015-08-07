@@ -7,7 +7,7 @@
 #include <utils/Assert.h>
 #include <sys/stat.h>
 
-namespace ce {
+namespace pg {
 
     /// \brief Check whether a file of the given name exists.
     inline bool FileExists( const std::string& file ) {
