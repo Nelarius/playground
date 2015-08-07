@@ -10,16 +10,31 @@ entities = {
     {
         script = "data/template.lua",
         transform = {
-            position = pg.Vector3f( 0.0, 0.0, 0.0 ),
+            position = pg.Vector3f( 0.0, 0.0, -2.0 ),
             scale = pg.Vector3f( 1.0, 1.0, 1.0 )
         },
         camera = {
             fov =           1.15,
-            near_plane =    0.1,
-            far_plane =     1000.0,
+            nearPlane =    0.1,
+            farPlane =     1000.0,
             perspective =   true,
             active =        true
         }
+    },
+    
+    {
+        transform = {
+            position = pg.Vector3f( 0.0, 0.0, 0.0 ),
+            scale = pg.Vector3f( 1.0, 1.0, 1.0 )
+        },
+        renderable = {
+            model = "data/puck.obj",
+            ambient = {
+                color = pg.Vector3f( 0.5, 0.5, 0.1 )
+            }
+        }
     }
+    
+    
 }
 

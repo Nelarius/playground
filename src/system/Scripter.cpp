@@ -13,12 +13,12 @@ void Scripter::configure( ecs::EventManager& events ) {
 }
 
 void Scripter::update( ecs::EntityManager& entities, ecs::EventManager& events, float dt ) {
-    /*for ( ecs::Entity entity: entities.join<component::Script>() ) {
+    for ( ecs::Entity entity: entities.join<component::Script>() ) {
         lb::LuaRef upadte = lb::getGlobal( entity.component<component::Script>()->state.get(), "update" );
         if ( upadte ) {
             upadte( dt );
         }
-    }*/
+    }
 }
 
 void Scripter::receive( const ecs::ComponentAssignedEvent<component::Script>& assigned ) {

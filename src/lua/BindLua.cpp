@@ -77,11 +77,15 @@ void BindComponent( lua_State* l ) {
 void BindEntity( lua_State* l ) {
     lb::getGlobalNamespace( l )
         .beginNamespace( "pg" )
-            .beginClass<ecs::Entity>( "LuaEntity" )
+            .beginClass<ecs::Entity>( "Entity" )
                 .addFunction( "isValid", &ecs::Entity::isValid )
                 .addFunction( "hasTransform", &ecs::Entity::has<component::Transform> )
+                .addFunction( "hasRenderable", &ecs::Entity::has<component::Renderable> )
                 .addFunction( "hasCamera", &ecs::Entity::has<component::Camera> )
+                .addFunction( "hasScript", &ecs::Entity::has<component::Script> )
                 .addProperty( "transform", &ecs::Entity::componentPointer<component::Transform> )
+                .addProperty( "camera", &ecs::Entity::componentPointer<component::Camera> )
+                .addProperty( "renderable", &ecs::Entity::componentPointer<component::Renderable> )
             .endClass()
         .endNamespace();
 }

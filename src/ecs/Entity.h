@@ -128,7 +128,7 @@ class LuaEntity: public Entity {
         virtual ~LuaEntity()                      = default;
         
         template<typename C>
-        C* componentPointer();
+        C* componentPointer() const;
 };
 
 // this should be a run-time adjustable
@@ -458,7 +458,7 @@ C* Entity::componentPointer() const {
 /////////////////////////////////////////////////////////////////////////////
 
 template<typename C>
-C* LuaEntity::componentPointer() {
+C* LuaEntity::componentPointer() const {
     return manager_->component_<C>( id_ );
 }
 

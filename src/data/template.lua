@@ -3,14 +3,17 @@
 
 -- this gets called just after the component is assigned
 function activate()
-    if entity:hasTransform() then
-        transform.position = pg.Vector3f( 10.0, 10.0, 10.0 )
-    end
 end
+
+vz = -1.0
 
 -- this gets called in the update loop
 function update( dt )
-    -- comment
+    if entity:hasTransform() then
+        print( entity.transform.position.z + vz * dt )
+        print(entity.transform.position.z)
+        entity.transform.position.z = -10.0
+    end
 end
 
 --  this gets called just before the component is removed

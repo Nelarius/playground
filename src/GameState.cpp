@@ -52,23 +52,49 @@ void GameState::loadScene_() {
             lua.execute( scriptFile );
             entity.assign<component::Script>( lua );
         }   // script component
+        
         if ( table["camera"] ) {
-            //
+            lb::LuaRef camera = table["camera"];
+            entity.assign<component::Camera>(
+                camera["fov"].cast<float>(),
+                camera["nearPlane"].cast<float>(),
+                camera["farPlane"].cast<float>(),
+                camera["perspective"].cast<bool>(),
+                camera["active"].cast<bool>()
+            );
         }   // camera component
+        
         if ( table["transform"] ) {
+            lb::LuaRef transform = table["transform"];
             entity.assign<component::Transform>(
-                std::initializer_list<float>{ 0.0f, 0.0f, 0.0f },
-                std::initializer_list<float>{ 1.0f, 1.0f, 1.0f }
+                //std::initializer_list<float>{ 0.0f, 0.0f, 0.0f },
+                //std::initializer_list<float>{ 1.0f, 1.0f, 1.0f }
+                transform["position"].cast<math::Vector3f>(),
+                transform["scale"].cast<math::Vector3f>()
             );
         }   // transform component
+        
         if ( table["renderable"] ) {
             lb::LuaRef renderable = table["renderable"];
+            opengl::BufferObject* buffer = context_.meshManager.get( renderable["model"] );
+            opengl::Program* shader{ nullptr };
+            std::unordered_map<std::string, float> uniforms{};
             if ( renderable["ambient"] ) {
-                //
+                shader = context_.shaderManager.get( "ambient" );
+                lb::LuaRef ambient = renderable["ambient"];
+                math::Vector3f color = ambient["color"];
+                uniforms.emplace( "color_r", color.r );
+                uniforms.emplace( "color_g", color.g );
+                uniforms.emplace( "color_b", color.b );
             } else if ( renderable["diffuse"] ) {
-                //
+                shader = context_.shaderManager.get( "diffuse" );
             }
+            opengl::VertexArrayObjectFactory factory{ buffer, shader };
+            factory.addStandardAttribute( opengl::VertexAttribute::Vertex );
+            auto vao = factory.getVao();
+            entity.assign<component::Renderable>( buffer, shader, vao, uniforms );
         }   // renderable component
+        
     }   // iterate over entities
 }
 
@@ -79,6 +105,7 @@ void GameState::activate() {
     
     context_.shaderManager.addShader( "data/ambient.vert.glsl", GL_VERTEX_SHADER );
     context_.shaderManager.addShader( "data/ambient.frag.glsl", GL_FRAGMENT_SHADER );
+    context_.shaderManager.compile( "ambient" );
     
     loadScene_();
 }
