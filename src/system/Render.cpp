@@ -28,7 +28,7 @@ namespace {
 namespace pg {
 namespace system {
 
-Render::Render( pg::Context& context )
+Render::Render( Context& context )
 :   System<Render>(),
     context_{ context }
     {}

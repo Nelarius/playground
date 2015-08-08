@@ -85,7 +85,6 @@ void BindEntity( lua_State* l ) {
                 .addFunction( "hasScript", &ecs::Entity::has<component::Script> )
                 .addProperty( "transform", &ecs::Entity::componentPointer<component::Transform> )
                 .addProperty( "camera", &ecs::Entity::componentPointer<component::Camera> )
-                .addProperty( "renderable", &ecs::Entity::componentPointer<component::Renderable> )
             .endClass()
         .endNamespace();
 }

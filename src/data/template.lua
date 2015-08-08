@@ -6,13 +6,13 @@ function activate()
 end
 
 vz = -1.0
+z = 5.0
 
 -- this gets called in the update loop
 function update( dt )
     if entity:hasTransform() then
-        print( entity.transform.position.z + vz * dt )
-        print(entity.transform.position.z)
-        entity.transform.position.z = -10.0
+        z = z + vz * dt
+        entity.transform.position = pg.Vector3f( 0.0, 0.0, z )
     end
 end
 
