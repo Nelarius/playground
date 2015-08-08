@@ -38,12 +38,16 @@ class VertexArrayObjectFactory {
         /**
          * @brief 
          * @param attrib The name of the attribute in the shader.
-         * @param size The number of components in the attribute
-         * @param type The type of each component
+         * @param size The number of components in the attribute. Must be 1, 2, 3, or 4.
+         * @param type The OpenGL type of each component
          * @param normalized Specify whether the components should be normalized (GL_TRUE) or not (GL_FALSE).
          * @param stride The byte offset of consecutive attributes. Assumes tightly packed data if this is zero.
          * @param offset The pointer offset in bytes to this attribute's location within the buffer.
          * Do not use this method and addStandardAttribute for the same vao! Incorrect results will follow.
+         * 
+         * Valid types are GL_BYTE, GL_UNSIGNED_BYTE, GL_SHORT, GL_UNSIGNED_SHORT, GL_INT,
+         * GL_UNSIGNED_INT, GL_HALF_FLOAT, GL_FLOAT, GL_DOUBLE, GL_FIXED,  GL_INT_2_10_10_10_REV, 
+         * GL_UNSIGNED_INT_2_10_10_10_REV, and GL_UNSIGNED_INT_10F_11F_11F_REV.
          */
         void addAttribute(
             const std::string& attrib, GLint size, GLenum type,

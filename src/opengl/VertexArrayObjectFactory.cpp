@@ -46,28 +46,24 @@ void VertexArrayObjectFactory::addStandardAttribute( VertexAttribute attribute )
     
     switch( attribute ) {
         case VertexAttribute::Vertex: {
-            //GLint attrib = glGetAttribLocation( program, "vertex" );
             standardAttributeQueue_.emplace_back(
                 "vertex", 3, GL_FLOAT, GL_FALSE, 0, 0u
             );
             break;
         }
         case VertexAttribute::Normal: {
-            //GLint attrib = glGetAttribLocation( program, "normal" );
             standardAttributeQueue_.emplace_back(
                 "normal", 3, GL_FLOAT, GL_FALSE, 0, 0u
             );
             break;
         }
         case VertexAttribute::Color: {
-            //GLint attrib = glGetAttribLocation( program, "color" );
             standardAttributeQueue_.emplace_back(
                 "color", 3, GL_FLOAT, GL_FALSE, 0, 0u 
             );
             break;
         }
         case VertexAttribute::UVCoordinate: {
-            //GLint attrib = glGetAttribLocation( program, "uvcoordinate" );
             standardAttributeQueue_.emplace_back(
                 "uvcoordinate", 2, GL_FLOAT, GL_FALSE, 0, 0u
             );

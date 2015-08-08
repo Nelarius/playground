@@ -67,8 +67,6 @@ void GameState::loadScene_() {
         if ( table["transform"] ) {
             lb::LuaRef transform = table["transform"];
             entity.assign<component::Transform>(
-                //std::initializer_list<float>{ 0.0f, 0.0f, 0.0f },
-                //std::initializer_list<float>{ 1.0f, 1.0f, 1.0f }
                 transform["position"].cast<math::Vector3f>(),
                 transform["scale"].cast<math::Vector3f>()
             );
@@ -78,6 +76,7 @@ void GameState::loadScene_() {
             lb::LuaRef renderable = table["renderable"];
             opengl::BufferObject* buffer = context_.meshManager.get( renderable["model"] );
             opengl::Program* shader{ nullptr };
+            opengl::VertexArrayObject vao{ 0 };
             std::unordered_map<std::string, float> uniforms{};
             if ( renderable["ambient"] ) {
                 shader = context_.shaderManager.get( "ambient" );
@@ -86,12 +85,13 @@ void GameState::loadScene_() {
                 uniforms.emplace( "color_r", color.r );
                 uniforms.emplace( "color_g", color.g );
                 uniforms.emplace( "color_b", color.b );
+                opengl::VertexArrayObjectFactory factory{ buffer, shader };
+                factory.addAttribute( "vertex", 3, GL_FLOAT, GL_FALSE, 6*sizeof(float) );
+                vao = factory.getVao();
             } else if ( renderable["diffuse"] ) {
                 shader = context_.shaderManager.get( "diffuse" );
             }
             opengl::VertexArrayObjectFactory factory{ buffer, shader };
-            factory.addStandardAttribute( opengl::VertexAttribute::Vertex );
-            auto vao = factory.getVao();
             entity.assign<component::Renderable>( buffer, shader, vao, uniforms );
         }   // renderable component
         
