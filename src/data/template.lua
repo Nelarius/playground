@@ -5,14 +5,17 @@
 function activate()
 end
 
-vz = -1.0
-z = 5.0
+-- accumulated time
+t = 0.0
+-- angular valocity
+av = 0.5
+r = 8.0
 
 -- this gets called in the update loop
 function update( dt )
     if entity:hasTransform() then
-        z = z + vz * dt
-        entity.transform.position = pg.Vector3f( 0.0, 0.0, z )
+        t = t + dt
+        entity.transform.position = pg.Vector3f( r*math.cos( t*av ), 0.0, r*math.sin( t*av ) )
     end
 end
 

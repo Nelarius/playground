@@ -36,7 +36,7 @@ class VertexArrayObjectFactory {
         ~VertexArrayObjectFactory() = default;
         
         /**
-         * @brief 
+         * @brief A slightly streamlined interface over OpenGL for creating vertex attributes.
          * @param attrib The name of the attribute in the shader.
          * @param size The number of components in the attribute. Must be 1, 2, 3, or 4.
          * @param type The OpenGL type of each component

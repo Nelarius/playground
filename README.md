@@ -55,10 +55,19 @@ This component will be rendered with OpenGL. The component consists of a 3d mode
 ```lua
 renderable = {
     model = {String}
+    <material> = {Table}
 }
 ```
 
-The `Vector3f` is a custom data type, which can be used to describe vectors. 
+There are currently two `material` types supported: ambient and specular shading. The only data we need to give the ambient material is the base color. We do it like this.
+
+```lua
+ambient = {
+  color = pg.Vector3f( 0.5, 0.5, 0.1 )
+}
+```
+
+More about the specular shading later.
 
 #### Camera
 
@@ -123,14 +132,17 @@ entities = {
 function activate()
 end
 
-vz = -1.0
+-- accumulated time
+t = 0.0
+-- angular valocity
+av = 0.5
+r = 8.0
 
 -- this gets called in the update loop
 function update( dt )
     if entity:hasTransform() then
-        print( entity.transform.position.z + vz * dt )
-        print(entity.transform.position.z)
-        entity.transform.position.z = -10.0
+        t = t + dt
+        entity.transform.position = pg.Vector3f( r*math.cos( t*av ), 0.0, r*math.sin( t*av ) )
     end
 end
 
@@ -165,12 +177,15 @@ window = {
 Here is a list of functions and variables available for use in the script component.
 
 ## TODO
-* Read & render basic components
-  * visible components need to be described in Lua scene file
-  * create a simple scene in C++ to test systems and components
+* Implement spotlight component
+* Implement specular shaders
+  * There will initially be only one spot light.
+  * After that, we stick an array of lights into the shader
+  * add specular highlight uniform variables to specular material
 * Bind Matrix to Lua
 * Quaternion math
 * Rendering matrices use Matrix4f
+* Implement directional light component
 * Implement Transform component & rendering system using my math module
 * Scripting system needs context, managers, and ECS subsystems to be bound
   * Entity needs to be bound in such a way that we have direct access to component pointers
