@@ -69,6 +69,20 @@ ambient = {
 
 More about the specular shading later.
 
+#### PointLight
+
+This component casts light on all renderables in the scene.
+
+*Component dependency: transform*
+
+```lua
+pointLight = {
+    intensity = pg.Vector3f( 1.0, 1.0, 1.0 )
+    attenuation = 0.2
+    ambientCoefficient = 0.005
+}
+```
+
 #### Camera
 
 The camera component is used for rendering the renderable components.
@@ -177,7 +191,6 @@ window = {
 Here is a list of functions and variables available for use in the script component.
 
 ## TODO
-* Implement spotlight component
 * Implement specular shaders
   * There will initially be only one spot light.
   * After that, we stick an array of lights into the shader
