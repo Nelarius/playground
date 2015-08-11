@@ -46,6 +46,8 @@
       <File Name="src/component/Script.h" ExcludeProjConfig="Test"/>
       <File Name="src/component/Include.h"/>
       <File Name="src/component/Transform.h"/>
+      <File Name="src/component/PointLight.h"/>
+      <File Name="src/component/DirectionalLight.h"/>
     </VirtualDirectory>
     <VirtualDirectory Name="manager">
       <File Name="src/manager/MeshManager.cpp" ExcludeProjConfig="Test"/>
@@ -88,6 +90,8 @@
       <File Name="src/data/diffuse.frag.glsl"/>
       <File Name="src/data/diffuse.vert.glsl"/>
       <File Name="src/data/template.lua"/>
+      <File Name="src/data/specular.frag.glsl"/>
+      <File Name="src/data/specular.vert.glsl"/>
     </VirtualDirectory>
     <File Name="src/GameState.cpp" ExcludeProjConfig="Test"/>
     <File Name="src/GameState.h" ExcludeProjConfig="Test"/>
@@ -143,9 +147,6 @@
     <File Name="src/config.lua"/>
     <File Name="Makefile"/>
   </VirtualDirectory>
-  <Dependencies Name="Debug"/>
-  <Dependencies Name="Release"/>
-  <Dependencies Name="Test"/>
   <Settings Type="Executable">
     <GlobalSettings>
       <Compiler Options="" C_Options="" Assembler="">
@@ -312,4 +313,7 @@
       </Completion>
     </Configuration>
   </Settings>
+  <Dependencies Name="Debug"/>
+  <Dependencies Name="Release"/>
+  <Dependencies Name="Test"/>
 </CodeLite_Project>

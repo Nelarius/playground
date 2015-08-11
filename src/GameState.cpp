@@ -90,6 +90,16 @@ void GameState::loadScene_() {
                 vao = factory.getVao();
             } else if ( renderable["diffuse"] ) {
                 shader = context_.shaderManager.get( "diffuse" );
+                opengl::VertexArrayObjectFactory factory{ buffer, shader };
+                factory.addStandardAttribute( opengl::VertexAttribute::Vertex );
+                factory.addStandardAttribute( opengl::VertexAttribute::Normal );
+                vao = factory.getVao();
+            } else if ( renderable["specular"] )  {
+                shader = context_.shaderManager.get( "specular" );
+                opengl::VertexArrayObjectFactory factory{ buffer, shader };
+                factory.addStandardAttribute( opengl::VertexAttribute::Vertex );
+                factory.addStandardAttribute( opengl::VertexAttribute::Normal );
+                vao = factory.getVao();
             }
             opengl::VertexArrayObjectFactory factory{ buffer, shader };
             entity.assign<component::Renderable>( buffer, shader, vao, uniforms );
@@ -106,6 +116,10 @@ void GameState::activate() {
     context_.shaderManager.addShader( "data/ambient.vert.glsl", GL_VERTEX_SHADER );
     context_.shaderManager.addShader( "data/ambient.frag.glsl", GL_FRAGMENT_SHADER );
     context_.shaderManager.compile( "ambient" );
+    
+    context_.shaderManager.addShader( "data/specular.vert.glsl", GL_VERTEX_SHADER );
+    context_.shaderManager.addShader( "data/specular.frag.glsl", GL_FRAGMENT_SHADER );
+    context_.shaderManager.compile( "specular" );
     
     loadScene_();
 }
