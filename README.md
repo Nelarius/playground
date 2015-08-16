@@ -205,7 +205,6 @@ Here is a list of functions and variables available for use in the script compon
   * There needs to be read/write access for the components.
   * Create wrapper/binding for unordered_map, so that scripts can access material values
 * Figure out a mechanism to make `componentPointer<C>` private/not part of Entity API.
-* GameState, and other app states should be a part of app.
 * Bundle has iterators
 * Add R'lyeh's profit lib to profile execution times of critical methods
 

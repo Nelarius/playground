@@ -39,6 +39,9 @@
       <File Name="src/app/Context.h" ExcludeProjConfig="Test"/>
       <File Name="src/app/Window.cpp" ExcludeProjConfig="Test"/>
       <File Name="src/app/Window.h" ExcludeProjConfig="Test"/>
+      <File Name="src/app/GameState.cpp"/>
+      <File Name="src/app/GameState.h"/>
+      <File Name="src/app/StateIdentifiers.h"/>
     </VirtualDirectory>
     <VirtualDirectory Name="component">
       <File Name="src/component/Camera.h" ExcludeProjConfig="Test"/>
@@ -93,10 +96,7 @@
       <File Name="src/data/specular.frag.glsl"/>
       <File Name="src/data/specular.vert.glsl"/>
     </VirtualDirectory>
-    <File Name="src/GameState.cpp" ExcludeProjConfig="Test"/>
-    <File Name="src/GameState.h" ExcludeProjConfig="Test"/>
     <File Name="src/Main.cpp" ExcludeProjConfig="Test"/>
-    <File Name="src/StateIdentifiers.h" ExcludeProjConfig="Test"/>
     <VirtualDirectory Name="ecs">
       <File Name="src/ecs/Component.h" ExcludeProjConfig="Debug"/>
       <File Name="src/ecs/Entity.cpp" ExcludeProjConfig=""/>

@@ -14,7 +14,7 @@ entities = {
             scale = pg.Vector3f( 1.0, 1.0, 1.0 )
         },
         camera = {
-            fov =           1.15,
+            fov =           1.32,
             nearPlane =    0.1,
             farPlane =     1000.0,
             perspective =   true,
@@ -29,9 +29,7 @@ entities = {
         },
         renderable = {
             model = "data/cow.obj",
-            ambient = {
-                color = pg.Vector3f( 0.5, 0.5, 0.1 )
-            }
+            specular = {}
         }
     }
 }

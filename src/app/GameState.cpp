@@ -1,4 +1,4 @@
-#include "GameState.h"
+#include "app/GameState.h"
 #include "app/AppStateStack.h"
 #include "opengl/VertexArrayObject.h"
 #include "opengl/VertexArrayObjectFactory.h"

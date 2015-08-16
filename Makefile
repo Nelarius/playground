@@ -46,7 +46,7 @@ else
 endif
 
 OBJ = src/Main.o \
-	src/GameState.o \
+	src/app/GameState.o \
 	src/app/Application.o \
 	src/app/Window.o \
 	src/app/AppState.o \

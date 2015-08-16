@@ -1,5 +1,5 @@
 #include "app/Application.h"
-#include "GameState.h"
+#include "app/GameState.h"
 #include "lua/LuaState.h"
 #include "lua/LuaBridge.h"
 #include "utils/Assert.h"

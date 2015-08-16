@@ -3,7 +3,6 @@
 
 
 namespace pg {
-	
 namespace states {
 	
 enum Id {
