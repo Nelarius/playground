@@ -194,8 +194,11 @@ Here is a list of functions and variables available for use in the script compon
 * Implement specular shaders
   * There will initially be only one spot light.
   * After that, we stick an array of lights into the shader
-  * add ambient color parameters to scene file
-* Bind Matrix to Lua
+  * add gamma correction to specular shader
+* Implement free-look camera script
+  * Bind Matrix to Lua
+  * Add orientation to transform
+  * Implement look-at, script side
 * Quaternion math
 * Rendering matrices use Matrix4f
 * Implement directional light component
