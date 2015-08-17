@@ -116,6 +116,7 @@
       <File Name="src/system/Render.h" ExcludeProjConfig="Test"/>
       <File Name="src/system/Scripter.cpp"/>
       <File Name="src/system/Scripter.h"/>
+      <File Name="src/system/Material.h"/>
     </VirtualDirectory>
     <VirtualDirectory Name="lua">
       <File Name="src/lua/LuaError.h" ExcludeProjConfig="Test"/>

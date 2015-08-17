@@ -1,4 +1,5 @@
 #include "system/Render.h"
+#include "system/Material.h"
 #include "component/Include.h"
 #include "utils/Log.h"
 #include <glm/glm.hpp>
@@ -42,6 +43,7 @@ void Render::update(
 
     float aspectRatio = float( context_.window->width() ) / context_.window->height();
     glm::mat4 cameraMatrix{};
+    glm::vec3 cameraPos;
     /*
      * Iterate over cameras here, find the active one
      * */
@@ -49,6 +51,7 @@ void Render::update(
         auto camera = entity.component<component::Camera>();
         auto transform = entity.component<component::Transform>();
         if ( camera->active ) {
+            cameraPos = glm::vec3( transform->position.x, transform->position.y, transform->position.z );
             glm::mat4 view = ModelMatrixFromTransform( transform );
             glm::mat4 proj;
             if ( camera->viewPerspective ) {
@@ -76,14 +79,21 @@ void Render::update(
             )
         );
         shader->setUniform( "camera", cameraMatrix );
-        for ( const auto& it: renderable->uniforms ) {
+        for ( const auto& it: renderable->material.uniforms ) {
             shader->setUniform( it.first.c_str(), it.second );
+        }
+        if ( renderable->material.type == MaterialType::Specular ) {
+            setSpecularUniforms_( cameraPos, shader );
         }
         renderable->vao.bind();
         glDrawArrays( GL_TRIANGLES, 0, renderable->vbo->count() / renderable->vao.elementsPerIndex() );
         renderable->vao.unbind();
         shader->stopUsing();
     }
+}
+
+void Render::setSpecularUniforms_( const glm::vec3& pos, opengl::Program* p ) {
+    p->setUniform( "cameraPosition", pos );
 }
 
 }

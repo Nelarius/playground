@@ -1,10 +1,10 @@
 
 #pragma once
 
-#include "manager/MeshManager.h"
-#include "manager/ShaderManager.h"
+#include "system/Material.h"
 #include "opengl/VertexArrayObject.h"
 #include "opengl/BufferObject.h"
+#include "opengl/Program.h"
 #include <memory>
 #include <unordered_map>
 #include <string>
@@ -30,33 +30,12 @@ namespace component {
  * @file Renderable.h
  * @brief 
  */
-/*struct Renderable {
-    Renderable() = default;
-    ~Renderable() = default;
-    Renderable(
-        BufferObject* vbo,
-        Program* prog,
-        const VertexArrayObject& vao,
-        const std::unordered_map<std::string, float>& unif
-    )
-    :   vbo( vbo ),
-        shader( prog ),
-        vao( vao ),
-        uniforms( unif )
-        {}
-    
-    // a borrowed pointer is not managed here
-    opengl::BufferObject*                   vbo{ nullptr };
-    opengl::Program*                        shader{ nullptr };
-    opengl::VertexArrayObject               vao{ 0 };
-    std::unordered_map<std::string, float>  uniforms{ 10 }; // initialize with the number of initial buckets, to save on allocation time
-};*/
-
 struct Renderable {
     opengl::BufferObject* vbo;
     opengl::Program* shader;
     opengl::VertexArrayObject vao;
-    std::unordered_map<std::string, float>  uniforms;
+    //std::unordered_map<std::string, float>  uniforms;
+    system::Material material;
 };
 
 

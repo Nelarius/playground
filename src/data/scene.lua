@@ -29,7 +29,11 @@ entities = {
         },
         renderable = {
             model = "data/cow.obj",
-            specular = {}
+            specular = {
+                shininess = 80.0,
+                specularColor = pg.Vector3f( 1.0, 1.0, 1.0 ),
+                surfaceColor = pg.Vector3f(0.0941, 0.455, 0.804 )
+            }
         }
     }
 }
