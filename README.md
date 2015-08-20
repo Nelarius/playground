@@ -129,8 +129,10 @@ entities = {
         },
         renderable = {
             model = "data/puck.obj",
-            ambient = {
-                color = pg.Vector3f( 0.5, 0.5, 0.1 )
+            specular = {
+                shininess = 80.0,
+                specularColor = pg.Vector3f( 1.0, 1.0, 1.0 ),
+                ambientColor = pg.Vector3f(0.941, 0.455, 0.804 )
             }
         }
     }
@@ -148,7 +150,7 @@ end
 
 -- accumulated time
 t = 0.0
--- angular valocity
+-- angular velocity
 av = 0.5
 r = 8.0
 

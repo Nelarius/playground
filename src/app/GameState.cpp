@@ -112,13 +112,13 @@ void GameState::loadScene_() {
                 std::unordered_map<std::string, float> uniforms;
                 uniforms.emplace( "shininess", specular["shininess"] );
                 math::Vector3f specColor = specular["specularColor"];
-                math::Vector3f surfColor = specular["surfaceColor"];
+                math::Vector3f surfColor = specular["ambientColor"];
                 uniforms.emplace( "specColor_r", specColor.r );
                 uniforms.emplace( "specColor_g", specColor.g );
                 uniforms.emplace( "specColor_b", specColor.b );
-                uniforms.emplace( "surfColor_r", surfColor.r );
-                uniforms.emplace( "surfColor_g", surfColor.g );
-                uniforms.emplace( "surfColor_b", surfColor.b );
+                uniforms.emplace( "ambientColor_r", surfColor.r );
+                uniforms.emplace( "ambientColor_g", surfColor.g );
+                uniforms.emplace( "ambientColor_b", surfColor.b );
                 mat.type = system::MaterialType::Specular;
                 mat.uniforms = uniforms;
                 shader = context_.shaderManager.get( "specular" );
