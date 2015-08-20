@@ -201,6 +201,7 @@ Here is a list of functions and variables available for use in the script compon
   * Bind Matrix to Lua
   * Add orientation to transform
   * Implement look-at, script side
+* Normalize resource names in MeshManager and ShaderManager using r-lyeh's Unify lib.
 * Quaternion math
 * Rendering matrices use Matrix4f
 * Implement directional light component
