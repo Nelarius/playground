@@ -141,6 +141,8 @@
     </VirtualDirectory>
     <VirtualDirectory Name="3rdparty">
       <File Name="src/3rdparty/SimpleSignal.h"/>
+      <File Name="src/3rdparty/unify.cpp"/>
+      <File Name="src/3rdparty/unify.hpp"/>
     </VirtualDirectory>
   </VirtualDirectory>
   <VirtualDirectory Name="project">

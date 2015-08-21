@@ -205,6 +205,9 @@ Here is a list of functions and variables available for use in the script compon
   * Implement look-at, script side
 * Normalize resource names in MeshManager and ShaderManager using r-lyeh's Unify lib.
 * Quaternion math
+  * Add matrix representation of Quaternion 
+  * Add rotation matrix representation between two axes in Operations.h
+* Consistency: Vector should return matrix representations as well, just like Quaternion
 * Rendering matrices use Matrix4f
 * Implement directional light component
 * Implement Transform component & rendering system using my math module
