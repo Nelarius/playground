@@ -1,6 +1,7 @@
 #include "system/Render.h"
 #include "system/Material.h"
 #include "component/Include.h"
+#include "math/Include.h"
 #include "utils/Log.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
@@ -13,6 +14,15 @@ namespace {
     const float DegreesToRads = 3.141592653f / 180.0f;
     const float RadsToDegrees = 180.0f / 3.141592653f;
     const float Pi = 3.141592653f;
+    
+    /*
+     * These structs correspond to data types in the shaders
+     * */
+    struct DirectionalLight {
+        pg::math::Vector3f direction;
+        pg::math::Vector3f intensity;
+        float ambientCoefficient;
+    };
     
     glm::mat4 ModelMatrixFromTransform( const pg::ecs::ComponentHandle<pg::component::Transform>& t ) {
         /*
@@ -62,6 +72,18 @@ void Render::update(
             cameraMatrix = proj * glm::inverse( view );
             break;
         }
+    }
+    
+    Bundle<DirectionalLight, 12> lights{};
+    /*
+     * Iterate over lights here
+     * */
+    for ( ecs::Entity entity: entities.join<component::Transform, component::DirectionalLight>() ) {
+        lights.emplace( 
+            std::initializer_list<float>{ 0.0f, 0.0f, 0.0f } ,
+            std::initializer_list<float>{ 1.0f, 1.0f, 1.0f },
+            0.5f
+        );
     }
     
      /*
