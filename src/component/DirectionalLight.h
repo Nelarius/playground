@@ -8,7 +8,8 @@ namespace component {
 
 struct DirectionalLight {
     math::Vector3f intensity;
+    float ambientCoefficient;
 };
-    
+
 }
 }

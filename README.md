@@ -193,9 +193,11 @@ window = {
 Here is a list of functions and variables available for use in the script component.
 
 ## TODO
+* Write tests for Bundle
 * Implement specular shaders
-  * There will initially be only one spot light.
-  * After that, we stick an array of lights into the shader
+  * Add array of lights to specular shader
+  * Add Light count
+  * Read orientation from DirectionalLight component
   * add gamma correction to specular shader
 * Implement free-look camera script
   * Bind Matrix to Lua
