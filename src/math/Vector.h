@@ -27,11 +27,11 @@ struct BaseVector {
     
     Derived normalize() const {
         Derived res( *static_cast<Derived const*>(this) );
-        T factor = 1 / this->l2norm();
+        T factor = 1 / this->norm();
         return res * factor;
     }
     
-    T l2norm() const {
+    T norm() const {
         T sum = 0;
         for ( int i = 0; i < N; i++ ) {
             T element = static_cast<Derived const*>( this )->data[i];
@@ -41,7 +41,7 @@ struct BaseVector {
     }
     
     T length() const {
-        return l2norm();
+        return norm();
     }
     
     T squaredLength() const {
@@ -147,7 +147,8 @@ struct Vector3: public BaseVector<T, Vector3<T>, 3> {
         data[1] = y;
         data[2] = z;
     }
-    Vector3()                               = default;
+    Vector3()
+    :   x( 0 ), y( 0 ), z( 0 ) {}
     Vector3( const Vector3& )               = default;
     Vector3( Vector3&& )                    = default;
     Vector3& operator=( const Vector3& )    = default;
