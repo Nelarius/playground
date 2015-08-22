@@ -32,9 +32,25 @@ Matrix4<T> Scale( const Vector3<T>& v ) {
     };
 }
 
+/**
+ * @brief Get the rotation matrix for the rotation between two axes.
+ * @param s
+ * @param t
+ * @return 
+ */
 template<typename T>
-Matrix4<T> Rotate( const Vector3<T>& axis, T angle ) {
-    return Matrix4<T> {};
+Matrix4<T> Rotate( const Vector3<T>& s, const Vector3<T> t ) {
+    s = s.normalize();
+    t = t.normalize();
+    Vector3<T> v = s.cross( t );
+    T e = s.dot( t );
+    T h = 1.0 / ( 1.0 + e );
+    return Matrix4<T> {
+        e + h*v.x*v.x, h*v.x*v.y - v.z, h*v.x*v.z + v.y, 0.0,
+        h*v.x*v.y + v.z, e + h*v.y*v.y, h*v.y*v.z - v.x, 0.0,
+        h*v.x*v.z - v.y, h*v.y*v.z + v.x, e + h*v.z*v.z, 0.0,
+        0.0, 0.0, 0.0, 1.0
+    };
 }
 
 template<typename T>
@@ -79,12 +95,13 @@ Matrix4<T> Orthographic() {
 }
 
 template<typename T>
-Matrix4<T> Model( const Vector3<T>& s, const Vector3<T>& t) {
+Matrix4<T> Model( const Vector3<T>& t, const Quaternion<T>& r, const Vector3<T>& s ) {
     // the composite model matrix is C = TRS
     // where T is the translation matrix
     // R is the rotation matrix 
     // S is the scale matrix
-    return Translate( t ) * Scale( s );
+    auto M = r.asMatrix()*Scale( s );
+    return Translate( t ) * M;
 }
 
 template<typename T>

@@ -54,6 +54,16 @@ class Quaternion {
             };
         }
         
+        Matrix4<T> asMatrix() const {
+            T s = 2.0 / norm();
+            return Matrix4<T> {
+                1 - s*(v.y*v.y + v.z*v.z), s*(v.x*v.y - w*v.z), s*(v.x*v.z + w*v.y), 0.0,
+                s*(v.x*v.y + w*v.z), 1 - s*(v.x*v.x + v.z*v.z), s*(v.y*v.z - w*v.x), 0.0,
+                s*(v.x*v.z - w*v.y), s*(v.y*v.z + w*v.x), 1 - s*(v.x*v.x + v.y*v.y), 0.0,
+                0.0, 0.0, 0.0, 1.0
+            };
+        }
+        
         Vector3<T>  v{};    // the imaginary part
         T           w{ 1 }; // the real part
 };
@@ -62,6 +72,10 @@ template<typename T>
 Quaternion<T> operator*( T lhs, const Quaternion<T>& rhs ) {
     return Quaternion<T>{ lhs*rhs.v.x, lhs*rhs.v.y, lhs*rhs.v.z, lhs*rhs.w };
 }
+
+
+using Quaternionf = Quaternion<float>;
+using Quaterniond = Quaternion<double>;
 
 }   // math
 }   // pg
