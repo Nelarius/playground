@@ -28,8 +28,8 @@ GameState::GameState( Context& context, AppStateStack& stack )
     events_(),
     entities_( events_ ),
     systems_( events_, entities_ ){
-	systems_.add<system::Render>( context );
-	systems_.add<system::Debug>();
+    systems_.add<system::Render>( context );
+    systems_.add<system::Debug>();
     systems_.add<system::Scripter>();
     systems_.configure<system::Debug>();
     systems_.configure<system::Scripter>();
@@ -70,6 +70,7 @@ void GameState::loadScene_() {
             lb::LuaRef transform = table["transform"];
             entity.assign<component::Transform>(
                 transform["position"].cast<math::Vector3f>(),
+                math::Quaternionf{},
                 transform["scale"].cast<math::Vector3f>()
             );
         }   // transform component
@@ -167,7 +168,7 @@ void GameState::render( float dt ) {
     /*
      * Iterate over Renderable components here
      * */
-	systems_.update<system::Render>( dt );
+    systems_.update<system::Render>( dt );
 }
 
 }
