@@ -1,5 +1,6 @@
 #include "lua/BindLua.h"
 #include "math/Vector.h"
+#include "math/Quaternion.h"
 #include "component/Include.h"
 #include "ecs/Include.h"
 
@@ -7,6 +8,8 @@ namespace pg {
 
 void BindAll( lua_State* l ) {
     BindVector( l );
+    BindMatrix( l );
+    BindQuaternion( l );
     BindComponent( l );
     BindEntity( l );
 }
@@ -55,6 +58,29 @@ void BindVector( lua_State* l ) {
                 .addFunction( "squaredLength", &math::Vector4f::squaredLength )
             .endClass()
         .endNamespace();
+}
+
+void BindQuaternion( lua_State*  l ) {
+    lb::getGlobalNamespace( l )
+        .beginNamespace( "pg" )
+            .beginClass<math::Quaternionf>( "Quaternion" )
+                .addConstructor<void(*)(float, float, float, float)>()
+                .addFunction( "conjugate", &math::Quaternionf::conjugate )
+                .addFunction( "inverse", &math::Quaternionf::inverse )
+                .addFunction( "norm", &math::Quaternionf::norm )
+                .addFunction( "normSquared", &math::Quaternionf::normSquared )
+                .addFunction( "asMatrix", &math::Quaternionf::asMatrix )
+            .endClass()
+        .endNamespace();
+}
+
+void BindMatrix( lua_State* l ) {
+    lb::getGlobalNamespace( l )
+        .beginNamespace( "pg" )
+            .beginClass<math::Matrix4f>( "Matrix4f" )
+                .addConstructor<void(*)(void)>()
+            .endClass()
+        .endNamespace();    
 }
 
 void BindComponent( lua_State* l ) {
