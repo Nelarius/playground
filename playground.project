@@ -85,6 +85,7 @@
       <File Name="src/utils/Pool.cpp"/>
       <File Name="src/utils/Pool.h"/>
       <File Name="src/utils/Bundle.h"/>
+      <File Name="src/utils/Exception.h"/>
     </VirtualDirectory>
     <VirtualDirectory Name="data">
       <File Name="src/data/ambient.frag.glsl"/>
