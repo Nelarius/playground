@@ -14,14 +14,15 @@ namespace pg {
  * @brief A logged runtime exception class.
  */
 class PlaygroundException: public std::runtime_error {
-    explicit PlaygroundException( const std::string& what )
-    :   std::runtime_error( what ) {
-        LOG_ERROR << "PgException was thrown: " << what;
-    }
-    explicit PlaygroundException( const char* what )
-    :   std::runtime_error( what ) {
-        LOG_ERROR << "PgException was thrown: " << what;
-    }
+    public:
+        explicit PlaygroundException( const std::string& what )
+        :   std::runtime_error( what ) {
+            LOG_ERROR << "PlaygroundException was thrown: " << what;
+        }
+        explicit PlaygroundException( const char* what )
+        :   std::runtime_error( what ) {
+            LOG_ERROR << "PlaygroundException was thrown: " << what;
+        }
 };
 
 }

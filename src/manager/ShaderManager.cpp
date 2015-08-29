@@ -1,17 +1,25 @@
-#include <manager/ShaderManager.h>
-#include <utils/File.h>
-#include <utils/Assert.h>
+#include "utils/Exception.h"
+#include "manager/ShaderManager.h"
+#include "utils/File.h"
+#include "utils/Assert.h"
 
 namespace pg {
 
 void ShaderManager::addShader( const std::string file, GLenum type ) {
-    shaderStages_.emplace_back( new opengl::Shader( pg::FileToString( file ), type ) );
+    try {
+        shaderStages_.emplace_back( new opengl::Shader( pg::FileToString( file ), type ) );
+    } catch ( const PlaygroundException& e ) {
+        // this is kinda lame. It looks like I'm ignoring the exception, when in fact it is logged.
+    }
 }
 
 void ShaderManager::compile( const std::string& tag ) {
-    //resources_.emplace( tag, std::make_unique<ce::Program>( shaderStages_ ) );
-    auto index = buffer_.emplace( shaderStages_ );
-    resources_.emplace( tag, &buffer_[index] );
+    try {
+        auto index = buffer_.emplace( shaderStages_ );
+        resources_.emplace( tag, &buffer_[index] );
+    } catch( const PlaygroundException& e ) {
+        LOG_ERROR << "Exception in compiling " << tag << " shader.";
+    }
     shaderStages_.clear();
 }
 

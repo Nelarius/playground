@@ -192,6 +192,10 @@ window = {
 
 Here is a list of functions and variables available for use in the script component.
 
+## Using invaldiated entities
+
+It will not crash the program, but a warning will be logged.
+
 ## TODO
 * Write tests for Bundle
 * Implement specular shaders
@@ -204,7 +208,6 @@ Here is a list of functions and variables available for use in the script compon
   * Drawback: makes extension more difficult. Not a problem for now.
 * Error handling.
   * Ecs module should no longer assert when trying to do something with an invalidated entity.
-  * FileToString should throw an error, if the file doesn't exist.
 * Implement free-look camera script
 * Normalize resource names in MeshManager and ShaderManager using r-lyeh's Unify lib.
 * Consistency: Vector should return matrix representations as well, just like Quaternion
