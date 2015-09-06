@@ -1,5 +1,6 @@
 #include "opengl/Program.h"
 #include "utils/Assert.h"
+#include "utils/Exception.h"
 #include <glm/gtc/type_ptr.hpp>
 #include <iostream>
 #include <cstdlib>  //for std::exit
@@ -21,9 +22,11 @@ void Program::link( const std::vector<std::unique_ptr<Shader>>& shaders ) {
         std::cerr << "No shaders were provided to create the program.\n";
         std::exit( EXIT_SUCCESS );
     }
-
+    
     object_ = glCreateProgram();
-    ASSERT( object_ != 0, "error: glCreateProgram() failed." );
+    if ( object_ == 0 ) {
+        throw PlaygroundException( "glCreateProgram() failed" );
+    }
 
     for ( auto& shader: shaders ) {
         glAttachShader( object_, shader->object() );
@@ -46,7 +49,7 @@ void Program::link( const std::vector<std::unique_ptr<Shader>>& shaders ) {
 
         glDeleteProgram( object_ );
         object_ = 0;
-        ASSERT( false, msg.c_str() );
+        throw PlaygroundException( msg );
     }
 }
 
