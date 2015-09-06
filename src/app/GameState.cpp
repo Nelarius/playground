@@ -14,6 +14,7 @@
 #include "lua/LuaBridge.h"
 #include "lua/BindLua.h"
 
+#include <SDL2/SDL_scancode.h>
 #include <cmath>
 #include <vector>
 #include <unordered_map>
@@ -27,7 +28,8 @@ GameState::GameState( Context& context, AppStateStack& stack )
 :   AppState( context, stack ),
     events_(),
     entities_( events_ ),
-    systems_( events_, entities_ ){
+    systems_( events_, entities_ ),
+    keyboard_() {
     systems_.add<system::Render>( context );
     systems_.add<system::Debug>();
     systems_.add<system::Scripter>();
@@ -149,9 +151,18 @@ void GameState::activate() {
     context_.shaderManager.compile( "specular" );
     
     loadScene_();
+    
+    keyboard_.addInput( SDL_SCANCODE_A, []() -> void {
+        LOG_INFO << "wheee, inside a real time input handler!";
+    } );
+    keyboard_.addInput( SDL_SCANCODE_W, []() -> void {
+        LOG_INFO << "yet another real time input handler";
+    } );
 }
 
 bool GameState::update( float dt ) {
+    keyboard_.handleInput();
+    
     systems_.update<system::Scripter>( dt );
     return false;
 }

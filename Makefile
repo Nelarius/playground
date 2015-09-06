@@ -49,6 +49,7 @@ OBJ = src/Main.o \
 	src/app/GameState.o \
 	src/app/Application.o \
 	src/app/Window.o \
+	src/app/KeyboardManager.o \
 	src/app/AppState.o \
 	src/app/AppStateStack.o \
 	src/ecs/Event.o \

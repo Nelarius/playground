@@ -42,6 +42,8 @@
       <File Name="src/app/GameState.cpp"/>
       <File Name="src/app/GameState.h"/>
       <File Name="src/app/StateIdentifiers.h"/>
+      <File Name="src/app/KeyboardManager.h"/>
+      <File Name="src/app/KeyboardManager.cpp"/>
     </VirtualDirectory>
     <VirtualDirectory Name="component">
       <File Name="src/component/Camera.h" ExcludeProjConfig="Test"/>

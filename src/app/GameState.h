@@ -4,6 +4,7 @@
 #include "ecs/Include.h"
 #include "app/AppState.h"
 #include "app/Context.h"
+#include "app/KeyboardManager.h"
 #include "manager/ShaderManager.h"
 
 union SDL_Event;
@@ -42,7 +43,8 @@ class GameState : public AppState {
         // these could be possibly moved to AppState
         ecs::EventManager    events_;
         ecs::EntityManager   entities_;
-        ecs::SystemManager   systems_;        
+        ecs::SystemManager   systems_;      
+        KeyboardManager      keyboard_;
 };
 
 }
