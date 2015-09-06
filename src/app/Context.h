@@ -32,11 +32,10 @@ struct Context {
     MeshManager     meshManager{};
     ShaderManager   shaderManager{};
     bool            running{ true };
-    const Window*   window{ nullptr };
+    Window*         window{ nullptr };
     
     private:
         Mouse                   mouse_{};
-        
         float                   time_{0.0f};
 
 };

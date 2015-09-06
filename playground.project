@@ -120,6 +120,10 @@
       <File Name="src/system/Scripter.cpp"/>
       <File Name="src/system/Scripter.h"/>
       <File Name="src/system/Material.h"/>
+      <File Name="src/system/Console.h"/>
+      <File Name="src/system/Console.cpp"/>
+      <File Name="src/system/Ui.h"/>
+      <File Name="src/system/Ui.cpp"/>
     </VirtualDirectory>
     <VirtualDirectory Name="lua">
       <File Name="src/lua/LuaError.h" ExcludeProjConfig="Test"/>
@@ -146,6 +150,9 @@
       <File Name="src/3rdparty/SimpleSignal.h"/>
       <File Name="src/3rdparty/unify.cpp"/>
       <File Name="src/3rdparty/unify.hpp"/>
+      <File Name="src/3rdparty/imconfig.h"/>
+      <File Name="src/3rdparty/imgui.cpp"/>
+      <File Name="src/3rdparty/imgui.h"/>
     </VirtualDirectory>
   </VirtualDirectory>
   <VirtualDirectory Name="project">

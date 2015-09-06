@@ -2,8 +2,8 @@
 targetFrameRate = 60.0
 
 window = {
-    width = 800,
-    height = 600,
+    width = 1200,
+    height = 900,
     name = "Playground engine",
     opengl = {
         major = 3,

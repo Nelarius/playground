@@ -221,6 +221,8 @@ It will not crash the program, but a warning will be logged.
 * Figure out a mechanism to make `componentPointer<C>` private/not part of Entity API.
 * Bundle has iterators
 * Add R'lyeh's profit lib to profile execution times of critical methods
+* Integrate ImGui into a system
+  * I need to figure out how to render textured panels isometrically
 
 Error handling must be updated. I must make a distinction between hard and soft errors. Soft errors occus when a user supplies e.g. incorrect input. A typo in a file name in an input script is such an error. Currently `pg::FileExists` exits the program. What if we use the same function later in on UI code? A typo in the UI code should *NOT* crash the entire program. Instead, the error should passed onto the the module doing the work. The module needs to decide what to do with the error.
 

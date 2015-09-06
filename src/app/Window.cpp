@@ -116,3 +116,8 @@ unsigned Window::width() const {
 unsigned Window::height() const {
     return height_;
 }
+
+SDL_Window* Window::SDLwindow() {
+    return window_;
+
+}

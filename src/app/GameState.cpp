@@ -7,6 +7,7 @@
 #include "system/Debug.h"
 #include "system/Render.h"
 #include "system/Scripter.h"
+#include "system/Ui.h"
 #include "component/Include.h"
 #include "utils/Log.h"
 #include "utils/Assert.h"
@@ -30,11 +31,13 @@ GameState::GameState( Context& context, AppStateStack& stack )
     entities_( events_ ),
     systems_( events_, entities_ ),
     keyboard_() {
-    systems_.add<system::Render>( context );
-    systems_.add<system::Debug>();
-    systems_.add<system::Scripter>();
-    systems_.configure<system::Debug>();
-    systems_.configure<system::Scripter>();
+    systems_.add< system::Render >( context );
+    systems_.add< system::Debug >();
+    systems_.add< system::Scripter >();
+    systems_.add< system::Ui >( context );
+    systems_.configure< system::Debug >();
+    systems_.configure< system::Scripter >();
+    systems_.configure< system::Ui >();
 }
 
 void GameState::loadScene_() {
@@ -108,7 +111,7 @@ void GameState::loadScene_() {
                 factory.addStandardAttribute( opengl::VertexAttribute::Vertex );
                 factory.addStandardAttribute( opengl::VertexAttribute::Normal );
                 vao = factory.getVao();
-            } 
+            }
             
             else if ( renderable["specular"] )  {
                 lb::LuaRef specular = renderable["specular"];
@@ -179,6 +182,7 @@ void GameState::render( float dt ) {
     /*
      * Iterate over Renderable components here
      * */
+    //systems_.update<system::Ui>( dt );
     systems_.update<system::Render>( dt );
 }
 

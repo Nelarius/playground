@@ -21,23 +21,23 @@ void Debug::configure( ecs::EventManager& events ) {
 void Debug::update( ecs::EntityManager& entities, ecs::EventManager& events, float dt ) {}
 
 void Debug::receive( const ecs::EntityCreatedEvent& event ) {
-	LOG_DEBUG << "Entity " << event.entity.id().index() << "." << event.entity.id().version() << " created.";
+    LOG_DEBUG << "Entity " << event.entity.id().index() << "." << event.entity.id().version() << " created.";
 }
 
 void Debug::receive( const ecs::EntityDestroyedEvent& event ) {
-	LOG_DEBUG << "Entity " << event.entity.id().index() << "." << event.entity.id().version() << " destroyed.";
+    LOG_DEBUG << "Entity " << event.entity.id().index() << "." << event.entity.id().version() << " destroyed.";
 }
 
 void Debug::receive( const ecs::ComponentAssignedEvent<component::Camera>& event ) {
-	LOG_DEBUG << "Camera component assigned to Entity " << event.entity.id().index() << "." << event.entity.id().version();
+    LOG_DEBUG << "Camera component assigned to Entity " << event.entity.id().index() << "." << event.entity.id().version();
 }
 
 void Debug::receive( const ecs::ComponentAssignedEvent<component::Transform>& event ) {
-	LOG_DEBUG << "Transform component assigned to Entity " << event.entity.id().index() << "." << event.entity.id().version();
+    LOG_DEBUG << "Transform component assigned to Entity " << event.entity.id().index() << "." << event.entity.id().version();
 }
 
 void Debug::receive( const ecs::ComponentAssignedEvent<component::Renderable>& event ) {
-	LOG_DEBUG << "Renderable component assigned to Entity " << event.entity.id().index() << "." << event.entity.id().version();
+    LOG_DEBUG << "Renderable component assigned to Entity " << event.entity.id().index() << "." << event.entity.id().version();
 }
 
 void Debug::receive( const ecs::ComponentAssignedEvent<component::Script>& event ) {
@@ -45,15 +45,15 @@ void Debug::receive( const ecs::ComponentAssignedEvent<component::Script>& event
 }
 
 void Debug::receive( const ecs::ComponentRemovedEvent<component::Camera>& event ) {
-	LOG_DEBUG << "Camera component removed from Entity " << event.entity.id().index() << "." << event.entity.id().version();
+    LOG_DEBUG << "Camera component removed from Entity " << event.entity.id().index() << "." << event.entity.id().version();
 }
 
 void Debug::receive( const ecs::ComponentRemovedEvent<component::Transform>& event ) {
-	LOG_DEBUG << "Transform component removed from Entity " << event.entity.id().index() << "." << event.entity.id().version();
+    LOG_DEBUG << "Transform component removed from Entity " << event.entity.id().index() << "." << event.entity.id().version();
 }
 
 void Debug::receive( const ecs::ComponentRemovedEvent<component::Renderable>& event ) {
-	LOG_DEBUG << "Renderable component removed from Entity " << event.entity.id().index() << "." << event.entity.id().version();
+    LOG_DEBUG << "Renderable component removed from Entity " << event.entity.id().index() << "." << event.entity.id().version();
 }
 
 void Debug::receive( const ecs::ComponentRemovedEvent<component::Script>& event ) {

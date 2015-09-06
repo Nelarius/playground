@@ -47,6 +47,13 @@ class Window {
 
         unsigned width() const;
         unsigned height() const;
+        
+        /**
+         * @brief Get the underlying SDL window.
+         * @return 
+         * This pointer is managed and should not be deleted!
+         */
+        SDL_Window* SDLwindow();
 
     private:
         void initialize_();

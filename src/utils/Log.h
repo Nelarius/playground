@@ -11,14 +11,14 @@
 namespace ce {
 
 enum LogLevel {
-	Inhibit = 0,
-	Error,
-	Warning,
-	Info,
-	Debug,
-	Debug2,
-	Debug3,
-	Debug4,
+    Inhibit = 0,
+    Error,
+    Warning,
+    Info,
+    Debug,
+    Debug2,
+    Debug3,
+    Debug4,
     All
 };
 
@@ -67,7 +67,7 @@ inline LogLevel StringToLogLevel( const std::string& level ) {
 #pragma GCC diagnostic pop
 
 inline std::string NowTime() {
-	time_t rawtime;
+    time_t rawtime;
     struct tm * timeinfo;
     char buffer[80];
 
@@ -81,9 +81,9 @@ inline std::string NowTime() {
 
 class Log {
 
-	public:
-		Log() = default;
-		~Log() {
+    public:
+        Log() = default;
+        ~Log() {
             os_ << std::endl;
             std::cerr << os_.str();
             std::cerr.flush();  //syncrohize underlying device
@@ -94,14 +94,14 @@ class Log {
             return level;
         }
 
-		inline std::ostringstream& get( LogLevel level = LogLevel::Info ) {
+        inline std::ostringstream& get( LogLevel level = LogLevel::Info ) {
             //TO-DO: use std::put_time here to format the time output.
             os_ << " [" << NowTime() << " " << LogLevelToString( level ) << "] ";
             os_ << std::string( level < LogLevel::Debug ? 0 : level - LogLevel::Debug, '\t' );
             return os_;
         }
 
-	private:
+    private:
         std::ostringstream os_{};
 };
 
