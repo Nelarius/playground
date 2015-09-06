@@ -206,8 +206,6 @@ It will not crash the program, but a warning will be logged.
 * Material should use a union of material type structs, get rid of the verbosity of per-float uniform names.
   * I think this is justified, because the Render system is the one which provides the rendering service; materials are a part of that process.
   * Drawback: makes extension more difficult. Not a problem for now.
-* Error handling.
-  * Ecs module should no longer assert when trying to do something with an invalidated entity.
 * Implement free-look camera script
 * Normalize resource names in MeshManager and ShaderManager using r-lyeh's Unify lib.
 * Consistency: Vector should return matrix representations as well, just like Quaternion
@@ -222,11 +220,12 @@ It will not crash the program, but a warning will be logged.
 * Bundle has iterators
 * Add R'lyeh's profit lib to profile execution times of critical methods
 * Integrate ImGui into a system
-  * I need to figure out how to render textured panels isometrically
+  * I need to figure out how to render textured panels isometrically using modern OpenGL
+  * Add event handling functions for the Ui system:
+  * Add handler for text input event
+  * add handler for keyup input event
 
-Error handling must be updated. I must make a distinction between hard and soft errors. Soft errors occus when a user supplies e.g. incorrect input. A typo in a file name in an input script is such an error. Currently `pg::FileExists` exits the program. What if we use the same function later in on UI code? A typo in the UI code should *NOT* crash the entire program. Instead, the error should passed onto the the module doing the work. The module needs to decide what to do with the error.
-
-Conclusion: each module needs to throw an exception due to soft errors occurring in the module. The ECS should not crash when calling methods on an invalidated entity! Asserts shall remain in e.g. Bundle, and other places where corrupted state might occur. This is essentially a distinction between program error, and user-driven error.
+Remember to distinguish between hard and soft errors. Hard errors occur in palces like `Bundle` where an off-by one error leads to corrupted state. Soft errors occur e.g. when a user supplies an incorrect file name. The program still works correctly, it just has been given incorrect information.
 
 ## Dependencies
 ### SDL2
