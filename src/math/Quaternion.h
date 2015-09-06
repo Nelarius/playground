@@ -64,6 +64,15 @@ class Quaternion {
             };
         }
         
+        Vector3<T> axis() const {
+            T angle = this->angle();
+            return v * ( 1.0 / sin( angle / 2.0 ) );
+        }
+        
+        T angle() const {
+            return 2 * acos( w );
+        }
+        
         Vector3<T>  v{};    // the imaginary part
         T           w{ 1 }; // the real part
 };

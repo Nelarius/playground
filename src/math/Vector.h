@@ -80,7 +80,7 @@ struct BaseVector {
     Derived operator/( T scale ) const {
         Derived res{};
         for ( int i = 0; i < N; i++ ) {
-            res.data[i] = static_cast<Derived const*>(this)->data[i] * scale;
+            res.data[i] = static_cast<Derived const*>(this)->data[i] / scale;
         }
         return res;
     }
