@@ -70,6 +70,8 @@ void BindQuaternion( lua_State*  l ) {
                 .addFunction( "norm", &math::Quaternionf::norm )
                 .addFunction( "normSquared", &math::Quaternionf::normSquared )
                 .addFunction( "asMatrix", &math::Quaternionf::asMatrix )
+                .addFunction( "angle", &math::Quaternionf::angle )
+                .addFunction( "axis", &math::Quaternionf::axis )
             .endClass()
         .endNamespace();
 }

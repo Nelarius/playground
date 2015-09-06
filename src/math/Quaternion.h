@@ -20,7 +20,7 @@ class Quaternion {
         :   v( x, y, z ),
             w( w )
             {}
-            
+        
         Quaternion<T> conjugate() const {
             return Quaternion<T>{ -v.x, -v.y, -v.z, w };
         }
@@ -64,6 +64,15 @@ class Quaternion {
             };
         }
         
+        Vector3<T> axis() const {
+            T angle = this->angle();
+            return v * ( 1.0 / sin( angle / 2.0 ) );
+        }
+        
+        T angle() const {
+            return 2 * acos( w );
+        }
+        
         Vector3<T>  v{};    // the imaginary part
         T           w{ 1 }; // the real part
 };
@@ -72,7 +81,6 @@ template<typename T>
 Quaternion<T> operator*( T lhs, const Quaternion<T>& rhs ) {
     return Quaternion<T>{ lhs*rhs.v.x, lhs*rhs.v.y, lhs*rhs.v.z, lhs*rhs.w };
 }
-
 
 using Quaternionf = Quaternion<float>;
 using Quaterniond = Quaternion<double>;
