@@ -2,23 +2,9 @@
 #include "opengl/BufferObject.h"
 #include "opengl/Enum.h"
 
-using ce::BufferObject;
-using ce::Texture;
-
-namespace {
-
-/*
- * This function exists, because when querying what is in the current target,
- * we cant't query with the target's GLenum type -  rather, we have to use a variation
- * of it, with the word BINDING in it :(
- * */
-/*GLenum GetBindingTarget( GLenum type ) {
-    switch( type ) {
-        case GL_TEXTURE_BUFFER: return GL_TEXTURE_BINDING_BUFFER;
-    }
-}*/
-
-}
+namespace pg {
+namespace opengl {
+    
 
 Texture::Texture( GLenum type )
     :   object_( 0 ),
@@ -38,7 +24,7 @@ void Texture::setStore( GLenum internalFormat, const BufferObject& object ) {
 }
 
 void Texture::bind() {
-    glGetIntegerv( ce::GetBindingTarget( type_ ), &old_ );
+    glGetIntegerv( GetBindingTarget( type_ ), &old_ );
     glBindTexture( type_, object_ );
 }
 
@@ -48,4 +34,8 @@ void Texture::unbind() {
 
 GLuint Texture::object() const {
     return object_;
+}
+
+
+}
 }

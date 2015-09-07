@@ -98,6 +98,8 @@
       <File Name="src/data/template.lua"/>
       <File Name="src/data/specular.frag.glsl"/>
       <File Name="src/data/specular.vert.glsl"/>
+      <File Name="src/data/panel.frag.glsl"/>
+      <File Name="src/data/panel.vert.glsl"/>
     </VirtualDirectory>
     <File Name="src/Main.cpp" ExcludeProjConfig="Test"/>
     <VirtualDirectory Name="ecs">
@@ -120,10 +122,10 @@
       <File Name="src/system/Scripter.cpp"/>
       <File Name="src/system/Scripter.h"/>
       <File Name="src/system/Material.h"/>
-      <File Name="src/system/Console.h"/>
-      <File Name="src/system/Console.cpp"/>
       <File Name="src/system/Ui.h"/>
       <File Name="src/system/Ui.cpp"/>
+      <File Name="src/system/ImGuiRenderer.cpp"/>
+      <File Name="src/system/ImGuiRenderer.h"/>
     </VirtualDirectory>
     <VirtualDirectory Name="lua">
       <File Name="src/lua/LuaError.h" ExcludeProjConfig="Test"/>

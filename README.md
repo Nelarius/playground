@@ -192,11 +192,14 @@ window = {
 
 Here is a list of functions and variables available for use in the script component.
 
-## Using invaldiated entities
-
-It will not crash the program, but a warning will be logged.
-
 ## TODO
+* The ECS is, in fact, a shared resource! I need to stick it into the context.
+* Towards the first demo
+  * Add cube model, with origin at base
+  * Instantiate it three times, scale it differently
+  * `Quaternion::operator*( const Quaternion& )` needs to be bound to a named function in Lua
+  * In Lua script, change the orientation of one of the hands as time progresses
+  * Add access to system time via Lua script
 * Write tests for Bundle
 * Implement specular shaders
   * Add array of lights to specular shader
@@ -221,6 +224,9 @@ It will not crash the program, but a warning will be logged.
 * Add R'lyeh's profit lib to profile execution times of critical methods
 * Integrate ImGui into a system
   * I need to figure out how to render textured panels isometrically using modern OpenGL
+    * This is explained in `imgui/examples/opengl3_example/imgui_impl_glfw_gl3::CreateDeviceObjects()`
+    * I need to check that the `Texture` object wors as intended.
+    * I need to write the orthogonal projection matrix
   * Add event handling functions for the Ui system:
   * Add handler for text input event
   * add handler for keyup input event

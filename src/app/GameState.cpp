@@ -21,8 +21,6 @@
 #include <unordered_map>
 #include <string>
 
-#include <iostream>
-
 namespace pg {
 
 GameState::GameState( Context& context, AppStateStack& stack ) 
@@ -30,15 +28,7 @@ GameState::GameState( Context& context, AppStateStack& stack )
     events_(),
     entities_( events_ ),
     systems_( events_, entities_ ),
-    keyboard_() {
-    systems_.add< system::Render >( context );
-    systems_.add< system::Debug >();
-    systems_.add< system::Scripter >();
-    systems_.add< system::Ui >( context );
-    systems_.configure< system::Debug >();
-    systems_.configure< system::Scripter >();
-    systems_.configure< system::Ui >();
-}
+    keyboard_() {}
 
 void GameState::loadScene_() {
     LuaState lua{ false };
@@ -141,6 +131,7 @@ void GameState::loadScene_() {
 }
 
 void GameState::activate() {
+    // everything here should eventually go into a loading state
     context_.shaderManager.addShader( "data/diffuse.vert.glsl", GL_VERTEX_SHADER );
     context_.shaderManager.addShader( "data/diffuse.frag.glsl", GL_FRAGMENT_SHADER );
     context_.shaderManager.compile( "diffuse" );
@@ -153,6 +144,10 @@ void GameState::activate() {
     context_.shaderManager.addShader( "data/specular.frag.glsl", GL_FRAGMENT_SHADER );
     context_.shaderManager.compile( "specular" );
     
+    context_.shaderManager.addShader( "data/panel.vert.glsl", GL_VERTEX_SHADER );
+    context_.shaderManager.addShader( "data/panel.frag.glsl", GL_FRAGMENT_SHADER );
+    context_.shaderManager.compile( "panel" );
+    
     loadScene_();
     
     keyboard_.addInput( SDL_SCANCODE_A, []() -> void {
@@ -161,6 +156,13 @@ void GameState::activate() {
     keyboard_.addInput( SDL_SCANCODE_W, []() -> void {
         LOG_INFO << "yet another real time input handler";
     } );
+    
+    systems_.add< system::Render >( context_ );
+    systems_.add< system::Debug >();
+    systems_.add< system::Scripter >();
+    systems_.add< system::Ui >( context_ );
+    systems_.configure< system::Debug >();
+    systems_.configure< system::Scripter >();
 }
 
 bool GameState::update( float dt ) {
@@ -182,7 +184,7 @@ void GameState::render( float dt ) {
     /*
      * Iterate over Renderable components here
      * */
-    //systems_.update<system::Ui>( dt );
+    systems_.update<system::Ui>( dt );
     systems_.update<system::Render>( dt );
 }
 

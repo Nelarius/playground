@@ -3,7 +3,8 @@
 
 #include <GL/glew.h>
 
-namespace ce {
+namespace pg {
+namespace opengl {
 
 class BufferObject;
 
@@ -37,5 +38,7 @@ class Texture {
 };
 
 
-}
+
+}   // opengl
+}   // pg
 

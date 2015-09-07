@@ -24,11 +24,11 @@ class BufferObject {
         explicit BufferObject( GLenum type );
         virtual ~BufferObject();
 
-        BufferObject()                              	= delete;
-        BufferObject( const BufferObject& )           	= delete;
-        BufferObject& operator=( const BufferObject&) 	= delete;
-        BufferObject( BufferObject&& )					= delete;
-        BufferObject& operator=( BufferObject&& )   	= delete;
+        BufferObject()                                  = delete;
+        BufferObject( const BufferObject& )             = delete;
+        BufferObject& operator=( const BufferObject&)   = delete;
+        BufferObject( BufferObject&& )                  = delete;
+        BufferObject& operator=( BufferObject&& )       = delete;
 
         /// @brief Define the data store and optionally copy data to the store.
         /// @param count The number of elements to store
