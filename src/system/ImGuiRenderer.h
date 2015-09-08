@@ -23,7 +23,6 @@ class ImGuiRenderer {
         
     protected:
         void initialize_();
-        void shutdown_();
         void createDeviceObjects_();
         void newFrame_( float dt );
         

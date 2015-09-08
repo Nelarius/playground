@@ -15,11 +15,13 @@
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
+// link to where I got some of the code from:
+// https://github.com/ocornut/imgui/blob/master/examples/opengl3_example/imgui_impl_glfw_gl3.cpp#L31
+
 namespace {
     // unfortunate global state
     pg::opengl::Program*            gShader{ nullptr };
     pg::opengl::BufferObject*       gVbo{ nullptr };
-    pg::opengl::BufferObject*       gElements{ nullptr };
     pg::opengl::VertexArrayObject*  gVao{ nullptr };
     pg::opengl::Texture*            gFont{ nullptr };
     
@@ -48,7 +50,7 @@ namespace {
         glUniformMatrix4fv( gShader->uniform( "MOrtho" ), 1, GL_FALSE, &orthoProjection[0][0] );
         for ( int n = 0; n < drawData->CmdListsCount; n++ ) {
             const ImDrawList* commandList = drawData->CmdLists[n];
-            const ImDrawIdx* idxBufferOffset = 0;
+            const ImDrawIdx* idxBuffer = &commandList->IdxBuffer.front();
             
             // set vertex data
             gVbo->dataStore(
@@ -57,18 +59,11 @@ namespace {
                 ( GLvoid* ) &commandList->VtxBuffer.front(),
                 GL_STREAM_DRAW
             );
-            LOG_DEBUG << "I have " << commandList->IdxBuffer.size() << " indices";
-            // set element data
-            gElements->dataStore(
-                ( GLsizeiptr ) commandList->IdxBuffer.size(),
-                sizeof( ImDrawIdx ),
-                ( GLvoid* ) &commandList->IdxBuffer.front(),
-                GL_STREAM_DRAW
-            );
             
             gVao->bind();
             
-            for ( const ImDrawCmd* pcmd = commandList->CmdBuffer.begin(); pcmd != commandList->CmdBuffer.end(); pcmd++ ) {
+            for ( int cmdIndex = 0; cmdIndex < commandList->CmdBuffer.size(); cmdIndex++ ) {
+                const ImDrawCmd* pcmd = &commandList->CmdBuffer[ cmdIndex ];
                 if ( pcmd->UserCallback ) {
                     pcmd->UserCallback( commandList, pcmd );
                 } else {
@@ -79,19 +74,19 @@ namespace {
                         (int)( pcmd->ClipRect.z - pcmd->ClipRect.x ), 
                         (int)( pcmd->ClipRect.w - pcmd->ClipRect.y )
                     );
-                    LOG_DEBUG << "Trying to render " << pcmd->ElemCount << " elements";
                     glDrawElements( 
                         GL_TRIANGLES, 
                         ( GLsizei ) pcmd->ElemCount,
                         GL_UNSIGNED_SHORT,
-                        idxBufferOffset
+                        idxBuffer
                     );
                 }
-                idxBufferOffset += pcmd->ElemCount;
+                idxBuffer += pcmd->ElemCount;
             }
         }
         gVao->unbind();
         gShader->stopUsing();
+        glDisable(GL_SCISSOR_TEST);
     }
     
     void SetClipboardText( const char* text ) {
@@ -105,7 +100,7 @@ namespace {
 
 namespace pg {
 namespace system {
-    
+
 uint32_t ImGuiRenderer::refCount_ = 0u;
 
 ImGuiRenderer::ImGuiRenderer( Context& context )
@@ -116,13 +111,13 @@ ImGuiRenderer::ImGuiRenderer( Context& context )
 
 ImGuiRenderer::~ImGuiRenderer() {
     if ( --refCount_ == 0u ) {
-        LOG_DEBUG << "Destroying global ImGuiRenderer resources";
-        delete gShader;
+        ImGui::Shutdown();
+        LOG_DEBUG2 << "Destructing global ImGuiRenderer resources";
         delete gVbo;
-        delete gElements;
         delete gVao;
         delete gFont;
     }
+    LOG_DEBUG2 << "Done destructing ImGuiRenderer resources.";
 }
 
 void ImGuiRenderer::initialize_() {
@@ -164,10 +159,6 @@ void ImGuiRenderer::initialize_() {
     // handle callbacks
 }
 
-void ImGuiRenderer::shutdown_() {
-    ImGui::Shutdown();
-}
-
 void ImGuiRenderer::createDeviceObjects_() {
     if ( !gShader ) {
         gShader = context_.shaderManager.get( "panel" );
@@ -177,16 +168,15 @@ void ImGuiRenderer::createDeviceObjects_() {
     }
     if ( ! gVao ) {
         auto factory = opengl::VertexArrayObjectFactory{ gVbo, gShader };
-        #define OFFSETOF(TYPE, ELEMENT) ((size_t)&(((TYPE *)0)->ELEMENT))
-        factory.addAttribute( "position", 2, GL_FLOAT, GL_FALSE, sizeof( ImDrawVert ), OFFSETOF(ImDrawVert, pos) );
-        factory.addAttribute( "uv", 2, GL_FLOAT, GL_FALSE, sizeof( ImDrawVert ), OFFSETOF(ImDrawVert, uv) );
-        factory.addAttribute( "color", 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof( ImDrawVert ), OFFSETOF(ImDrawVert, col) );
-        #undef OFFSETOF
+        // 2 * 4 bytes
+        factory.addAttribute( "position", 2, GL_FLOAT, GL_FALSE, sizeof( ImDrawVert ), 0 ); 
+        // another 2 * 4 bytes
+        factory.addAttribute( "uv", 2, GL_FLOAT, GL_FALSE, sizeof( ImDrawVert ), 8 ); 
+        // 4 * 1 byte
+        factory.addAttribute( "color", 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof( ImDrawVert ), 16 );
+        // total size of ImDrawVert is 20 bytes ( I checked )
         gVao = new opengl::VertexArrayObject( 0 );
         *gVao = factory.getVao();
-    }
-    if ( !gElements ) {
-        gElements = new opengl::BufferObject( GL_ELEMENT_ARRAY_BUFFER );
     }
     if ( !gFont ) {
         gFont = new opengl::Texture( GL_TEXTURE_2D );

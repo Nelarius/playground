@@ -148,6 +148,13 @@ void GameState::activate() {
     context_.shaderManager.addShader( "data/panel.frag.glsl", GL_FRAGMENT_SHADER );
     context_.shaderManager.compile( "panel" );
     
+    systems_.add< system::Render >( context_ );
+    systems_.add< system::Debug >();
+    systems_.add< system::Scripter >();
+    systems_.add< system::Ui >( context_ );
+    systems_.configure< system::Debug >();
+    systems_.configure< system::Scripter >();
+    
     loadScene_();
     
     keyboard_.addInput( SDL_SCANCODE_A, []() -> void {
@@ -156,13 +163,6 @@ void GameState::activate() {
     keyboard_.addInput( SDL_SCANCODE_W, []() -> void {
         LOG_INFO << "yet another real time input handler";
     } );
-    
-    systems_.add< system::Render >( context_ );
-    systems_.add< system::Debug >();
-    systems_.add< system::Scripter >();
-    systems_.add< system::Ui >( context_ );
-    systems_.configure< system::Debug >();
-    systems_.configure< system::Scripter >();
 }
 
 bool GameState::update( float dt ) {
