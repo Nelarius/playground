@@ -35,6 +35,9 @@ namespace {
         glEnable(GL_SCISSOR_TEST);
         glActiveTexture(GL_TEXTURE0);
         
+        GLint oldTexture;
+        glGetIntegerv( GL_TEXTURE_BINDING_2D, &oldTexture );
+        
         ImGuiIO& io = ImGui::GetIO();
         
         float fbHeight = io.DisplaySize.y * io.DisplayFramebufferScale.y;
@@ -70,7 +73,7 @@ namespace {
                     glBindTexture( GL_TEXTURE_2D, (GLuint)(intptr_t)pcmd->TextureId );
                     glScissor(
                         (int)  pcmd->ClipRect.x, 
-                        (int)( fbHeight - pcmd->ClipRect.w ), 
+                        (int)( fbHeight - pcmd->ClipRect.w ),
                         (int)( pcmd->ClipRect.z - pcmd->ClipRect.x ), 
                         (int)( pcmd->ClipRect.w - pcmd->ClipRect.y )
                     );
@@ -86,7 +89,8 @@ namespace {
         }
         gVao->unbind();
         gShader->stopUsing();
-        glDisable(GL_SCISSOR_TEST);
+        glBindTexture( GL_TEXTURE_2D, oldTexture );
+        glDisable( GL_SCISSOR_TEST );
     }
     
     void SetClipboardText( const char* text ) {
@@ -169,7 +173,7 @@ void ImGuiRenderer::createDeviceObjects_() {
     if ( ! gVao ) {
         auto factory = opengl::VertexArrayObjectFactory{ gVbo, gShader };
         // 2 * 4 bytes
-        factory.addAttribute( "position", 2, GL_FLOAT, GL_FALSE, sizeof( ImDrawVert ), 0 ); 
+        factory.addAttribute( "position", 2, GL_FLOAT, GL_FALSE, 20, 0 ); 
         // another 2 * 4 bytes
         factory.addAttribute( "uv", 2, GL_FLOAT, GL_FALSE, sizeof( ImDrawVert ), 8 ); 
         // 4 * 1 byte
@@ -201,18 +205,21 @@ void ImGuiRenderer::newFrame_( float dt ) {
     SDL_Window* window = context_.window->SDLwindow();
 
     ImGuiIO& io = ImGui::GetIO();
+    
+    io.DeltaTime = dt;
 
     // Setup display size (every frame to accommodate for window resizing)
     int w, h;
     SDL_GetWindowSize( window, &w, &h );
     io.DisplaySize = ImVec2( float( w ), float( h ) );
+    // how do I get this in SDL?
+    io.DisplayFramebufferScale = ImVec2( 1.0f, 1.0f );
     
     // Hide OS mouse cursor if ImGui is drawing it
     SDL_ShowCursor(io.MouseDrawCursor ? 0 : 1);
     
     ImGui::NewFrame();
 }
-
 
 }   // system
 }   // pg

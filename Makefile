@@ -22,7 +22,7 @@ CPPTEST_LINK = C:/dev/unittest-cpp/build
 
 LINKER_INCLUDES = -L $(SDL_LINK) -L $(GLEW_LINK) -L $(LUA_LINK) -L $(ASSIMP_LINK)
 
-CFLAGS = -std=gnu++14 -Wall -O2 -DDEBUG -DGLM_FORCE_RADIANS
+CFLAGS = -std=gnu++14 -Wall -g -DDEBUG -DGLM_FORCE_RADIANS
 
 LDFLAGS =
 
@@ -65,12 +65,14 @@ OBJ = src/Main.o \
 	src/opengl/VertexArrayObject.o \
 	src/opengl/VertexArrayObjectFactory.o \
 	src/opengl/BufferObject.o \
+	src/opengl/Texture.o \
 	src/manager/MeshManager.o \
 	src/manager/ShaderManager.o \
 	src/system/Render.o \
 	src/system/Debug.o \
 	src/system/Scripter.o \
 	src/system/Ui.o \
+	src/system/ImGuiRenderer.o \
 	src/utils/Random.o \
 	src/utils/Pool.o \
 	

@@ -49,8 +49,6 @@ void Render::update(
     ecs::EventManager& events,
     float dt 
 ) {
-    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-
     float aspectRatio = float( context_.window->width() ) / context_.window->height();
     glm::mat4 cameraMatrix{};
     glm::vec3 cameraPos;

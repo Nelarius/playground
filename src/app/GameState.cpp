@@ -181,11 +181,9 @@ bool GameState::handleEvent( const SDL_Event& event ) {
 }
 
 void GameState::render( float dt ) {
-    /*
-     * Iterate over Renderable components here
-     * */
-    systems_.update<system::Ui>( dt );
+    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
     systems_.update<system::Render>( dt );
+    systems_.update<system::Ui>( dt );
 }
 
 }
