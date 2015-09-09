@@ -39,7 +39,7 @@ else
 	UNAME_S := $(shell uname -s)
     ifeq ($(UNAME_S),Linux)
         CFLAGS +=  -I ./src -I /home/muszynsk/dev/LuaBridge/Source
-        LDFLAGS +=  -lGL -lGLEW -lSDL2 -lyaml-cpp -lentityx -lassimp -llua 
+        LDFLAGS +=  -lGL -lGLEW -lSDL2 -lentityx -lassimp -llua 
 		EXECUTABLE += Build/app
 		TEST_EXECUTABLE += Build/test
     endif
