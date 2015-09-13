@@ -205,14 +205,12 @@ void Program::setUniform( const GLchar* name, const glm::mat4& m, GLboolean tran
 
 void Program::setUniform( const GLchar* name, const pg::math::Matrix3f& M ) const {
     ASSERT( isInUse(), "Program::setUniform(Matrix3f)> program not in use" );
-    pg::math::CMMatrix3f N { M };
-    glUniformMatrix3fv( uniform(name), 1, false, N.data );
+    glUniformMatrix3fv( uniform(name), 1, GL_TRUE, M.data );
 }
 
 void Program::setUniform( const GLchar* name, const pg::math::Matrix4f& M ) const {
     ASSERT( isInUse(), "Program::setUniform(Matrix4f)> program not in use" );
-    pg::math::CMMatrix4f N { M };
-    glUniformMatrix4fv( uniform(name), 1, false, N.data );
+    glUniformMatrix4fv( uniform(name), 1, GL_TRUE, M.data );
 }
 
 }   // opengl

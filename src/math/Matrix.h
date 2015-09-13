@@ -320,59 +320,12 @@ Matrix4<T> operator*( T val, const Matrix4<T>& m ) {
     };
 }
 
-/**
- * @class CMMatrix2
- * @author Muszynski Johann M
- * @date 09/07/15
- * @file Matrix.h
- * @brief A copy of a Matrix2, stored in column-major order.
- * Intended to be used with OpenGL.
- */
-template<typename T>
-struct CMMatrix2 {
-    T data[4];
-    
-    CMMatrix2( const Matrix2<T>& M )
-    :   data{ M.data[0], M.data[2], M.data[1], M.data[3] }
-        {}
-        
-    T* raw() { return data; }
-};
-
-template<typename T>
-struct CMMatrix3 {
-    T data[9];
-    CMMatrix3( const Matrix3<T>& M ) 
-    :   data{ M.data[0], M.data[3], M.data[6], M.data[1], M.data[4], M.data[7], M.data[2], M.data[5], M.data[8] }
-        {}
-        
-    T* raw() { return data; }
-};
-
-template<typename T>
-struct CMMatrix4 {
-    T data[16];
-    CMMatrix4( const Matrix4<T>& M )
-    :   data{ 
-            M.data[0], M.data[4], M.data[8], M.data[12], 
-            M.data[1], M.data[5], M.data[9], M.data[13], 
-            M.data[2], M.data[6], M.data[10], M.data[14], 
-            M.data[3], M.data[7], M.data[11], M.data[15] 
-        }
-        {}
-        
-    T* raw() { return data; }
-};
-
 using Matrix2f = Matrix2<float>;
 using Matrix2d = Matrix2<double>;
 using Matrix3f = Matrix3<float>;
 using Matrix3d = Matrix3<double>;
 using Matrix4f = Matrix4<float>;
 using Matrix4d = Matrix4<double>;
-using CMMatrix2f = CMMatrix2<float>;
-using CMMatrix3f = CMMatrix3<float>;
-using CMMatrix4f = CMMatrix4<float>;
 
     
 }   // math
