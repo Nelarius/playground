@@ -17,7 +17,7 @@ Ui::Ui( Context& context )
 
 void Ui::update( ecs::EntityManager&, ecs::EventManager&, float dt ) {
     newFrame_( dt );
-    ImGui::Text( "Hello, world!" );
+    //ImGui::Text( "Hello, world!" );
     ImGui::Render();
 }
 

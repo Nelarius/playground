@@ -11,11 +11,17 @@ namespace math {
 template<typename T> 
 class Quaternion {
     public:
-        Quaternion()    = default;
+        Quaternion()                                = default;
+        Quaternion( const Quaternion& )             = default;
+        Quaternion( Quaternion&& )                  = default;
+        Quaternion& operator=( const Quaternion& )  = default;
+        Quaternion& operator=( Quaternion&& )       = default;
+        
         Quaternion( const Vector3<T>& i, T r )
         :   v( i ),
             w( r )
             {}
+            
         Quaternion( T x, T y, T z, T w )
         :   v( x, y, z ),
             w( w )
@@ -41,7 +47,7 @@ class Quaternion {
         Quaternion<T> operator*( const Quaternion& rhs ) const {
             return Quaternion<T> {
                 v.cross( rhs.v ) + rhs.w*v + w*rhs.v,
-                w*rhs*w - v.dot( rhs.v )
+                w*rhs.w - v.dot( rhs.v )
             };
         }
         
@@ -51,6 +57,13 @@ class Quaternion {
                 rhs*v.y,
                 rhs*v.z,
                 rhs*w
+            };
+        }
+        
+        Quaternion<T> multiply( const Quaternion& rhs ) const {
+            return Quaternion<T> {
+                v.cross( rhs.v ) + rhs.w*v + w*rhs.v,
+                w*rhs.w - v.dot( rhs.v )
             };
         }
         
@@ -74,7 +87,7 @@ class Quaternion {
         }
         
         Vector3<T>  v{};    // the imaginary part
-        T           w{ 1 }; // the real part
+        T           w{ 1.0 }; // the real part
 };
 
 template<typename T>
@@ -82,8 +95,8 @@ Quaternion<T> operator*( T lhs, const Quaternion<T>& rhs ) {
     return Quaternion<T>{ lhs*rhs.v.x, lhs*rhs.v.y, lhs*rhs.v.z, lhs*rhs.w };
 }
 
-using Quaternionf = Quaternion<float>;
-using Quaterniond = Quaternion<double>;
+using Quatf = Quaternion<float>;
+using Quatd = Quaternion<double>;
 
 }   // math
 }   // pg
