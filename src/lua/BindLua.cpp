@@ -25,8 +25,6 @@ void BindVector( lua_State* l ) {
                 .addData( "g", &math::Vector2f::g )
                 .addFunction( "norm", &pg::math::Vector2f::norm )
                 .addFunction( "normalize", &pg::math::Vector2f::normalize )
-                .addFunction( "length", &pg::math::Vector2f::length )
-                .addFunction( "squaredLength", &pg::math::Vector2f::squaredLength )
             .endClass()
             .beginClass<math::Vector3f>( "Vector3f" )
                 .addConstructor<void(*)( float, float, float )>()
@@ -38,8 +36,6 @@ void BindVector( lua_State* l ) {
                 .addData( "b", &math::Vector3f::b )
                 .addFunction( "norm", &math::Vector3f::norm )
                 .addFunction( "normalize", &math::Vector3f::normalize )
-                .addFunction( "length", &math::Vector3f::length )
-                .addFunction( "squaredLength", &math::Vector3f::squaredLength )
                 .addFunction( "cross", &math::Vector3f::cross )
             .endClass()
             .beginClass<math::Vector4f>( "Vector4f" )
@@ -54,8 +50,6 @@ void BindVector( lua_State* l ) {
                 .addData( "a", &math::Vector4f::a )
                 .addFunction( "norm", &math::Vector4f::norm )
                 .addFunction( "normalize", &math::Vector4f::normalize )
-                .addFunction( "length", &math::Vector4f::length )
-                .addFunction( "squaredLength", &math::Vector4f::squaredLength )
             .endClass()
         .endNamespace();
 }

@@ -37,11 +37,11 @@ class Quaternion {
         }
         
         T norm() const {
-            return sqrt( v.squaredLength() + w*w );
+            return sqrt( v.normSquared() + w*w );
         }
         
         T normSquared() const {
-            return v.squaredLength() + w*w;
+            return v.normSquared() + w*w;
         }
         
         Quaternion<T> operator*( const Quaternion& rhs ) const {
