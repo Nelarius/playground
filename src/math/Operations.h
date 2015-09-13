@@ -25,10 +25,10 @@ inline Matrix4f Mirror( const Planef& plane ) {
 template<typename T>
 Matrix4<T> Scale( const Vector3<T>& v ) {
     return Matrix4<T> {
-        v.x, 0.0f, 0.0f, 0.0f,
-        0.0f, v.y, 0.0f, 0.0f,
-        0.0f, 0.0f, v.z, 0.0f, 
-        0.0f, 0.0f, 0.0f, 0.0f
+        v.x,    0.0f,   0.0f,   0.0f,
+        0.0f,   v.y,    0.0f,   0.0f,
+        0.0f,   0.0f,   v.z,    0.0f, 
+        0.0f,   0.0f,   0.0f,   1.0f
     };
 }
 
@@ -56,9 +56,9 @@ Matrix4<T> Rotate( const Vector3<T>& s, const Vector3<T> t ) {
 template<typename T>
 Matrix4<T> Translate( const Vector3<T>& v ) {
     return Matrix4<T> {
-        0.0f, 0.0f, 0.0f, v.x,
-        0.0f, 0.0f, 0.0f, v.y,
-        0.0f, 0.0f, 0.0f, v.z,
+        1.0f, 0.0f, 0.0f, v.x,
+        0.0f, 1.0f, 0.0f, v.y,
+        0.0f, 0.0f, 1.0f, v.z,
         0.0f, 0.0f, 0.0f, 1.0f
     };
 }
@@ -90,7 +90,7 @@ Matrix4<T> AsymmetricPerspective( T near, T far, T fov, T aspect ) {
 template<typename T>
 Matrix4<T> Orthographic() {
     return Matrix4<T>{
-        
+        //
     };
 }
 
@@ -100,8 +100,7 @@ Matrix4<T> Model( const Vector3<T>& t, const Quaternion<T>& r, const Vector3<T>&
     // where T is the translation matrix
     // R is the rotation matrix 
     // S is the scale matrix
-    auto M = r.asMatrix()*Scale( s );
-    return Translate( t ) * M;
+    return Translate( t ) * r.asMatrix() * Scale( s );
 }
 
 template<typename T>
