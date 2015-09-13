@@ -11,6 +11,7 @@ entities = {
         script = "data/template.lua",
         transform = {
             position = pg.Vector3f( 0.0, 0.0, 8.0 ),
+            rotation = pg.Quaternion( 0.0, 0.0, 0.0, 1.0 ),
             scale = pg.Vector3f( 1.0, 1.0, 1.0 )
         },
         camera = {
@@ -25,6 +26,7 @@ entities = {
     {
         transform = {
             position = pg.Vector3f( 0.0, 0.0, 0.0 ),
+            rotation = pg.Quaternion( 0.0, 0.0, 0.0998334, 0.99500417 ),
             scale = pg.Vector3f( 1.0, 1.0, 1.0 )
         },
         renderable = {
@@ -32,7 +34,7 @@ entities = {
             specular = {
                 shininess = 80.0,
                 specularColor = pg.Vector3f( 1.0, 1.0, 1.0 ),
-                ambientColor = pg.Vector3f(0.941, 0.455, 0.804 )
+                ambientColor = pg.Vector3f( 0.941, 0.455, 0.804 )
             }
         }
     }

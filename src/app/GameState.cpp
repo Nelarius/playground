@@ -33,6 +33,7 @@ GameState::GameState( Context& context, AppStateStack& stack )
 void GameState::loadScene_() {
     LuaState lua{ false };
     BindVector( lua.get() );
+    BindQuaternion( lua.get() );
     lua.execute( "data/scene.lua" );
     
     lb::LuaRef entities = lb::getGlobal( lua.get(), "entities" );
@@ -65,7 +66,7 @@ void GameState::loadScene_() {
             lb::LuaRef transform = table["transform"];
             entity.assign<component::Transform>(
                 transform["position"].cast<math::Vector3f>(),
-                math::Quaternionf{},
+                transform["rotation"].cast<math::Quatf>(),
                 transform["scale"].cast<math::Vector3f>()
             );
         }   // transform component

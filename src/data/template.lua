@@ -1,6 +1,5 @@
 
 
-
 -- this gets called just after the component is assigned
 function activate()
 end

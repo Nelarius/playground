@@ -94,8 +94,10 @@ void Render::update(
         shader->use();
         shader->setUniform( 
             "model", 
-            ModelMatrixFromTransform(
-                transform
+            pg::math::Model(
+                transform->position,
+                transform->rotation,
+                transform->scale
             )
         );
         shader->setUniform( "camera", cameraMatrix );
