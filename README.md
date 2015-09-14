@@ -198,7 +198,6 @@ Here is a list of functions and variables available for use in the script compon
   * Instantiate it three times, scale it differently
   * `Quaternion::operator*( const Quaternion& )` needs to be bound to a named function in Lua
   * In Lua script, change the orientation of one of the hands as time progresses
-  * Add access to system time via Lua script
 * Write tests for Bundle
 * Implement specular shaders
   * Add array of lights to specular shader
@@ -228,7 +227,7 @@ Here is a list of functions and variables available for use in the script compon
   * Add handler for text input event
   * add handler for keyup input event
 
-Remember to distinguish between hard and soft errors. Hard errors occur in palces like `Bundle` where an off-by one error leads to corrupted state. Soft errors occur e.g. when a user supplies an incorrect file name. The program still works correctly, it just has been given incorrect information.
+Remember to distinguish between hard and soft errors. Hard errors occur in places like `Bundle` where an off-by one error leads to corrupted state. Soft errors occur e.g. when a user supplies an incorrect file name. The program still works correctly, it just has been given incorrect information.
 
 ## Dependencies
 ### SDL2

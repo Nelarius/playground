@@ -3,24 +3,11 @@
 
 #include "math/Vector.h"
 #include "math/Matrix.h"
-#include "math/Plane.h"
 #include "utils/Log.h"
 #include <cmath>
 
 namespace pg {
 namespace math {
-
-inline Matrix4f Mirror( const Planef& plane ) {
-    const Vector3f& n = plane.normal();
-    float k = plane.constant();
-    Matrix4f M {
-        1.0f-2.0f*n.x*n.x, -2.0f*n.y*n.x, -2.0f*n.z*n.x, 2.0f*k*n.x,
-        -2.0f*n.x*n.y, 1.0f-2.0f*n.y*n.y, -2.0f*n.z*n.y, 2.0f*k*n.y,
-        -2.0f*n.x*n.z, -2.0f*n.y*n.z, 1.0f-2.0f*n.z*n.z, 2.0f*k*n.z,
-        0.0f, 0.0f, 0.0f, 1.0f
-    };
-    return M;
-}
 
 template<typename T>
 Matrix4<T> Scale( const Vector3<T>& v ) {
@@ -83,29 +70,12 @@ Matrix4<T> Perspective( T near, T far, T fov, T width, T height ) {
 }
 
 template<typename T>
-Matrix4<T> AsymmetricPerspective( T near, T far, T fov, T aspect ) {
-    return Matrix4<T>{};
-}
-
-template<typename T>
-Matrix4<T> Orthographic() {
-    return Matrix4<T>{
-        //
-    };
-}
-
-template<typename T>
 Matrix4<T> Model( const Vector3<T>& t, const Quaternion<T>& r, const Vector3<T>& s ) {
     // the composite model matrix is C = TRS
     // where T is the translation matrix
     // R is the rotation matrix 
     // S is the scale matrix
     return Translate( t ) * r.asMatrix() * Scale( s );
-}
-
-template<typename T>
-Matrix4<T> Camera() {
-    return Matrix4<T> {};
 }
 
 }   // math
