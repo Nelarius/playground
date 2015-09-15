@@ -63,7 +63,6 @@ void BindQuaternion( lua_State*  l ) {
                 .addFunction( "inverse", &math::Quatf::inverse )
                 .addFunction( "norm", &math::Quatf::norm )
                 .addFunction( "normSquared", &math::Quatf::normSquared )
-                .addFunction( "asMatrix", &math::Quatf::asMatrix )
                 .addFunction( "multiply", &math::Quatf::multiply )
                 .addFunction( "angle", &math::Quatf::angle )
                 .addFunction( "axis", &math::Quatf::axis )

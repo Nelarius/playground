@@ -2,7 +2,6 @@
 #pragma once
 
 #include "math/Vector.h"
-#include "math/Matrix.h"
 #include <cmath>
 
 namespace pg {
@@ -10,12 +9,17 @@ namespace math {
 
 template<typename T> 
 class Quaternion {
+    
     public:
         Quaternion()                                = default;
         Quaternion( const Quaternion& )             = default;
         Quaternion( Quaternion&& )                  = default;
         Quaternion& operator=( const Quaternion& )  = default;
         Quaternion& operator=( Quaternion&& )       = default;
+        
+        static Quaternion<T> Identity() {
+            return Quaternion<T>{ 0.0, 0.0, 0.0, 1.0 };
+        }
         
         Quaternion( const Vector3<T>& i, T r )
         :   v( i ),
@@ -67,16 +71,6 @@ class Quaternion {
             };
         }
         
-        Matrix4<T> asMatrix() const {
-            T s = 2.0 / norm();
-            return Matrix4<T> {
-                1 - s*(v.y*v.y + v.z*v.z), s*(v.x*v.y - w*v.z), s*(v.x*v.z + w*v.y), 0.0,
-                s*(v.x*v.y + w*v.z), 1 - s*(v.x*v.x + v.z*v.z), s*(v.y*v.z - w*v.x), 0.0,
-                s*(v.x*v.z - w*v.y), s*(v.y*v.z + w*v.x), 1 - s*(v.x*v.x + v.y*v.y), 0.0,
-                0.0, 0.0, 0.0, 1.0
-            };
-        }
-        
         Vector3<T> axis() const {
             T angle = this->angle();
             return v * ( 1.0 / sin( angle / 2.0 ) );
@@ -96,7 +90,6 @@ Quaternion<T> operator*( T lhs, const Quaternion<T>& rhs ) {
 }
 
 using Quatf = Quaternion<float>;
-using Quatd = Quaternion<double>;
 
 }   // math
 }   // pg

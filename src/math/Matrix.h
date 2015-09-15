@@ -2,6 +2,7 @@
 #pragma once
 
 #include "math/Vector.h"
+#include "math/Quaternion.h"
 
 namespace pg {
 namespace math {
@@ -9,9 +10,11 @@ namespace math {
 template<typename T>
 struct Matrix2 {
     T data[4];
+    
     Matrix2()
     :   data{ 1.0, 0.0, 0.0, 1.0 }
         {}
+        
     Matrix2( std::initializer_list<T> l ) {
         int i = 0;
         for ( T e: l ) {
@@ -19,6 +22,7 @@ struct Matrix2 {
             i++;
         }
     }
+    
     Matrix2( const Vector2<T>& r1, const Vector2<T>& r2 )
     :   data{ r1.x, r1.y, r2.x, r2.y }
         {}
@@ -212,12 +216,42 @@ struct Matrix4 {
             i++;
         }
     }
+    
     Matrix4()
     :   data{ 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0 }
         {}
+        
     Matrix4( const Vector4<T>& r1, const Vector4<T>& r2, const Vector4<T>& r3, const Vector4<T>& r4 )
     :   data{ r1.x, r1.y, r1.z, r1.w, r2.x, r2.y, r2.z, r2.w, r3.x, r3.y, r3.z, r3.w, r4.x, r4.y, r4.z, r4.w }
         {}
+    
+    static Matrix4<T> Translation( const Vector3<T>& v ) {
+        return Matrix4<T>{
+                1.0f, 0.0f, 0.0f, v.x,
+                0.0f, 1.0f, 0.0f, v.y,
+                0.0f, 0.0f, 1.0f, v.z,
+                0.0f, 0.0f, 0.0f, 1.0f
+        };
+    }
+    
+    static Matrix4<T> Rotation( const Quaternion<T>& q ) {
+        T s = 2.0 / q.norm();
+        return Matrix4<T> {
+            1 - s*(q.v.y*q.v.y + q.v.z*q.v.z),  s*(q.v.x*q.v.y - q.w*q.v.z),        s*(q.v.x*q.v.z + q.w*q.v.y),          0.0,
+            s*(q.v.x*q.v.y + q.w*q.v.z),        1 - s*(q.v.x*q.v.x + q.v.z*q.v.z),  s*(q.v.y*q.v.z - q.w*q.v.x),        0.0,
+            s*(q.v.x*q.v.z - q.w*q.v.y),        s*(q.v.y*q.v.z + q.w*q.v.x),        1 - s*(q.v.x*q.v.x + q.v.y*q.v.y),  0.0,
+            0.0,                                0.0,                                0.0,                                1.0
+        };
+    }
+    
+    static Matrix4<T> Scale( const Vector3<T>& s ) {
+        return Matrix4<T> {
+            s.x, 0.0, 0.0, 0.0,
+            0.0, s.y, 0.0, 0.0,
+            0.0, 0.0, s.z, 0.0,
+            0.0, 0.0, 0.0, 1.0
+        };
+    }
     
     T trace() const {
         return data[0] + data[5] + data[10] + data[15];
@@ -321,11 +355,8 @@ Matrix4<T> operator*( T val, const Matrix4<T>& m ) {
 }
 
 using Matrix2f = Matrix2<float>;
-using Matrix2d = Matrix2<double>;
 using Matrix3f = Matrix3<float>;
-using Matrix3d = Matrix3<double>;
 using Matrix4f = Matrix4<float>;
-using Matrix4d = Matrix4<double>;
 
     
 }   // math
