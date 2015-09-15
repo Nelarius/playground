@@ -1,6 +1,3 @@
-
-print("Now creating scene.")
-
 --[[
     All entities must be placed in the entities variable
     
@@ -26,17 +23,18 @@ entities = {
     {
         transform = {
             position = pg.Vector3f( 0.0, 0.0, 0.0 ),
-            rotation = pg.Quaternion( 0.0, 0.0, 0.0998334, 0.99500417 ),
-            scale = pg.Vector3f( 1.0, 1.0, 1.0 )
+            rotation = pg.Quaternion( 0.0, 0.0, 0.0, 1.0 ),
+            scale = pg.Vector3f( 0.001, 0.01, 0.001 )
         },
         renderable = {
-            model = "data/cow.obj",
+            model = "data/cube.dae",
             specular = {
                 shininess = 80.0,
                 specularColor = pg.Vector3f( 1.0, 1.0, 1.0 ),
                 ambientColor = pg.Vector3f( 0.941, 0.455, 0.804 )
             }
-        }
+        },        
+        script = "data/rotate.lua"
     }
 }
 

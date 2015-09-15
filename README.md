@@ -194,10 +194,8 @@ Here is a list of functions and variables available for use in the script compon
 
 ## TODO
 * Towards the first demo
-  * Add cube model, with origin at base
-  * Instantiate it three times, scale it differently
-  * `Quaternion::operator*( const Quaternion& )` needs to be bound to a named function in Lua
-  * In Lua script, change the orientation of one of the hands as time progresses
+  * Figure out the time unit deltas in radians
+  * instantiate three times
 * Write tests for Bundle
 * Implement specular shaders
   * Add array of lights to specular shader
@@ -211,12 +209,7 @@ Here is a list of functions and variables available for use in the script compon
 * Normalize resource names in MeshManager and ShaderManager using r-lyeh's Unify lib.
 * Consistency: Vector should return matrix representations as well, just like Quaternion
 * Rendering matrices use Matrix4f
-* Implement directional light component
 * Implement Transform component & rendering system using my math module
-* Scripting system needs context, managers, and ECS subsystems to be bound
-  * Entity needs to be bound in such a way that we have direct access to component pointers
-  * There needs to be read/write access for the components.
-  * Create wrapper/binding for unordered_map, so that scripts can access material values
 * Figure out a mechanism to make `componentPointer<C>` private/not part of Entity API.
 * Bundle has iterators
 * Add R'lyeh's profit lib to profile execution times of critical methods

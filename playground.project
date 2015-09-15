@@ -100,6 +100,7 @@
       <File Name="src/data/specular.vert.glsl"/>
       <File Name="src/data/panel.frag.glsl"/>
       <File Name="src/data/panel.vert.glsl"/>
+      <File Name="src/data/rotate.lua"/>
     </VirtualDirectory>
     <File Name="src/Main.cpp" ExcludeProjConfig="Test"/>
     <VirtualDirectory Name="ecs">

@@ -84,6 +84,7 @@ void BindComponent( lua_State* l ) {
         .beginNamespace( "pg" )
             .beginClass<component::Transform>( "Transform" )
                 .addData( "position", &component::Transform::position )
+                .addData( "rotation", &component::Transform::rotation )
                 .addData( "scale", &component::Transform::scale )
             .endClass()
             .beginClass<component::Camera>( "Camera" )
