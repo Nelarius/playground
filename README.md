@@ -1,6 +1,6 @@
 # Playground
 
-A small, experimental, data-driven, entity-component-based, OpenGL-enabled, Lua-scriptable game engine. See below for a small programming example.
+A small, experimental, data-driven, entity-component-based, Lua-scriptable game engine. See below for a small programming example.
 
 ----------
 
@@ -27,6 +27,7 @@ This component describes the position and scale of an entity. There is no rotati
 ```lua
 transform = {
     position = {Vector3f},
+    rotation = {Quaternion},
     scale = {Vector3f}
 }
 ```
@@ -35,6 +36,11 @@ The custom data type `pg.Vector3f` can be used to describe vectors in the scene 
 
 ```lua
 vec = pg.Vector3f( 0.0, 0.0, 0.0 )
+```
+
+`Quaternion` can be used to calculate rotations. For instance, you could describe a 0.5 radian rotation about the z-axis like
+```cpp
+q = pg.Quaternion( 0.0, 0.0, math.sin( 0.5 ), math.cos( 0.5 ) )
 ```
 
 #### Script
