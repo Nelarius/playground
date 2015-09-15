@@ -93,12 +93,10 @@ void Render::update(
         auto shader = renderable->shader;
         shader->use();
         shader->setUniform( 
-            "model", 
-            pg::math::Model(
-                transform->position,
-                transform->rotation,
-                transform->scale
-            )
+            "model",
+            math::Matrix4f::Translation( transform->position )
+            * math::Matrix4f::Rotation( transform->rotation )
+            * math::Matrix4f::Scale( transform->scale )
         );
         shader->setUniform( "camera", cameraMatrix );
         for ( const auto& it: renderable->material.uniforms ) {
