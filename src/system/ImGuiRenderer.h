@@ -15,13 +15,12 @@ class ImGuiRenderer {
         ImGuiRenderer( Context& context );
         virtual ~ImGuiRenderer();
         
-        void update( float dt );
-        
         // public function callbacks need to be set here
         // the idea would be to have ImGuiRenderer do something with a mouse click
         // I would bind the callback to a real time mouse input handler
         
     protected:
+        void render_();
         void initialize_();
         void createDeviceObjects_();
         void newFrame_( float dt );
