@@ -237,7 +237,7 @@ struct Matrix4 {
     static Matrix4<T> Rotation( const Quaternion<T>& q ) {
         T s = 2.0 / q.norm();
         return Matrix4<T> {
-            1 - s*(q.v.y*q.v.y + q.v.z*q.v.z),  s*(q.v.x*q.v.y - q.w*q.v.z),        s*(q.v.x*q.v.z + q.w*q.v.y),          0.0,
+            1 - s*(q.v.y*q.v.y + q.v.z*q.v.z),  s*(q.v.x*q.v.y - q.w*q.v.z),        s*(q.v.x*q.v.z + q.w*q.v.y),        0.0,
             s*(q.v.x*q.v.y + q.w*q.v.z),        1 - s*(q.v.x*q.v.x + q.v.z*q.v.z),  s*(q.v.y*q.v.z - q.w*q.v.x),        0.0,
             s*(q.v.x*q.v.z - q.w*q.v.y),        s*(q.v.y*q.v.z + q.w*q.v.x),        1 - s*(q.v.x*q.v.x + q.v.y*q.v.y),  0.0,
             0.0,                                0.0,                                0.0,                                1.0
@@ -250,6 +250,15 @@ struct Matrix4 {
             0.0, s.y, 0.0, 0.0,
             0.0, 0.0, s.z, 0.0,
             0.0, 0.0, 0.0, 1.0
+        };
+    }
+    
+    static Matrix4<T> Orthographic( float width, float height, float near, float far ) {
+        return Matrix4<T>{
+            2.0f/width,     0.0f,           0.0f,                       0.0f,
+            0.0f,           2.0f/height,    0.0f,                       0.0f,
+            0.0f,           0.0f,           2.0f / (near - far),        (near + far) / (c.near - far),
+            0.0f,           0.0f,           0.0f,                       1.0f
         };
     }
     
