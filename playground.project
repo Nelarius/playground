@@ -146,6 +146,8 @@
       <File Name="src/math/Matrix.h"/>
       <File Name="src/math/Quaternion.h"/>
       <File Name="src/math/Vector.h"/>
+      <File Name="src/math/Angle.h"/>
+      <File Name="src/math/Angle.cpp"/>
     </VirtualDirectory>
     <VirtualDirectory Name="3rdparty">
       <File Name="src/3rdparty/SimpleSignal.h"/>
