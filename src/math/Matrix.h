@@ -257,7 +257,7 @@ struct Matrix4 {
         return Matrix4<T>{
             2.0f/width,     0.0f,           0.0f,                       0.0f,
             0.0f,           2.0f/height,    0.0f,                       0.0f,
-            0.0f,           0.0f,           2.0f / (near - far),        (near + far) / (c.near - far),
+            0.0f,           0.0f,           2.0f / (near - far),        (near + far) / (near - far),
             0.0f,           0.0f,           0.0f,                       1.0f
         };
     }

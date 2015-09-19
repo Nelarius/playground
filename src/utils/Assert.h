@@ -5,18 +5,18 @@
 #include <iostream>
 
 //defined as a do-while so that a semicolon can be used
-#ifdef DEBUG
-    #define ASSERT(condition, message) \
+#ifdef ASSERTIONS_ENABLED
+    #define ASSERT( condition ) \
     do { \
         if (! (condition)) { \
             std::cerr << "Assertion '" #condition "' failed in " << __FILE__ \
-                      << " line " << __LINE__ << ": " << message << std::endl; \
+                      << " line " << __LINE__ << ".\n"; \
             std::exit(EXIT_FAILURE); \
         } \
     } while (false) \
 
 #else
-    #define ASSERT(condition, message) do {} while (false)
+    #define ASSERT( condition ) do {} while (false)
 #endif
 
 

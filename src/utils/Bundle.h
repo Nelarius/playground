@@ -47,11 +47,11 @@ class Bundle {
             return position_++;
         }
         T& at( std::size_t i ) {
-            ASSERT( i < position_, "Bundle::at> index out of bound" );
+            ASSERT( i < position_ );
             return *(static_cast<T*>( pool_.at(i) ));
         }
         T& operator[]( std::size_t i ) {
-            ASSERT( i < position_, "Bundle::operator[]> index out of bound" );
+            ASSERT( i < position_ );
             return *(static_cast<T*>( pool_.at(i) ));
         }
         std::size_t size() const {

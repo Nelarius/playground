@@ -7,7 +7,7 @@ namespace opengl {
 Shader::Shader( const std::string& shaderCode, GLenum shaderType ) {
     //create the shader object, returns 0 on error
     object_ = glCreateShader( shaderType );
-    ASSERT( object_ != 0, "error: glCreateShader() failed." );
+    ASSERT( object_ != 0 );
 
     const char* code = shaderCode.c_str();
     glShaderSource( object_, 1, (const GLchar**)& code, NULL );
@@ -28,7 +28,7 @@ Shader::Shader( const std::string& shaderCode, GLenum shaderType ) {
 
         glDeleteShader( object_ );
         object_ = 0;
-        ASSERT( false, msg.c_str() );
+        std::cerr << msg << std::endl;
     }
 }
 

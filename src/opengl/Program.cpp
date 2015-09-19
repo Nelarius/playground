@@ -58,49 +58,33 @@ GLuint Program::object() const {
 }
 
 GLint Program::attribute( const GLchar* attribName ) const {
-    ASSERT( attribName, "error: attribName was NULL" );
+    ASSERT( attribName );
 
     GLint attrib = glGetAttribLocation( object_, attribName );
-    //ASSERT( attrib != -1, "error: program attribute not found" );
-    ASSERT( attrib != -1, std::string("error: program attribute not found: ") + attribName );
+    ASSERT( attrib != -1 );
 
     return attrib;
 }
 
 GLint Program::uniform( const GLchar* uniformName ) const {
-    ASSERT( uniformName, "error: uniformName was NULL" );
+    ASSERT( uniformName );
 
     GLint uniform = glGetUniformLocation( object_, uniformName );
-    #ifdef DEBUG
-    std::string msg( "error: program uniform " );
-    msg += uniformName;
-    msg += " not found";
-    ASSERT( uniform != -1, msg.c_str() );
-    #endif // DEBUG
+    ASSERT( uniform != -1 );
     return uniform;
 }
 
 GLint Program::subroutineUniform( const GLchar* uniformName, GLenum shaderType ) const {
-    ASSERT( uniformName, "error: subroutine uniform name was null" );
+    ASSERT( uniformName );
     GLint uniform = glGetSubroutineUniformLocation( object_, shaderType, uniformName );
-    #ifdef DEBUG
-    std::string msg( "error: subroutine uniform " );
-    msg += uniformName;
-    msg += " not found";
-    ASSERT( uniform != -1, msg.c_str() );
-    #endif  // DEBUG
+    ASSERT( uniform != -1 );
     return uniform;
 }
 
 GLuint Program::subroutineIndex( const GLchar* functionName, GLenum shaderType ) const {
-    ASSERT( functionName, "error: subroutine function name was null" );
+    ASSERT( functionName );
     GLuint index = glGetSubroutineIndex( object_, shaderType, functionName );
-    #ifdef DEBUG
-    std::string msg("error: active subroutine " );
-    msg += functionName;
-    msg += " not found";
-    ASSERT( index != GL_INVALID_INDEX, msg.c_str() );
-    #endif // DEBUG
+    ASSERT( index != GL_INVALID_INDEX );
     return index;
 }
 
@@ -115,101 +99,101 @@ bool Program::isInUse() const {
 }
 
 void Program::stopUsing() const {
-    ASSERT( isInUse(), "error: cannot stop using because program is not in use" );
+    ASSERT( isInUse() );
     glUseProgram( 0 );
 }
 
 void Program::setUniform( const GLchar* name, GLint v0 ) const {
-    ASSERT( isInUse(), "Program::setUniform(i)> program not in use" );
+    ASSERT( isInUse() );
     glUniform1i( uniform(name), v0 );
 }
 
 void Program::setUniform( const GLchar* name, GLint v0, GLint v1 ) const {
-    ASSERT( isInUse(), "Program::setUniform(2i)> program not in use" );
+    ASSERT( isInUse() );
     glUniform2i( uniform(name), v0, v1);
 }
 
 void Program::setUniform( const GLchar* name, GLint v0, GLint v1, GLint v2 ) const {
-    ASSERT( isInUse(), "Program::setUniform(3i)> program not in use" );
+    ASSERT( isInUse() );
     glUniform3i( uniform(name), v0, v1, v2 );
 }
 
 void Program::setUniform( const GLchar* name, GLint v0, GLint v1, GLint v2, GLint v3 ) const {
-    ASSERT( isInUse(), "Program::setUniform(4i)> program not in use" );
+    ASSERT( isInUse() );
     glUniform4i( uniform(name), v0, v1, v2, v3 );
 }
 
 void Program::setUniform( const GLchar* name, GLfloat v0 ) const {
-    ASSERT( isInUse(), "Program::setUniform(f)> program not in use" );
+    ASSERT( isInUse() );
     glUniform1f( uniform(name), v0);
 }
 
 void Program::setUniform( const GLchar* name, GLfloat v0, GLfloat v1 ) const {
-    ASSERT( isInUse(), "Program::setUniform(2f)> program not in use" );
+    ASSERT( isInUse() );
     glUniform2f( uniform(name), v0, v1 );
 }
 
 void Program::setUniform( const GLchar* name, GLfloat v0, GLfloat v1, GLfloat v2 ) const {
-    ASSERT( isInUse(), "Program::setUniform(3f)> program not in use" );
+    ASSERT( isInUse() );
     glUniform3f( uniform(name), v0, v1, v2 );
 }
 
 void Program::setUniform( const GLchar* name, GLfloat v0, GLfloat v1, GLfloat v2, GLfloat v3 ) const
 {
-    ASSERT( isInUse(), "Program::setUniform(4f)> program not in use" );
+    ASSERT( isInUse() );
     glUniform4f( uniform(name), v0, v1, v2, v3 );
 }
 
 void Program::setUniform( const GLchar* name, const glm::vec2& v ) const
 {
-    ASSERT( isInUse(), "Program::setUniform> program not in use" );
+    ASSERT( isInUse() );
     glUniform2fv( uniform(name), 1, glm::value_ptr( v ) );
 }
 
 void Program::setUniform( const GLchar* name, const glm::vec3& v ) const
 {
-    ASSERT( isInUse(), "Program::setUniform> program not in use" );
+    ASSERT( isInUse() );
     glUniform3fv( uniform(name), 1, glm::value_ptr( v ) );
 }
 
 void Program::setUniform( const GLchar* name, const glm::vec4& v ) const
 {
-    ASSERT( isInUse(), "Program::setUniform> program not in use" );
+    ASSERT( isInUse() );
     glUniform4fv( uniform(name), 1, glm::value_ptr( v ) );
 }
 
 void Program::setUniform( const GLchar* name, const pg::math::Vector2f& v ) const {
-    ASSERT( isInUse(), "Program::setUniform(Vector2f)> program not in use" );
+    ASSERT( isInUse() );
     glUniform2fv( uniform(name), 1, v.data );
 }
 
 void Program::setUniform( const GLchar* name, const pg::math::Vector3f& v ) const {
-    ASSERT( isInUse(), "Program::setUniform(Vector3f)> program not in use" );
+    ASSERT( isInUse() );
     glUniform3fv( uniform(name), 1, v.data );
 }
 
 void Program::setUniform( const GLchar* name, const pg::math::Vector4f& v ) const {
-    ASSERT( isInUse(), "Program::setUniform(Vector4f)> program not in use" );
+    ASSERT( isInUse() );
     glUniform4fv( uniform(name), 1, v.data );
 }
 
 void Program::setUniform( const GLchar* name, const glm::mat3& m, GLboolean transpose ) const {
-    ASSERT( isInUse(), "Program::setUniform> program not in use" );
+    ASSERT( isInUse() );
     glUniformMatrix3fv( uniform(name), 1, transpose, glm::value_ptr( m ) );
 }
 
 void Program::setUniform( const GLchar* name, const glm::mat4& m, GLboolean transpose ) const {
-    ASSERT( isInUse(), "Program::setUniform> program not in use" );
+    ASSERT( isInUse() );
     glUniformMatrix4fv( uniform(name), 1, transpose, glm::value_ptr( m ) );
 }
 
 void Program::setUniform( const GLchar* name, const pg::math::Matrix3f& M ) const {
-    ASSERT( isInUse(), "Program::setUniform(Matrix3f)> program not in use" );
+    ASSERT( isInUse() );
     glUniformMatrix3fv( uniform(name), 1, GL_TRUE, M.data );
 }
 
 void Program::setUniform( const GLchar* name, const pg::math::Matrix4f& M ) const {
-    ASSERT( isInUse(), "Program::setUniform(Matrix4f)> program not in use" );
+    ASSERT( isInUse() );
     glUniformMatrix4fv( uniform(name), 1, GL_TRUE, M.data );
 }
 

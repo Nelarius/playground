@@ -199,7 +199,7 @@ window = {
 Here is a list of functions and variables available for use in the script component.
 
 ## TODO
-* Excise the assert message; the condition and location should be enough information. 
+* Reconsider the assertions in MeshManager and ShaderManager.
 * Towards the first demo
   * Figure out the time unit deltas in radians
   * instantiate three times
