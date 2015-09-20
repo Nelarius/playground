@@ -4,18 +4,15 @@
 function activate()
 end
 
--- accumulated time
+pi = 3.1415927
 t = 0.0
--- angular velocity
-av = 0.5
-r = 8.0
 
 -- this gets called in the update loop
 function update( dt )
     if entity:hasTransform() then
         t = t + dt
-        q = pg.Quaternion( 0.0, 0.0, math.sin( -dt*10.0 ), math.cos( -dt*10.0 ) )
-        entity.transform.rotation = pg.Quaternion( 0.0, 0.0, math.sin( -t*0.5 ), math.cos( -t*0.5 ) )
+        local angle = 2*pi*t / 60.0
+        entity.transform.rotation = pg.Quaternion( 0.0, 0.0, math.sin( -angle ), math.cos( -angle ) )
     end
 end
 

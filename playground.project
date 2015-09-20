@@ -100,7 +100,6 @@
       <File Name="src/data/specular.vert.glsl"/>
       <File Name="src/data/panel.frag.glsl"/>
       <File Name="src/data/panel.vert.glsl"/>
-      <File Name="src/data/rotate.lua"/>
     </VirtualDirectory>
     <File Name="src/Main.cpp" ExcludeProjConfig="Test"/>
     <VirtualDirectory Name="ecs">
@@ -114,6 +113,7 @@
       <File Name="src/ecs/Event.h"/>
       <File Name="src/ecs/Component.cpp"/>
       <File Name="src/ecs/Event.cpp"/>
+      <File Name="src/ecs/README.md"/>
     </VirtualDirectory>
     <VirtualDirectory Name="system">
       <File Name="src/system/Debug.cpp" ExcludeProjConfig="Test"/>
