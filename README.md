@@ -225,7 +225,7 @@ Here is a list of functions and variables available for use in the script compon
   * Add event handling functions for the Ui system:
   * Add handler for text input event
   * add handler for keyup input event
-
+* `EntityManager` needs to expose the pool size in its public API.
 Here's a great way to handle developer errors: if, for instance, a mesh isn't found, use an "error" mesh instead which will be easy to spot. There is no need to halt execution because of an erroneous path to a resource.
 
 Remember to distinguish between hard and soft errors. Hard errors occur in places like `Bundle` where an off-by one error leads to corrupted state. Soft errors occur e.g. when a user supplies an incorrect file name. The program still works correctly, it just has been given incorrect information.
