@@ -100,6 +100,7 @@
       <File Name="src/data/specular.vert.glsl"/>
       <File Name="src/data/panel.frag.glsl"/>
       <File Name="src/data/panel.vert.glsl"/>
+      <File Name="src/data/scene.json"/>
     </VirtualDirectory>
     <File Name="src/Main.cpp" ExcludeProjConfig="Test"/>
     <VirtualDirectory Name="ecs">
@@ -153,9 +154,10 @@
       <File Name="src/3rdparty/SimpleSignal.h"/>
       <File Name="src/3rdparty/unify.cpp"/>
       <File Name="src/3rdparty/unify.hpp"/>
-      <File Name="src/3rdparty/imconfig.h"/>
-      <File Name="src/3rdparty/imgui.cpp"/>
-      <File Name="src/3rdparty/imgui.h"/>
+      <VirtualDirectory Name="json11">
+        <File Name="src/3rdparty/json11/json11.cpp"/>
+        <File Name="src/3rdparty/json11/json11.hpp"/>
+      </VirtualDirectory>
     </VirtualDirectory>
   </VirtualDirectory>
   <VirtualDirectory Name="project">

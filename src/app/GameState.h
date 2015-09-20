@@ -38,6 +38,7 @@ class GameState : public AppState {
     private:
         // METHODS
         void loadScene_();
+        void parseScene_();
         
         // FIELDS
         // these could be possibly moved to AppState

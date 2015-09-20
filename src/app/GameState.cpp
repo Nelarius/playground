@@ -14,6 +14,8 @@
 #include "lua/LuaState.h"
 #include "lua/LuaBridge.h"
 #include "lua/BindLua.h"
+#include "utils/File.h"
+#include "3rdparty/json11/json11.hpp"
 
 #include <SDL2/SDL_scancode.h>
 #include <cmath>
@@ -30,92 +32,57 @@ GameState::GameState( Context& context, AppStateStack& stack )
     systems_( events_, entities_ ),
     keyboard_() {}
 
-void GameState::loadScene_() {
-    LuaState lua{ false };
-    BindVector( lua.get() );
-    BindQuaternion( lua.get() );
-    lua.execute( "data/scene.lua" );
+void GameState::parseScene_() {
     
-    lb::LuaRef entities = lb::getGlobal( lua.get(), "entities" );
-    for ( lb::Iterator iter( entities ); !iter.isNil(); ++iter ) {
-        auto entity = entities_.create();
-        lb::LuaRef table = *iter;
+    auto json = pg::FileToString( "data/scene.json" );
+    std::string error{""};
+    auto scene = json11::Json::parse( json, error ).array_items();
+
+    for ( auto object: scene ) {
+        ecs::Entity entity = entities_.create();
+        auto transform = object["transform"];
+        auto renderable = object["renderable"];
+        auto script = object["script"];
+        auto camera = object["camera"];
         
-        if ( table["script"] ) {
-            std::string scriptFile = table["script"].cast<std::string>();
-            LuaState lua{ false };
-            BindAll( lua.get() );
-            lb::push( lua.get(), entity );
-            lua_setglobal( lua.get(), "entity" );
-            lua.execute( scriptFile );
-            entity.assign<component::Script>( lua );
-        }   // script component
-        
-        if ( table["camera"] ) {
-            lb::LuaRef camera = table["camera"];
-            entity.assign<component::Camera>(
-                camera["fov"].cast<float>(),
-                camera["nearPlane"].cast<float>(),
-                camera["farPlane"].cast<float>(),
-                camera["perspective"].cast<bool>(),
-                camera["active"].cast<bool>()
+        if ( !transform.is_null() ) {
+            auto contents = transform.object_items();
+            auto pos = contents["position"].array_items();
+            auto rot = contents["rotation"].array_items();
+            auto sca = contents["scale"].array_items();
+            entity.assign< component::Transform >(
+                math::Vector3f( pos[0].number_value(), pos[1].number_value(), pos[2].number_value() ),
+                math::Quatf( rot[0].number_value(), rot[1].number_value(), rot[2].number_value(), rot[3].number_value() ),
+                math::Vector3f( sca[0].number_value(), sca[1].number_value(), sca[2].number_value() )
             );
-        }   // camera component
+        }   // transform
         
-        if ( table["transform"] ) {
-            lb::LuaRef transform = table["transform"];
-            entity.assign<component::Transform>(
-                transform["position"].cast<math::Vector3f>(),
-                transform["rotation"].cast<math::Quatf>(),
-                transform["scale"].cast<math::Vector3f>()
-            );
-        }   // transform component
-        
-        if ( table["renderable"] ) {
-            lb::LuaRef renderable = table["renderable"];
-            opengl::BufferObject* buffer = context_.meshManager.get( renderable["model"] );
+        if ( !renderable.is_null() ) {
+            auto contents = renderable.object_items();
+            opengl::BufferObject* buffer = context_.meshManager.get( contents["model"].string_value() );
             opengl::Program* shader{ nullptr };
             opengl::VertexArrayObject vao{ 0 };
-            //std::unordered_map<std::string, float> uniforms{};
             system::Material mat;
             
-            
-            if ( renderable["ambient"] ) {
-                shader = context_.shaderManager.get( "ambient" );
-                lb::LuaRef ambient = renderable["ambient"];
-                math::Vector3f color = ambient["color"];
-                std::unordered_map<std::string, float> uniforms;
-                uniforms.emplace( "color_r", color.r );
-                uniforms.emplace( "color_g", color.g );
-                uniforms.emplace( "color_b", color.b );
-                mat.uniforms = uniforms;
-                mat.type = system::MaterialType::Ambient;
-                opengl::VertexArrayObjectFactory factory{ buffer, shader };
-                factory.addAttribute( "vertex", 3, GL_FLOAT, GL_FALSE, 6*sizeof(float) );
-                vao = factory.getVao();
-            }
-            
-            else if ( renderable["diffuse"] ) {
-                shader = context_.shaderManager.get( "diffuse" );
-                mat.type = system::MaterialType::Diffuse;
-                opengl::VertexArrayObjectFactory factory{ buffer, shader };
-                factory.addStandardAttribute( opengl::VertexAttribute::Vertex );
-                factory.addStandardAttribute( opengl::VertexAttribute::Normal );
-                vao = factory.getVao();
-            }
-            
-            else if ( renderable["specular"] )  {
-                lb::LuaRef specular = renderable["specular"];
-                std::unordered_map<std::string, float> uniforms;
-                uniforms.emplace( "shininess", specular["shininess"] );
-                math::Vector3f specColor = specular["specularColor"];
-                math::Vector3f surfColor = specular["ambientColor"];
+            if ( !contents[ "specular"].is_null() ) {
+                auto specular = contents[ "specular" ].object_items();
+                std::unordered_map<std::string, float> uniforms{};
+                uniforms.emplace( "shininess", specular[ "shininess" ].number_value() );
+                auto scolor = specular[ "specularColor" ].array_items();
+                math::Vector3f specColor(
+                    scolor[0].number_value(), scolor[1].number_value(), scolor[2].number_value()
+                );
+                auto acolor = specular[ "ambientColor" ].array_items();
+                math::Vector3f surfColor(
+                    acolor[0].number_value(), acolor[1].number_value(), acolor[2].number_value()
+                );
                 uniforms.emplace( "specColor_r", specColor.r );
                 uniforms.emplace( "specColor_g", specColor.g );
                 uniforms.emplace( "specColor_b", specColor.b );
                 uniforms.emplace( "ambientColor_r", surfColor.r );
                 uniforms.emplace( "ambientColor_g", surfColor.g );
                 uniforms.emplace( "ambientColor_b", surfColor.b );
+                
                 mat.type = system::MaterialType::Specular;
                 mat.uniforms = uniforms;
                 shader = context_.shaderManager.get( "specular" );
@@ -126,9 +93,29 @@ void GameState::loadScene_() {
             }
             opengl::VertexArrayObjectFactory factory{ buffer, shader };
             entity.assign<component::Renderable>( buffer, shader, vao, mat );
-        }   // renderable component
+        }   //renderable
         
-    }   // iterate over entities
+        if ( !camera.is_null() ) {
+            auto contents = camera.object_items();
+            entity.assign< component::Camera >(
+                contents["fov"].number_value(),
+                contents["nearPlane"].number_value(),
+                contents["farPlane"].number_value(),
+                true,
+                true
+            );
+        }   //camera
+        
+        if ( !script.is_null() ) {
+            auto file = script.string_value();
+            LuaState lua{ false };
+            BindAll( lua.get() );
+            lb::push( lua.get(), entity );
+            lua_setglobal( lua.get(), "entity" );
+            lua.execute( file );
+            entity.assign< component::Script >( lua );
+        }   // script
+    }
 }
 
 void GameState::activate() {
@@ -156,7 +143,7 @@ void GameState::activate() {
     systems_.configure< system::Debug >();
     systems_.configure< system::Scripter >();
     
-    loadScene_();
+    parseScene_();
     
     keyboard_.addInput( SDL_SCANCODE_A, []() -> void {
         LOG_INFO << "wheee, inside a real time input handler!";

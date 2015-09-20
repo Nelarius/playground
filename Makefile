@@ -48,6 +48,7 @@ endif
 OBJ = src/Main.o \
 	src/3rdparty/imgui.o \
 	src/3rdparty/imgui_draw.o \
+	src/3rdparty/json11/json11.o \
 	src/app/GameState.o \
 	src/app/Application.o \
 	src/app/Window.o \
