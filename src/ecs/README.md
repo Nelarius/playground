@@ -1,4 +1,11 @@
-# The entity-component system (ECS)
+# The ECS module
+
+This module contains the engine's entity-component system (ECS). Here you will find
+* Entity
+* EntityManager
+* SystemManager
+* SystemManager
+* as well as Events and Systems
 
 Here are some important things to know. Currently, the chunk size of each component memory pool is controlled by the `EntityManager::PoolSize_` field. Ideally, all of the components used in the game would fit within one chunk. Additionally, `EntityManager` should expose the variable in the public API.
 
@@ -98,7 +105,151 @@ But the `join` method returns a `View` object, so that you don't have to write a
 
 ## Implement functionality using systems
 
-**TODO**
+Program logic is implemented using systems. Systems must inherit the class `System<S>`, where `S` is the deriving class itself. Two pure virtual methods can be overridden: `configure( EventManager& )` and `update( EventManager&, EntityManager&, float )`.
+
+Logic is implemented in the `update`-method using the entity manager to gain access to components. For instance, a very simple movement system might be implemented as:
+
+```cpp
+struct Position {
+    Vector3f position;
+};
+
+struct Velocity {
+    Vector3f velocity;
+};
+
+class Body: public System<Body> {
+    public:
+        void configure( EventManager& events ) override {}
+        void update( EventManager& events, EntityManager& entities, float dt ) override {
+            for ( Entity entity: entities.join<Position, Velocity>() ) {
+                entity.component<Position>()->position += 
+					entity.component<Velocity>()->velocity * dt;
+            }
+        }
+};
+``` 
+
+Different systems can be tied together using `SystemManager`:
+
+```cpp
+systemManager.add<Body>();
+systemManager.configure<Body>();
+systemManager.update<Body>( dt );
+std::shared_ptr<System> body = systemManager.system<Body>();
+```
+
+### Communicating using events
+
+Systems communicate between each other using events. In order for a system to receive events, it must inherit `Receiver` and implement the following method: `void receive( const E& event )`, where `E` is the type of event. Subscribe to the event using `EventManager::subscribe<E, S>( const S& )`, where `S` is your system. Events are emitted using `EventManager::emit<E, Args...>( Args&&... )`.
+
+As an example, here's how you could implement a simple trigger system using systems, components, and events. We want a trigger event to fire when an entity wanders into a trigger zone (a rectangle). We define the following components and events:
+
+```cpp
+struct TriggerComponent {
+    Rectangle area;
+};
+
+struct PositionComponent {
+    Vector2f position;
+};
+
+struct VelocityComponent {
+    Vector2f velocity;
+    float factor;
+};
+
+struct TriggerEvent {
+    Entity entity;
+};
+```
+
+We want the trigger system to fire the event. It can do so in the `update` method.
+
+```cpp
+class Trigger: public System<Trigger> {
+public:
+    void update( EventManager& events, EntityManager& entities, float dt ) {
+        // yucky O(N^2) implementation
+        for ( auto posEnt: entities.join<PositionComponent>() ) {
+            auto pos = entity.component<PositionComponent>();
+            for ( auto triggerEnt: entities.join<TriggerComponent>() ) {
+                auto rect = entity.component<TriggerComponent>();
+                // if the entity's position is in the rectangle, then fire the event!
+                if ( InRectangle( rect, pos  ) ) {
+                    // pass the entity to the event's default constructor
+                    events.emit<TriggerEvent>( posEnt );    
+                }
+            }
+        }
+    }
+};
+```
+
+Now let's assume that when a trigger fires, the entity who triggered it will speed up by a factor of two. We want the body system to receive the event. We need the `configure`, `update` and `receive` methods to be defined. The body system must additionally inherit from `Receiver`:
+
+```cpp
+class Body: public System<Body>, Receiver {
+public:
+    void configure( EventManager& events ) override {
+        // pass a reference to yourself so that the event manager can contact you :)
+        events.subscribe<TriggerEvent>( *this );
+    }
+    
+    void receive( const TriggerEvent& event ) {
+        // speed the entity up!
+        event.entity.component<VelocityComponent>()->factor *= 2.0f;
+    }
+    
+    void update( EventManager& events, EntityManager& entities, float dt ) override {
+        for ( Entity entity: entities.join<PositionComponent, VelocityComponent>() ) {
+            auto pos = entity.component<PositionComponent>();
+            auto vel = entity.component<VelocityComponent>();
+            pos->position += vel->velocity * vel->factor * dt;
+        }
+    }
+};
+```
+
+`EntityManager` emits the following events, regardless of whether any system is subscribed to them.
+
+```cpp
+/**
+ * @class EntityCreatedEvent
+ * @brief Emitted when an entity is created.
+ */
+struct EntityCreatedEvent {
+    Entity entity;
+};
+
+/**
+ * @class EntityDestroyedEvent
+ * @brief Emitted just before the entity is destroyed.
+ */
+struct EntityDestroyedEvent {
+    Entity entity;
+};
+
+/**
+ * @class ComponentAssignedEvent
+ * @brief Emitted when an entity is assigned to a component.
+ */
+template<typename C>
+struct ComponentAssignedEvent {
+    Entity entity;
+    ComponentHandle<C> component;
+};
+
+/**
+ * @class ComponentRemovedEvent
+ * @brief Emitted just before the component is removed.
+ */
+template<typename C>
+struct ComponentRemovedEvent {
+    Entity entity;
+    ComponentHandle<C> component;
+};
+```
 
 ## The three manager classes
 
