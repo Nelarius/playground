@@ -1,7 +1,6 @@
 #include "system/Render.h"
 #include "system/Material.h"
 #include "component/Include.h"
-#include "math/Include.h"
 #include "utils/Log.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
@@ -41,55 +40,40 @@ namespace system {
 
 Render::Render( Context& context )
 :   System<Render>(),
+    cameraEntity_{},
+    defaultProjection_{},
     context_{ context }
     {}
+    
+void Render::configure( ecs::EventManager& events ) {
+    events.subscribe< CameraAdded >( *this );
+}
+
+void Render::receive( const CameraAdded& event ) {
+    cameraEntity_ = event.entity;
+}
 
 void Render::update(
     ecs::EntityManager& entities,
     ecs::EventManager& events,
     float dt 
 ) {
-    float aspectRatio = float( context_.window->width() ) / context_.window->height();
     glm::mat4 cameraMatrix{};
     glm::vec3 cameraPos;
-    /*
-     * Iterate over cameras here, find the active one
-     * */
-    for ( ecs::Entity entity: entities.join<component::Transform, component::Camera>() ) {
-        auto camera = entity.component<component::Camera>();
-        auto transform = entity.component<component::Transform>();
-        if ( camera->active ) {
-            cameraPos = glm::vec3( transform->position.x, transform->position.y, transform->position.z );
-            glm::mat4 view = ModelMatrixFromTransform( transform );
-            glm::mat4 proj;
-            if ( camera->viewPerspective ) {
-                proj = glm::perspective( camera->verticalFov, aspectRatio, camera->nearPlane, camera->farPlane );
-            } else {
-                // construct orthogonal projection matrix here
-            }
-            cameraMatrix = proj * glm::inverse( view );
-            break;
-        }
-    }
-    
-    Bundle<DirectionalLight, 12> lights{};
-    /*
-     * Iterate over lights here
-     * */
-    for ( ecs::Entity entity: entities.join<component::Transform, component::DirectionalLight>() ) {
-        lights.emplace( 
-            std::initializer_list<float>{ 0.0f, 0.0f, 0.0f } ,
-            std::initializer_list<float>{ 1.0f, 1.0f, 1.0f },
-            0.5f
-        );
+    if ( cameraEntity_.isValid() ) {
+        float aspectRatio = float( context_.window->width() ) / context_.window->height();
+        glm::mat4 view = ModelMatrixFromTransform( cameraEntity_.component< component::Transform >() );
+        auto c = cameraEntity_.component< component::Camera >();
+        glm::mat4 proj = glm::perspective( c->verticalFov, aspectRatio, c->nearPlane, c->farPlane );
+        cameraMatrix = proj * glm::inverse( view );
     }
     
      /*
       * Then, iterate over renderables
       * */
-    for ( ecs::Entity entity: entities.join<component::Transform, component::Renderable>() ) {
-        auto renderable = entity.component<component::Renderable>();
-        auto transform = entity.component<component::Transform>();
+    for ( ecs::Entity entity: entities.join< component::Transform, component::Renderable>() ) {
+        auto renderable = entity.component< component::Renderable>();
+        auto transform = entity.component< component::Transform>();
         auto shader = renderable->shader;
         shader->use();
         shader->setUniform( 

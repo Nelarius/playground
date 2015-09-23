@@ -176,6 +176,7 @@ window = {
 **TODO: documentation**
 
 ## TODO
+* Get rid of the cause of warnings at `GameState.cpp:107`
 * Convert config file format to JSON
 * Add scene parser, serialization/deserialization should go there
 * Reconsider the assertions in MeshManager and ShaderManager.

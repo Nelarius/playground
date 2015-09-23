@@ -128,6 +128,9 @@
       <File Name="src/system/Ui.cpp"/>
       <File Name="src/system/ImGuiRenderer.cpp"/>
       <File Name="src/system/ImGuiRenderer.h"/>
+      <File Name="src/system/ForwardRenderer.cpp"/>
+      <File Name="src/system/ForwardRenderer.h"/>
+      <File Name="src/system/Events.h"/>
     </VirtualDirectory>
     <VirtualDirectory Name="lua">
       <File Name="src/lua/LuaError.h" ExcludeProjConfig="Test"/>

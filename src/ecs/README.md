@@ -29,6 +29,8 @@ entity2.isValid();  // also false
 entity.destroy();   // this will now fail
 ```
 
+If you want to optionally store an entity, the default constructor of `Entity` will construct an invalid entity.
+
 > The underlying handle within the entity class can be obtained by calling entity.id(), which returns the type Id. Id actually stores two uint32_t values. The first is the unique id of the entity, and the second is the version of the entity. The EntityManager instance which created the entity also stores a version for that entity. When you destroy the entity, the entity manager increments its version value. Thus the validity of the entity object can be easily checked by comparing the entity's version to the entity manager's version. If they differ, then the entity was destroyed.
 
 ## Using components

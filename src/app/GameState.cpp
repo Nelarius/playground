@@ -8,6 +8,7 @@
 #include "system/Render.h"
 #include "system/Scripter.h"
 #include "system/Ui.h"
+#include "system/Events.h"
 #include "component/Include.h"
 #include "utils/Log.h"
 #include "utils/Assert.h"
@@ -104,6 +105,7 @@ void GameState::parseScene_() {
                 true,
                 true
             );
+            events_.emit< system::CameraAdded >( entity );
         }   //camera
         
         if ( !script.is_null() ) {
@@ -141,8 +143,10 @@ void GameState::activate() {
     systems_.add< system::Scripter >();
     systems_.add< system::Ui >( context_ );
     systems_.configure< system::Debug >();
+    systems_.configure< system::Render >();
     systems_.configure< system::Scripter >();
     
+    // the full capacity of the systems are used in parsing, so the systems must be configured and ready to go!
     parseScene_();
     
     keyboard_.addInput( SDL_SCANCODE_A, []() -> void {

@@ -54,7 +54,7 @@ class ComponentHandle {
 class Entity {
     public:
         Entity( EntityManager* manager, Id id );
-        Entity()                            = delete;
+        Entity()                            = default;
         Entity( const Entity& )	            = default;
         Entity( Entity&& )                  = default;
         Entity& operator=( const Entity& )  = default;
