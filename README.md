@@ -50,7 +50,6 @@ Entities can be scripted in Lua. The script component JSON notation simply conta
 
 This component will be rendered with OpenGL. The component consists of a 3d model, and a shader. Currently, only the specular shader should be used at the moment.
 
-
 *Component dependency: transform*
 
 ```json
@@ -151,22 +150,23 @@ function deactivate()
 end
 ```
 
-`config.lua`:
+`config.json`:
 
-```lua
-targetFrameRate = 60.0
-
-window = {
-    width = 800,
-    height = 600,
-    name = "Playground engine",
-    opengl = {
-        major = 3,
-        minor = 3,
-        stencil_bits = 8,
-        depth_bits = 24,
-        multisample_buffers = 1,
-        multisample_samples = 4
+```json
+{
+    "frameRate": 60.0,
+    "window": {
+        "width": 800,
+        "height": 600,
+        "name": "Playground engine",
+        "opengl": {
+            "major": 3,
+            "minor": 1,
+            "stencilBits": 8,
+            "depthBits": 24,
+            "msBuffers": 1,
+            "msSamples": 4
+        }
     }
 }
 ```
@@ -177,7 +177,6 @@ window = {
 
 ## TODO
 * Get rid of the cause of warnings at `GameState.cpp:107`
-* Convert config file format to JSON
 * Add scene parser, serialization/deserialization should go there
 * Reconsider the assertions in MeshManager and ShaderManager.
 * Write tests for Bundle

@@ -88,7 +88,7 @@ TESTOBJ = src/Test.o \
 
 all: $(EXECUTABLE)
 	make test
-	cp src/config.lua Build/
+	cp src/config.json Build/
 	cp -r src/data Build/
 	./Build/test
 
@@ -106,5 +106,5 @@ test: $(TESTOBJ)
 
 clean:
 	rm $(OBJ) $(EXECUTABLE) $(TEST_EXECUTABLE) $(TESTOBJ)
-	rm Build/config.lua
+	rm Build/config.json
 	rm -r Build/data

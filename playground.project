@@ -165,8 +165,8 @@
   </VirtualDirectory>
   <VirtualDirectory Name="project">
     <File Name="README.md"/>
-    <File Name="src/config.lua"/>
     <File Name="Makefile"/>
+    <File Name="src/config.json"/>
   </VirtualDirectory>
   <Settings Type="Executable">
     <GlobalSettings>
