@@ -86,8 +86,8 @@
       <File Name="src/utils/Random.h"/>
       <File Name="src/utils/Pool.cpp"/>
       <File Name="src/utils/Pool.h"/>
-      <File Name="src/utils/Bundle.h"/>
       <File Name="src/utils/Exception.h"/>
+      <File Name="src/utils/Container.h"/>
     </VirtualDirectory>
     <VirtualDirectory Name="data">
       <File Name="src/data/ambient.frag.glsl"/>

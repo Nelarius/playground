@@ -2,7 +2,7 @@
 #pragma once 
 
 #include "utils/Pool.h"
-#include "utils/Bundle.h"
+#include "utils/Container.h"
 #include "3rdparty/SimpleSignal.h"
 #include "utils/Assert.h"
 #include "utils/Log.h"
@@ -12,7 +12,7 @@
 #include <cstdlib>
 
 using EventSignal = Simple::Signal<void(const void*)>;
-using SignalBundle = pg::Bundle<EventSignal>;
+using SignalContainer = pg::Container<EventSignal>;
 
 namespace pg {
 namespace ecs {
@@ -86,7 +86,7 @@ class EventManager {
                 signals_.emplace();
             }
         }
-        SignalBundle  signals_{};
+        SignalContainer  signals_{};
 };
 
 template<typename E, typename S>

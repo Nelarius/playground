@@ -3,7 +3,7 @@
 
 #include "opengl/BufferObject.h"
 #include "utils/Borrowed.h"
-#include "utils/Bundle.h"
+#include "utils/Container.h"
 #include <memory>
 #include <map>
 #include <utility>
@@ -41,7 +41,7 @@ class MeshManager {
         std::size_t     size() const;
         
     private:
-        Bundle<opengl::BufferObject>                        buffer_{};
+        Container<opengl::BufferObject>                     buffer_{};
         std::map<const std::string, opengl::BufferObject*>  resources_{};
 };
 
