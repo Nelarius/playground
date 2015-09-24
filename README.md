@@ -176,7 +176,6 @@ end
 **TODO: documentation**
 
 ## TODO
-* Get rid of the cause of warnings at `GameState.cpp:107`
 * Add scene parser, serialization/deserialization should go there
 * Reconsider the assertions in MeshManager and ShaderManager.
 * Write tests for Bundle

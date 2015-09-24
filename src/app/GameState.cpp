@@ -98,10 +98,11 @@ void GameState::parseScene_() {
         
         if ( !camera.is_null() ) {
             auto contents = camera.object_items();
+            // cast doubles (numbers) to float, to avoid narrowing errors
             entity.assign< component::Camera >(
-                contents["fov"].number_value(),
-                contents["nearPlane"].number_value(),
-                contents["farPlane"].number_value(),
+                (float) contents["fov"].number_value(),
+                (float) contents["nearPlane"].number_value(),
+                (float) contents["farPlane"].number_value(),
                 true,
                 true
             );
