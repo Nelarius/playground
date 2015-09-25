@@ -36,7 +36,7 @@ class ShaderManager {
          * @brief Get the shader with the given tag.
          * @param tag
          */
-        opengl::Program*    get( const std::string& tag );
+        opengl::Program*    get( const std::string& tag ) const;
         
         /**
          * @brief Delete all contained shaders.

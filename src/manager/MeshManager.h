@@ -5,7 +5,7 @@
 #include "utils/Borrowed.h"
 #include "utils/Container.h"
 #include <memory>
-#include <map>
+#include <unordered_map>
 #include <utility>
 #include <string>
 #include <cstddef>
@@ -30,7 +30,7 @@ class MeshManager {
          * @brief 
          * @param file The mesh file to get.
          */
-        opengl::BufferObject*   get( const std::string& file );
+        opengl::BufferObject*   get( const std::string& file ) const;
         /**
          * @brief Clear all elements.
          */
@@ -41,8 +41,8 @@ class MeshManager {
         std::size_t     size() const;
         
     private:
-        Container<opengl::BufferObject>                     buffer_{};
-        std::map<const std::string, opengl::BufferObject*>  resources_{};
+        mutable Container<opengl::BufferObject>                                 buffer_{};
+        mutable std::unordered_map<std::string, opengl::BufferObject*>    resources_{};
 };
 
 }

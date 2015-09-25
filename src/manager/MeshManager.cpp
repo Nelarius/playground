@@ -8,7 +8,7 @@
 
 namespace pg {
 
-opengl::BufferObject* MeshManager::get( const std::string& file ) {
+opengl::BufferObject* MeshManager::get( const std::string& file ) const {
     auto it = resources_.find( file );
     
     if ( it != resources_.end() ) {
