@@ -59,6 +59,8 @@
       <File Name="src/manager/MeshManager.h" ExcludeProjConfig="Test"/>
       <File Name="src/manager/ShaderManager.cpp" ExcludeProjConfig="Test"/>
       <File Name="src/manager/ShaderManager.h" ExcludeProjConfig="Test"/>
+      <File Name="src/manager/StringManager.h"/>
+      <File Name="src/manager/StringManager.cpp"/>
     </VirtualDirectory>
     <VirtualDirectory Name="opengl">
       <File Name="src/opengl/BufferObject.cpp" ExcludeProjConfig="Test"/>

@@ -69,6 +69,7 @@ OBJ = src/Main.o \
 	src/opengl/Texture.o \
 	src/manager/MeshManager.o \
 	src/manager/ShaderManager.o \
+	src/manager/StringManager.o \
 	src/math/Angle.o \
 	src/system/Render.o \
 	src/system/Debug.o \

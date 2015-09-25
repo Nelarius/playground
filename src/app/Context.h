@@ -5,6 +5,7 @@
 #include "app/Window.h"
 #include "manager/MeshManager.h"
 #include "manager/ShaderManager.h"
+#include "manager/StringManager.h"
 
 namespace pg {
 
@@ -31,6 +32,7 @@ struct Context {
     
     MeshManager     meshManager{};
     ShaderManager   shaderManager{};
+    StringManager   stringManager{};
     bool            running{ true };
     Window*         window{ nullptr };
     
