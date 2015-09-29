@@ -16,7 +16,7 @@ Compiling on Windows isn't a great experience at the moment. Your locations of t
 
 ## Usage
 
-For more detailed information, see the README files in the module folders within `src/`.
+For more detailed information, feel free to browse the module folders in `src/`.
 
 The scene is described in a data file. The data is written in the JSON format. Each entity is listed as an object in a list. Each entity is composed of components, each of whom have their own object notation.
 
