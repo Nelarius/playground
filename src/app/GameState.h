@@ -36,9 +36,6 @@ class GameState : public AppState {
         bool handleEvent( const SDL_Event& event ) override;
     
     private:
-        // METHODS
-        void loadScene_();
-        void parseScene_();
         
         // FIELDS
         // these could be possibly moved to AppState

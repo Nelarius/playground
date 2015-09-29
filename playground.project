@@ -44,6 +44,8 @@
       <File Name="src/app/StateIdentifiers.h"/>
       <File Name="src/app/KeyboardManager.h"/>
       <File Name="src/app/KeyboardManager.cpp"/>
+      <File Name="src/app/WorldIO.cpp"/>
+      <File Name="src/app/WorldIO.h"/>
     </VirtualDirectory>
     <VirtualDirectory Name="component">
       <File Name="src/component/Camera.h" ExcludeProjConfig="Test"/>
@@ -104,7 +106,6 @@
       <File Name="src/data/panel.vert.glsl"/>
       <File Name="src/data/scene.json"/>
     </VirtualDirectory>
-    <File Name="src/Main.cpp" ExcludeProjConfig="Test"/>
     <VirtualDirectory Name="ecs">
       <File Name="src/ecs/Component.h" ExcludeProjConfig="Debug"/>
       <File Name="src/ecs/Entity.cpp" ExcludeProjConfig=""/>

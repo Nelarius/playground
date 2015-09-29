@@ -41,7 +41,7 @@ class MeshManager {
         std::size_t     size() const;
         
     private:
-        mutable Container<opengl::BufferObject>                                 buffer_{};
+        mutable Container<opengl::BufferObject>                           buffer_{};
         mutable std::unordered_map<std::string, opengl::BufferObject*>    resources_{};
 };
 

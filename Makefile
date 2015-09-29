@@ -55,6 +55,7 @@ OBJ = src/Main.o \
 	src/app/KeyboardManager.o \
 	src/app/AppState.o \
 	src/app/AppStateStack.o \
+	src/app/WorldIO.o \
 	src/ecs/Event.o \
 	src/ecs/Entity.o \
 	src/ecs/Component.o \

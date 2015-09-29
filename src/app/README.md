@@ -4,8 +4,23 @@ This module contains
 * the main application class which gets executed from `main()`
 * the window wrapper, which application uses
 * the general application context
-  * resource managers from the `manager` module contained in the context
+  * Why do we need a context? The idea is to store instances of managers which should only exist once within the context. You, as a user, never create the manager, but you access the context and use the services that it provides.
+  * Note that the context is shared across the different application states.
+  * Resource managers from the `manager` module contained in the context
 * application state control
+* input and output logic for the world state
+
+## Reading and writing the world
+
+Currently, the world state can only be read in. The world state is stored as a single JSON file. Here's how you use it:
+
+```cpp
+// context is owned by the application class
+WorldIO world{ context };
+// entities, events are declared elsewhere
+// they are ecs::EntityManager and ecs::EventManager, respectively
+world.read( "data/scene.json", entities, events );
+```
 
 ## Controlling application state
 

@@ -176,7 +176,6 @@ end
 **TODO: documentation**
 
 ## TODO
-* Add scene parser, serialization/deserialization should go there
 * Reconsider the assertions in MeshManager and ShaderManager.
 * Write tests for Bundle
 * Implement specular shaders
@@ -201,6 +200,8 @@ end
   * Add handler for text input event
   * add handler for keyup input event
 * `EntityManager` needs to expose the pool size in its public API.
+* Think about the time step. See `Game Programming Patterns::Game Loop` chapter for some ideas about variable time step vs. fixed time step with rendering independent of the updating.
+
 Here's a great way to handle developer errors: if, for instance, a mesh isn't found, use an "error" mesh instead which will be easy to spot. There is no need to halt execution because of an erroneous path to a resource.
 
 Remember to distinguish between hard and soft errors. Hard errors occur in places like `Bundle` where an off-by one error leads to corrupted state. Soft errors occur e.g. when a user supplies an incorrect file name. The program still works correctly, it just has been given incorrect information.
