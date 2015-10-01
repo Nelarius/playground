@@ -51,8 +51,10 @@ OBJ = src/Main.o \
 	src/3rdparty/json11/json11.o \
 	src/app/GameState.o \
 	src/app/Application.o \
+	src/app/Command.o \
 	src/app/Window.o \
 	src/app/KeyboardManager.o \
+	src/app/MouseEvents.o \
 	src/app/AppState.o \
 	src/app/AppStateStack.o \
 	src/app/WorldIO.o \

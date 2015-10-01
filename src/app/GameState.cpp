@@ -8,6 +8,7 @@
 #include "system/Events.h"
 
 #include <SDL2/SDL_scancode.h>
+#include <SDL2/SDL_mouse.h>
 #include <cmath>
 #include <vector>
 #include <unordered_map>
@@ -20,7 +21,9 @@ GameState::GameState( Context& context, AppStateStack& stack )
     events_(),
     entities_( events_ ),
     systems_( events_, entities_ ),
-    keyboard_() {}
+    keyboard_(),
+    mouse_() 
+    {}
 
 void GameState::activate() {
     // everything here should eventually go into a loading state
@@ -58,10 +61,19 @@ void GameState::activate() {
     keyboard_.addInput( SDL_SCANCODE_W, []() -> void {
         LOG_INFO << "yet another real time input handler";
     } );
+    
+    mouse_.set( 
+        SDL_BUTTON_LEFT, 
+        Command(
+            [] () -> void { LOG_DEBUG << "Left mouse button pressed!"; },
+            std::function<void()>()
+        )
+    );
 }
 
 bool GameState::update( float dt ) {
     keyboard_.handleInput();
+    mouse_.update();
     
     systems_.update<system::Scripter>( dt );
     return false;
