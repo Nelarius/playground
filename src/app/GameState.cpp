@@ -55,12 +55,12 @@ void GameState::activate() {
     WorldIO world( context_ );
     world.read( "data/scene.json", entities_, events_ );
     
-    keyboard_.addInput( SDL_SCANCODE_A, []() -> void {
+    /*keyboard_.addInput( SDL_SCANCODE_A, []() -> void {
         LOG_INFO << "wheee, inside a real time input handler!";
     } );
     keyboard_.addInput( SDL_SCANCODE_W, []() -> void {
         LOG_INFO << "yet another real time input handler";
-    } );
+    } );*/
     
     mouse_.set( 
         SDL_BUTTON_LEFT, 
