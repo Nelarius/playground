@@ -100,7 +100,7 @@ void WorldIO::read(
                 true,
                 true
             );
-            events.emit< system::CameraAdded >( entity );
+            events.emit< system::PerspectiveCameraAdded >( entity );
         }   //camera
         
         if ( !script.is_null() ) {

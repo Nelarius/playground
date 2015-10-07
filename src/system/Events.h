@@ -5,7 +5,7 @@
 namespace pg {
 namespace system {
  
-struct CameraAdded {
+struct PerspectiveCameraAdded {
     ecs::Entity entity;
 };
 

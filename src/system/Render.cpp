@@ -46,10 +46,10 @@ Render::Render( Context& context )
     {}
     
 void Render::configure( ecs::EventManager& events ) {
-    events.subscribe< CameraAdded >( *this );
+    events.subscribe< PerspectiveCameraAdded >( *this );
 }
 
-void Render::receive( const CameraAdded& event ) {
+void Render::receive( const PerspectiveCameraAdded& event ) {
     cameraEntity_ = event.entity;
 }
 

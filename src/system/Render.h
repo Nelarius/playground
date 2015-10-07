@@ -16,7 +16,7 @@ class Render : public ecs::System<Render>, public ecs::Receiver {
         
         void configure( ecs::EventManager& ) override;
         void update( ecs::EntityManager&, ecs::EventManager&, float ) override;
-        void receive( const CameraAdded& );
+        void receive( const PerspectiveCameraAdded& );
     
     private:
         // camera position passed as parameter
