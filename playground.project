@@ -100,7 +100,6 @@
     <VirtualDirectory Name="data">
       <File Name="src/data/ambient.frag.glsl"/>
       <File Name="src/data/ambient.vert.glsl"/>
-      <File Name="src/data/scene.lua"/>
       <File Name="src/data/diffuse.frag.glsl"/>
       <File Name="src/data/diffuse.vert.glsl"/>
       <File Name="src/data/template.lua"/>
