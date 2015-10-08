@@ -3,6 +3,7 @@
 
 #include "math/Vector.h"
 #include "math/Quaternion.h"
+#include <cmath>
 
 namespace pg {
 namespace math {
@@ -253,12 +254,39 @@ struct Matrix4 {
         };
     }
     
+    /**
+     * @brief Symmetric orthographic projection matrix
+     * @param width
+     * @param height
+     * @param near
+     * @param far
+     * @return 
+     */
     static Matrix4<T> Orthographic( float width, float height, float near, float far ) {
         return Matrix4<T>{
             2.0f/width,     0.0f,           0.0f,                       0.0f,
             0.0f,           2.0f/height,    0.0f,                       0.0f,
             0.0f,           0.0f,           2.0f / (near - far),        (near + far) / (near - far),
             0.0f,           0.0f,           0.0f,                       1.0f
+        };
+    }
+    
+    /**
+     * @brief Symmetric perspective projection matrix
+     * @param vfov The vertical field of view
+     * @param ar The aspect ratio of the projection plane
+     * @param n The near plane
+     * @param f The far plane
+     * @return The OpenGL perspective projection matrix
+     */
+    static Matrix4<T> Perspective( float vfov, float ar, float n, float f ) {
+        T h = 2.0f * n * tan( 0.5f * vfov );
+        T w = ar * h;
+        return Matrix4<T>{
+            2.0f*n / w,     0.0f,           0.0f,                   0.0f,
+            0.0f,           2.0f*n / h,     0.0f,                   0.0f,
+            0.0f,           0.0f,           -(f + n) / (f - n),     -(2.0f*f*n) / (f - n),
+            0.0f,           0.0f,           -1.0f,                  0.0f
         };
     }
     

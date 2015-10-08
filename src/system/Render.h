@@ -20,7 +20,7 @@ class Render : public ecs::System<Render>, public ecs::Receiver {
     
     private:
         // camera position passed as parameter
-        void setSpecularUniforms_( const glm::vec3&, opengl::Program* );
+        void setSpecularUniforms_( const math::Vector3f&, opengl::Program* );
         
         ecs::Entity     cameraEntity_;
         math::Matrix4f  defaultProjection_;

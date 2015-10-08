@@ -210,9 +210,6 @@ Remember to distinguish between hard and soft errors. Hard errors occur in place
 ### SDL2
 zlib license
 Feel free to do anything you want with it, so long as you don't misrepresent who wrote the original software, license must be included
-### glm
-Happy bunny license, MIT license
-Feel free to use and redistribute, but include the license
 ### glew
 MIT license
 ### Lua 5.2

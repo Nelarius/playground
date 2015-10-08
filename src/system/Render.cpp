@@ -2,37 +2,15 @@
 #include "system/Material.h"
 #include "component/Include.h"
 #include "utils/Log.h"
-#include <glm/glm.hpp>
-#include <glm/gtc/quaternion.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-
+//#include <glm/glm.hpp>
+//#include <glm/gtc/quaternion.hpp>
+//#include <glm/gtc/matrix_transform.hpp>
 #include <cmath>
 
 namespace {
-    
     const float DegreesToRads = 3.141592653f / 180.0f;
     const float RadsToDegrees = 180.0f / 3.141592653f;
     const float Pi = 3.141592653f;
-    
-    /*
-     * These structs correspond to data types in the shaders
-     * */
-    struct DirectionalLight {
-        pg::math::Vector3f direction;
-        pg::math::Vector3f intensity;
-        float ambientCoefficient;
-    };
-    
-    glm::mat4 ModelMatrixFromTransform( const pg::ecs::ComponentHandle<pg::component::Transform>& t ) {
-        /*
-         * The composite model matrix is C = TRS
-         * */
-        glm::mat4 scale = glm::scale( glm::mat4(), glm::vec3( t->scale.x, t->scale.y, t->scale.z ) );
-        //glm::mat4 rotate = glm::mat4_cast( t->rotation );
-        glm::mat4 rotate = glm::mat4();
-        glm::mat4 translate = glm::translate( glm::mat4(), glm::vec3( t->position.x, t->position.y, t->position.z ) );
-        return translate * rotate * scale;
-    }
 }
 
 namespace pg {
@@ -42,9 +20,10 @@ Render::Render( Context& context )
 :   System<Render>(),
     cameraEntity_{},
     defaultProjection_{},
-    context_{ context }
-    {}
-    
+    context_{ context } {
+    defaultProjection_ = math::Matrix4f::Perspective( 70.0f, 1.5f, 0.1f, 100.0f );
+}
+
 void Render::configure( ecs::EventManager& events ) {
     events.subscribe< PerspectiveCameraAdded >( *this );
 }
@@ -58,14 +37,23 @@ void Render::update(
     ecs::EventManager& events,
     float dt 
 ) {
-    glm::mat4 cameraMatrix{};
-    glm::vec3 cameraPos;
+    math::Matrix4f cameraMatrix{ defaultProjection_ };
+    math::Vector3f cameraPos{};
+    
     if ( cameraEntity_.isValid() ) {
         float aspectRatio = float( context_.window->width() ) / context_.window->height();
-        glm::mat4 view = ModelMatrixFromTransform( cameraEntity_.component< component::Transform >() );
-        auto c = cameraEntity_.component< component::Camera >();
-        glm::mat4 proj = glm::perspective( c->verticalFov, aspectRatio, c->nearPlane, c->farPlane );
-        cameraMatrix = proj * glm::inverse( view );
+        auto transform = cameraEntity_.component< component::Transform >();
+        auto view = math::Matrix4f::Translation( transform->position )
+                    * math::Matrix4f::Rotation( transform->rotation )
+                    * math::Matrix4f::Scale( transform->scale );
+        auto camera = cameraEntity_.component< component::Camera >();
+        auto proj = math::Matrix4f::Perspective( 
+            camera->verticalFov, 
+            aspectRatio,
+            camera->nearPlane,
+            camera->farPlane
+        );
+        cameraMatrix = proj * view.inverse();
     }
     
      /*
@@ -96,7 +84,7 @@ void Render::update(
     }
 }
 
-void Render::setSpecularUniforms_( const glm::vec3& pos, opengl::Program* p ) {
+void Render::setSpecularUniforms_( const math::Vector3f& pos, opengl::Program* p ) {
     p->setUniform( "cameraPosition", pos );
 }
 

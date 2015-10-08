@@ -15,7 +15,6 @@ LUA_LINK = C:/dev/lua/build
 LUA_COMP = C:/dev/lua/src
 
 LUABRIDGE_COMP = C:/dev/LuaBridge/Source
-GLM_COMP = C:/dev/glm
 
 CPPTEST_COMP = C:/dev/unittest-cpp
 CPPTEST_LINK = C:/dev/unittest-cpp/build
@@ -31,7 +30,7 @@ EXECUTABLE =
 TEST_EXECUTABLE = 
 
 ifeq ($(OS),Windows_NT)
-	CFLAGS += -I./src -I $(GLM_COMP) -I $(GLEW_COMP) -I $(SDL_COMP) -I $(LUA_COMP) -I $(LUABRIDGE_COMP) -I $(ASSIMP_COMP) -I $(CPPTEST_COMP)
+	CFLAGS += -I./src -I $(GLEW_COMP) -I $(SDL_COMP) -I $(LUA_COMP) -I $(LUABRIDGE_COMP) -I $(ASSIMP_COMP) -I $(CPPTEST_COMP)
 	LDFLAGS += -lopengl32 -lglew32 -lmingw32 -lSDL2main -lSDL2 -llua -lassimp -lm -ldinput8 -ldxguid -ldxerr8 -luser32 -lgdi32 -lwinmm -limm32 -lole32 -loleaut32 -lshell32 -lversion -luuid $(LINKER_INCLUDES)
 	EXECUTABLE += Build/app.exe
 	TEST_EXECUTABLE += Build/test.exe

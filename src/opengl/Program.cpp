@@ -1,7 +1,6 @@
 #include "opengl/Program.h"
 #include "utils/Assert.h"
 #include "utils/Exception.h"
-#include <glm/gtc/type_ptr.hpp>
 #include <iostream>
 #include <cstdlib>  //for std::exit
 
@@ -144,24 +143,6 @@ void Program::setUniform( const GLchar* name, GLfloat v0, GLfloat v1, GLfloat v2
     glUniform4f( uniform(name), v0, v1, v2, v3 );
 }
 
-void Program::setUniform( const GLchar* name, const glm::vec2& v ) const
-{
-    ASSERT( isInUse() );
-    glUniform2fv( uniform(name), 1, glm::value_ptr( v ) );
-}
-
-void Program::setUniform( const GLchar* name, const glm::vec3& v ) const
-{
-    ASSERT( isInUse() );
-    glUniform3fv( uniform(name), 1, glm::value_ptr( v ) );
-}
-
-void Program::setUniform( const GLchar* name, const glm::vec4& v ) const
-{
-    ASSERT( isInUse() );
-    glUniform4fv( uniform(name), 1, glm::value_ptr( v ) );
-}
-
 void Program::setUniform( const GLchar* name, const pg::math::Vector2f& v ) const {
     ASSERT( isInUse() );
     glUniform2fv( uniform(name), 1, v.data );
@@ -175,16 +156,6 @@ void Program::setUniform( const GLchar* name, const pg::math::Vector3f& v ) cons
 void Program::setUniform( const GLchar* name, const pg::math::Vector4f& v ) const {
     ASSERT( isInUse() );
     glUniform4fv( uniform(name), 1, v.data );
-}
-
-void Program::setUniform( const GLchar* name, const glm::mat3& m, GLboolean transpose ) const {
-    ASSERT( isInUse() );
-    glUniformMatrix3fv( uniform(name), 1, transpose, glm::value_ptr( m ) );
-}
-
-void Program::setUniform( const GLchar* name, const glm::mat4& m, GLboolean transpose ) const {
-    ASSERT( isInUse() );
-    glUniformMatrix4fv( uniform(name), 1, transpose, glm::value_ptr( m ) );
 }
 
 void Program::setUniform( const GLchar* name, const pg::math::Matrix3f& M ) const {

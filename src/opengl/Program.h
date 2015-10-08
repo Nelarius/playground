@@ -4,7 +4,6 @@
 #include "opengl/Shader.h"
 #include "math/Vector.h"
 #include "math/Matrix.h"
-#include <glm/glm.hpp>
 #include <vector>
 #include <memory>
 
@@ -69,16 +68,11 @@ class Program {
         void setUniform( const GLchar*, GLfloat, GLfloat, GLfloat ) const;
         void setUniform( const GLchar*, GLfloat, GLfloat, GLfloat, GLfloat ) const;
         /// A wrapper for glUniform*fv
-        void setUniform( const GLchar*, const glm::vec2& ) const;
-        void setUniform( const GLchar*, const glm::vec3& ) const;
-        void setUniform( const GLchar*, const glm::vec4& ) const;
         void setUniform( const GLchar*, const pg::math::Vector2f& ) const;
         void setUniform( const GLchar*, const pg::math::Vector3f& ) const;
         void setUniform( const GLchar*, const pg::math::Vector4f& ) const;
 
         /// A wrapper for glUniformMatrix*fv
-        void setUniform( const GLchar*, const glm::mat3&, GLboolean transpose = GL_FALSE ) const;
-        void setUniform( const GLchar*, const glm::mat4&, GLboolean transpose = GL_FALSE ) const;
         void setUniform( const GLchar*, const pg::math::Matrix3f& ) const;
         void setUniform( const GLchar*, const pg::math::Matrix4f& ) const;
         

@@ -11,10 +11,6 @@
 #include <SDL2/SDL_timer.h>
 #include <SDL2/SDL_syswm.h>
 
-#include <glm/glm.hpp>
-#include <glm/gtc/quaternion.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-
 // link to where I got some of the code from:
 // https://github.com/ocornut/imgui/blob/master/examples/opengl3_example/imgui_impl_glfw_gl3.cpp#L31
 
