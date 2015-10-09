@@ -1,0 +1,17 @@
+
+{
+    "frameRate": 60.0,
+    "window": {
+        "width": 800,
+        "height": 600,
+        "name": "Clock example",
+        "opengl": {
+            "major": 3,
+            "minor": 1,
+            "stencilBits": 8,
+            "depthBits": 24,
+            "msBuffers": 1,
+            "msSamples": 4
+        }
+    }
+}

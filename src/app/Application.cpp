@@ -5,6 +5,7 @@
 #include "utils/Assert.h"
 #include "utils/File.h"
 #include "utils/Log.h"
+#include "3rdparty/json11/json11.hpp"
 #include <SDL2/SDL_mouse.h>
 #include <GL/glew.h>
 #include <string>
@@ -81,25 +82,31 @@ void Application::run() {
 }
 
 void Application::initialize_() {
-    pg::LuaState lua{ false };
+    /*pg::LuaState lua{ false };
     lua.execute( "config.lua" );
     
     lb::LuaRef targetFrameRate = lb::getGlobal( lua.get(), "targetFrameRate" );
     lb::LuaRef window = lb::getGlobal( lua.get(), "window" );
-    lb::LuaRef opengl = window["opengl"];
+    lb::LuaRef opengl = window["opengl"];*/
     
-    TargetDeltaTime = std::chrono::duration<float, std::ratio<1,1>>( 1.0f /  targetFrameRate.cast<float>() );
+    auto json = pg::FileToString( "config.json" );
+    std::string error{""};
+    auto obj = json11::Json::parse( json, error ).object_items();
+    auto window = obj["window"].object_items();
+    auto opengl = window["opengl"].object_items();
+    
+    TargetDeltaTime = std::chrono::duration<float, std::ratio<1,1>>( 1.0f /  obj["frameRate"].number_value() );
     
     WindowSettings settings{};
-    settings.width = window["width"].cast<int>();
-    settings.height = window["height"];
-    settings.name = window["name"].cast<std::string>();
-    settings.glMajor = opengl["major"];
-    settings.glMinor = opengl["minor"];
-    settings.stencilBits = opengl["stencil_bits"];
-    settings.depthBits = opengl["depth_bits"];
-    settings.multisampleBuffer = opengl["multisample_buffers"];
-    settings.multisampleSamples = opengl["multisample_samples"];
+    settings.width = window["width"].int_value();
+    settings.height = window["height"].int_value();
+    settings.name = window["name"].string_value();
+    settings.glMajor = opengl["major"].int_value();
+    settings.glMinor = opengl["minor"].int_value();
+    settings.stencilBits = opengl["stencil_bits"].int_value();
+    settings.depthBits = opengl["depth_bits"].int_value();
+    settings.multisampleBuffer = opengl["multisample_buffers"].int_value();
+    settings.multisampleSamples = opengl["multisample_samples"].int_value();
     
     window_.initialize( settings );
     

@@ -2,7 +2,7 @@
 #pragma once 
 
 #include "utils/Pool.h"
-#include "utils/Bundle.h"
+#include "utils/Container.h"
 #include "3rdparty/SimpleSignal.h"
 #include "utils/Assert.h"
 #include "utils/Log.h"
@@ -12,7 +12,7 @@
 #include <cstdlib>
 
 using EventSignal = Simple::Signal<void(const void*)>;
-using SignalBundle = pg::Bundle<EventSignal>;
+using SignalContainer = pg::Container<EventSignal>;
 
 namespace pg {
 namespace ecs {
@@ -53,7 +53,7 @@ class Receiver {
         }
         inline uint32_t connection_( uint32_t family ) const {
             auto it = connections_.find( family );
-            ASSERT( it != connections_.end(), "No connection in Receiver!" );
+            ASSERT( it != connections_.end() );
             return it->second;
         }
         inline void disconnect_( uint32_t family ) {
@@ -86,14 +86,14 @@ class EventManager {
                 signals_.emplace();
             }
         }
-        SignalBundle  signals_{};
+        SignalContainer  signals_{};
 };
 
 template<typename E, typename S>
 void EventManager::subscribe( S& system ) {
     Receiver& receiver = static_cast<Receiver&>( system );
     const uint32_t family = Event<E>::family();
-    ASSERT( !receiver.isConnected_( family ), "EventManager::subscribe> system already subscribed to event!" );
+    ASSERT( !receiver.isConnected_( family ) );
     accommodate_( family );
     std::size_t connection = signals_[family].connect( [&system]( const void* event ) -> void {
         system.receive( *(static_cast<const E*>( event )) );
@@ -105,7 +105,7 @@ template<typename E, typename S>
 void EventManager::unsubscribe( S& system ) {
     Receiver& receiver = static_cast<Receiver&> (system);
     const uint32_t family = Event<E>::family();
-    ASSERT( receiver.isConnected_( family ), "EventManager::unsubscribe> system not subscribed to event!" );
+    ASSERT( receiver.isConnected_( family ) );
     signals_[family].disconnect( receiver.connection_( family ) );
     receiver.disconnect_( family );
 }

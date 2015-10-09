@@ -23,14 +23,10 @@ void ShaderManager::compile( const std::string& tag ) {
     shaderStages_.clear();
 }
 
-opengl::Program* ShaderManager::get( const std::string& tag ) {
+opengl::Program* ShaderManager::get( const std::string& tag ) const {
     auto it = resources_.find( tag );
     
-    #ifdef DEBUG
-    std::string msg = "error: no such shader ";
-    msg += tag;
-    ASSERT( it != resources_.end(), msg.c_str() );
-    #endif
+    ASSERT( it != resources_.end() );
     
     return it->second;
 }

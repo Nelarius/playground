@@ -5,6 +5,7 @@
 #include "app/AppState.h"
 #include "app/Context.h"
 #include "app/KeyboardManager.h"
+#include "app/MouseEvents.h"
 #include "manager/ShaderManager.h"
 
 union SDL_Event;
@@ -36,8 +37,6 @@ class GameState : public AppState {
         bool handleEvent( const SDL_Event& event ) override;
     
     private:
-        // METHODS
-        void loadScene_();
         
         // FIELDS
         // these could be possibly moved to AppState
@@ -45,6 +44,7 @@ class GameState : public AppState {
         ecs::EntityManager   entities_;
         ecs::SystemManager   systems_;      
         KeyboardManager      keyboard_;
+        MouseEvents          mouse_;
 };
 
 }

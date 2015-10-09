@@ -1,30 +1,12 @@
 #pragma once
 
+#include "app/Command.h"
 #include <SDL2/SDL_events.h>
 #include <functional>
 #include <vector>
 #include <unordered_map>
 
 namespace pg {
-
-namespace detail {
-    
-class Command {
-    public:
-        Command() = default;
-        Command( SDL_Scancode code, std::function< void(void) > callback );
-        ~Command() = default;
-        
-        void operator()();
-        
-        SDL_Scancode scancode() const;
-        
-    private:
-        SDL_Scancode                scancode_;
-        std::function< void(void) > callback_;
-};
-
-}   // detail
 
 /**
  * @class KeyboardManager
@@ -38,12 +20,12 @@ class KeyboardManager {
         KeyboardManager() = default;
         ~KeyboardManager() = default;
         
-        void addInput( SDL_Scancode code, std::function< void(void) > callback );
+        void addInput( SDL_Scancode code, const Command& command );
         
         void handleInput();
         
     private:
-        std::vector< detail::Command >  commands_{};
+        std::vector< std::pair< SDL_Scancode, Command> >  commands_{};
 };
 
 }   // pg

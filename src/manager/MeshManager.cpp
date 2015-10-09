@@ -8,16 +8,14 @@
 
 namespace pg {
 
-opengl::BufferObject* MeshManager::get( const std::string& file ) {
+opengl::BufferObject* MeshManager::get( const std::string& file ) const {
     auto it = resources_.find( file );
     
     if ( it != resources_.end() ) {
         return it->second;
     }
     
-    #ifdef DEBUG
-    ASSERT( pg::FileExists( file ), std::string("error: no such mesh file: " ) + file );
-    #endif
+    ASSERT( pg::FileExists( file ) );
     
     Assimp::Importer importer;
     const aiScene* scene = importer.ReadFile( 
@@ -26,9 +24,7 @@ opengl::BufferObject* MeshManager::get( const std::string& file ) {
         aiProcess_GenSmoothNormals
     );
     
-    #ifdef DEBUG
-    ASSERT( scene, std::string("error: couldn't load model ") + file );
-    #endif
+    ASSERT( scene );
     
     std::vector<float> data;
     

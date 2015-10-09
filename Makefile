@@ -15,14 +15,13 @@ LUA_LINK = C:/dev/lua/build
 LUA_COMP = C:/dev/lua/src
 
 LUABRIDGE_COMP = C:/dev/LuaBridge/Source
-GLM_COMP = C:/dev/glm
 
 CPPTEST_COMP = C:/dev/unittest-cpp
 CPPTEST_LINK = C:/dev/unittest-cpp/build
 
 LINKER_INCLUDES = -L $(SDL_LINK) -L $(GLEW_LINK) -L $(LUA_LINK) -L $(ASSIMP_LINK)
 
-CFLAGS = -std=gnu++14 -Wall -g -DDEBUG -DGLM_FORCE_RADIANS
+CFLAGS = -std=gnu++14 -Wall -g -DDEBUG -DASSERTION_ENABLED -DGLM_FORCE_RADIANS
 
 LDFLAGS =
 
@@ -31,7 +30,7 @@ EXECUTABLE =
 TEST_EXECUTABLE = 
 
 ifeq ($(OS),Windows_NT)
-	CFLAGS += -I./src -I $(GLM_COMP) -I $(GLEW_COMP) -I $(SDL_COMP) -I $(LUA_COMP) -I $(LUABRIDGE_COMP) -I $(ASSIMP_COMP) -I $(CPPTEST_COMP)
+	CFLAGS += -I./src -I $(GLEW_COMP) -I $(SDL_COMP) -I $(LUA_COMP) -I $(LUABRIDGE_COMP) -I $(ASSIMP_COMP) -I $(CPPTEST_COMP)
 	LDFLAGS += -lopengl32 -lglew32 -lmingw32 -lSDL2main -lSDL2 -llua -lassimp -lm -ldinput8 -ldxguid -ldxerr8 -luser32 -lgdi32 -lwinmm -limm32 -lole32 -loleaut32 -lshell32 -lversion -luuid $(LINKER_INCLUDES)
 	EXECUTABLE += Build/app.exe
 	TEST_EXECUTABLE += Build/test.exe
@@ -48,12 +47,16 @@ endif
 OBJ = src/Main.o \
 	src/3rdparty/imgui.o \
 	src/3rdparty/imgui_draw.o \
+	src/3rdparty/json11/json11.o \
 	src/app/GameState.o \
 	src/app/Application.o \
+	src/app/Command.o \
 	src/app/Window.o \
 	src/app/KeyboardManager.o \
+	src/app/MouseEvents.o \
 	src/app/AppState.o \
 	src/app/AppStateStack.o \
+	src/app/WorldIO.o \
 	src/ecs/Event.o \
 	src/ecs/Entity.o \
 	src/ecs/Component.o \
@@ -68,6 +71,8 @@ OBJ = src/Main.o \
 	src/opengl/Texture.o \
 	src/manager/MeshManager.o \
 	src/manager/ShaderManager.o \
+	src/manager/StringManager.o \
+	src/math/Angle.o \
 	src/system/Render.o \
 	src/system/Debug.o \
 	src/system/Scripter.o \
@@ -86,7 +91,7 @@ TESTOBJ = src/Test.o \
 
 all: $(EXECUTABLE)
 	make test
-	cp src/config.lua Build/
+	cp src/config.json Build/
 	cp -r src/data Build/
 	./Build/test
 
@@ -104,5 +109,5 @@ test: $(TESTOBJ)
 
 clean:
 	rm $(OBJ) $(EXECUTABLE) $(TEST_EXECUTABLE) $(TESTOBJ)
-	rm Build/config.lua
+	rm Build/config.json
 	rm -r Build/data

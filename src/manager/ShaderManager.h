@@ -1,7 +1,7 @@
 
 #pragma once
 
-#include "utils/Bundle.h"
+#include "utils/Container.h"
 #include "opengl/Program.h"
 #include "opengl/Shader.h"
 #include <GL/glew.h>
@@ -36,7 +36,7 @@ class ShaderManager {
          * @brief Get the shader with the given tag.
          * @param tag
          */
-        opengl::Program*    get( const std::string& tag );
+        opengl::Program*    get( const std::string& tag ) const;
         
         /**
          * @brief Delete all contained shaders.
@@ -44,7 +44,7 @@ class ShaderManager {
         void            clear();
         
     private:
-        Bundle<opengl::Program, 16>                       buffer_{};
+        Container<opengl::Program, 16>                    buffer_{};
         std::unordered_map<std::string, opengl::Program*> resources_{};
         std::vector<std::unique_ptr<opengl::Shader>>      shaderStages_{};
 

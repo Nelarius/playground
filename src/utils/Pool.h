@@ -97,7 +97,7 @@ class Pool: public BasePool {
         virtual ~Pool() = default;
         
         void destroy( std::size_t n ) override {
-            ASSERT( n < capacity_, "Pool::destroy> invalid positional argument." );
+            ASSERT( n < capacity_ );
             T* ptr = static_cast<T*>( this->at( n ) );
             ptr->~T();
         }

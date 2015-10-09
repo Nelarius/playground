@@ -61,7 +61,7 @@ inline LogLevel StringToLogLevel( const std::string& level ) {
     } else if ( level == "All" ) {
         return LogLevel::All;
     } else {
-        ASSERT( false, "StringToLogLevel> invalid level string." );
+        ASSERT( false );
     }
 }
 #pragma GCC diagnostic pop

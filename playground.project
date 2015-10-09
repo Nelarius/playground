@@ -44,6 +44,12 @@
       <File Name="src/app/StateIdentifiers.h"/>
       <File Name="src/app/KeyboardManager.h"/>
       <File Name="src/app/KeyboardManager.cpp"/>
+      <File Name="src/app/WorldIO.cpp"/>
+      <File Name="src/app/WorldIO.h"/>
+      <File Name="src/app/Command.cpp"/>
+      <File Name="src/app/Command.h"/>
+      <File Name="src/app/MouseEvents.h"/>
+      <File Name="src/app/MouseEvents.cpp"/>
     </VirtualDirectory>
     <VirtualDirectory Name="component">
       <File Name="src/component/Camera.h" ExcludeProjConfig="Test"/>
@@ -59,6 +65,8 @@
       <File Name="src/manager/MeshManager.h" ExcludeProjConfig="Test"/>
       <File Name="src/manager/ShaderManager.cpp" ExcludeProjConfig="Test"/>
       <File Name="src/manager/ShaderManager.h" ExcludeProjConfig="Test"/>
+      <File Name="src/manager/StringManager.h"/>
+      <File Name="src/manager/StringManager.cpp"/>
     </VirtualDirectory>
     <VirtualDirectory Name="opengl">
       <File Name="src/opengl/BufferObject.cpp" ExcludeProjConfig="Test"/>
@@ -86,13 +94,12 @@
       <File Name="src/utils/Random.h"/>
       <File Name="src/utils/Pool.cpp"/>
       <File Name="src/utils/Pool.h"/>
-      <File Name="src/utils/Bundle.h"/>
       <File Name="src/utils/Exception.h"/>
+      <File Name="src/utils/Container.h"/>
     </VirtualDirectory>
     <VirtualDirectory Name="data">
       <File Name="src/data/ambient.frag.glsl"/>
       <File Name="src/data/ambient.vert.glsl"/>
-      <File Name="src/data/scene.lua"/>
       <File Name="src/data/diffuse.frag.glsl"/>
       <File Name="src/data/diffuse.vert.glsl"/>
       <File Name="src/data/template.lua"/>
@@ -100,8 +107,8 @@
       <File Name="src/data/specular.vert.glsl"/>
       <File Name="src/data/panel.frag.glsl"/>
       <File Name="src/data/panel.vert.glsl"/>
+      <File Name="src/data/scene.json"/>
     </VirtualDirectory>
-    <File Name="src/Main.cpp" ExcludeProjConfig="Test"/>
     <VirtualDirectory Name="ecs">
       <File Name="src/ecs/Component.h" ExcludeProjConfig="Debug"/>
       <File Name="src/ecs/Entity.cpp" ExcludeProjConfig=""/>
@@ -113,6 +120,7 @@
       <File Name="src/ecs/Event.h"/>
       <File Name="src/ecs/Component.cpp"/>
       <File Name="src/ecs/Event.cpp"/>
+      <File Name="src/ecs/README.md"/>
     </VirtualDirectory>
     <VirtualDirectory Name="system">
       <File Name="src/system/Debug.cpp" ExcludeProjConfig="Test"/>
@@ -126,6 +134,9 @@
       <File Name="src/system/Ui.cpp"/>
       <File Name="src/system/ImGuiRenderer.cpp"/>
       <File Name="src/system/ImGuiRenderer.h"/>
+      <File Name="src/system/ForwardRenderer.cpp"/>
+      <File Name="src/system/ForwardRenderer.h"/>
+      <File Name="src/system/Events.h"/>
     </VirtualDirectory>
     <VirtualDirectory Name="lua">
       <File Name="src/lua/LuaError.h" ExcludeProjConfig="Test"/>
@@ -145,20 +156,23 @@
       <File Name="src/math/Matrix.h"/>
       <File Name="src/math/Quaternion.h"/>
       <File Name="src/math/Vector.h"/>
+      <File Name="src/math/Angle.h"/>
+      <File Name="src/math/Angle.cpp"/>
     </VirtualDirectory>
     <VirtualDirectory Name="3rdparty">
       <File Name="src/3rdparty/SimpleSignal.h"/>
       <File Name="src/3rdparty/unify.cpp"/>
       <File Name="src/3rdparty/unify.hpp"/>
-      <File Name="src/3rdparty/imconfig.h"/>
-      <File Name="src/3rdparty/imgui.cpp"/>
-      <File Name="src/3rdparty/imgui.h"/>
+      <VirtualDirectory Name="json11">
+        <File Name="src/3rdparty/json11/json11.cpp"/>
+        <File Name="src/3rdparty/json11/json11.hpp"/>
+      </VirtualDirectory>
     </VirtualDirectory>
   </VirtualDirectory>
   <VirtualDirectory Name="project">
     <File Name="README.md"/>
-    <File Name="src/config.lua"/>
     <File Name="Makefile"/>
+    <File Name="src/config.json"/>
   </VirtualDirectory>
   <Settings Type="Executable">
     <GlobalSettings>

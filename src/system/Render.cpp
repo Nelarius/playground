@@ -1,39 +1,16 @@
 #include "system/Render.h"
 #include "system/Material.h"
 #include "component/Include.h"
-#include "math/Include.h"
 #include "utils/Log.h"
-#include <glm/glm.hpp>
-#include <glm/gtc/quaternion.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-
+//#include <glm/glm.hpp>
+//#include <glm/gtc/quaternion.hpp>
+//#include <glm/gtc/matrix_transform.hpp>
 #include <cmath>
 
 namespace {
-    
     const float DegreesToRads = 3.141592653f / 180.0f;
     const float RadsToDegrees = 180.0f / 3.141592653f;
     const float Pi = 3.141592653f;
-    
-    /*
-     * These structs correspond to data types in the shaders
-     * */
-    struct DirectionalLight {
-        pg::math::Vector3f direction;
-        pg::math::Vector3f intensity;
-        float ambientCoefficient;
-    };
-    
-    glm::mat4 ModelMatrixFromTransform( const pg::ecs::ComponentHandle<pg::component::Transform>& t ) {
-        /*
-         * The composite model matrix is C = TRS
-         * */
-        glm::mat4 scale = glm::scale( glm::mat4(), glm::vec3( t->scale.x, t->scale.y, t->scale.z ) );
-        //glm::mat4 rotate = glm::mat4_cast( t->rotation );
-        glm::mat4 rotate = glm::mat4();
-        glm::mat4 translate = glm::translate( glm::mat4(), glm::vec3( t->position.x, t->position.y, t->position.z ) );
-        return translate * rotate * scale;
-    }
 }
 
 namespace pg {
@@ -41,55 +18,50 @@ namespace system {
 
 Render::Render( Context& context )
 :   System<Render>(),
-    context_{ context }
-    {}
+    cameraEntity_{},
+    defaultProjection_{},
+    context_{ context } {
+    defaultProjection_ = math::Matrix4f::Perspective( 70.0f, 1.5f, 0.1f, 100.0f );
+}
+
+void Render::configure( ecs::EventManager& events ) {
+    events.subscribe< PerspectiveCameraAdded >( *this );
+}
+
+void Render::receive( const PerspectiveCameraAdded& event ) {
+    cameraEntity_ = event.entity;
+}
 
 void Render::update(
     ecs::EntityManager& entities,
     ecs::EventManager& events,
     float dt 
 ) {
-    float aspectRatio = float( context_.window->width() ) / context_.window->height();
-    glm::mat4 cameraMatrix{};
-    glm::vec3 cameraPos;
-    /*
-     * Iterate over cameras here, find the active one
-     * */
-    for ( ecs::Entity entity: entities.join<component::Transform, component::Camera>() ) {
-        auto camera = entity.component<component::Camera>();
-        auto transform = entity.component<component::Transform>();
-        if ( camera->active ) {
-            cameraPos = glm::vec3( transform->position.x, transform->position.y, transform->position.z );
-            glm::mat4 view = ModelMatrixFromTransform( transform );
-            glm::mat4 proj;
-            if ( camera->viewPerspective ) {
-                proj = glm::perspective( camera->verticalFov, aspectRatio, camera->nearPlane, camera->farPlane );
-            } else {
-                // construct orthogonal projection matrix here
-            }
-            cameraMatrix = proj * glm::inverse( view );
-            break;
-        }
-    }
+    math::Matrix4f cameraMatrix{ defaultProjection_ };
+    math::Vector3f cameraPos{};
     
-    Bundle<DirectionalLight, 12> lights{};
-    /*
-     * Iterate over lights here
-     * */
-    for ( ecs::Entity entity: entities.join<component::Transform, component::DirectionalLight>() ) {
-        lights.emplace( 
-            std::initializer_list<float>{ 0.0f, 0.0f, 0.0f } ,
-            std::initializer_list<float>{ 1.0f, 1.0f, 1.0f },
-            0.5f
+    if ( cameraEntity_.isValid() ) {
+        float aspectRatio = float( context_.window->width() ) / context_.window->height();
+        auto transform = cameraEntity_.component< component::Transform >();
+        auto view = math::Matrix4f::Translation( transform->position )
+                    * math::Matrix4f::Rotation( transform->rotation )
+                    * math::Matrix4f::Scale( transform->scale );
+        auto camera = cameraEntity_.component< component::Camera >();
+        auto proj = math::Matrix4f::Perspective( 
+            camera->verticalFov, 
+            aspectRatio,
+            camera->nearPlane,
+            camera->farPlane
         );
+        cameraMatrix = proj * view.inverse();
     }
     
      /*
       * Then, iterate over renderables
       * */
-    for ( ecs::Entity entity: entities.join<component::Transform, component::Renderable>() ) {
-        auto renderable = entity.component<component::Renderable>();
-        auto transform = entity.component<component::Transform>();
+    for ( ecs::Entity entity: entities.join< component::Transform, component::Renderable>() ) {
+        auto renderable = entity.component< component::Renderable>();
+        auto transform = entity.component< component::Transform>();
         auto shader = renderable->shader;
         shader->use();
         shader->setUniform( 
@@ -112,7 +84,7 @@ void Render::update(
     }
 }
 
-void Render::setSpecularUniforms_( const glm::vec3& pos, opengl::Program* p ) {
+void Render::setSpecularUniforms_( const math::Vector3f& pos, opengl::Program* p ) {
     p->setUniform( "cameraPosition", pos );
 }
 

@@ -93,7 +93,7 @@ void LuaState::loadMinimal_() {
 }
 
 void LuaState::retain_() {
-    ASSERT( refCount_, "LuaState::retain> invalid reference count!" );
+    ASSERT( refCount_ );
     *refCount_ += 1u;
 }
 
