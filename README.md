@@ -188,8 +188,6 @@ end
   * Drawback: makes extension more difficult. Not a problem for now.
 * Implement free-look camera script
 * Normalize resource names in MeshManager and ShaderManager using r-lyeh's Unify lib.
-* Rendering matrices use Matrix4f
-* Implement Transform component & rendering system using my math module
 * Figure out a mechanism to make `componentPointer<C>` private/not part of Entity API.
 * Bundle has iterators
 * Add R'lyeh's profit lib to profile execution times of critical methods
