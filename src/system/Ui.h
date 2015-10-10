@@ -18,7 +18,8 @@ class Ui: public ecs::System<Ui>, public ImGuiRenderer {
         void toggleDisplay();
         
     private:
-        bool on_;
+        void ui_( float );
+        bool display_;
 
 };
 
