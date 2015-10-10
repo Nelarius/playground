@@ -18,7 +18,15 @@ Ui::Ui( Context& context )
 void Ui::update( ecs::EntityManager&, ecs::EventManager&, float dt ) {
     newFrame_( dt );
     
-    render_();
+    // place your Imgui logic herestatic float f = 0.0f;
+    float f = 0.0f;
+    bool show_test_window = true;
+    bool show_another_window = false;
+    ImGui::Text("Hello, world!");
+    ImGui::SliderFloat("float", &f, 0.0f, 1.0f);
+    if (ImGui::Button("Test Window")) show_test_window ^= 1;
+    if (ImGui::Button("Another Window")) show_another_window ^= 1;
+    ImGui::Render();
 }
 
 }   // system

@@ -20,7 +20,6 @@ class ImGuiRenderer {
         // I would bind the callback to a real time mouse input handler
         
     protected:
-        void render_();
         void initialize_();
         void createDeviceObjects_();
         void newFrame_( float dt );
