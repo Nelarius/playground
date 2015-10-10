@@ -21,7 +21,18 @@ class MouseEvents{
         MouseEvents()   = default;
         ~MouseEvents()  = default;
         
-        void set( int button, const Command& command );
+        /*
+        * @brief set a callback command for when a mouse button is pressed.
+        * @param button The SDL button id defined in SDL_mouse.h
+        * @param command The command 
+        **/
+        void setPressCallback( int button, const Command& command );
+        /*
+        * @brief set a callback command for when a mouse button is released.
+        * @param button The SDL button id defined in SDL_mouse.h
+        * @param command The command 
+        **/
+        void setReleaseCallback( int button, const Command& command );
         void update();
     
     private:
