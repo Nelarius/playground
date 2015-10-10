@@ -14,6 +14,12 @@ class Ui: public ecs::System<Ui>, public ImGuiRenderer {
         virtual ~Ui() = default;
         
         void update( ecs::EntityManager&, ecs::EventManager&, float ) override;
+        
+        void toggleDisplay();
+        
+    private:
+        bool on_;
+
 };
 
 }   // system

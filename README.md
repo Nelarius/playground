@@ -176,6 +176,12 @@ end
 **TODO: documentation**
 
 ## TODO
+* The whole event handling framework needs to overhauled.
+  * An `EventHandler` class gets passed events.
+  * Commands are registered with certain events, such as key down, mouse button down, etc.
+  * MouseEvents, KeyboardHandler are not needed.
+  * Each application state is responsible for filling the event handler with events.
+  * In this way, no events are erroneously "leaked" to application states lower in the state stack.
 * Reconsider the assertions in MeshManager and ShaderManager.
 * Write tests for Bundle
 * Implement specular shaders

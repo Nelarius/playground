@@ -8,6 +8,7 @@
 #include <SDL2/SDL_events.h>
 #include <SDL2/SDL_scancode.h>
 #include <SDL2/SDL_clipboard.h>
+#include <SDL2/SDL_mouse.h>
 #include <SDL2/SDL_timer.h>
 #include <SDL2/SDL_syswm.h>
 
@@ -137,6 +138,30 @@ ImGuiRenderer::~ImGuiRenderer() {
     LOG_DEBUG2 << "Done destructing ImGuiRenderer resources.";
 }
 
+void ImGuiRenderer::mouseButtonPressed( int button ) {
+    int i;
+    switch ( button ) {
+        case SDL_BUTTON_LEFT: i = 0; break;
+        case SDL_BUTTON_MIDDLE: i = 1; break;
+        case SDL_BUTTON_RIGHT: i = 2; break;
+        default: return;
+    }
+    ImGuiIO& io = ImGui::GetIO();
+    io.MouseDown[i] = true;
+}
+
+void ImGuiRenderer::mouseButtonReleased( int button ) {
+    int i;
+    switch( button ) {
+        case SDL_BUTTON_LEFT: i = 0; break;
+        case SDL_BUTTON_MIDDLE: i = 1; break;
+        case SDL_BUTTON_RIGHT: i = 2; break;
+        default: return;
+    }
+    ImGuiIO& io = ImGui::GetIO();
+    io.MouseDown[i] = false;
+}
+
 void ImGuiRenderer::initialize_() {
     
     ImGuiIO& io = ImGui::GetIO();
@@ -218,6 +243,8 @@ void ImGuiRenderer::newFrame_( float dt ) {
     SDL_Window* window = context_.window->SDLwindow();
 
     ImGuiIO& io = ImGui::GetIO();
+    
+    io.MousePos = ImVec2( float( context_.mouse().x ), float( context_.mouse().y ) );
     
     io.DeltaTime = dt;
 
