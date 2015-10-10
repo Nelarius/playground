@@ -78,7 +78,7 @@ template<typename S>
 std::shared_ptr<S> SystemManager::system() {
     auto it = systems_.find( S::family() );
     ASSERT( it != systems_.end() );
-    std::shared_ptr<S>( std::static_pointer_cast<S>( it->second ) );
+    return std::shared_ptr<S>( std::static_pointer_cast<S>( it->second ) );
 }
 
 template<typename S>

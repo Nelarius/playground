@@ -62,10 +62,33 @@ void GameState::activate() {
         LOG_INFO << "yet another real time input handler";
     } );*/
     
-    mouse_.set( 
+    keyboard_.addInput( SDL_SCANCODE_Q, Command(
+      [ this ]() -> void {
+          auto ui = this->systems_.system< system::Ui >();
+          ui->toggleDisplay();
+      },
+      std::function<void()>()
+    ) );
+  
+    mouse_.setPressCallback( 
         SDL_BUTTON_LEFT, 
         Command(
-            [] () -> void { LOG_DEBUG << "Left mouse button pressed!"; },
+            [ this ] () -> void { 
+                LOG_DEBUG << "Left mouse button pressed!";
+                auto ui = this->systems_.system< system::Ui >();
+                ui->mouseButtonPressed( SDL_BUTTON_LEFT );
+            },
+            std::function<void()>()
+        )
+    );
+    mouse_.setReleaseCallback(
+        SDL_BUTTON_LEFT,
+        Command(
+            [ this ] () -> void {
+                LOG_DEBUG << "Left mouse button released!";
+                auto ui = this->systems_.system< system::Ui >();
+                ui->mouseButtonReleased( SDL_BUTTON_LEFT );
+            },
             std::function<void()>()
         )
     );

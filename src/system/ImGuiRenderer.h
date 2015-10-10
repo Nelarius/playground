@@ -9,13 +9,26 @@
 namespace pg {
 namespace system {
 
+/*
+ * @brief Inherit from this class in order to render a user interface using the ImGui library
+ * Note that the implementation of this class has a global state.
+ **/
 class ImGuiRenderer {
     public:
         ImGuiRenderer() = delete;
         ImGuiRenderer( Context& context );
         virtual ~ImGuiRenderer();
         
-        void update( float dt );
+        /*
+        * @brief Callback for when a mouse button is pressed.
+        * @param button The SDL button id, defined in SDL_mouse.h
+        **/
+        void mouseButtonPressed( int button );
+        /*
+         * @brief Callback for when a mouse button is released.
+         * @param button the SDL button id, defined in SDL_mouse.h
+         **/
+        void mouseButtonReleased( int button );
         
         // public function callbacks need to be set here
         // the idea would be to have ImGuiRenderer do something with a mouse click
@@ -26,8 +39,9 @@ class ImGuiRenderer {
         void createDeviceObjects_();
         void newFrame_( float dt );
         
-        Context&            context_;
-        static uint32_t     refCount_;
+        Context&        context_;
+        static uint32_t refCount_;
+        
 };
     
 }   // system
