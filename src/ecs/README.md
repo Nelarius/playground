@@ -3,7 +3,7 @@
 This module contains the engine's entity-component system (ECS). Here you will find
 * Entity
 * EntityManager
-* SystemManager
+* EventManager
 * SystemManager
 * as well as Events and Systems
 
