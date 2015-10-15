@@ -8,11 +8,6 @@
 #include <SDL2/SDL_timer.h>
 #include <string>
 
-namespace {
-    bool show_another_window{ false };
-    float f{ 0.0f };
-}
-
 namespace pg {
 namespace system {
 
@@ -26,7 +21,7 @@ void Ui::update( ecs::EntityManager&, ecs::EventManager&, float dt ) {
     newFrame_( dt );
     
     if ( display_ ) {
-        ui_();
+        ui_( dt );
     }
     
     ImGui::Render();
@@ -38,11 +33,12 @@ void Ui::toggleDisplay() {
 
 void Ui::ui_( float dt ) {
     // place your Imgui logic here
-    ImGui::Text( std::string( std::string( "GL_VERSION: " ) + ( const char* ) glGetString(GL_VERSION) ).c_str() );
-    ImGui::Text( std::string( std::string( "GLSL_VERSION: ") + ( const char* ) glGetString(GL_SHADING_LANGUAGE_VERSION) ).c_str() );
-    ImGui::Text( std::string( std::string( "GL_VENDOR: " ) + ( const char* ) glGetString(GL_VENDOR) ).c_str() );
-    ImGui::Text( std::string( std::string( "GL_RENDERER: " ) + ( const char* ) glGetString(GL_RENDERER) ).c_str() );
-
+    ImGui::Begin( "GL info" );
+    ImGui::Text( "GL_VERSION: %s", ( const char* ) glGetString( GL_VERSION ) );
+    ImGui::Text( "GLSL_VERSION: %s", ( const char* ) glGetString( GL_SHADING_LANGUAGE_VERSION ) );
+    ImGui::Text( "GL_VENDOR: %s", ( const char* ) glGetString( GL_VENDOR ) );
+    ImGui::Text( "GL_RENDERER: %s", ( const char* ) glGetString( GL_RENDERER ) );
+    ImGui::End();
 }
 
 }   // system
