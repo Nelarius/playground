@@ -9,9 +9,11 @@ A small, experimental, data-driven, entity-component-based, Lua-scriptable game 
 The source code uses GCC pragmas and C++14.
 
 #### Linux
+
 On Linux, once the dependencies have been installed, just run `make` to build the program and run the tests. The result will appear in the `./Build` folder.
 
 #### Windows
+
 Compiling on Windows isn't a great experience at the moment. Your locations of the dependencies should be entered into the `*_COMP` and `*_LINK` fields, at the beginning of the Makefile. Once that has been done, the build is done the same way as on Linux.
 
 ## Usage
@@ -174,41 +176,6 @@ end
 ## Scripting interface
 
 **TODO: documentation**
-
-## TODO
-* The whole event handling framework needs to overhauled.
-  * An `EventHandler` class gets passed events.
-  * Commands are registered with certain events, such as key down, mouse button down, etc.
-  * MouseEvents, KeyboardHandler are not needed.
-  * Each application state is responsible for filling the event handler with events.
-  * In this way, no events are erroneously "leaked" to application states lower in the state stack.
-* Reconsider the assertions in MeshManager and ShaderManager.
-* Write tests for Bundle
-* Implement specular shaders
-  * Add array of lights to specular shader
-  * Add Light count
-  * Read orientation from DirectionalLight component
-  * add gamma correction to specular shader
-* Material should use a union of material type structs, get rid of the verbosity of per-float uniform names.
-  * I think this is justified, because the Render system is the one which provides the rendering service; materials are a part of that process.
-  * Drawback: makes extension more difficult. Not a problem for now.
-* Implement free-look camera script
-* Normalize resource names in MeshManager and ShaderManager using r-lyeh's Unify lib.
-* Figure out a mechanism to make `componentPointer<C>` private/not part of Entity API.
-* Bundle has iterators
-* Add R'lyeh's profit lib to profile execution times of critical methods
-* Integrate ImGui into a system
-  * I need to figure out how to render textured panels isometrically using modern OpenGL
-    * This is explained in `imgui/examples/opengl3_example/imgui_impl_glfw_gl3::CreateDeviceObjects()`
-  * Add event handling functions for the Ui system:
-  * Add handler for text input event
-  * add handler for keyup input event
-* `EntityManager` needs to expose the pool size in its public API.
-* Think about the time step. See `Game Programming Patterns::Game Loop` chapter for some ideas about variable time step vs. fixed time step with rendering independent of the updating.
-
-Here's a great way to handle developer errors: if, for instance, a mesh isn't found, use an "error" mesh instead which will be easy to spot. There is no need to halt execution because of an erroneous path to a resource.
-
-Remember to distinguish between hard and soft errors. Hard errors occur in places like `Bundle` where an off-by one error leads to corrupted state. Soft errors occur e.g. when a user supplies an incorrect file name. The program still works correctly, it just has been given incorrect information.
 
 ## Dependencies
 ### SDL2
