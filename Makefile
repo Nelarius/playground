@@ -19,9 +19,12 @@ LUABRIDGE_COMP = C:/dev/LuaBridge/Source
 CPPTEST_COMP = C:/dev/unittest-cpp
 CPPTEST_LINK = C:/dev/unittest-cpp/build
 
-LINKER_INCLUDES = -L $(SDL_LINK) -L $(GLEW_LINK) -L $(LUA_LINK) -L $(ASSIMP_LINK)
+WREN_COMP = C:/dev/wren/src/include
+WREN_LINK = C:/dev/wren/lib
 
-CFLAGS = -std=gnu++14 -Wall -g -DDEBUG -DASSERTION_ENABLED -DGLM_FORCE_RADIANS
+LINKER_INCLUDES = -L $(SDL_LINK) -L $(GLEW_LINK) -L $(LUA_LINK) -L $(WREN_LINK) -L $(ASSIMP_LINK)
+
+CFLAGS = -std=gnu++14 -Wall -g -DDEBUG -DASSERTION_ENABLED
 
 LDFLAGS =
 
@@ -30,8 +33,8 @@ EXECUTABLE =
 TEST_EXECUTABLE = 
 
 ifeq ($(OS),Windows_NT)
-	CFLAGS += -I./src -I $(GLEW_COMP) -I $(SDL_COMP) -I $(LUA_COMP) -I $(LUABRIDGE_COMP) -I $(ASSIMP_COMP) -I $(CPPTEST_COMP)
-	LDFLAGS += -lopengl32 -lglew32 -lmingw32 -lSDL2main -lSDL2 -llua -lassimp -lm -ldinput8 -ldxguid -ldxerr8 -luser32 -lgdi32 -lwinmm -limm32 -lole32 -loleaut32 -lshell32 -lversion -luuid $(LINKER_INCLUDES)
+	CFLAGS += -I./src -I ./wrenly/src -I $(GLEW_COMP) -I $(SDL_COMP) -I $(LUA_COMP) -I $(WREN_COMP) -I $(LUABRIDGE_COMP) -I $(ASSIMP_COMP) -I $(CPPTEST_COMP)
+	LDFLAGS += -lopengl32 -lglew32 -lmingw32 -lSDL2main -lSDL2 -llua -lwren -lassimp -lm -ldinput8 -ldxguid -ldxerr8 -luser32 -lgdi32 -lwinmm -limm32 -lole32 -loleaut32 -lshell32 -lversion -luuid $(LINKER_INCLUDES)
 	EXECUTABLE += Build/app.exe
 	TEST_EXECUTABLE += Build/test.exe
 else
@@ -76,10 +79,14 @@ OBJ = src/Main.o \
 	src/system/Render.o \
 	src/system/Debug.o \
 	src/system/Scripter.o \
+    src/system/WrenSystem.o \
 	src/system/Ui.o \
 	src/system/ImGuiRenderer.o \
 	src/utils/Random.o \
 	src/utils/Pool.o \
+    src/wren/Generate.o \
+    wrenly/src/Wrenly.o \
+    wrenly/src/detail/Type.o \
 	
 TESTOBJ = src/Test.o \
 	src/test/EntityManagerTest.o \

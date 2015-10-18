@@ -1,0 +1,3 @@
+[submodule "wrenly"]
+	path = wrenly
+	url = https://github.com/nelarius/wrenly

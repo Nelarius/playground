@@ -1,6 +1,8 @@
-# Playground
+# The Playground engine
 
-A small, experimental, data-driven, entity-component-based, Lua-scriptable game engine. See below for a small programming example.
+A small, experimental, data-driven, entity-component-based, and scriptable game engine.
+
+See below for a small overview of what kind of components are currently implemented.
 
 ----------
 
