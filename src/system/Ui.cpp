@@ -1,6 +1,6 @@
 #include "system/Ui.h"
 #include "GL/glew.h"
-#include "3rdparty/imgui.h"
+#include "3rdparty/imgui/imgui.h"
 #include <GL/glew.h>
 #include <SDL2/SDL_events.h>
 #include <SDL2/SDL_scancode.h>
