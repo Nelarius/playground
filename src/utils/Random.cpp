@@ -44,5 +44,8 @@ double Randd( double a, double b ) {
     return d( global_urng(), parm_t{ a, b } );
 }
 
+double Randd() {
+    return Randd( 0.0, 1.0 );
+}
 
 }

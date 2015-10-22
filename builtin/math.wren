@@ -25,4 +25,7 @@ class Math {
     
     // other functions
     foreign static abs( x )
+    
+    // random numbers
+    foreign static rand( a, b )
 }

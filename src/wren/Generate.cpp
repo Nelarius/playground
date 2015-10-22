@@ -1,4 +1,5 @@
 #include "wren/Include.h"
+#include "utils/Random.h"
 #include <cmath>
 
 namespace pg {
@@ -22,7 +23,10 @@ void GenerateMathModule( wrenly::Wren& w ) {
             .registerFunction< decltype(&ceil), &ceil   >( true, "ceil(_)" )
             .registerFunction< decltype(&floor), &floor >( true, "floor(_)" )
             .registerFunction< decltype(&round), &round >( true, "round(_)" )
-            .registerFunction< decltype(&abs),  &abs    >( true, "abs(_)" );
+            .registerFunction< decltype(&abs),  &abs    >( true, "abs(_)" )
+            .registerFunction< decltype(static_cast<double(*)(double, double)>(&pg::Randd) ), static_cast<double(*)(double, double)>(&pg::Randd) >( true, "rand(_,_)" )
+            .registerFunction< decltype(static_cast<double(*)(void)>(&pg::Randd)), static_cast<double(*)(void)>(&pg::Randd) >( true, "rand()" );
+            
 }
 
 void GenerateVectorModule( wrenly::Wren& w ) {

@@ -20,6 +20,9 @@ namespace pg {
 
     /// \brief Get a random double in [ a, b ).
     double Randd( double a, double b );
+    
+    /// \brief Ger a random number in [ 0, 1 ).
+    double Randd();
 }
 
 #endif // RANDOM_H_INCLUDED

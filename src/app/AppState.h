@@ -14,10 +14,10 @@ class AppState {
         AppState( Context& context, AppStateStack& stack );
         virtual ~AppState() = default;
         
-        virtual void activate() = 0;
-        virtual void render( float dt ) = 0;
-        virtual bool update( float dt ) = 0;
-        virtual bool handleEvent( const SDL_Event& event ) = 0;
+        virtual void activate()                             = 0;
+        virtual void render( float dt )                     = 0;
+        virtual bool update( float dt )                     = 0;
+        virtual bool handleEvent( const SDL_Event& event )  = 0;
 
     protected:
         // METHODS

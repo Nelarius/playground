@@ -25,10 +25,10 @@ class GameState : public AppState {
 
         GameState( Context& context, AppStateStack& stack );
         GameState()                                 = delete;
-        GameState( const GameState& )               = default;
-        GameState( GameState&& )                    = default;
-        GameState& operator=( const GameState& )    = default;
-        GameState& operator=( GameState&& )         = default;
+        GameState( const GameState& )               = delete;
+        GameState( GameState&& )                    = delete;
+        GameState& operator=( const GameState& )    = delete;
+        GameState& operator=( GameState&& )         = delete;
         virtual ~GameState()                        = default;
         
         void activate() override;
