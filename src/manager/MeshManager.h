@@ -2,7 +2,6 @@
 #pragma once
 
 #include "opengl/BufferObject.h"
-#include "utils/Borrowed.h"
 #include "utils/Container.h"
 #include <memory>
 #include <unordered_map>

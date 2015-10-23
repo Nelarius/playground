@@ -40,16 +40,16 @@ ifeq ($(OS),Windows_NT)
 else
 	UNAME_S := $(shell uname -s)
     ifeq ($(UNAME_S),Linux)
-        CFLAGS +=  -I ./src -I /home/muszynsk/dev/LuaBridge/Source
-        LDFLAGS +=  -lGL -lGLEW -lSDL2 -lentityx -lassimp -llua 
+        CFLAGS +=  -I ./src -I ./wrenly/src -I /home/muszynsk/dev/LuaBridge/Source -I /home/muszynsk/dev/wren/src/include
+        LDFLAGS +=  -L /home/muszynsk/dev/wren/lib -lGL -lGLEW -lSDL2 -lentityx -lassimp -llua -lwren
 		EXECUTABLE += Build/app
 		TEST_EXECUTABLE += Build/test
     endif
 endif
 
 OBJ = src/Main.o \
-	src/3rdparty/imgui.o \
-	src/3rdparty/imgui_draw.o \
+    src/3rdparty/imgui/imgui.o \
+    src/3rdparty/imgui/imgui_draw.o \
 	src/3rdparty/json11/json11.o \
 	src/app/GameState.o \
 	src/app/Application.o \
@@ -90,6 +90,7 @@ OBJ = src/Main.o \
 	
 TESTOBJ = src/Test.o \
 	src/test/EntityManagerTest.o \
+    src/test/SparseGraphTest.o \
 	src/ecs/Component.o \
 	src/ecs/Entity.o \
 	src/ecs/Event.o \
