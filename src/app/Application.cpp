@@ -50,18 +50,6 @@ void Application::run() {
         if ( !context_.running ) {
             running_ = false;
         }
-
-        /*if ( SDL_GetMouseState( NULL, NULL ) & SDL_BUTTON(SDL_BUTTON_LEFT) ) {
-            camera_.orbit( context_.mouse().dx, context_.mouse().dy );
-        } else if ( SDL_GetMouseState( NULL, NULL ) & SDL_BUTTON(SDL_BUTTON_RIGHT) ) {
-            camera_.translate( context_.mouse().dx, context_.mouse().dy );
-        }*/
-
-        /*for (auto& event: context_.events_ ) {
-            if ( event.type == SDL_MOUSEWHEEL ) {
-                camera_.dolly( 0.5f*event.wheel.y );
-            }
-        }*/
         
         stateStack_.update( dt.count() );
         
@@ -82,12 +70,6 @@ void Application::run() {
 }
 
 void Application::initialize_() {
-    /*pg::LuaState lua{ false };
-    lua.execute( "config.lua" );
-    
-    lb::LuaRef targetFrameRate = lb::getGlobal( lua.get(), "targetFrameRate" );
-    lb::LuaRef window = lb::getGlobal( lua.get(), "window" );
-    lb::LuaRef opengl = window["opengl"];*/
     
     auto json = pg::FileToString( "config.json" );
     std::string error{""};
@@ -117,8 +99,6 @@ void Application::initialize_() {
 }
 
 void Application::updateContext_() {
-    //context_.events_.clear();
-
     // update real-time input
     int oldx = context_.mouse_.x;
     int oldy = context_.mouse_.y;
@@ -128,17 +108,6 @@ void Application::updateContext_() {
     context_.mouse_.dy = newy - oldy;
     context_.mouse_.x = newx;
     context_.mouse_.y = newy;
-
-    // update events
-    /*SDL_Event event;
-    while( SDL_PollEvent( &event ) ) {
-        // close is the only event that the application shell captures & handles
-        if ( event.type == SDL_QUIT ) {
-            running_ = false;
-        } else {
-            context_.events_.push_back( event );
-        }
-    }*/
 }
 
 

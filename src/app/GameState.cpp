@@ -55,14 +55,7 @@ void GameState::activate() {
     WorldIO world( context_ );
     world.read( "data/scene.json", entities_, events_ );
     
-    /*keyboard_.addInput( SDL_SCANCODE_A, []() -> void {
-        LOG_INFO << "wheee, inside a real time input handler!";
-    } );
-    keyboard_.addInput( SDL_SCANCODE_W, []() -> void {
-        LOG_INFO << "yet another real time input handler";
-    } );*/
-    
-    keyboard_.addInput( SDL_SCANCODE_Q, Command(
+    keyboard_.registerKeyDownCommand( SDLK_q, Command(
       [ this ]() -> void {
           auto ui = this->systems_.system< system::Ui >();
           ui->toggleDisplay();
@@ -73,8 +66,7 @@ void GameState::activate() {
     mouse_.setPressCallback( 
         SDL_BUTTON_LEFT, 
         Command(
-            [ this ] () -> void { 
-                LOG_DEBUG << "Left mouse button pressed!";
+            [ this ] () -> void {
                 auto ui = this->systems_.system< system::Ui >();
                 ui->mouseButtonPressed( SDL_BUTTON_LEFT );
             },
@@ -85,7 +77,6 @@ void GameState::activate() {
         SDL_BUTTON_LEFT,
         Command(
             [ this ] () -> void {
-                LOG_DEBUG << "Left mouse button released!";
                 auto ui = this->systems_.system< system::Ui >();
                 ui->mouseButtonReleased( SDL_BUTTON_LEFT );
             },
@@ -95,9 +86,7 @@ void GameState::activate() {
 }
 
 bool GameState::update( float dt ) {
-    keyboard_.handleInput();
     mouse_.update();
-    
     systems_.update<system::Scripter>( dt );
     return false;
 }
@@ -106,7 +95,8 @@ bool GameState::handleEvent( const SDL_Event& event ) {
     if ( event.type == SDL_QUIT ) {
         requestStackClear_();
         context_.running = false;
-    } 
+    }
+    keyboard_.handleEvent( event );
     return false; 
 }
 

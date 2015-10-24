@@ -6,6 +6,7 @@
 #include "manager/MeshManager.h"
 #include "manager/ShaderManager.h"
 #include "manager/StringManager.h"
+#include <vector>
 
 namespace pg {
 
@@ -24,6 +25,7 @@ struct Context {
     friend class Application;
 
     Context() = default;
+    ~Context() = default;
 
     /// @brief Get real-time input for the mouse.
     Mouse mouse()     const { return mouse_; }
@@ -37,8 +39,8 @@ struct Context {
     Window*         window{ nullptr };
     
     private:
-        Mouse                   mouse_{};
-        float                   time_{0.0f};
+        Mouse  mouse_{};
+        float  time_{0.0f};
 
 };
 
