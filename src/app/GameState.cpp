@@ -55,7 +55,7 @@ void GameState::activate() {
     WorldIO world( context_ );
     world.read( "data/scene.json", entities_, events_ );
     
-    keyboard_.registerKeyDownCommand( SDLK_q, Command(
+    keyboard_.registerKeyDownCommand( Keycode::KeyQ, Command(
       [ this ]() -> void {
           auto ui = this->systems_.system< system::Ui >();
           ui->toggleDisplay();
@@ -86,6 +86,7 @@ void GameState::activate() {
 }
 
 bool GameState::update( float dt ) {
+    keyboard_.handleKeyPressedCommands();
     mouse_.update();
     systems_.update<system::Scripter>( dt );
     return false;
