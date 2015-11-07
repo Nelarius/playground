@@ -1,10 +1,10 @@
 # C++
-#Compiled object files
+## Compiled object files
 *.o
 *.lo
 *.slo
 
-#Compiled dynamic libraries
+## Compiled dynamic libraries
 *.so
 *.dylib
 *.dll
@@ -23,6 +23,10 @@
 # Codelite will generate it anyway based on the project file.
 playground.mk
 playground.txt
+
+# Test, and temporary files
+*.hh
+*.cc
 
 # Project files/folders
 Build/
