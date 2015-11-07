@@ -18,17 +18,17 @@
 #include "3rdparty/json11/json11.hpp"
 
 namespace pg {
-    
+
 WorldIO::WorldIO( Context& context )
 :   context_( context )
     {}
-    
+
 void WorldIO::read( 
                         const std::string& file,
                         ecs::EntityManager& entities,
                         ecs::EventManager& events
                     ) {
-    
+
     auto json = pg::FileToString( "data/scene.json" );
     std::string error{""};
     auto scene = json11::Json::parse( json, error ).array_items();
@@ -39,7 +39,8 @@ void WorldIO::read(
         auto renderable = object["renderable"];
         auto script = object["script"];
         auto camera = object["camera"];
-        
+        auto pointLight = object["pointLight"];
+
         if ( !transform.is_null() ) {
             auto contents = transform.object_items();
             auto pos = contents["position"].array_items();
@@ -51,14 +52,14 @@ void WorldIO::read(
                 math::Vector3f( sca[0].number_value(), sca[1].number_value(), sca[2].number_value() )
             );
         }   // transform
-        
+
         if ( !renderable.is_null() ) {
             auto contents = renderable.object_items();
             opengl::BufferObject* buffer = context_.meshManager.get( contents["model"].string_value() );
             opengl::Program* shader{ nullptr };
             opengl::VertexArrayObject vao{ 0 };
             system::Material mat;
-            
+
             if ( !contents[ "specular"].is_null() ) {
                 auto specular = contents[ "specular" ].object_items();
                 std::unordered_map<std::string, float> uniforms{};
@@ -89,7 +90,11 @@ void WorldIO::read(
             opengl::VertexArrayObjectFactory factory{ buffer, shader };
             entity.assign<component::Renderable>( buffer, shader, vao, mat );
         }   //renderable
-        
+
+        if ( !pointLight.is_null() ) {
+            // add the point light here
+        }
+
         if ( !camera.is_null() ) {
             auto contents = camera.object_items();
             // cast doubles (numbers) to float, to avoid narrowing errors
@@ -100,7 +105,6 @@ void WorldIO::read(
                 true,
                 true
             );
-            events.emit< system::PerspectiveCameraAdded >( entity );
         }   //camera
         
         if ( !script.is_null() ) {

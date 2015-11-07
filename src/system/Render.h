@@ -2,6 +2,7 @@
 #pragma once
 
 #include "ecs/Include.h"
+#include "component/Include.h"
 #include "system/Events.h"
 #include "app/Context.h"
 #include "opengl/Program.h"
@@ -16,7 +17,8 @@ class Render : public ecs::System<Render>, public ecs::Receiver {
         
         void configure( ecs::EventManager& ) override;
         void update( ecs::EntityManager&, ecs::EventManager&, float ) override;
-        void receive( const PerspectiveCameraAdded& );
+        void receive( const ecs::ComponentAssignedEvent<component::Camera>& );
+        void receive( const ecs::ComponentAssignedEvent<component::PointLight>& );
     
     private:
         // camera position passed as parameter

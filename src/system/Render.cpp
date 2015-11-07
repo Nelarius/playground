@@ -28,8 +28,12 @@ void Render::configure( ecs::EventManager& events ) {
     events.subscribe< PerspectiveCameraAdded >( *this );
 }
 
-void Render::receive( const PerspectiveCameraAdded& event ) {
+void Render::receive( const ComponentAssignedEvent<component::Camera>& event ) {
     cameraEntity_ = event.entity;
+}
+
+void Render:receive( const ecs::ComponentAssignedEvent<component::PointLight>& event ) {
+    //
 }
 
 void Render::update(
