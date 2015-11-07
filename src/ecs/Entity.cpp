@@ -66,8 +66,8 @@ LuaEntity::LuaEntity( const Entity& entity )
 /////////////////////////////////////////////////////////////////////////////
 // EntityManager implementation
 /////////////////////////////////////////////////////////////////////////////
-EntityManager::EntityManager( EventManager& eventManager, uint32_t poolSize )
-:   PoolSize_( poolSize ),
+EntityManager::EntityManager( EventManager& eventManager, uint32_t arenaSize )
+:   ArenaSize_( arenaSize ),
     indexCounter_( 0u ),
     componentPools_(),
     componentMasks_(),

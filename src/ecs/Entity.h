@@ -2,7 +2,7 @@
 #pragma once
 
 #include "ecs/Id.h"
-#include "utils/Pool.h"
+#include "utils/MemoryArena.h"
 #include "ecs/Component.h"
 #include "ecs/Event.h"
 #include "utils/Log.h"
@@ -199,7 +199,7 @@ class EntityManager {
          * @brief Initialize with the number of elements to store in one chunk in the pool.
          * @param poolSize The number of elements reserved in one chunk of memory. 64 by default.
          */
-        EntityManager( EventManager&, uint32_t poolSize = 64 );
+        EntityManager( EventManager&, uint32_t arenaSize = 64 );
         ~EntityManager();
         
         EntityManager( const EntityManager& )               = delete;
@@ -388,9 +388,9 @@ class EntityManager {
         template<typename C>
         bool hasComponent_( Id id ) const;
         
-        const uint32_t                              PoolSize_{ 64 };
+        const uint32_t                              ArenaSize_{ 64 };
         uint32_t                                    indexCounter_{ 0u };
-        std::vector<std::unique_ptr<BasePool>>      componentPools_{};
+        std::vector<std::unique_ptr<BaseArena>>     componentPools_{};
         std::vector<std::bitset<MaskElements>>      componentMasks_{};
         std::vector<uint32_t>                       entityVersions_{};
         std::vector<uint32_t>                       freeList_{};
@@ -484,7 +484,7 @@ template<typename C>
 void EntityManager::accommodateComponent_() {
     const unsigned family = Component<C>::family();
     while( family >= componentPools_.size() ) {
-        componentPools_.emplace_back( new Pool<C>( PoolSize_ ) );
+        componentPools_.emplace_back( new MemoryArena<C>( ArenaSize_ ) );
     }
 }
 

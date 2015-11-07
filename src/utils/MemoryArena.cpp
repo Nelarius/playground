@@ -1,8 +1,8 @@
-#include "utils/Pool.h"
+#include "utils/MemoryArena.h"
 
 namespace pg {
 
-BasePool::BasePool( std::size_t elementSize, std::size_t chunkSize )
+BaseArena::BaseArena( std::size_t elementSize, std::size_t chunkSize )
 :   blocks_(),
     ElementSize_( elementSize ),
     ChunkSize_( chunkSize ),
@@ -10,21 +10,21 @@ BasePool::BasePool( std::size_t elementSize, std::size_t chunkSize )
     this->reserve( ChunkSize_ );
 }
 
-BasePool::~BasePool() {
+BaseArena::~BaseArena() {
     for ( auto block: blocks_ ) {
         delete [] block;
     }
 }
 
-std::size_t BasePool::capacity() const {
+std::size_t BaseArena::capacity() const {
     return capacity_;
 }
 
-std::size_t BasePool::chunks() const {
+std::size_t BaseArena::chunks() const {
     return blocks_.size();
 }
 
-void BasePool::reserve( std::size_t n ) {
+void BaseArena::reserve( std::size_t n ) {
     while ( capacity_ <= n ) {
         char* chunk = new char[ ElementSize_ * ChunkSize_ ];
         blocks_.push_back( chunk );
@@ -32,7 +32,7 @@ void BasePool::reserve( std::size_t n ) {
     }
 }
 
-void* BasePool::at( std::size_t i ) {
+void* BaseArena::at( std::size_t i ) {
     if ( i >= capacity_ ) {
         reserve( i );
     }

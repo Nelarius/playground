@@ -9,10 +9,10 @@
 namespace pg {
 
 /**
- * @class BasePool
+ * @class BaseArena
  * @author Muszynski Johann M
  * @date 06/10/15
- * @file Pool.h
+ * @file MemoryArena.h
  * @brief A pool of mostly contiguous memory, organized into discrete chunks.
  * This is a "stupid pool", as it doesn't do any sort of memory management.
  * Pointers into the pool will only be invalidated when the pool is destroyed.
@@ -20,21 +20,21 @@ namespace pg {
  * Lookups are O(1).
  * Appends are amortized O(1).
  */
-class BasePool {
+class BaseArena {
     public:
-        BasePool() = delete;
+        BaseArena() = delete;
         /**
          * @brief Construct the pool with the element and chunk size.
          * @param elementSize The size of one element, in bytes.
          * @param chunkSize The number of elements that you want stored in one chunk.
          */
-        explicit BasePool( std::size_t elementSize, std::size_t chunkSize = 128 );
-        virtual ~BasePool();
+        explicit BaseArena( std::size_t elementSize, std::size_t chunkSize = 128 );
+        virtual ~BaseArena();
         
-        BasePool( const BasePool& )             = delete;
-        BasePool& operator=( const BasePool& )  = delete;
-        BasePool( BasePool&& )                  = delete;
-        BasePool& operator=( BasePool&& )       = delete;
+        BaseArena( const BaseArena& )             = delete;
+        BaseArena& operator=( const BaseArena& )  = delete;
+        BaseArena( BaseArena&& )                  = delete;
+        BaseArena& operator=( BaseArena&& )       = delete;
 
         /**
          * @brief Get the total capacity (the number of elements) of the contained memory pool.
@@ -78,23 +78,23 @@ class BasePool {
 };
 
 /**
- * @class Pool
+ * @class MemoryArena
  * @author Muszynski Johann M
  * @date 06/14/15
- * @file Pool.h
+ * @file MemoryArena.h
  * @brief 
  */
 template<typename T>
-class Pool: public BasePool {
+class MemoryArena: public BaseArena {
     public:
         /**
-         * @brief Create the Pool with the chunk size.
+         * @brief Create the MemoryArena with the chunk size.
          * @param chunkSize The number of elements one block of memory will hold.
          */
-        Pool( std::size_t chunkSize )
-        :   BasePool( sizeof(T), chunkSize )
+        MemoryArena( std::size_t chunkSize )
+        :   BaseArena( sizeof(T), chunkSize )
             {}
-        virtual ~Pool() = default;
+        virtual ~MemoryArena() = default;
         
         void destroy( std::size_t n ) override {
             ASSERT( n < capacity_ );

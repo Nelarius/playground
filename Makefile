@@ -83,7 +83,7 @@ OBJ = src/Main.o \
 	src/system/Ui.o \
 	src/system/ImGuiRenderer.o \
 	src/utils/Random.o \
-	src/utils/Pool.o \
+	src/utils/MemoryArena.o \
     src/wren/Generate.o \
     wrenly/src/Wrenly.o \
     wrenly/src/detail/Type.o \
@@ -95,7 +95,7 @@ TESTOBJ = src/Test.o \
 	src/ecs/Entity.o \
 	src/ecs/Event.o \
 	src/ecs/System.o \
-	src/utils/Pool.o \
+	src/utils/MemoryArena.o \
 
 all: $(EXECUTABLE)
 	make test
