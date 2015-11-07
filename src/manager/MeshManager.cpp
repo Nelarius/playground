@@ -5,6 +5,8 @@
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
+#include <cmath>
+#include <limits>
 
 namespace pg {
 
@@ -26,6 +28,13 @@ opengl::BufferObject* MeshManager::get( const std::string& file ) const {
     
     ASSERT( scene );
     
+    float minx = std::numeric_limits< float >::max();
+    float maxx = std::numeric_limits< float >::min();
+    float miny = std::numeric_limits< float >::max();
+    float maxy = std::numeric_limits< float >::min();
+    float minz = std::numeric_limits< float >::max();
+    float maxz = std::numeric_limits< float >::min();
+    
     std::vector<float> data;
     
     for ( std::size_t i = 0u; i < scene->mNumMeshes; i++ ) {
@@ -36,8 +45,28 @@ opengl::BufferObject* MeshManager::get( const std::string& file ) const {
             for ( std::size_t k = 0u; k < 3u; k++ ) {
                 
                 aiVector3D vert = mesh->mVertices[ face.mIndices[k] ];
+                
+                // find aabb bounding min/max extents
+                if ( vert.x < minx ) {
+                    minx = vert.x;
+                } else if ( vert.x > maxx ) {
+                    maxx = vert.x;
+                }
+                if ( vert.y < miny ) {
+                    miny = vert.y;
+                } else if ( vert.y > maxy ) {
+                    maxy = vert.y;
+                }
+                if ( vert.z < minz ) {
+                    minz = vert.z;
+                } else if ( vert.z > maxz ) {
+                    maxz = vert.z;
+                }
+                
+                // stick the vertex into memory
                 data.push_back( vert.x ); data.push_back( vert.y ); data.push_back( vert.z );
                 
+                // get the normal vector
                 if ( mesh->HasNormals() ) {
                     aiVector3D norm = mesh->mNormals[ face.mIndices[k] ];
                     data.push_back( norm.x ); data.push_back( norm.y ); data.push_back( norm.z );
@@ -53,6 +82,11 @@ opengl::BufferObject* MeshManager::get( const std::string& file ) const {
     );
     
     return vbo;
+}
+
+component::BoundingBox MeshManager::getBoundingBox( const std::string& file ) const {
+    auto it = boxes_.find( file );
+    return it->second;
 }
 
 void MeshManager::clear() {

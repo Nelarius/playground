@@ -3,6 +3,7 @@
 
 #include "opengl/BufferObject.h"
 #include "utils/Container.h"
+#include "component/BoundingBox.h"
 #include <memory>
 #include <unordered_map>
 #include <utility>
@@ -13,7 +14,6 @@ namespace pg {
 
 /**
  * @class MeshManager
- * @author Johann
  * @date 05/14/15
  * @file MeshManager.h
  * @brief This class manages the memory of mesh objects, stored internally as VertexBuffer objects.
@@ -31,6 +31,12 @@ class MeshManager {
          */
         opengl::BufferObject*   get( const std::string& file ) const;
         /**
+        * @brief 
+        * @param file 
+        * @returns
+        */
+        component::BoundingBox  getBoundingBox( const std::string& file ) const;
+        /**
          * @brief Clear all elements.
          */
         void            clear();
@@ -40,8 +46,9 @@ class MeshManager {
         std::size_t     size() const;
         
     private:
-        mutable Container<opengl::BufferObject>                           buffer_{};
-        mutable std::unordered_map<std::string, opengl::BufferObject*>    resources_{};
+        mutable Container< opengl::BufferObject >                           buffer_{};
+        mutable std::unordered_map< std::string, opengl::BufferObject* >    resources_{};
+        mutable std::unordered_map< std::string, component::BoundingBox >   boxes_{};
 };
 
 }

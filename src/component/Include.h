@@ -6,4 +6,5 @@
 #include "component/Transform.h"
 #include "component/Camera.h"
 #include "component/DirectionalLight.h"
+#include "component/BoundingBox.h"
 #include "component/WrenScript.h"
