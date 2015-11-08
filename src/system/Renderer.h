@@ -10,10 +10,10 @@
 namespace pg {
 namespace system {
 
-class Render : public ecs::System<Render>, public ecs::Receiver {
+class Renderer : public ecs::System< Renderer >, public ecs::Receiver {
     public:
-        Render() = delete;
-        explicit Render( Context& context );
+        Renderer() = delete;
+        explicit Renderer( Context& context );
         
         void configure( ecs::EventManager& ) override;
         void update( ecs::EntityManager&, ecs::EventManager&, float ) override;

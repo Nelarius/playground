@@ -77,7 +77,7 @@ OBJ = src/Main.o \
 	src/manager/ShaderManager.o \
 	src/manager/StringManager.o \
 	src/math/Angle.o \
-	src/system/Render.o \
+	src/system/Renderer.o \
 	src/system/Debug.o \
 	src/system/Scripter.o \
 	src/system/WrenSystem.o \

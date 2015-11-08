@@ -2,7 +2,7 @@
 [
     {
         "transform": {
-            "position": [ 0.0, 0.0, 7.0 ],
+            "position": [ 0.0, 0.0, 8.0 ],
             "rotation": [ 0.0, 0.0, 0.0, 1.0 ],
             "scale": [ 1.0, 1.0, 1.0 ]
         },
@@ -13,6 +13,28 @@
         }
     },
     {
+        "script": "data/template.lua",
+        "transform": {
+            "position": [ -2.0, 0.0, 10.0 ],
+            "rotation": [ 0.0, 0.0, 0.0, 1.0 ],
+            "scale": [ 0.001, 0.001, 0.001 ]
+        },
+        "pointLight": {
+            "intensity": [ 1.0, 1.0, 1.0 ],
+            "attenuation": 0.5,
+            "ambientCoefficient": 0.3
+        },
+        "renderable": {
+            "model": "data/cube.dae",
+            "material": {
+                "shininess": 80.0,
+                "specularColor": [ 0.0, 0.0, 0.0 ],
+                "ambientColor": [ 1.0, 1.0, 1.0 ],
+                "baseColor": [ 1.0, 1.0, 1.0 ]
+            }
+        }
+    },
+    {
         "transform": {
             "position": [ 0.0, 0.0, 0.0 ],
             "rotation": [ 0.0, 0.0, 0.0, 1.0 ],
@@ -20,24 +42,12 @@
         },
         "renderable": {
             "model": "data/cow.obj",
-            "specular": {
+            "material": {
                 "shininess": 80.0,
                 "specularColor": [ 1.0, 1.0, 1.0 ],
-                "ambientColor": [ 0.941, 0.455, 0.804 ]
+                "ambientColor": [ 0.941, 0.455, 0.804 ],
+                "baseColor": [ 0.0, 0.0, 0.0 ]
             }
-        }
-    },
-    {
-        "script": "data/template.lua",
-        "transform": {
-            "position": [ -2.0, 0.0, 10.0 ],
-            "rotation": [ 0.0, 0.0, 0.0, 1.0 ],
-            "scale": [ 1.0, 1.0, 1.0 ]
-        },
-        "pointLight": {
-            "intensity": [ 1.0, 1.0, 1.0 ],
-            "attenuation": 0.3,
-            "ambientCoefficient": 0.3
         }
     }
 ]

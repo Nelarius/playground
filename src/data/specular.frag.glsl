@@ -13,6 +13,9 @@ uniform struct PointLight {
 } pointLight;
 
 uniform float shininess;
+uniform float baseColor_r;
+uniform float baseColor_g;
+uniform float baseColor_b;
 uniform float ambientColor_r;
 uniform float ambientColor_g;
 uniform float ambientColor_b;
@@ -27,6 +30,7 @@ out vec4 color;
 void main() {
     vec3 specularColor = vec3( specColor_r, specColor_g, specColor_b );
     vec3 ambient = vec3( ambientColor_r, ambientColor_g, ambientColor_b );
+    vec3 base = vec3( baseColor_r, baseColor_g, baseColor_b );
 
     vec3 eye = normalize( cameraPosition - fragPos );
     vec3 lightDir = pointLight.position - fragPos;
@@ -52,7 +56,7 @@ void main() {
 
     vec3 scatteredLight = ambient * pointLight.ambientCoefficient + diffuse * pointLight.intensity * attenuation;
     vec3 reflectedLight = specular*pointLight.intensity*specularColor*attenuation;
-    vec3 rgb = min( scatteredLight + reflectedLight, vec3(1.0) );
+    vec3 rgb = min( base + scatteredLight + reflectedLight, vec3(1.0) );
 
     color = vec4( rgb, 1.0 );
 }

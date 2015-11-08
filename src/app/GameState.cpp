@@ -2,7 +2,7 @@
 #include "app/AppStateStack.h"
 #include "app/WorldIO.h"
 #include "system/Debug.h"
-#include "system/Render.h"
+#include "system/Renderer.h"
 #include "system/Scripter.h"
 #include "system/Ui.h"
 #include "system/Events.h"
@@ -43,12 +43,12 @@ void GameState::activate() {
     context_.shaderManager.addShader( "data/panel.frag.glsl", GL_FRAGMENT_SHADER );
     context_.shaderManager.compile( "panel" );
     
-    systems_.add< system::Render >( context_ );
+    systems_.add< system::Renderer >( context_ );
     systems_.add< system::Debug >();
     systems_.add< system::Scripter >();
     systems_.add< system::Ui >( context_ );
     systems_.configure< system::Debug >();
-    systems_.configure< system::Render >();
+    systems_.configure< system::Renderer >();
     systems_.configure< system::Scripter >();
     
     // the full capacity of the systems are used in parsing, so the systems must be configured and ready to go!
@@ -88,7 +88,7 @@ void GameState::activate() {
 bool GameState::update( float dt ) {
     keyboard_.handleKeyPressedCommands();
     mouse_.update();
-    systems_.update<system::Scripter>( dt );
+    systems_.update< system::Scripter >( dt );
     return false;
 }
 
@@ -102,9 +102,8 @@ bool GameState::handleEvent( const SDL_Event& event ) {
 }
 
 void GameState::render( float dt ) {
-    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-    systems_.update<system::Render>( dt );
-    systems_.update<system::Ui>( dt );
+    systems_.update< system::Renderer >( dt );
+    systems_.update< system::Ui >( dt );
 }
 
 }

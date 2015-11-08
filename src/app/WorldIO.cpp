@@ -4,7 +4,7 @@
 #include "manager/MeshManager.h"
 #include "system/Material.h"
 #include "system/Debug.h"
-#include "system/Render.h"
+#include "system/Renderer.h"
 #include "system/Scripter.h"
 #include "system/Ui.h"
 #include "system/Events.h"
@@ -60,8 +60,8 @@ void WorldIO::read(
             opengl::VertexArrayObject vao{ 0 };
             system::Material mat;
 
-            if ( !contents[ "specular"].is_null() ) {
-                auto specular = contents[ "specular" ].object_items();
+            if ( !contents[ "material"].is_null() ) {
+                auto specular = contents[ "material" ].object_items();
                 std::unordered_map<std::string, float> uniforms{};
                 uniforms.emplace( "shininess", specular[ "shininess" ].number_value() );
                 auto scolor = specular[ "specularColor" ].array_items();
@@ -72,13 +72,20 @@ void WorldIO::read(
                 math::Vector3f surfColor(
                     acolor[0].number_value(), acolor[1].number_value(), acolor[2].number_value()
                 );
+                auto bcolor = specular[ "baseColor" ].array_items();
+                math::Vector3f baseColor(
+                    bcolor[0].number_value(), bcolor[1].number_value(), bcolor[2].number_value()
+                );
                 uniforms.emplace( "specColor_r", specColor.r );
                 uniforms.emplace( "specColor_g", specColor.g );
                 uniforms.emplace( "specColor_b", specColor.b );
                 uniforms.emplace( "ambientColor_r", surfColor.r );
                 uniforms.emplace( "ambientColor_g", surfColor.g );
                 uniforms.emplace( "ambientColor_b", surfColor.b );
-                
+                uniforms.emplace( "baseColor_r", baseColor.r );
+                uniforms.emplace( "baseColor_g", baseColor.g );
+                uniforms.emplace( "baseColor_b", baseColor.b );
+
                 mat.type = system::MaterialType::Specular;
                 mat.uniforms = uniforms;
                 shader = context_.shaderManager.get( "specular" );

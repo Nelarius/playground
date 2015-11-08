@@ -1,4 +1,4 @@
-#include "system/Render.h"
+#include "system/Renderer.h"
 #include "system/Material.h"
 #include "component/Include.h"
 #include "utils/Log.h"
@@ -16,8 +16,8 @@ const float Pi = 3.141592653f;
 namespace pg {
 namespace system {
 
-Render::Render( Context& context )
-:   System<Render>(),
+Renderer::Renderer( Context& context )
+:   System< Renderer >(),
     cameraEntity_{},
     lightEntity_{},
     defaultProjection_{},
@@ -25,20 +25,20 @@ Render::Render( Context& context )
     defaultProjection_ = math::Matrix4f::Perspective( 70.0f, 1.5f, 0.1f, 100.0f );
 }
 
-void Render::configure( ecs::EventManager& events ) {
+void Renderer::configure( ecs::EventManager& events ) {
     events.subscribe< ecs::ComponentAssignedEvent<component::Camera> >( *this );
     events.subscribe< ecs::ComponentAssignedEvent<component::PointLight> >( *this );
 }
 
-void Render::receive( const ecs::ComponentAssignedEvent< component::Camera >& event ) {
+void Renderer::receive( const ecs::ComponentAssignedEvent< component::Camera >& event ) {
     cameraEntity_ = event.entity;
 }
 
-void Render::receive( const ecs::ComponentAssignedEvent< component::PointLight >& event ) {
+void Renderer::receive( const ecs::ComponentAssignedEvent< component::PointLight >& event ) {
     lightEntity_ = event.entity;
 }
 
-void Render::update(
+void Renderer::update(
     ecs::EntityManager& entities,
     ecs::EventManager& events,
     float dt 
@@ -75,7 +75,7 @@ void Render::update(
 
      /*
       * Then, iterate over renderables
-      * */
+      */
     for ( ecs::Entity entity: entities.join< component::Transform, component::Renderable>() ) {
         auto renderable = entity.component< component::Renderable>();
         auto transform = entity.component< component::Transform>();
@@ -102,7 +102,7 @@ void Render::update(
     }
 }
 
-void Render::setSpecularUniforms_( const math::Vector3f& pos, opengl::Program* p ) {
+void Renderer::setSpecularUniforms_( const math::Vector3f& pos, opengl::Program* p ) {
     p->setUniform( "cameraPosition", pos );
 }
 

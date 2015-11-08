@@ -8,13 +8,13 @@ end
 t = 0.0
 -- angular velocity
 av = 0.5
-r = 5.0
+r = 6.0
 
 -- this gets called in the update loop
 function update( dt )
     t = t + dt
     if entity:hasTransform() then
-        entity.transform.position = pg.Vector3f( r*math.cos(t), 0.0, r*math.sin(t))
+        entity.transform.position = pg.Vector3f( r*math.cos(t), 0.5, r*math.sin(t))
     end
 end
 
