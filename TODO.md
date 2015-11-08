@@ -1,18 +1,9 @@
 
 # TODO
 
-* The whole event handling framework needs to overhauled.
-  * An `EventHandler` class gets passed events.
-  * Commands are registered with certain events, such as key down, mouse button down, etc.
-  * MouseEvents, KeyboardHandler are not needed.
-  * Each application state is responsible for filling the event handler with events.
-  * In this way, no events are erroneously "leaked" to application states lower in the state stack.
 * Reconsider the assertions in MeshManager and ShaderManager.
-* Write tests for Bundle
+* Multidimensional textures
 * Implement specular shaders
-  * Add array of lights to specular shader
-  * Add Light count
-  * Read orientation from DirectionalLight component
   * add gamma correction to specular shader
 * Material should use a union of material type structs, get rid of the verbosity of per-float uniform names.
   * I think this is justified, because the Render system is the one which provides the rendering service; materials are a part of that process.
@@ -20,7 +11,7 @@
 * Implement free-look camera script
 * Normalize resource names in MeshManager and ShaderManager using r-lyeh's Unify lib.
 * Figure out a mechanism to make `componentPointer<C>` private/not part of Entity API.
-* Bundle has iterators
+* Container has iterators
 * Add R'lyeh's profit lib to profile execution times of critical methods
 * Integrate ImGui into a system
   * I need to figure out how to render textured panels isometrically using modern OpenGL
@@ -39,6 +30,16 @@ opengl::VertexArrayObject vao = opengl::AttributeHandler{}
   .add( opengl::VertexAttribute::Normal )
   .end();   // this returns the actual VertexArrayObject instance, which gets moved into vao
 ``` 
+
+### Towards the first feature demo
+
+The first demo ideally would feature
+* Multiple shadow casters
+* One scripted light rotating about the scene
+* a plane to receive the shadows casted
+* Wren scripts
+  * the ability to hot-swap Wren scripts
+* the ability to select entities and change their properties via an ImGui popup editor
 
 ### Handling hard and soft errors
 
