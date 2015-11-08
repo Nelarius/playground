@@ -8,9 +8,8 @@ namespace component {
 
 struct PointLight {
     math::Vector3f intensity;
-    float attenutation;
-    float ambientCoefficient;
+    float attenuation;
 };
-    
+
 }
 }

@@ -1,9 +1,8 @@
 
 [
     {
-        "script": "data/template.lua",
         "transform": {
-            "position": [ 0.0, 0.0, 8.0 ],
+            "position": [ 0.0, 0.0, 10.0 ],
             "rotation": [ 0.0, 0.0, 0.0, 1.0 ],
             "scale": [ 1.0, 1.0, 1.0 ]
         },
@@ -17,48 +16,27 @@
         "transform": {
             "position": [ 0.0, 0.0, 0.0 ],
             "rotation": [ 0.0, 0.0, 0.0, 1.0 ],
-            "scale": [ 0.001, 0.01, 0.001 ]
+            "scale": [ 1.0, 1.0, 1.0 ]
         },
         "renderable": {
-            "model": "data/cube.dae",
+            "model": "data/cow.obj",
             "specular": {
                 "shininess": 80.0,
                 "specularColor": [ 1.0, 1.0, 1.0 ],
                 "ambientColor": [ 0.941, 0.455, 0.804 ]
             }
-        },
-        "script": "data/RotateSecond.lua"
+        }
     },
     {
+        "script": "data/template.lua",
         "transform": {
-            "position": [ 0.0, 0.0, 0.0 ],
+            "position": [ -2.0, 0.0, 10.0 ],
             "rotation": [ 0.0, 0.0, 0.0, 1.0 ],
-            "scale": [ 0.0015, 0.008, 0.001 ]
+            "scale": [ 1.0, 1.0, 1.0 ]
         },
-        "renderable": {
-            "model": "data/cube.dae",
-            "specular": {
-                "shininess": 80.0,
-                "specularColor": [ 1.0, 1.0, 1.0 ],
-                "ambientColor": [ 0.941, 0.455, 0.804 ]
-            }
-        },
-        "script": "data/RotateMinute.lua"
-    },
-    {
-        "transform": {
-            "position": [ 0.0, 0.0, 0.0 ],
-            "rotation": [ 0.0, 0.0, 0.0, 1.0 ],
-            "scale": [ 0.0019, 0.005, 0.001 ]
-        },
-        "renderable": {
-            "model": "data/cube.dae",
-            "specular": {
-                "shininess": 80.0,
-                "specularColor": [ 1.0, 1.0, 1.0 ],
-                "ambientColor": [ 0.941, 0.455, 0.804 ]
-            }
-        },
-        "script": "data/RotateHour.lua"
+        "pointLight": {
+            "intensity": [ 1.0, 1.0, 1.0 ],
+            "attenuation": 0.2
+        }
     }
 ]

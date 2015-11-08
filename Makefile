@@ -39,17 +39,17 @@ ifeq ($(OS),Windows_NT)
 	TEST_EXECUTABLE += Build/test.exe
 else
 	UNAME_S := $(shell uname -s)
-    ifeq ($(UNAME_S),Linux)
-        CFLAGS +=  -I ./src -I ./wrenly/src -I /home/muszynsk/dev/LuaBridge/Source -I /home/muszynsk/dev/wren/src/include
-        LDFLAGS +=  -L /home/muszynsk/dev/wren/lib -lGL -lGLEW -lSDL2 -lentityx -lassimp -llua -lwren
+	ifeq ($(UNAME_S),Linux)
+		CFLAGS +=  -I ./src -I ./wrenly/src -I /home/muszynsk/dev/LuaBridge/Source -I /home/muszynsk/dev/wren/src/include
+		LDFLAGS +=  -L /home/muszynsk/dev/wren/lib -lGL -lGLEW -lSDL2 -lentityx -lassimp -llua -lwren
 		EXECUTABLE += Build/app
 		TEST_EXECUTABLE += Build/test
-    endif
+	endif
 endif
 
 OBJ = src/Main.o \
-    src/3rdparty/imgui/imgui.o \
-    src/3rdparty/imgui/imgui_draw.o \
+	src/3rdparty/imgui/imgui.o \
+	src/3rdparty/imgui/imgui_draw.o \
 	src/3rdparty/json11/json11.o \
 	src/app/GameState.o \
 	src/app/Application.o \
@@ -71,6 +71,7 @@ OBJ = src/Main.o \
 	src/opengl/VertexArrayObject.o \
 	src/opengl/VertexArrayObjectFactory.o \
 	src/opengl/BufferObject.o \
+	src/opengl/Framebuffer.o \
 	src/opengl/Texture.o \
 	src/manager/MeshManager.o \
 	src/manager/ShaderManager.o \
@@ -79,18 +80,18 @@ OBJ = src/Main.o \
 	src/system/Render.o \
 	src/system/Debug.o \
 	src/system/Scripter.o \
-    src/system/WrenSystem.o \
+	src/system/WrenSystem.o \
 	src/system/Ui.o \
 	src/system/ImGuiRenderer.o \
 	src/utils/Random.o \
 	src/utils/MemoryArena.o \
-    src/wren/Generate.o \
-    wrenly/src/Wrenly.o \
-    wrenly/src/detail/Type.o \
+	src/wren/Generate.o \
+	wrenly/src/Wrenly.o \
+	wrenly/src/detail/Type.o \
 	
 TESTOBJ = src/Test.o \
 	src/test/EntityManagerTest.o \
-    src/test/SparseGraphTest.o \
+	src/test/SparseGraphTest.o \
 	src/ecs/Component.o \
 	src/ecs/Entity.o \
 	src/ecs/Event.o \

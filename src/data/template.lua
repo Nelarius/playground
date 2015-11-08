@@ -12,11 +12,9 @@ r = 8.0
 
 -- this gets called in the update loop
 function update( dt )
+    t = t + dt
     if entity:hasTransform() then
-        t = t + dt
-        q = pg.Quaternion( 0.0, 0.0, math.sin( 10.0*dt ), math.cos( 10.0*dt ) )
-        --entity.transform.position = pg.Vector3f( r*math.cos( t*av ), 0.0, r*math.sin( t*av ) )
-        entity.transform.rotation = pg.Quaternion( 0.0, 0.0, math.sin( 0.2 ), math.cos( 0.2 ) )
+        entity.transform.position = pg.Vector3f( r*math.cos(t), 0.0, r*math.sin(t))
     end
 end
 

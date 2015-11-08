@@ -92,7 +92,12 @@ void WorldIO::read(
         }   //renderable
 
         if ( !pointLight.is_null() ) {
-            // add the point light here
+            auto contents = pointLight.object_items();
+            auto intensity = contents["intensity"].array_items();
+            entity.assign< component::PointLight >(
+                math::Vector3f( float( intensity[0].number_value() ), float( intensity[1].number_value() ), float( intensity[2].number_value() ) ),
+                float( contents["attenuation"].number_value() )
+            );
         }
 
         if ( !camera.is_null() ) {

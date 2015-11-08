@@ -5,6 +5,12 @@ in vec3 fragNorm;
 
 uniform vec3 cameraPosition;
 
+uniform struct PointLight {
+    vec3 position;
+    vec3 intensity;
+    float attenuation;
+} pointLight;
+
 uniform float shininess;
 uniform float ambientColor_r;
 uniform float ambientColor_g;
@@ -13,36 +19,38 @@ uniform float specColor_r;
 uniform float specColor_g;
 uniform float specColor_b;
 
-uniform struct DirectionalLight {
-    vec3 direction;
-    vec3 intensities;
-    float ambientCoefficient;
-} light;
-
 // there needs to be an array of these lights, as well as a light count.
 
 out vec4 color;
 
 void main() {
-    vec3 lightPosition = vec3( 10.0, 0.0, 10.0 );
-    vec3 lightDirection = normalize( vec3( 1.0, 1.0, 0.0 ) );
-    vec3 lightIntensity = vec3( 1.0, 1.0, 1.0 );
-    
     vec3 specularColor = vec3( specColor_r, specColor_g, specColor_b );
-    
-    vec3 surfToCamera = normalize( cameraPosition - fragPos );
-    
-    //ambient
     vec3 ambient = vec3( ambientColor_r, ambientColor_g, ambientColor_b );
 
-    float diffuseCoefficient = max( 0.0, dot( fragNorm, lightDirection ) );
-    vec3 diffuse = diffuseCoefficient * ambient * lightIntensity;
-    
-    float specularCoefficient = 0.0;
-    if ( diffuseCoefficient > 0.0 ) {
-        specularCoefficient = pow( max( 0.0, dot( surfToCamera, reflect( -lightDirection, fragNorm ) ) ), shininess );
+    vec3 eye = normalize( cameraPosition - fragPos );
+    vec3 lightDir = pointLight.position - fragPos;
+    float lightDist = length(lightDir);
+    // direction should point to the light
+    // it should be normalized
+    // now the dot product gives positive cosines
+    lightDir = lightDir / lightDist;
+
+    float attenuation = 1.0 / (
+        pointLight.attenuation * lightDist * lightDist
+    );
+
+    float diffuse = max( 0.0, dot(lightDir, fragNorm) );
+    float specular = max( 0.0, dot(reflect(lightDir, fragNorm), eye) );
+
+    if ( diffuse == 0.0 ) {
+        specular = 0.0;
+    } else {
+        specular = pow(specular, shininess);
     }
-    vec3 specular = specularCoefficient * specularColor;
-    
-    color = vec4( ambient + diffuse + specular, 0.0 );
+
+    vec3 scatteredLight = ambient + diffuse*pointLight.intensity*attenuation;
+    vec3 reflectedLight = specular*pointLight.intensity*attenuation;
+    vec3 rgb = min( scatteredLight + reflectedLight, vec3(1.0) );
+
+    color = vec4( rgb, 1.0 );
 }

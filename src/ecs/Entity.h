@@ -131,11 +131,6 @@ class LuaEntity: public Entity {
         C* componentPointer() const;
 };
 
-// this should be a run-time adjustable
-// to do so, EntityManager needs to use the Cheshire Cat pattern
-const uint32_t MaxComponents = 16u;
-const uint32_t MaskElements = MaxComponents + 1u;
-
 /**
  * @class EntityCreatedEvent
  * @author Muszynski Johann M
@@ -183,6 +178,11 @@ struct ComponentRemovedEvent {
     Entity entity;
     ComponentHandle<C> component;
 };
+
+// this should be a run-time adjustable
+// to do so, EntityManager needs to use the Cheshire Cat pattern
+const uint32_t MaxComponents = 16u;
+const uint32_t MaskElements = MaxComponents + 1u;
 
 /**
  * @class EntityManager
@@ -532,5 +532,4 @@ bool EntityManager::hasComponent_( Id id ) const {
 }
 
 }   // namespace ecs
-}   // namespace ce
-
+}   // namespace pg

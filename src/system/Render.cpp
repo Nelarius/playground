@@ -2,15 +2,15 @@
 #include "system/Material.h"
 #include "component/Include.h"
 #include "utils/Log.h"
-//#include <glm/glm.hpp>
-//#include <glm/gtc/quaternion.hpp>
-//#include <glm/gtc/matrix_transform.hpp>
+
 #include <cmath>
 
 namespace {
-    const float DegreesToRads = 3.141592653f / 180.0f;
-    const float RadsToDegrees = 180.0f / 3.141592653f;
-    const float Pi = 3.141592653f;
+
+const float DegreesToRads = 3.141592653f / 180.0f;
+const float RadsToDegrees = 180.0f / 3.141592653f;
+const float Pi = 3.141592653f;
+
 }
 
 namespace pg {
@@ -19,21 +19,23 @@ namespace system {
 Render::Render( Context& context )
 :   System<Render>(),
     cameraEntity_{},
+    lightEntity_{},
     defaultProjection_{},
     context_{ context } {
     defaultProjection_ = math::Matrix4f::Perspective( 70.0f, 1.5f, 0.1f, 100.0f );
 }
 
 void Render::configure( ecs::EventManager& events ) {
-    events.subscribe< PerspectiveCameraAdded >( *this );
+    events.subscribe< ecs::ComponentAssignedEvent<component::Camera> >( *this );
+    events.subscribe< ecs::ComponentAssignedEvent<component::PointLight> >( *this );
 }
 
-void Render::receive( const ComponentAssignedEvent<component::Camera>& event ) {
+void Render::receive( const ecs::ComponentAssignedEvent< component::Camera >& event ) {
     cameraEntity_ = event.entity;
 }
 
-void Render:receive( const ecs::ComponentAssignedEvent<component::PointLight>& event ) {
-    //
+void Render::receive( const ecs::ComponentAssignedEvent< component::PointLight >& event ) {
+    lightEntity_ = event.entity;
 }
 
 void Render::update(
@@ -43,7 +45,9 @@ void Render::update(
 ) {
     math::Matrix4f cameraMatrix{ defaultProjection_ };
     math::Vector3f cameraPos{};
-    
+    math::Vector3f lightPos{};
+    math::Vector3f lightIntensity{};
+    float attenuation = 1.0f;
     if ( cameraEntity_.isValid() ) {
         float aspectRatio = float( context_.window->width() ) / context_.window->height();
         auto transform = cameraEntity_.component< component::Transform >();
@@ -59,7 +63,13 @@ void Render::update(
         );
         cameraMatrix = proj * view.inverse();
     }
-    
+
+    if ( lightEntity_.isValid() ) {
+        lightPos = lightEntity_.component< component::Transform >()->position;
+        lightIntensity = lightEntity_.component< component::PointLight >()->intensity;
+        attenuation = lightEntity_.component< component::PointLight >()->attenuation;
+    }
+
      /*
       * Then, iterate over renderables
       * */
@@ -78,9 +88,9 @@ void Render::update(
         for ( const auto& it: renderable->material.uniforms ) {
             shader->setUniform( it.first.c_str(), it.second );
         }
-        if ( renderable->material.type == MaterialType::Specular ) {
-            setSpecularUniforms_( cameraPos, shader );
-        }
+        shader->setUniform( "pointLight.position", lightPos );
+        shader->setUniform( "pointLight.intensity", lightIntensity );
+        shader->setUniform( "pointLight.attenuation", attenuation );
         renderable->vao.bind();
         glDrawArrays( GL_TRIANGLES, 0, renderable->vbo->count() / renderable->vao.elementsPerIndex() );
         renderable->vao.unbind();
