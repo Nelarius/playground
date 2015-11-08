@@ -2,10 +2,6 @@
 
 A small, experimental, data-driven, entity-component-based, and scriptable game engine.
 
-See below for a small overview of what kind of components are currently implemented.
-
-----------
-
 ## Compiling
 
 The source code uses GCC pragmas and C++14.
@@ -18,9 +14,13 @@ On Linux, once the dependencies have been installed, just run `make` to build th
 
 Compiling on Windows isn't a great experience at the moment. Your locations of the dependencies should be entered into the `*_COMP` and `*_LINK` fields, at the beginning of the Makefile. Once that has been done, the build is done the same way as on Linux.
 
-## Usage
+## Organization
 
-For more detailed information, feel free to browse the module folders in `src/`.
+The C/C++ source code is in `src/`. The engine depends on some data, such as scriping files and shader source. These are located in `builtin/`.
+
+Within `src/` lies a number of subfolders. These are usually fairly independent modules, some of which I've provided their own README file.
+
+## Usage
 
 The scene is described in a data file. The data is written in the JSON format. Each entity is listed as an object in a list. Each entity is composed of components, each of whom have their own object notation.
 
@@ -59,18 +59,18 @@ This component will be rendered with OpenGL. The component consists of a 3d mode
 ```json
 "renderable": {
   "model": STRING,
-  "specular": {	
+  "material": {
     "shininess": NUMBER,
-    "specularColor": [ NUMBER, NUMBER, NUMBER ],
-    "ambientColor": [ NUMBER, NUMBER, NUMBER ]
+    "baseColor": [ NUMBER, NUMBER, NUMBER ],
+    "ambientColor": [ NUMBER, NUMBER, NUMBER ],
+    "specularColor": [ NUMBER, NUMBER, NUMBER ]
   }
 }
-
 ```
 
 `"model"` is the just the file path where the 3d model is located.
 
-More about the shading system later.
+Here's the way shading works. The base color, diffuse color and specular color are all summed together to generate the final value. So if you want to turn, say specular shading, off, just set the specularColor elements to zero. The base color is what all the other colors are added on to, and it isn't affected by light.
 
 #### Camera
 
@@ -88,15 +88,13 @@ The camera component is used for rendering the renderable components.
 
 #### A small scene
 
-Here is a small example of how to build a simple scene.
+Here is a simple scene where a cube light rotates around another 3d model:
 
 `data/scene.json`:
 
 ```json
-
 [
     {
-        "script": "data/template.lua",
         "transform": {
             "position": [ 0.0, 0.0, 8.0 ],
             "rotation": [ 0.0, 0.0, 0.0, 1.0 ],
@@ -109,22 +107,44 @@ Here is a small example of how to build a simple scene.
         }
     },
     {
+        "script": "data/template.lua",
         "transform": {
-            "position": [ 0.0, 0.0, 0.0 ],
+            "position": [ -2.0, 0.0, 10.0 ],
             "rotation": [ 0.0, 0.0, 0.0, 1.0 ],
-            "scale": [ 0.001, 0.01, 0.001 ]
+            "scale": [ 0.001, 0.001, 0.001 ]
+        },
+        "pointLight": {
+            "intensity": [ 1.0, 1.0, 1.0 ],
+            "attenuation": 0.5,
+            "ambientCoefficient": 0.3
         },
         "renderable": {
             "model": "data/cube.dae",
-            "specular": {
+            "material": {
+                "shininess": 80.0,
+                "specularColor": [ 0.0, 0.0, 0.0 ],
+                "ambientColor": [ 1.0, 1.0, 1.0 ],
+                "baseColor": [ 1.0, 1.0, 1.0 ]
+            }
+        }
+    },
+    {
+        "transform": {
+            "position": [ 0.0, 0.0, 0.0 ],
+            "rotation": [ 0.0, 0.0, 0.0, 1.0 ],
+            "scale": [ 1.0, 1.0, 1.0 ]
+        },
+        "renderable": {
+            "model": "data/cow.obj",
+            "material": {
                 "shininess": 80.0,
                 "specularColor": [ 1.0, 1.0, 1.0 ],
-                "ambientColor": [ 0.941, 0.455, 0.804 ]
+                "ambientColor": [ 0.941, 0.455, 0.804 ],
+                "baseColor": [ 0.0, 0.0, 0.0 ]
             }
         }
     }
 ]
-
 ```
 
 `data/template.lua`:
@@ -138,19 +158,19 @@ end
 t = 0.0
 -- angular velocity
 av = 0.5
-r = 8.0
+r = 5.0
 
 -- this gets called in the update loop
 function update( dt )
+    t = t + dt
     if entity:hasTransform() then
-        t = t + dt
-        entity.transform.position = pg.Vector3f( r*math.cos( t*av ), 0.0, r*math.sin( t*av ) )
+        entity.transform.position = pg.Vector3f( r*math.cos(t), 0.0, r*math.sin(t))
     end
 end
 
 --  this gets called just before the component is removed
 function deactivate()
-    print("Script gonna hang up now!")
+    --this gets called just before the script gets removed from the owning entity
 end
 ```
 
