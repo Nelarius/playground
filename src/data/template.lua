@@ -8,7 +8,7 @@ end
 t = 0.0
 -- angular velocity
 av = 0.5
-r = 8.0
+r = 5.0
 
 -- this gets called in the update loop
 function update( dt )

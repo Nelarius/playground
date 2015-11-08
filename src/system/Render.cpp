@@ -48,6 +48,8 @@ void Render::update(
     math::Vector3f lightPos{};
     math::Vector3f lightIntensity{};
     float attenuation = 1.0f;
+    float ambientCoefficient = 0.5f;
+
     if ( cameraEntity_.isValid() ) {
         float aspectRatio = float( context_.window->width() ) / context_.window->height();
         auto transform = cameraEntity_.component< component::Transform >();
@@ -68,6 +70,7 @@ void Render::update(
         lightPos = lightEntity_.component< component::Transform >()->position;
         lightIntensity = lightEntity_.component< component::PointLight >()->intensity;
         attenuation = lightEntity_.component< component::PointLight >()->attenuation;
+        ambientCoefficient = lightEntity_.component< component::PointLight >()->ambientCoefficient;
     }
 
      /*
@@ -91,6 +94,7 @@ void Render::update(
         shader->setUniform( "pointLight.position", lightPos );
         shader->setUniform( "pointLight.intensity", lightIntensity );
         shader->setUniform( "pointLight.attenuation", attenuation );
+        shader->setUniform( "pointLight.ambientCoefficient", ambientCoefficient );
         renderable->vao.bind();
         glDrawArrays( GL_TRIANGLES, 0, renderable->vbo->count() / renderable->vao.elementsPerIndex() );
         renderable->vao.unbind();

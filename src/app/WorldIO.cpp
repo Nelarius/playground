@@ -96,7 +96,8 @@ void WorldIO::read(
             auto intensity = contents["intensity"].array_items();
             entity.assign< component::PointLight >(
                 math::Vector3f( float( intensity[0].number_value() ), float( intensity[1].number_value() ), float( intensity[2].number_value() ) ),
-                float( contents["attenuation"].number_value() )
+                float( contents["attenuation"].number_value() ),
+                float( contents["ambientCoefficient"].number_value() )
             );
         }
 

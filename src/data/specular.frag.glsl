@@ -9,6 +9,7 @@ uniform struct PointLight {
     vec3 position;
     vec3 intensity;
     float attenuation;
+    float ambientCoefficient;
 } pointLight;
 
 uniform float shininess;
@@ -36,6 +37,7 @@ void main() {
     lightDir = lightDir / lightDist;
 
     float attenuation = 1.0 / (
+        1.0 +
         pointLight.attenuation * lightDist * lightDist
     );
 
@@ -48,8 +50,8 @@ void main() {
         specular = pow(specular, shininess);
     }
 
-    vec3 scatteredLight = ambient + diffuse*pointLight.intensity*attenuation;
-    vec3 reflectedLight = specular*pointLight.intensity*attenuation;
+    vec3 scatteredLight = ambient * pointLight.ambientCoefficient + diffuse * pointLight.intensity * attenuation;
+    vec3 reflectedLight = specular*pointLight.intensity*specularColor*attenuation;
     vec3 rgb = min( scatteredLight + reflectedLight, vec3(1.0) );
 
     color = vec4( rgb, 1.0 );
