@@ -2,6 +2,7 @@
 #pragma once
 
 #include <GL/glew.h>
+#include <cstdint>
 
 namespace pg {
 namespace opengl {
@@ -17,15 +18,15 @@ class Texture {
         /// GL_TEXTURE_BUFFER, GL_TEXTURE_2D_MULTISAMPLE or GL_TEXTURE_2D_MULTISAMPLE_ARRAY.
         /// For more information, see the glBindTexture doc entry
         explicit Texture( GLenum type );
-        ~Texture();
-
         Texture()                               = delete;
         Texture( const Texture& )               = delete;
         Texture( Texture&& )                    = delete;
         Texture& operator=( const Texture& )    = delete;
         Texture& operator=( Texture&& )         = delete;
+        ~Texture();
 
         void    setStore( GLenum internalFormat, const BufferObject& object );
+        void    allocateStore( GLenum format, uint32_t w, uint32_t h );
 
         void    bind();
         void    unbind();
