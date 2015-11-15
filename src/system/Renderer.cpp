@@ -2,6 +2,7 @@
 #include "system/Material.h"
 #include "component/Include.h"
 #include "utils/Log.h"
+#include "utils/Assert.h"
 
 #include <cmath>
 

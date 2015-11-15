@@ -7,12 +7,10 @@ end
 pi = 3.1415927
 t = 0.0
 
--- this gets called in the update loop
 function update( dt )
+    t = t + dt
     if entity:hasTransform() then
-        t = t + dt
-        local angle = 2*pi*t / 60.0
-        entity.transform.rotation = pg.Quaternion( 0.0, 0.0, math.sin( -angle ), math.cos( -angle ) )
+        entity.transform.rotation = pg.Quaternion( 0.0, math.sin(-0.2*t), 0.0, math.cos(-0.2*t))
     end
 end
 

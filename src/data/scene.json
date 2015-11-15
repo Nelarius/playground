@@ -2,14 +2,31 @@
 [
     {
         "transform": {
-            "position": [ 0.0, 0.0, 8.0 ],
+            "position": [ 0.0, 0.0, 10.0 ],
             "rotation": [ 0.0, 0.0, 0.0, 1.0 ],
             "scale": [ 1.0, 1.0, 1.0 ]
         },
         "camera": {
             "fov": 1.32,
             "nearPlane": 0.1,
-            "farPlane": 10000
+            "farPlane": 1000.0
+        }
+    },
+    {
+        "transform": {
+            "position": [ 0.0, 0.0, 0.0 ],
+            "rotation": [ 0.0, 0.0, 0.0, 1.0 ],
+            "scale": [ 1.0, 1.0, 1.0 ]
+        },
+        "script": "data/RotateCow.lua",
+        "renderable": {
+            "model": "data/cow.obj",
+            "material": {
+                "shininess": 50.0,
+                "specularColor": [ 1.0, 1.0, 1.0 ],
+                "ambientColor": [ 0.241, 0.755, 0.604 ],
+                "baseColor": [ 0.0, 0.0, 0.0 ]
+            }
         }
     },
     {
@@ -20,8 +37,8 @@
             "scale": [ 0.001, 0.001, 0.001 ]
         },
         "pointLight": {
-            "intensity": [ 1.0, 1.0, 1.0 ],
-            "attenuation": 0.5,
+            "intensity": [ 1.0, 1.0, 0.0 ],
+            "attenuation": 0.15,
             "ambientCoefficient": 0.3
         },
         "renderable": {
@@ -30,23 +47,7 @@
                 "shininess": 80.0,
                 "specularColor": [ 0.0, 0.0, 0.0 ],
                 "ambientColor": [ 1.0, 1.0, 1.0 ],
-                "baseColor": [ 1.0, 1.0, 1.0 ]
-            }
-        }
-    },
-    {
-        "transform": {
-            "position": [ 0.0, 0.0, 0.0 ],
-            "rotation": [ 0.0, 0.0, 0.0, 1.0 ],
-            "scale": [ 1.0, 1.0, 1.0 ]
-        },
-        "renderable": {
-            "model": "data/cow.obj",
-            "material": {
-                "shininess": 80.0,
-                "specularColor": [ 1.0, 1.0, 1.0 ],
-                "ambientColor": [ 0.941, 0.455, 0.804 ],
-                "baseColor": [ 0.0, 0.0, 0.0 ]
+                "baseColor": [ 1.0, 1.0, 0.0 ]
             }
         }
     }

@@ -2,8 +2,8 @@
 {
     "frameRate": 60.0,
     "window": {
-        "width": 800,
-        "height": 600,
+        "width": 1200,
+        "height": 800,
         "name": "Clock example",
         "opengl": {
             "major": 3,
