@@ -81,15 +81,16 @@ OBJ = src/Main.o \
 	src/system/Renderer.o \
 	src/system/Debug.o \
 	src/system/Scripter.o \
-	src/system/WrenSystem.o \
+	src/system/ScriptHandler.o \
 	src/system/Ui.o \
 	src/system/ImGuiRenderer.o \
 	src/utils/Random.o \
 	src/utils/MemoryArena.o \
 	src/wren/Generate.o \
+	src/wren/WrenVector.o \
 	wrenly/src/Wrenly.o \
 	wrenly/src/detail/Type.o \
-	
+
 TESTOBJ = src/Test.o \
 	src/test/EntityManagerTest.o \
 	src/test/SparseGraphTest.o \
@@ -104,6 +105,9 @@ all: $(EXECUTABLE)
 	make test
 	cp src/config.json Build/
 	cp -r src/data Build/
+	cp -r builtin Build/
+	dos2unix Build/builtin/vector.wren
+	dos2unix Build/builtin/math.wren
 	./Build/test
 
 %.o: %.cpp
@@ -114,7 +118,6 @@ $(EXECUTABLE): $(OBJ)
 	
 test: $(TESTOBJ)
 	$(CC) -o $(TEST_EXECUTABLE) $(TESTOBJ) -L $(CPPTEST_LINK) -lUnitTest++
-
 
 .PHONY: clean
 

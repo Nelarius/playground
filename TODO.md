@@ -21,6 +21,13 @@
   * add handler for keyup input event
 * `EntityManager` needs to expose the pool size in its public API.
 * Think about the time step. See `Game Programming Patterns::Game Loop` chapter for some ideas about variable time step vs. fixed time step with rendering independent of the updating.
+* Implement Vector and quaternion math.
+  * WorldIO reads in `WrenScript component`
+  * the component is added to the ScriptHandler system
+  * the system is called in the update loop
+  * the system calls the relevant function within the Wren script
+  * Vector3 is bound to Wren
+  * finally, the Makefile needs to move `builtin/` to `Build/`
 
 Consider adding the following API to `VertexArrayObjectFactory`:
 

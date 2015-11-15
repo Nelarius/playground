@@ -1,16 +1,18 @@
 #include "wren/Include.h"
 #include "utils/Random.h"
+#include "math/Vector.h"
+#include "wren/WrenVector.h"
 #include <cmath>
 
 namespace pg {
 namespace wren {
-    
-void GenerateMathModule( wrenly::Wren& w ) {
-    w.beginModule( "math" )
+
+void BindMathModule( wrenly::Wren& w ) {
+    w.beginModule( "builtin/math" )
         .beginClass( "Math" )
             .registerFunction< decltype(&cos), &cos     >( true, "cos(_)" )
             .registerFunction< decltype(&sin), &sin     >( true, "sin(_)" )
-            .registerFunction< decltype(&tan), &tan     >( true, "tan()_" )
+            .registerFunction< decltype(&tan), &tan     >( true, "tan(_)" )
             .registerFunction< decltype(&acos), &acos   >( true, "acos(_)" )
             .registerFunction< decltype(&asin), &asin   >( true, "asin(_)" )
             .registerFunction< decltype(&atan), &atan   >( true, "atan(_)" )
@@ -26,12 +28,20 @@ void GenerateMathModule( wrenly::Wren& w ) {
             .registerFunction< decltype(&abs),  &abs    >( true, "abs(_)" )
             .registerFunction< decltype(static_cast<double(*)(double, double)>(&pg::Randd) ), static_cast<double(*)(double, double)>(&pg::Randd) >( true, "rand(_,_)" )
             .registerFunction< decltype(static_cast<double(*)(void)>(&pg::Randd)), static_cast<double(*)(void)>(&pg::Randd) >( true, "rand()" );
-            
 }
 
-void GenerateVectorModule( wrenly::Wren& w ) {
-    //
+void BindVectorModule( wrenly::Wren& w ) {
+    w.beginModule( "builtin/vector" )
+        .registerClass< math::Vector3f, float, float, float >( "Vec3" )
+            .registerMethod< decltype(&math::Vector3f::norm), &math::Vector3f::norm >( false, "norm()" )
+            .registerMethod< decltype(&math::Vector3f::normSquared), &math::Vector3f::normSquared >( false, "normSquared()" )
+            .registerMethod< decltype(&math::Vector3f::dot), &math::Vector3f::dot >( false, "dot(_)" )
+            .registerCFunction( false, "cross(_)", wren::cross3f )
+            .registerCFunction( false, "plus(_)", wren::plus3f )
+            .registerCFunction( false, "minus(_)", wren::minus3f )
+        .endClass()
+    .endModule();
 }
-    
+
 }
 }

@@ -1,3 +1,4 @@
+#include "3rdparty/json11/json11.hpp"
 #include "app/WorldIO.h"
 #include "opengl/VertexArrayObject.h"
 #include "opengl/VertexArrayObjectFactory.h"
@@ -15,7 +16,8 @@
 #include "lua/LuaBridge.h"
 #include "lua/BindLua.h"
 #include "utils/File.h"
-#include "3rdparty/json11/json11.hpp"
+#include "Wrenly.h"
+#include "wren/Include.h"
 
 namespace pg {
 
@@ -33,6 +35,17 @@ void WorldIO::read(
     std::string error{""};
     auto scene = json11::Json::parse( json, error ).array_items();
 
+    //auto mod = "data/script";
+    //wrenly::Wren vm{};
+    //wren::BindVectorModule( vm );
+    //vm.executeModule( mod );
+    //vm.executeString( "var fn = Fn.new {\n System.print(\"Hello from fn.\")\n}\nfn.call()\n" );
+    //wrenly::Method fn = vm.method( "main", "fn", "call()" );
+    //fn();
+    //vm.executeString( "class Foo {\nstatic say() {\nSystem.print(\"Heeellooo!\")\n}\n}\n" );
+    //wrenly::Method say = vm.method( "main", "Foo", "say()" );
+    //say();
+
     for ( auto object: scene ) {
         ecs::Entity entity = entities.create();
         auto transform = object["transform"];
@@ -40,6 +53,7 @@ void WorldIO::read(
         auto script = object["script"];
         auto camera = object["camera"];
         auto pointLight = object["pointLight"];
+        auto wrenScript = object["wren"];
 
         if ( !transform.is_null() ) {
             auto contents = transform.object_items();
@@ -121,7 +135,7 @@ void WorldIO::read(
                 true
             );
         }   //camera
-        
+
         if ( !script.is_null() ) {
             auto file = script.string_value();
             LuaState lua{ false };
@@ -131,6 +145,20 @@ void WorldIO::read(
             lua.execute( file );
             entity.assign< component::Script >( lua );
         }   // script
+
+        if ( !wrenScript.is_null() ) {
+            auto mod = wrenScript.string_value();
+            wrenly::Wren vm;
+            wren::BindVectorModule( vm );
+            wren::BindMathModule( vm );
+            vm.executeModule( mod );
+            entity.assign< component::WrenScript >(
+                std::move( vm ),
+                vm.method( "main", "activate", "call()" ),
+                vm.method( "main", "deactivate", "call()" ),
+                vm.method( "main", "update", "call()" )
+            );
+        }   // wren
     }
 }
 

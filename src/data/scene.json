@@ -31,6 +31,7 @@
     },
     {
         "script": "data/template.lua",
+        "wren": "data/script",
         "transform": {
             "position": [ -2.0, 0.0, 10.0 ],
             "rotation": [ 0.0, 0.0, 0.0, 1.0 ],

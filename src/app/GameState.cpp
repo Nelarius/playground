@@ -4,6 +4,7 @@
 #include "system/Debug.h"
 #include "system/Renderer.h"
 #include "system/Scripter.h"
+#include "system/ScriptHandler.h"
 #include "system/Ui.h"
 #include "system/Events.h"
 
@@ -40,10 +41,12 @@ void GameState::activate() {
     systems_.add< system::Renderer >( context_ );
     systems_.add< system::Debug >();
     systems_.add< system::Scripter >();
+    systems_.add< system::ScriptHandler >();
     systems_.add< system::Ui >( context_ );
     systems_.configure< system::Debug >();
     systems_.configure< system::Renderer >();
     systems_.configure< system::Scripter >();
+    systems_.configure< system::ScriptHandler >();
     
     // the full capacity of the systems are used in parsing, so the systems must be configured and ready to go!
     WorldIO world( context_ );
@@ -88,6 +91,7 @@ bool GameState::update( float dt ) {
     keyboard_.handleKeyPressedCommands();
     mouse_.update();
     systems_.update< system::Scripter >( dt );
+    systems_.update< system::ScriptHandler >( dt );
     return false;
 }
 
