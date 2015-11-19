@@ -493,7 +493,7 @@ ComponentHandle<C> EntityManager::assign_( Id id, Args&&... args ) {
     ASSERT( isValid_(id) );
     const int family = Component<C>::family();
     accommodateComponent_<C>(); // create a new component pool, if not already done
-    new ( componentPools_[family]->at( id.index() ) ) C{ std::forward<Args>( args )... };
+    new ( componentPools_[family]->newCapacity( id.index() ) ) C{ std::forward<Args>( args )... };
     
     if ( componentMasks_[id.index()].test( family ) ) {
         // if there already is a component, then log it and return the existing component

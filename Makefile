@@ -92,6 +92,7 @@ OBJ = src/Main.o \
 TESTOBJ = src/Test.o \
 	src/test/EntityManagerTest.o \
 	src/test/SparseGraphTest.o \
+	src/test/ContainerTest.o \
 	src/ecs/Component.o \
 	src/ecs/Entity.o \
 	src/ecs/Event.o \

@@ -30,7 +30,7 @@ class BaseArena {
          */
         explicit BaseArena( std::size_t elementSize, std::size_t chunkSize = 128 );
         virtual ~BaseArena();
-        
+
         BaseArena( const BaseArena& )             = delete;
         BaseArena& operator=( const BaseArena& )  = delete;
         BaseArena( BaseArena&& )                  = delete;
@@ -51,20 +51,17 @@ class BaseArena {
          * as it allocates memory one chunk size at a time.
          */
         void reserve( std::size_t n );
+
+        virtual const void* at( std::size_t n ) const;
+        virtual void* at( std::size_t n );
+
         /**
          * @brief Get the pointer to the n:th element in the chunk.
          * @param The n:th element, as if the chunk of memory were an array.
-         * When n is larger than the current capacity, the memory pool will resize itself,
-         * instead of causing a segfault or shutting the program down. The reason for this is
-         * the design of the main user of this class: EntityManager.
-         * 
-         * EntityManager does not create a memory pool for a specific type until that type of
-         * component is assigned for the first time. When we do the assignment, it is easy to
-         * simply create the pool (done in EntityManager::accommodateComponent_), and then immediately
-         * use placement new (using this method) to create the component, thus not having to worry
-         * separately about resizing to the correct size.
+         * When n is larger than the current capacity, the memory pool will resize itself.
          */
-        virtual void* at( std::size_t n );
+        void* newCapacity( std::size_t n );
+
         /**
          * @brief Destroy element at position i.
          */

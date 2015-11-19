@@ -32,14 +32,21 @@ void BaseArena::reserve( std::size_t n ) {
     }
 }
 
-void* BaseArena::at( std::size_t i ) {
-    if ( i >= capacity_ ) {
-        reserve( i );
-    }
+const void* BaseArena::at( std::size_t i ) const {
+    ASSERT( i < capacity_ );
     return blocks_[ i / ChunkSize_ ] + ( i % ChunkSize_ ) * ElementSize_;
 }
 
+void* BaseArena::at( std::size_t i ) {
+    return const_cast<void*>( static_cast<const BaseArena&>(*this).at(i) );
+}
 
+void* BaseArena::newCapacity( std::size_t i ) {
+    if ( i >= capacity_ ) {
+        reserve( i );
+    }
+    return at( i );
+}
 
 
 }
