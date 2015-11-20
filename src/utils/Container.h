@@ -67,6 +67,7 @@ class Container {
             for ( std::size_t i = 0u; i < position_; i++ ) {
                 pool_.destroy( i );
             }
+            position_ = 0u;
         }
 
     private:
