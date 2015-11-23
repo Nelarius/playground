@@ -95,7 +95,9 @@ void WorldIO::read(
                 vao = factory.getVao();
             }
             opengl::VertexArrayObjectFactory factory{ buffer, shader };
-            entity.assign<component::Renderable>( buffer, shader, vao, mat );
+            entity.assign< component::Renderable >( buffer, shader, vao, mat );
+            const auto& bb = context_.meshManager.getBoundingBox( contents["model"].string_value() );
+            entity.assign< component::BoundingBox >( bb.min, bb.max  );
         }   //renderable
 
         if ( !pointLight.is_null() ) {

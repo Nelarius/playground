@@ -6,8 +6,9 @@ namespace pg {
 namespace component {
 
 struct BoundingBox {
-    math::Vector3f corners[8];
+    math::Vector3f min;
+    math::Vector3f max;
 };
-    
+
 }
 }
