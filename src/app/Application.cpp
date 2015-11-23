@@ -1,7 +1,5 @@
 #include "app/Application.h"
 #include "app/GameState.h"
-#include "lua/LuaState.h"
-#include "lua/LuaBridge.h"
 #include "utils/Assert.h"
 #include "utils/File.h"
 #include "utils/Log.h"
@@ -23,11 +21,11 @@ namespace {
 
 void Application::run() { 
     initialize_();
-    
+
     running_ = true;
     auto currentTime = std::chrono::steady_clock::now();
     std::chrono::duration<float, std::ratio<1,1>> time( 0.0f );
-    
+
     while( running_ ) {
         auto newTime = std::chrono::steady_clock::now();
         std::chrono::duration<float, std::ratio<1,1>> dt = newTime - currentTime;
@@ -50,15 +48,15 @@ void Application::run() {
         if ( !context_.running ) {
             running_ = false;
         }
-        
+
         stateStack_.update( dt.count() );
         
         glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
         stateStack_.render( dt.count() );
-        
+
         window_.display();
         time += dt;
-        
+
         /*
          * Sleep for the remainder of the frame, if we have time for it
          * */
@@ -70,15 +68,14 @@ void Application::run() {
 }
 
 void Application::initialize_() {
-    
     auto json = pg::FileToString( "config.json" );
     std::string error{""};
     auto obj = json11::Json::parse( json, error ).object_items();
     auto window = obj["window"].object_items();
     auto opengl = window["opengl"].object_items();
-    
+
     TargetDeltaTime = std::chrono::duration<float, std::ratio<1,1>>( 1.0f /  obj["frameRate"].number_value() );
-    
+
     WindowSettings settings{};
     settings.width = window["width"].int_value();
     settings.height = window["height"].int_value();
@@ -89,11 +86,11 @@ void Application::initialize_() {
     settings.depthBits = opengl["depth_bits"].int_value();
     settings.multisampleBuffer = opengl["multisample_buffers"].int_value();
     settings.multisampleSamples = opengl["multisample_samples"].int_value();
-    
+
     window_.initialize( settings );
-    
+
     context_.window = &window_;
-    
+
     stateStack_.registerState<GameState>( states::Game );
     stateStack_.pushState( states::Game );
 }

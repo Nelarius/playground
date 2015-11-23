@@ -12,7 +12,7 @@ using pg::WindowSettings;
 Window::Window()
     :   window_( nullptr ),
         glContext_(),
-        name_( "Crowd engine" ),
+        name_( "Playground engine" ),
         width_( 800 ),
         height_( 600 ),
         glMajor_( 4 ),
@@ -38,8 +38,6 @@ void Window::initializeSDL_() {
 
     SDL_GL_SetAttribute( SDL_GL_CONTEXT_MAJOR_VERSION, glMajor_ );
     SDL_GL_SetAttribute( SDL_GL_CONTEXT_MINOR_VERSION, glMinor_ );
-    /*SDL_GL_SetAttribute( SDL_GL_CONTEXT_PROFILE_MASK,
-                        SDL_GL_CONTEXT_PROFILE_CORE );*/
     SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER, 1 );
     SDL_GL_SetAttribute( SDL_GL_DEPTH_SIZE, depthBits_ );
     SDL_GL_SetAttribute( SDL_GL_STENCIL_SIZE, stencilBits_ );
