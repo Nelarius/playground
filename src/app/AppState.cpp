@@ -7,15 +7,17 @@ using pg::AppStateStack;
 
 AppState::AppState( Context& context, AppStateStack& stack  )
 :	context_( context ),
-	stack_( stack )
-	{}
+    keyboard_(),
+    mouse_(),
+    stack_( stack )
+    {}
 
 void AppState::requestStackClear_() {
     stack_.clearStates();
 }
 
 void AppState::requestStackPop_() {
-	stack_.popState();
+    stack_.popState();
 }
 
 void AppState::requestStackPush_( pg::states::Id id ) {

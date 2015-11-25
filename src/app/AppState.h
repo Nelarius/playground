@@ -3,6 +3,8 @@
 
 #include "app/Context.h"
 #include "StateIdentifiers.h"
+#include "app/KeyboardManager.h"
+#include "app/MouseEvents.h"
 
 namespace pg {
 
@@ -25,13 +27,12 @@ class AppState {
         void requestStackPop_();
         void requestStackClear_();
         // FIELDS
-        Context&	context_;
+        Context&            context_;
+        KeyboardManager     keyboard_;
+        MouseEvents         mouse_;
 
     private:
         AppStateStack&	stack_;
-        //state stack goes here
-        //maybe as pointer if references and forward declaration don't work?
-
 };
 
 }

@@ -5,9 +5,9 @@ namespace pg {
 
 AppStateStack::AppStateStack( Context& context )
 :	context_( context ),
-	stack_(),
-	factories_()
-	{}
+    stack_(),
+    factories_()
+    {}
 
 void AppStateStack::render( float dt ) {
     for ( auto& ptr: stack_ ) {

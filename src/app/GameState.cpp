@@ -20,9 +20,7 @@ GameState::GameState( Context& context, AppStateStack& stack )
 :   AppState( context, stack ),
     events_(),
     entities_( events_ ),
-    systems_( events_, entities_ ),
-    keyboard_(),
-    mouse_() 
+    systems_( events_, entities_ )
     {}
 
 void GameState::activate() {
@@ -58,7 +56,12 @@ void GameState::activate() {
       },
       std::function<void()>()
     ) );
-  
+    keyboard_.registerKeyDownCommand( Keycode::KeyP, Command(
+        [ this ]() -> void {
+          this->requestStackPush_( states::Pause );
+      },
+      std::function<void()>()
+    ) );
     mouse_.setPressCallback( 
         SDL_BUTTON_LEFT, 
         Command(

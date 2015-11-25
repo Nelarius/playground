@@ -1,17 +1,13 @@
 #include "app/Application.h"
 #include "app/GameState.h"
+#include "app/PauseState.h"
 #include "utils/Assert.h"
 #include "utils/File.h"
 #include "utils/Log.h"
 #include "3rdparty/json11/json11.hpp"
-#include <SDL2/SDL_mouse.h>
-#include <GL/glew.h>
 #include <string>
 #include <chrono>
 #include <thread>
-#include <cmath>
-
-#include <iostream>
 
 namespace pg {
 
@@ -39,7 +35,7 @@ void Application::run() {
          * Handle events here
          * */
         SDL_Event event;
-        while( SDL_PollEvent( &event ) ) {           
+        while( SDL_PollEvent( &event ) ) {
             stateStack_.handleEvent( event );
         }
         /*
@@ -50,7 +46,7 @@ void Application::run() {
         }
 
         stateStack_.update( dt.count() );
-        
+
         glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
         stateStack_.render( dt.count() );
 
@@ -91,7 +87,8 @@ void Application::initialize_() {
 
     context_.window = &window_;
 
-    stateStack_.registerState<GameState>( states::Game );
+    stateStack_.registerState< GameState >( states::Game );
+    stateStack_.registerState< PauseState >( states::Pause );
     stateStack_.pushState( states::Game );
 }
 
@@ -106,7 +103,5 @@ void Application::updateContext_() {
     context_.mouse_.x = newx;
     context_.mouse_.y = newy;
 }
-
-
 
 }

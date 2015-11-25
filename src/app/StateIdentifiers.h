@@ -4,12 +4,12 @@
 
 namespace pg {
 namespace states {
-	
+
 enum Id {
-	None,
-	Pause,
+    None,
+    Pause,
     Game
 };
-	
+
 }
 }

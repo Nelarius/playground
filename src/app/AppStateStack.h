@@ -25,25 +25,25 @@ class AppStateStack {
 public:
     explicit AppStateStack( Context& context );
     ~AppStateStack() = default;
-    
+
     template<typename T>
     void registerState( states::Id id );
-    
+
     void render( float dt );
     void update( float dt );
     void handleEvent( const SDL_Event& event );
-    
+
     void pushState( states::Id id );
     void popState();
     void clearStates();
     
     bool isEmpty() const;
-    
+
     private:
         // METHODS
         std::unique_ptr<AppState> 	createState_( states::Id id );
         void 						applyPendingChanges_();
-        
+
         // STRUCTS
         struct PendingChange {
             explicit PendingChange( states::Action action, states::Id id = states::Id::None );
@@ -51,7 +51,7 @@ public:
             states::Action action;
             states::Id id;
         };
-        
+
         // FIELDS
         Context&	context_;
         std::vector<std::unique_ptr<AppState>>	stack_;
@@ -59,8 +59,6 @@ public:
         std::map<states::Id, std::function<std::unique_ptr<AppState>()>>	factories_;
 
 };
-
-
 
 template<typename T>
 void AppStateStack::registerState( states::Id id ) {
