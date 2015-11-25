@@ -12,13 +12,13 @@ class Ui: public ecs::System<Ui>, public ImGuiRenderer {
         Ui() = delete;
         explicit Ui( Context& context );
         virtual ~Ui() = default;
-        
+
         void update( ecs::EntityManager&, ecs::EventManager&, float ) override;
-        
+
         void toggleDisplay();
-        
+
     private:
-        void ui_( float );
+        void ui_( ecs::EventManager&, float );
         bool display_;
 
 };

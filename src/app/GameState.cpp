@@ -27,14 +27,10 @@ GameState::GameState( Context& context, AppStateStack& stack )
 
 void GameState::activate() {
     // everything here should eventually go into a loading state
-    context_.shaderManager.addShader( "data/diffuse.vert.glsl", GL_VERTEX_SHADER );
-    context_.shaderManager.addShader( "data/diffuse.frag.glsl", GL_FRAGMENT_SHADER );
-    context_.shaderManager.compile( "diffuse" );
-    
-    context_.shaderManager.addShader( "data/ambient.vert.glsl", GL_VERTEX_SHADER );
-    context_.shaderManager.addShader( "data/ambient.frag.glsl", GL_FRAGMENT_SHADER );
-    context_.shaderManager.compile( "ambient" );
-    
+    context_.shaderManager.addShader( "data/basic.vert.glsl", GL_VERTEX_SHADER );
+    context_.shaderManager.addShader( "data/basic.frag.glsl", GL_FRAGMENT_SHADER );
+    context_.shaderManager.compile( "basic" );
+
     context_.shaderManager.addShader( "data/specular.vert.glsl", GL_VERTEX_SHADER );
     context_.shaderManager.addShader( "data/specular.frag.glsl", GL_FRAGMENT_SHADER );
     context_.shaderManager.compile( "specular" );
