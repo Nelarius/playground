@@ -9,5 +9,9 @@ struct CameraActivated {
     ecs::Entity entity;
 };
 
+struct ToggleDebugRenderer {
+    bool show;
+};
+
 }
 }

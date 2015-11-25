@@ -23,17 +23,17 @@ namespace pg {
 class MeshManager {
     public:        
         MeshManager() = default;
-        ~MeshManager() = default;        
-        
+        ~MeshManager() = default;
+
         /**
-         * @brief 
+         * @brief
          * @param file The mesh file to get.
          */
         opengl::BufferObject*   get( const std::string& file ) const;
         /**
         * @brief 
         * @param file 
-        * @returns
+        * @returns The bounding box corresponding to the given file name.
         */
         component::BoundingBox  getBoundingBox( const std::string& file ) const;
         /**
@@ -44,7 +44,7 @@ class MeshManager {
          * @brief Get the number of elements.
          */
         std::size_t     size() const;
-        
+
     private:
         mutable Container< opengl::BufferObject >                           buffer_{};
         mutable std::unordered_map< std::string, opengl::BufferObject* >    resources_{};

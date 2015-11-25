@@ -16,12 +16,14 @@ class Debug : public ecs::System<Debug>, public ecs::Receiver {
         void receive( const ecs::ComponentAssignedEvent< component::Camera >& );
         void receive( const ecs::ComponentAssignedEvent< component::Transform >& );
         void receive( const ecs::ComponentAssignedEvent< component::Renderable >& );
+        void receive( const ecs::ComponentAssignedEvent< component::BoundingBox >& );
         void receive( const ecs::ComponentAssignedEvent< component::PointLight >& );
         void receive( const ecs::ComponentAssignedEvent< component::Script >& );
 
         void receive( const ecs::ComponentRemovedEvent< component::Camera >& );
         void receive( const ecs::ComponentRemovedEvent< component::Transform >& );
         void receive( const ecs::ComponentRemovedEvent< component::Renderable >& );
+        void receive( const ecs::ComponentRemovedEvent< component::BoundingBox >& );
         void receive( const ecs::ComponentRemovedEvent< component::PointLight >& );
         void receive( const ecs::ComponentRemovedEvent< component::Script >& script );
 };

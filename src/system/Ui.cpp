@@ -1,4 +1,5 @@
 #include "system/Ui.h"
+#include "system/Events.h"
 #include "GL/glew.h"
 #include "3rdparty/imgui/imgui.h"
 #include <GL/glew.h>
@@ -17,27 +18,40 @@ Ui::Ui( Context& context )
     display_( false )
     {}
 
-void Ui::update( ecs::EntityManager&, ecs::EventManager&, float dt ) {
+void Ui::update( ecs::EntityManager& entities, ecs::EventManager& events, float dt ) {
     newFrame_( dt );
-    
+
     if ( display_ ) {
-        ui_( dt );
+        ui_( events, dt );
     }
-    
+
     ImGui::Render();
 }
 
 void Ui::toggleDisplay() {
-    display_ = !display_;
+    display_ ^= 1;
 }
 
-void Ui::ui_( float dt ) {
-    // place your Imgui logic here
-    ImGui::Begin( "GL info" );
-    ImGui::Text( "GL_VERSION: %s", ( const char* ) glGetString( GL_VERSION ) );
-    ImGui::Text( "GLSL_VERSION: %s", ( const char* ) glGetString( GL_SHADING_LANGUAGE_VERSION ) );
-    ImGui::Text( "GL_VENDOR: %s", ( const char* ) glGetString( GL_VENDOR ) );
-    ImGui::Text( "GL_RENDERER: %s", ( const char* ) glGetString( GL_RENDERER ) );
+void Ui::ui_( ecs::EventManager& events, float dt ) {
+    static bool debugRendererOn = false;
+
+    ImGui::Begin( "Control panel" );
+
+    if ( ImGui::TreeNode( "Renderer") ) {
+        ImGui::Checkbox( "bounding box", &debugRendererOn );
+        events.emit< ToggleDebugRenderer >( debugRendererOn );
+
+        ImGui::TreePop();
+    }
+    if ( ImGui::TreeNode( "OpenGL renderer") ) {
+        ImGui::Text( "GL_VERSION: %s", ( const char* ) glGetString( GL_VERSION ) );
+        ImGui::Text( "GLSL_VERSION: %s", ( const char* ) glGetString( GL_SHADING_LANGUAGE_VERSION ) );
+        ImGui::Text( "GL_VENDOR: %s", ( const char* ) glGetString( GL_VENDOR ) );
+        ImGui::Text( "GL_RENDERER: %s", ( const char* ) glGetString( GL_RENDERER ) );
+
+        ImGui::TreePop();
+    }
+
     ImGui::End();
 }
 

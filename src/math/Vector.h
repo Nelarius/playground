@@ -51,15 +51,19 @@ struct Vector2 {
     T dot( const Vector2<T>& rhs ) const {
         return x*rhs.x + y*rhs.y;
     }
-    
+
+    Vector2 hadamard( const Vector2<T>& rhs ) const {
+        return Vector2<T>{ x*rhs.x, y*rhs.y };
+    }
+
     Vector2<T> operator+( const Vector2<T>& rhs ) const {
         return Vector2<T>{ x + rhs.x, y + rhs.y };
     }
-    
+
     Vector2<T> operator-( const Vector2<T>& rhs ) const {
         return Vector2<T>{ x - rhs.x, y - rhs.y };
     }
-    
+
     Vector2<T> operator*( T val ) const {
         return Vector2<T>{ x*val, y*val };
     }
@@ -129,6 +133,10 @@ struct Vector3 {
         return x*rhs.x + y*rhs.y + z*rhs.z;
     }
     
+    Vector3 hadamard( const Vector3<T>& rhs ) const {
+        return Vector3<T>{ x*rhs.x, y*rhs.y, z*rhs.z };
+    }
+
     Vector3 cross( const Vector3& rhs ) const {
         return Vector3 { 
             y*rhs.z - z*rhs.y,
@@ -222,6 +230,10 @@ struct Vector4 {
         return x*rhs.x + y*rhs.y + z*rhs.z + w*rhs.w;
     }
     
+    Vector4 hadamard( const Vector4<T>& rhs ) const {
+        return Vector4<T>{ x*rhs.x, y*rhs.y, z*rhs.z, w*rhs.w };
+    }
+
     Vector4 operator+( const Vector3<T>& rhs ) const {
         return Vector4<T>( x + rhs.x, y + rhs.y, z + rhs.z );
     }
