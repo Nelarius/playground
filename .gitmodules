@@ -1,3 +1,6 @@
 [submodule "wrenly"]
 	path = wrenly
 	url = https://github.com/nelarius/wrenly
+[submodule "filesentry"]
+	path = filesentry
+	url = https://github.com/nelarius/filesentry
