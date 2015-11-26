@@ -49,7 +49,7 @@ void GameState::activate() {
     WorldIO world( context_ );
     world.read( "data/scene.json", entities_, events_ );
     
-    keyboard_.registerKeyDownCommand( Keycode::KeyQ, Command(
+    keyboard_.registerKeyDownCommand( Keycode::KeyF1, Command(
       [ this ]() -> void {
           auto ui = this->systems_.system< system::Ui >();
           ui->toggleDisplay();
