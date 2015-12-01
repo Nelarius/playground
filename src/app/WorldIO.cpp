@@ -26,25 +26,28 @@ WorldIO::WorldIO( Context& context )
     {}
 
 void WorldIO::read( 
-                        const std::string& file,
-                        ecs::EntityManager& entities,
-                        ecs::EventManager& events
-                    ) {
+        const std::string& file,
+        ecs::EntityManager& entities,
+        ecs::EventManager& events
+    ) {
+    // bind the scripting API so that Wren can find the methods
+    wren::bindVectorModule();
+    wren::bindMathModule();
+    wren::bindQuaternionModule();
+    wren::bindEntityModule();
+    wrenly::Wren::loadModuleFn = []( const char* mod ) -> char* {
+        std::string path( mod );
+        path += ".wren";
+        auto source = FileToString( path );
+        char* buffer = (char*) malloc( source.size() + 1 );
+        memcpy( buffer, source.c_str(), source.size() + 1 );
+        buffer[source.size()] = '\0';
+        return buffer;
+    };
 
     auto json = pg::FileToString( "data/scene.json" );
     std::string error{""};
     auto scene = json11::Json::parse( json, error ).array_items();
-
-    //auto mod = "data/script";
-    //wrenly::Wren vm{};
-    //wren::BindVectorModule( vm );
-    //vm.executeModule( mod );
-    //vm.executeString( "var fn = Fn.new {\n System.print(\"Hello from fn.\")\n}\nfn.call()\n" );
-    //wrenly::Method fn = vm.method( "main", "fn", "call()" );
-    //fn();
-    //vm.executeString( "class Foo {\nstatic say() {\nSystem.print(\"Heeellooo!\")\n}\n}\n" );
-    //wrenly::Method say = vm.method( "main", "Foo", "say()" );
-    //say();
 
     for ( auto object: scene ) {
         ecs::Entity entity = entities.create();
@@ -149,8 +152,6 @@ void WorldIO::read(
         if ( !wrenScript.is_null() ) {
             auto mod = wrenScript.string_value();
             wrenly::Wren vm;
-            wren::BindVectorModule( vm );
-            wren::BindMathModule( vm );
             vm.executeModule( mod );
             entity.assign< component::WrenScript >(
                 std::move( vm ),

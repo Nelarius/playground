@@ -24,7 +24,7 @@ WREN_LINK = C:/dev/wren/lib
 
 LINKER_INCLUDES = -L $(SDL_LINK) -L $(GLEW_LINK) -L $(LUA_LINK) -L $(WREN_LINK) -L $(ASSIMP_LINK)
 
-CFLAGS = -std=gnu++14 -Wall -g -DDEBUG -DASSERTION_ENABLED
+CFLAGS = -std=gnu++14 -Wall -g -DDEBUG -DASSERTIONS_ENABLED
 
 LDFLAGS =
 
@@ -88,6 +88,8 @@ OBJ = src/Main.o \
 	src/utils/MemoryArena.o \
 	src/wren/Generate.o \
 	src/wren/WrenVector.o \
+	src/wren/WrenQuaternion.o \
+    src/wren/WrenEntity.o \
 	wrenly/src/Wrenly.o \
 	wrenly/src/detail/Type.o \
 
@@ -106,8 +108,6 @@ all: $(EXECUTABLE)
 	cp src/config.json Build/
 	cp -r src/data Build/
 	cp -r builtin Build/
-	dos2unix Build/builtin/vector.wren
-	dos2unix Build/builtin/math.wren
 	./Build/test
 
 %.o: %.cpp

@@ -6,7 +6,10 @@
 namespace pg {
 namespace wren {
     // this namespace generates the Wren scripting language interface
-    void BindMathModule( wrenly::Wren& );
-    void BindVectorModule( wrenly::Wren& );
+    void bindMathModule();
+    void bindVectorModule();
+    void bindQuaternionModule();
+    void bindEntityModule();
+    void bindComponentModule();
 }
 }
