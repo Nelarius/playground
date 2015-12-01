@@ -213,6 +213,10 @@ class EntityManager {
          */
         Entity create();
         /**
+         * @brief Get an valid entity for the given index.
+         */
+        Entity get( uint32_t index );
+        /**
          * @brief Destroy all entities and components associated with this manager.
          */
         void reset();

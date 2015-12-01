@@ -61,6 +61,11 @@ void bindVectorModule() {
 void bindQuaternionModule() {
     wrenly::beginModule( "builtin/quaternion" )
         .bindClass< math::Quatf, float, float, float, float >( "Quat" )
+            // properties
+            .bindSetter< decltype(math::Quatf::v), &math::Quatf::v >( false, "v=(_)")
+            .bindGetter< decltype(math::Quatf::w), &math::Quatf::w >( false, "w" )
+            .bindSetter< decltype(math::Quatf::w), &math::Quatf::w >( false, "w=(_)" )
+            // methods
             .bindMethod< decltype(&math::Quatf::norm), &math::Quatf::norm >( false, "norm()" )
             .bindMethod< decltype(&math::Quatf::normSquared), &math::Quatf::normSquared >( false, "normSquared()" )
             .bindMethod< decltype(&math::Quatf::angle), &math::Quatf::angle >( false, "angle()" )
@@ -80,8 +85,12 @@ void bindEntityModule() {
             .bindMethod< decltype(&ecs::Entity::has<component::Renderable>), &ecs::Entity::has<component::Renderable> >( false, "hasRenderable()" )
             .bindMethod< decltype(&ecs::Entity::has<component::Camera>), &ecs::Entity::has<component::Camera> >( false, "hasCamera()" )
             .bindMethod< decltype(&ecs::Entity::has<component::PointLight>), &ecs::Entity::has<component::PointLight> >( false, "hasPointLight()" )
+            .bindCFunction( false, "set(_)", wren::set )
             .bindCFunction( false, "index", wren::entityIndex )
             .bindCFunction( false, "version", wren::entityVersion )
+            .bindCFunction( false, "transform=(_)", wren::setTransform )
+        .endClass()
+        .bindClass< component::Transform, math::Vector3f, math::Quatf, math::Vector3f >( "Transform" )
         .endClass()
     .endModule();
 }

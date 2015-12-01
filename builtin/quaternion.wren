@@ -9,6 +9,10 @@ foreign class Quat {
     foreign axis()      // returns axis as Vec3
     foreign angle()     // returns angle in radians
     foreign multiply( rhs ) // returns the result as a new Quaternion
+
+    foreign v=( rhs )
+    foreign w
+    foreign w=( rhs )
 }
 
 var createQuaternion = Fn.new { | x, y, z, w |

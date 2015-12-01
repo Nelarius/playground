@@ -7,6 +7,7 @@
 #include "system/ScriptHandler.h"
 #include "system/Ui.h"
 #include "system/Events.h"
+#include "utils/Locator.h"
 
 #include <SDL2/SDL_scancode.h>
 #include <SDL2/SDL_mouse.h>
@@ -21,8 +22,9 @@ GameState::GameState( Context& context, AppStateStack& stack )
 :   AppState( context, stack ),
     events_(),
     entities_( events_ ),
-    systems_( events_, entities_ )
-    {}
+    systems_( events_, entities_ ) {
+    Locator< ecs::EntityManager >::set( &entities_ );
+}
 
 void GameState::activate() {
     // everything here should eventually go into a loading state

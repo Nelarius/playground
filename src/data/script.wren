@@ -1,26 +1,31 @@
 import "builtin/vector" for Vec3
 import "builtin/quaternion" for Quat
-import "builtin/entity" for Entity
 import "builtin/math" for Math
+import "builtin/entity" for Transform
 
-var v1 = Vec3.new( -1.0, 1.0, 1.0 )
-var v2 = Vec3.new( 0.0, -2.3, 1.0 )
-var q1 = Quat.new( 0.0, 0.0, 0.0, 1.0 )
+var pos = Vec3.new( 0.0, 0.0, 0.0 )
+var scale = Vec3.new( 1.0, 1.0, 1.0 )
+var rot = Quat.new( 0.0, 0.0, 0.0, 1.0 )
 
 var activate = Fn.new{
-    System.print( v1.norm() )
-    var v3 = (v2.cross( v1 ))
-    v1.x = 5.0
-    v1.y = 5.0
-    v1.z = 5.0
-    System.print("v1.cross(v2): (%(v3.x), %(v3.y), %(v3.z))")
-    System.print("v1.dot(v2): %(v1.dot(v2))")
+    if (entity.isValid() ) {
+        System.print("Yay, the entity is valid!")
+    } else {
+        System.print("The entity is not valid")
+    }
+    System.print("entity.hasTransform: %(entity.hasTransform())")
 }
 
 var deactivate = Fn.new{
     System.print( "calling deactivate" )
 }
 
-var update = Fn.new {
-    //System.print( "in ur script, updating ur entity" )
+var pi = 3.1415927
+var t = 0.0
+
+var update = Fn.new { | dt |
+    t = t + dt
+    rot.v = Vec3.new( 0.0, Math.sin(-0.2*t), 0.0 )
+    rot.w = Math.cos(-0.2*t)
+    entity.transform = Transform.new( pos, rot, scale )
 }

@@ -10,7 +10,7 @@ void ScriptHandler::configure( ecs::EventManager& events ) {
 
 void ScriptHandler::update( ecs::EntityManager& entities, ecs::EventManager& events, float dt ) {
     for ( ecs::Entity entity: entities.join< component::WrenScript >() ) {
-        entity.component< component::WrenScript >()->update();
+        entity.component< component::WrenScript >()->update( dt );
      }
 }
 

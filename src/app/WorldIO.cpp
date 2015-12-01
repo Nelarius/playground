@@ -35,15 +35,6 @@ void WorldIO::read(
     wren::bindMathModule();
     wren::bindQuaternionModule();
     wren::bindEntityModule();
-    wrenly::Wren::loadModuleFn = []( const char* mod ) -> char* {
-        std::string path( mod );
-        path += ".wren";
-        auto source = FileToString( path );
-        char* buffer = (char*) malloc( source.size() + 1 );
-        memcpy( buffer, source.c_str(), source.size() + 1 );
-        buffer[source.size()] = '\0';
-        return buffer;
-    };
 
     auto json = pg::FileToString( "data/scene.json" );
     std::string error{""};
@@ -152,12 +143,18 @@ void WorldIO::read(
         if ( !wrenScript.is_null() ) {
             auto mod = wrenScript.string_value();
             wrenly::Wren vm;
+            vm.executeString(
+                "import \"builtin/entity\" for Entity\n"
+                "var entity = Entity.new()\n"
+            );
+            wrenly::Method set = vm.method( "main", "entity", "set(_)" );
+            set( int(entity.id().index()) );
             vm.executeModule( mod );
             entity.assign< component::WrenScript >(
                 std::move( vm ),
                 vm.method( "main", "activate", "call()" ),
                 vm.method( "main", "deactivate", "call()" ),
-                vm.method( "main", "update", "call()" )
+                vm.method( "main", "update", "call(_)" )
             );
         }   // wren
     }

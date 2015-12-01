@@ -100,6 +100,14 @@ Entity EntityManager::create() {
     return entity;
 }
 
+Entity EntityManager::get( uint32_t index ) {
+    // indexCounter_ always points to the position of the next entity to be created
+    if ( index < indexCounter_ ) {
+        return Entity( this, Id( index, entityVersions_[index]) );
+    }
+    return Entity();
+}
+
 EntityManager::View EntityManager::join() {
     return View{ this };
 }
