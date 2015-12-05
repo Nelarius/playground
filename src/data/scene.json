@@ -18,7 +18,7 @@
             "rotation": [ 0.0, 0.0, 0.0, 1.0 ],
             "scale": [ 1.0, 1.0, 1.0 ]
         },
-        "wren": "data/script",
+        "wren": "data/cow",
         "renderable": {
             "model": "data/cow.obj",
             "material": {
@@ -30,7 +30,7 @@
         }
     },
     {
-        "script": "data/template.lua",
+        "wren": "data/lamp",
         "transform": {
             "position": [ -2.0, 0.0, 10.0 ],
             "rotation": [ 0.0, 0.0, 0.0, 1.0 ],

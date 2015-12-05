@@ -1,6 +1,6 @@
 # The Playground engine
 
-A small, experimental, data-driven, entity-component-based, and scriptable game engine.
+A small, experimental, data-driven, entity-component-based, and Wren-scriptable game engine.
 
 ## Compiling
 
@@ -16,7 +16,7 @@ Compiling on Windows isn't a great experience at the moment. Your locations of t
 
 ## Organization
 
-The C/C++ source code is in `src/`. The engine depends on some data, such as scriping files and shader source. These are located in `builtin/`.
+The C/C++ source code is in `src/`. The engine depends on some data, such as scripting files and shader source. These are located in `builtin/`.
 
 Within `src/` lies a number of subfolders. These are usually fairly independent modules, some of which I've provided their own README file.
 
@@ -44,7 +44,7 @@ This component describes the position, orientation, and scale of an entity. It's
 
 #### Script
 
-Entities can be scripted in Lua. The script component JSON notation simply contains the location of the script file.
+A script component can be attached to entities. Scripts are written in the Wren programming language. See below, in the Scripting API section, for more.
 
 ```json
 "script": STRING
@@ -86,93 +86,7 @@ The camera component is used for rendering the renderable components.
 }
 ```
 
-#### A small scene
-
-Here is a simple scene where a cube light rotates around another 3d model:
-
-`data/scene.json`:
-
-```json
-[
-    {
-        "transform": {
-            "position": [ 0.0, 0.0, 8.0 ],
-            "rotation": [ 0.0, 0.0, 0.0, 1.0 ],
-            "scale": [ 1.0, 1.0, 1.0 ]
-        },
-        "camera": {
-            "fov": 1.32,
-            "nearPlane": 0.1,
-            "farPlane": 10000
-        }
-    },
-    {
-        "script": "data/template.lua",
-        "transform": {
-            "position": [ -2.0, 0.0, 10.0 ],
-            "rotation": [ 0.0, 0.0, 0.0, 1.0 ],
-            "scale": [ 0.001, 0.001, 0.001 ]
-        },
-        "pointLight": {
-            "intensity": [ 1.0, 1.0, 1.0 ],
-            "attenuation": 0.5,
-            "ambientCoefficient": 0.3
-        },
-        "renderable": {
-            "model": "data/cube.dae",
-            "material": {
-                "shininess": 80.0,
-                "specularColor": [ 0.0, 0.0, 0.0 ],
-                "ambientColor": [ 1.0, 1.0, 1.0 ],
-                "baseColor": [ 1.0, 1.0, 1.0 ]
-            }
-        }
-    },
-    {
-        "transform": {
-            "position": [ 0.0, 0.0, 0.0 ],
-            "rotation": [ 0.0, 0.0, 0.0, 1.0 ],
-            "scale": [ 1.0, 1.0, 1.0 ]
-        },
-        "renderable": {
-            "model": "data/cow.obj",
-            "material": {
-                "shininess": 80.0,
-                "specularColor": [ 1.0, 1.0, 1.0 ],
-                "ambientColor": [ 0.941, 0.455, 0.804 ],
-                "baseColor": [ 0.0, 0.0, 0.0 ]
-            }
-        }
-    }
-]
-```
-
-`data/template.lua`:
-
-```lua
--- this gets called just after the component is assigned
-function activate()
-end
-
--- accumulated time
-t = 0.0
--- angular velocity
-av = 0.5
-r = 5.0
-
--- this gets called in the update loop
-function update( dt )
-    t = t + dt
-    if entity:hasTransform() then
-        entity.transform.position = pg.Vector3f( r*math.cos(t), 0.0, r*math.sin(t))
-    end
-end
-
---  this gets called just before the component is removed
-function deactivate()
-    --this gets called just before the script gets removed from the owning entity
-end
-```
+Here's what an example configuration for the application might look like:
 
 `config.json`:
 
@@ -180,16 +94,16 @@ end
 {
     "frameRate": 60.0,
     "window": {
-        "width": 800,
-        "height": 600,
-        "name": "Playground engine",
+        "width": 1200,
+        "height": 800,
+        "name": "Clock example",
         "opengl": {
             "major": 3,
             "minor": 1,
-            "stencilBits": 8,
-            "depthBits": 24,
-            "msBuffers": 1,
-            "msSamples": 4
+            "stencil_bits": 8,
+            "depth_bits": 24,
+            "multisample_buffers": 1,
+            "multisample_samples": 4
         }
     }
 }
@@ -197,18 +111,47 @@ end
 
 ## Scripting interface
 
-**TODO: documentation**
+See the `builtin` folder the Wren modules, and the `src/data` folder for any actual script files. It's very simple for now. Here's an example for what a script looks like which makes an object rotate around the origin:
+
+```dart
+import "builtin/math" for Math
+import "builtin/entity" for Transform
+import "builtin/vector" for Vec3
+import "builtin/quaternion" for Quat
+
+var activate = Fn.new {
+  // gets called when the script component is created
+}
+
+var deactivate = Fn.new {
+  // gets called just before the component is destroyed
+}
+
+var t = 0.0
+var r = 6.0
+var pos = Vec3.new( 0.5, 0.5, 0.5 )
+var rot = Quat.new( 0.0, 0.0, 0.0, 1.0 )
+var scale = Vec3.new( 0.001, 0.001, 0.001 )
+
+var update = Fn.new { | dt |
+  t = t + dt
+  pos.x = r * Math.cos(t)
+  pos.z = r * Math.sin(t)
+  entity.transform = Transform.new( pos, rot, scale )
+}
+```
 
 ## Dependencies
-### SDL2
-zlib license
-Feel free to do anything you want with it, so long as you don't misrepresent who wrote the original software, license must be included
-### glew
-MIT license
-### Lua 5.2
-MIT license
-### Assimp
-3-clause BSD license, do what you want, but include the license text.
-### LuaBridge
-MIT license
+* SDL2
+  * for windowing and OpenGL access
+* Assimp
+  * model asset import
+* GLEW
+* Wren
+  * scripting language
+* Wrenly
+  * C++ language bindings for Wren
+* Filesentry
+  * file system state change monitoring
+  * used to reload files at runtime
 

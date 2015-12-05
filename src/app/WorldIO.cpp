@@ -6,15 +6,11 @@
 #include "system/Material.h"
 #include "system/Debug.h"
 #include "system/Renderer.h"
-#include "system/Scripter.h"
 #include "system/Ui.h"
 #include "system/Events.h"
 #include "component/Include.h"
 #include "utils/Log.h"
 #include "utils/Assert.h"
-#include "lua/LuaState.h"
-#include "lua/LuaBridge.h"
-#include "lua/BindLua.h"
 #include "utils/File.h"
 #include "Wrenly.h"
 #include "wren/Include.h"
@@ -129,16 +125,6 @@ void WorldIO::read(
                 true
             );
         }   //camera
-
-        if ( !script.is_null() ) {
-            auto file = script.string_value();
-            LuaState lua{ false };
-            BindAll( lua.get() );
-            lb::push( lua.get(), entity );
-            lua_setglobal( lua.get(), "entity" );
-            lua.execute( file );
-            entity.assign< component::Script >( lua );
-        }   // script
 
         if ( !wrenScript.is_null() ) {
             auto mod = wrenScript.string_value();

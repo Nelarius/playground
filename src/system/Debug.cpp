@@ -13,13 +13,11 @@ void Debug::configure( ecs::EventManager& events ) {
     events.subscribe<ecs::ComponentAssignedEvent<component::Renderable>>( *this );
     events.subscribe<ecs::ComponentAssignedEvent<component::BoundingBox>>( *this );
     events.subscribe< ecs::ComponentAssignedEvent<component::PointLight> >( *this );
-    events.subscribe<ecs::ComponentAssignedEvent<component::Script>>( *this );
     events.subscribe<ecs::ComponentRemovedEvent<component::Camera>>( *this );
     events.subscribe<ecs::ComponentRemovedEvent<component::Transform>>( *this );
     events.subscribe<ecs::ComponentRemovedEvent<component::Renderable>>( *this );
     events.subscribe<ecs::ComponentRemovedEvent<component::BoundingBox>>( *this );
     events.subscribe< ecs::ComponentRemovedEvent<component::PointLight> >( *this );
-    events.subscribe<ecs::ComponentRemovedEvent<component::Script>>( *this );
 }
 
 void Debug::update( ecs::EntityManager& entities, ecs::EventManager& events, float dt ) {}
@@ -52,10 +50,6 @@ void Debug::receive( const ecs::ComponentAssignedEvent< component::PointLight >&
     LOG_DEBUG << "PointLight component assigned to Entity " << event.entity.id().index() << "." << event.entity.id().version();
 }
 
-void Debug::receive( const ecs::ComponentAssignedEvent< component::Script >& event ) {
-    LOG_DEBUG << "Script component assigned to Entity " << event.entity.id().index() << "." << event.entity.id().version();
-}
-
 void Debug::receive( const ecs::ComponentRemovedEvent< component::Camera >& event ) {
     LOG_DEBUG << "Camera component removed from Entity " << event.entity.id().index() << "." << event.entity.id().version();
 }
@@ -74,10 +68,6 @@ void Debug::receive( const ecs::ComponentRemovedEvent< component::BoundingBox >&
 
 void Debug::receive( const ecs::ComponentRemovedEvent< component::PointLight >& event ) {
     LOG_DEBUG << "PointLight component removed from Entity " << event.entity.id().index() << "." << event.entity.id().version(); 
-}
-
-void Debug::receive( const ecs::ComponentRemovedEvent< component::Script >& event ) {
-    LOG_DEBUG << "Script component removed Entity " << event.entity.id().index() << "." << event.entity.id().version();
 }
 
 }   // system
