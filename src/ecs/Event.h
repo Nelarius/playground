@@ -3,7 +3,7 @@
 
 //#include "utils/MemoryArena.h"
 #include "utils/Container.h"
-#include "3rdparty/SimpleSignal.h"
+#include "SimpleSignal.h"
 #include "utils/Assert.h"
 #include "utils/Log.h"
 #include <unordered_map>    // faster key access than map, slower for iteration

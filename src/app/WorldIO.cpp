@@ -1,4 +1,4 @@
-#include "3rdparty/json11/json11.hpp"
+#include "json11/json11.hpp"
 #include "app/WorldIO.h"
 #include "opengl/VertexArrayObject.h"
 #include "opengl/VertexArrayObjectFactory.h"

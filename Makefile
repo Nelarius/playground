@@ -28,7 +28,7 @@ EXECUTABLE =
 TEST_EXECUTABLE = 
 
 ifeq ($(OS),Windows_NT)
-	CFLAGS += -I./src -I ./wrenly/src -I $(GLEW_COMP) -I $(SDL_COMP) -I $(WREN_COMP) -I $(ASSIMP_COMP) -I $(CPPTEST_COMP)
+	CFLAGS += -I./src -I ./extern/wrenly/src -I ./extern -I $(GLEW_COMP) -I $(SDL_COMP) -I $(WREN_COMP) -I $(ASSIMP_COMP) -I $(CPPTEST_COMP)
 	LDFLAGS += -lopengl32 -lglew32 -lmingw32 -lSDL2main -lSDL2 -lwren -lassimp -lm -ldinput8 -ldxguid -ldxerr8 -luser32 -lgdi32 -lwinmm -limm32 -lole32 -loleaut32 -lshell32 -lversion -luuid $(LINKER_INCLUDES)
 	EXECUTABLE += Build/app.exe
 	TEST_EXECUTABLE += Build/test.exe
@@ -43,9 +43,6 @@ else
 endif
 
 OBJ = src/Main.o \
-	src/3rdparty/imgui/imgui.o \
-	src/3rdparty/imgui/imgui_draw.o \
-	src/3rdparty/json11/json11.o \
 	src/app/GameState.o \
     src/app/PauseState.o \
 	src/app/Application.o \
@@ -81,9 +78,12 @@ OBJ = src/Main.o \
 	src/wren/Generate.o \
 	src/wren/WrenVector.o \
 	src/wren/WrenQuaternion.o \
-    src/wren/WrenEntity.o \
-	wrenly/src/Wrenly.o \
-	wrenly/src/detail/Type.o \
+	src/wren/WrenEntity.o \
+	extern/wrenly/src/Wrenly.o \
+	extern/wrenly/src/detail/Type.o \
+	extern/imgui/imgui.o \
+	extern/imgui/imgui_draw.o \
+	extern/json11/json11.o \
 
 TESTOBJ = src/Test.o \
 	src/test/EntityManagerTest.o \

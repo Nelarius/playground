@@ -1,6 +1,15 @@
 [submodule "wrenly"]
-	path = wrenly
+	path = extern/wrenly
 	url = https://github.com/nelarius/wrenly
 [submodule "filesentry"]
-	path = filesentry
+	path = extern/filesentry
 	url = https://github.com/nelarius/filesentry
+[submodule "extern/assimp"]
+	path = extern/assimp
+	url = https://github.com/assimp/assimp
+[submodule "extern/SDL2"]
+	path = extern/SDL2
+	url = https://github.com/nelarius/SDL-mirror
+[submodule "extern/wren"]
+	path = extern/wren
+	url = https://github.com/munificent/wren

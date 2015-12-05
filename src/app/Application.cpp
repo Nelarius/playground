@@ -4,7 +4,7 @@
 #include "utils/Assert.h"
 #include "utils/File.h"
 #include "utils/Log.h"
-#include "3rdparty/json11/json11.hpp"
+#include "json11/json11.hpp"
 #include <string>
 #include <chrono>
 #include <thread>

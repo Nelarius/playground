@@ -1,7 +1,7 @@
 #pragma once
 
 #include "app/Context.h"
-#include "3rdparty/imgui/imgui.h"
+#include "imgui/imgui.h"
 #include "opengl/BufferObject.h"
 #include "opengl/Texture.h"
 #include "opengl/Program.h"
