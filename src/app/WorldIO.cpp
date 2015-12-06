@@ -26,6 +26,18 @@ void WorldIO::read(
         ecs::EntityManager& entities,
         ecs::EventManager& events
     ) {
+    wrenly::Wren::loadModuleFn = [this]( const char* mod ) -> char* {
+        std::string path( mod );
+        path += ".wren";
+        const std::string& source = this->context_.stringManager.get( path );
+        char* buffer = (char*) malloc( source.size() + 1 );
+        buffer[source.size()] = '\0';
+        memcpy( buffer, source.c_str(), source.size() );
+        return buffer;
+    };
+    wrenly::Wren::writeFn = []( WrenVM* vm, const char* text ) -> void {
+        LOG_INFO << text;
+    };
     // bind the scripting API so that Wren can find the methods
     wren::bindVectorModule();
     wren::bindMathModule();
@@ -128,6 +140,10 @@ void WorldIO::read(
 
         if ( !wrenScript.is_null() ) {
             auto mod = wrenScript.string_value();
+            auto path = mod + ".wren";
+            if ( !context_.stringManager.contains( path ) ) {
+                context_.stringManager.get( path );
+            }
             wrenly::Wren vm;
             vm.executeString(
                 "import \"builtin/entity\" for Entity\n"
@@ -137,7 +153,8 @@ void WorldIO::read(
             set( int(entity.id().index()) );
             wrenly::Result res = vm.executeModule( mod );
             if ( res == wrenly::Result::Success ) {
-                entity.assign< component::WrenScript >(
+                entity.assign< component::Script >(
+                    context_.stringManager.id( path ),
                     std::move( vm ),
                     vm.method( "main", "activate", "call()" ),
                     vm.method( "main", "deactivate", "call()" ),
