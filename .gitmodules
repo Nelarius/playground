@@ -13,3 +13,6 @@
 [submodule "extern/wren"]
 	path = extern/wren
 	url = https://github.com/munificent/wren
+[submodule "extern/unittest++"]
+	path = extern/unittest++
+	url = https://github.com/unittest-cpp/unittest-cpp
