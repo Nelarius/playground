@@ -21,13 +21,11 @@
   * add handler for keyup input event
 * `EntityManager` needs to expose the pool size in its public API.
 * Think about the time step. See `Game Programming Patterns::Game Loop` chapter for some ideas about variable time step vs. fixed time step with rendering independent of the updating.
-* Implement Vector and quaternion math.
-  * WorldIO reads in `WrenScript component`
-  * the component is added to the ScriptHandler system
-  * the system is called in the update loop
-  * the system calls the relevant function within the Wren script
-  * Vector3 is bound to Wren
-  * finally, the Makefile needs to move `builtin/` to `Build/`
+* Implement Wren code hot-swapping.
+  * `StringManager` needs to support getting, reloading strings, getting string ids,checking if a file is stored there
+  * Wren uses custom module loader, vie `StringManager`.
+  * Instantiate FileWatcher and watch `builtin` folder.
+  * `ScriptHandler` handles file change event
 
 Consider adding the following API to `VertexArrayObjectFactory`:
 

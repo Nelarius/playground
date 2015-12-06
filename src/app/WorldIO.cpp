@@ -135,13 +135,19 @@ void WorldIO::read(
             );
             wrenly::Method set = vm.method( "main", "entity", "set(_)" );
             set( int(entity.id().index()) );
-            vm.executeModule( mod );
-            entity.assign< component::WrenScript >(
-                std::move( vm ),
-                vm.method( "main", "activate", "call()" ),
-                vm.method( "main", "deactivate", "call()" ),
-                vm.method( "main", "update", "call(_)" )
-            );
+            wrenly::Result res = vm.executeModule( mod );
+            if ( res == wrenly::Result::Success ) {
+                entity.assign< component::WrenScript >(
+                    std::move( vm ),
+                    vm.method( "main", "activate", "call()" ),
+                    vm.method( "main", "deactivate", "call()" ),
+                    vm.method( "main", "update", "call(_)" )
+                );
+            } else if ( res == wrenly::Result::CompileError ) {
+                LOG_ERROR << "Entity(" << entity.id().index() << ", " << entity.id().version() << "): there was an error when compiling " << mod << " module.";
+            } else {
+                LOG_ERROR << "Entity(" << entity.id().index() << ", " << entity.id().version() << "): there was a runtime error in " << mod << " module.";
+            }
         }   // wren
     }
 }
