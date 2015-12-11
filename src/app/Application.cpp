@@ -4,6 +4,8 @@
 #include "utils/Assert.h"
 #include "utils/File.h"
 #include "utils/Log.h"
+#include "Wrenly.h"
+#include "wren/Include.h"
 #include "json11/json11.hpp"
 #include <string>
 #include <chrono>
@@ -45,6 +47,7 @@ void Application::run() {
             running_ = false;
         }
 
+        context_.textFileManager.update();
         stateStack_.update( dt.count() );
 
         glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
@@ -64,6 +67,9 @@ void Application::run() {
 }
 
 void Application::initialize_() {
+    /*
+     * Initialize app state here
+     * */
     auto json = pg::FileToString( "config.json" );
     std::string error{""};
     auto obj = json11::Json::parse( json, error ).object_items();
@@ -87,9 +93,28 @@ void Application::initialize_() {
 
     context_.window = &window_;
 
+    /*
+     * Create app states here
+     * */
     stateStack_.registerState< GameState >( states::Game );
     stateStack_.registerState< PauseState >( states::Pause );
     stateStack_.pushState( states::Game );
+
+    /*
+     * Initialize Wren state
+     * */
+     wrenly::Wren::loadModuleFn = [this]( const char* mod ) -> char* {
+        std::string path( mod );
+        path += ".wren";
+        const std::string& source = this->context_.textFileManager.get( path );
+        char* buffer = (char*) malloc( source.size() + 1 );
+        buffer[source.size()] = '\0';
+        memcpy( buffer, source.c_str(), source.size() );
+        return buffer;
+    };
+    wrenly::Wren::writeFn = []( WrenVM* vm, const char* text ) -> void {
+        LOG_INFO << text;
+    };
 }
 
 void Application::updateContext_() {

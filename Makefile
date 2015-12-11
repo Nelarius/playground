@@ -28,7 +28,7 @@ EXECUTABLE =
 TEST_EXECUTABLE = 
 
 ifeq ($(OS),Windows_NT)
-	CFLAGS += -I./src -I ./extern/wrenly/src -I ./extern -I $(GLEW_COMP) -I $(SDL_COMP) -I $(WREN_COMP) -I $(ASSIMP_COMP) -I $(CPPTEST_COMP)
+	CFLAGS += -I./src -I ./extern/wrenly/src -I ./extern/filesentry/include -I ./extern -I $(GLEW_COMP) -I $(SDL_COMP) -I $(WREN_COMP) -I $(ASSIMP_COMP) -I $(CPPTEST_COMP)
 	LDFLAGS += -lopengl32 -lglew32 -lmingw32 -lSDL2main -lSDL2 -lwren -lassimp -lm -ldinput8 -ldxguid -ldxerr8 -luser32 -lgdi32 -lwinmm -limm32 -lole32 -loleaut32 -lshell32 -lversion -luuid $(LINKER_INCLUDES)
 	EXECUTABLE += Build/app.exe
 	TEST_EXECUTABLE += Build/test.exe
@@ -44,7 +44,7 @@ endif
 
 OBJ = src/Main.o \
 	src/app/GameState.o \
-    src/app/PauseState.o \
+	src/app/PauseState.o \
 	src/app/Application.o \
 	src/app/Command.o \
 	src/app/Window.o \
@@ -66,7 +66,7 @@ OBJ = src/Main.o \
 	src/opengl/Texture.o \
 	src/manager/MeshManager.o \
 	src/manager/ShaderManager.o \
-	src/manager/StringManager.o \
+	src/manager/TextFileManager.o \
 	src/math/Angle.o \
 	src/system/Renderer.o \
 	src/system/Debug.o \
@@ -81,6 +81,10 @@ OBJ = src/Main.o \
 	src/wren/WrenEntity.o \
 	extern/wrenly/src/Wrenly.o \
 	extern/wrenly/src/detail/Type.o \
+	extern/filesentry/source/FileWatcher.o \
+	extern/filesentry/source/FileWatcherLinux.o \
+	extern/filesentry/source/FileWatcherOSX.o \
+	extern/filesentry/source/FileWatcherWin32.o \
 	extern/imgui/imgui.o \
 	extern/imgui/imgui_draw.o \
 	extern/json11/json11.o \

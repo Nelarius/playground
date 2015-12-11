@@ -27,17 +27,18 @@ class GameState : public AppState {
         GameState& operator=( const GameState& )    = delete;
         GameState& operator=( GameState&& )         = delete;
         virtual ~GameState()                        = default;
-        
+
         void activate() override;
         void render( float dt ) override;
         bool update( float dt ) override;
         bool handleEvent( const SDL_Event& event ) override;
+
     private:
         // FIELDS
         // these could be possibly moved to AppState
-        ecs::EventManager    events_;
-        ecs::EntityManager   entities_;
-        ecs::SystemManager   systems_;
+        ecs::EventManager   events_;
+        ecs::EntityManager  entities_;
+        ecs::SystemManager  systems_;
         //KeyboardManager      keyboard_;
         //MouseEvents          mouse_;
 };

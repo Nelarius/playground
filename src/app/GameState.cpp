@@ -23,9 +23,11 @@ GameState::GameState( Context& context, AppStateStack& stack )
     entities_( events_ ),
     systems_( events_, entities_ ) {
     Locator< ecs::EntityManager >::set( &entities_ );
+    Locator< ecs::EventManager >::set ( &events_ );
 }
 
 void GameState::activate() {
+    context_.textFileManager.addWatch( "data", false );
     // everything here should eventually go into a loading state
     context_.shaderManager.addShader( "data/basic.vert.glsl", GL_VERTEX_SHADER );
     context_.shaderManager.addShader( "data/basic.frag.glsl", GL_FRAGMENT_SHADER );
@@ -34,19 +36,19 @@ void GameState::activate() {
     context_.shaderManager.addShader( "data/specular.vert.glsl", GL_VERTEX_SHADER );
     context_.shaderManager.addShader( "data/specular.frag.glsl", GL_FRAGMENT_SHADER );
     context_.shaderManager.compile( "specular" );
-    
+
     context_.shaderManager.addShader( "data/panel.vert.glsl", GL_VERTEX_SHADER );
     context_.shaderManager.addShader( "data/panel.frag.glsl", GL_FRAGMENT_SHADER );
     context_.shaderManager.compile( "panel" );
-    
+
     systems_.add< system::Renderer >( context_ );
     systems_.add< system::Debug >();
-    systems_.add< system::ScriptHandler >();
+    systems_.add< system::ScriptHandler >( context_ );
     systems_.add< system::Ui >( context_ );
     systems_.configure< system::Debug >();
     systems_.configure< system::Renderer >();
     systems_.configure< system::ScriptHandler >();
-    
+
     // the full capacity of the systems are used in parsing, so the systems must be configured and ready to go!
     WorldIO world( context_ );
     world.read( "data/scene.json", entities_, events_ );
