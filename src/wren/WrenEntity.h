@@ -1,7 +1,5 @@
 #pragma once
 
-#include "component/Include.h"
-#include "math/Vector.h"
 extern "C" {
     #include <wren.h>
 }

@@ -77,8 +77,10 @@ OBJ = src/Main.o \
 	src/utils/MemoryArena.o \
 	src/wren/Generate.o \
 	src/wren/WrenVector.o \
+    src/wren/WrenArray.o \
 	src/wren/WrenQuaternion.o \
 	src/wren/WrenEntity.o \
+    src/wren/WrenImgui.o \
 	extern/wrenly/src/Wrenly.o \
 	extern/wrenly/src/detail/Type.o \
 	extern/filesentry/source/FileWatcher.o \
