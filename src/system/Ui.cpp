@@ -14,18 +14,13 @@ namespace system {
 
 Ui::Ui( Context& context )
 :   System<Ui>(),
-    ImGuiRenderer( context ),
     display_( false )
     {}
 
 void Ui::update( ecs::EntityManager& entities, ecs::EventManager& events, float dt ) {
-    newFrame_( dt );
-
     if ( display_ ) {
         ui_( events, dt );
     }
-
-    ImGui::Render();
 }
 
 void Ui::toggleDisplay() {

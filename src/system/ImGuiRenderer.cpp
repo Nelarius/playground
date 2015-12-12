@@ -1,8 +1,10 @@
+#include "app/Context.h"
 #include "system/ImGuiRenderer.h"
 #include "manager/ShaderManager.h"
 #include "opengl/VertexArrayObject.h"
 #include "opengl/VertexArrayObjectFactory.h"
 #include "math/Matrix.h"
+#include "utils/Assert.h"
 #include "utils/Log.h"
 #include <GL/glew.h>
 #include <SDL2/SDL_events.h>
@@ -162,8 +164,12 @@ void ImGuiRenderer::mouseButtonReleased( int button ) {
     io.MouseDown[i] = false;
 }
 
+void ImGuiRenderer::render() {
+    ImGui::Render();
+}
+
 void ImGuiRenderer::initialize_() {
-    
+
     ImGuiIO& io = ImGui::GetIO();
     io.KeyMap[ImGuiKey_Tab] = SDLK_TAB; // Keyboard mapping. ImGui will use those indices to peek into the io.KeyDown[] array.
     io.KeyMap[ImGuiKey_LeftArrow] = SDL_SCANCODE_LEFT;
@@ -184,19 +190,20 @@ void ImGuiRenderer::initialize_() {
     io.KeyMap[ImGuiKey_X] = SDLK_x;
     io.KeyMap[ImGuiKey_Y] = SDLK_y;
     io.KeyMap[ImGuiKey_Z] = SDLK_z;
-    
+
     io.RenderDrawListsFn = RenderDrawLists;
     io.GetClipboardTextFn = GetClipboardText;
     io.SetClipboardTextFn = SetClipboardText;
-    
+
     #ifdef _WIN32
         SDL_Window* window = context_.window->SDLwindow();
+        ASSERT(window != nullptr);
         SDL_SysWMinfo wmInfo;
         SDL_VERSION( &wmInfo.version );
         SDL_GetWindowWMInfo( window, &wmInfo );
         io.ImeWindowHandle = wmInfo.info.win.window;
     #endif
-    
+
     createDeviceObjects_();
     // handle callbacks
 }
@@ -239,12 +246,12 @@ void ImGuiRenderer::createDeviceObjects_() {
     }
 }
 
-void ImGuiRenderer::newFrame_( float dt ) {
+void ImGuiRenderer::newFrame( float dt, int x, int y ) {
     SDL_Window* window = context_.window->SDLwindow();
 
     ImGuiIO& io = ImGui::GetIO();
     
-    io.MousePos = ImVec2( float( context_.mouse().x ), float( context_.mouse().y ) );
+    io.MousePos = ImVec2( float( x ), float( y ) );
     
     io.DeltaTime = dt;
 

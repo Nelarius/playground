@@ -4,6 +4,14 @@
 
 namespace pg {
 
+math::Vec2i MouseEvents::getMouseCoords() const {
+    return currentCoords_;
+}
+
+math::Vec2i MouseEvents::getMouseDelta() const {
+    return currentCoords_ - previousCoords_;
+}
+
 void MouseEvents::setPressCallback( int button, const Command& command ) {
     pressed_.insert( std::make_pair( button, command ) );
 }
@@ -13,7 +21,8 @@ void MouseEvents::setReleaseCallback( int button, const Command& command ) {
 }
 
 void MouseEvents::update() {
-    uint32_t current = SDL_GetMouseState( nullptr, nullptr );
+    previousCoords_ = currentCoords_;
+    uint32_t current = SDL_GetMouseState( &currentCoords_.x, &currentCoords_.y );
     // see which buttons have changed state
     uint32_t delta = current ^ previousState_;
     previousState_ = current;

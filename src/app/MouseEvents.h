@@ -1,6 +1,7 @@
 #pragma once
 
 #include "app/Command.h"
+#include "math/Vector.h"
 #include <vector>
 #include <utility>
 #include <unordered_map>
@@ -8,8 +9,6 @@
 namespace pg {
 /**
  * @class MouseEvents
- * @author Nelarius
- * @date 30/09/2015
  * @file MouseEvents.h
  * @brief Bind commands to mouse events.
  * Internally uses SDL. Mouse button ID's are denoted by integers. Get the corresponding value
@@ -20,7 +19,10 @@ class MouseEvents{
     public:
         MouseEvents()   = default;
         ~MouseEvents()  = default;
-        
+
+        math::Vec2i getMouseCoords() const;
+        math::Vec2i getMouseDelta() const;
+
         /*
         * @brief set a callback command for when a mouse button is pressed.
         * @param button The SDL button id defined in SDL_mouse.h
@@ -34,9 +36,11 @@ class MouseEvents{
         **/
         void setReleaseCallback( int button, const Command& command );
         void update();
-    
+
     private:
         uint32_t    previousState_; // the mouse state mask
+        math::Vec2i previousCoords_;
+        math::Vec2i currentCoords_;
         std::unordered_map< int, Command >  pressed_{};
         std::unordered_map< int, Command >  released_{};
 };

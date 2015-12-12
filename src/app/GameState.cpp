@@ -27,20 +27,6 @@ GameState::GameState( Context& context, AppStateStack& stack )
 }
 
 void GameState::activate() {
-    context_.textFileManager.addWatch( "data", false );
-    // everything here should eventually go into a loading state
-    context_.shaderManager.addShader( "data/basic.vert.glsl", GL_VERTEX_SHADER );
-    context_.shaderManager.addShader( "data/basic.frag.glsl", GL_FRAGMENT_SHADER );
-    context_.shaderManager.compile( "basic" );
-
-    context_.shaderManager.addShader( "data/specular.vert.glsl", GL_VERTEX_SHADER );
-    context_.shaderManager.addShader( "data/specular.frag.glsl", GL_FRAGMENT_SHADER );
-    context_.shaderManager.compile( "specular" );
-
-    context_.shaderManager.addShader( "data/panel.vert.glsl", GL_VERTEX_SHADER );
-    context_.shaderManager.addShader( "data/panel.frag.glsl", GL_FRAGMENT_SHADER );
-    context_.shaderManager.compile( "panel" );
-
     systems_.add< system::Renderer >( context_ );
     systems_.add< system::Debug >();
     systems_.add< system::ScriptHandler >( context_ );
@@ -52,7 +38,7 @@ void GameState::activate() {
     // the full capacity of the systems are used in parsing, so the systems must be configured and ready to go!
     WorldIO world( context_ );
     world.read( "data/scene.json", entities_, events_ );
-    
+
     keyboard_.registerKeyDownCommand( Keycode::KeyF1, Command(
       [ this ]() -> void {
           auto ui = this->systems_.system< system::Ui >();
@@ -66,26 +52,6 @@ void GameState::activate() {
       },
       std::function<void()>()
     ) );
-    mouse_.setPressCallback( 
-        SDL_BUTTON_LEFT, 
-        Command(
-            [ this ] () -> void {
-                auto ui = this->systems_.system< system::Ui >();
-                ui->mouseButtonPressed( SDL_BUTTON_LEFT );
-            },
-            std::function<void()>()
-        )
-    );
-    mouse_.setReleaseCallback(
-        SDL_BUTTON_LEFT,
-        Command(
-            [ this ] () -> void {
-                auto ui = this->systems_.system< system::Ui >();
-                ui->mouseButtonReleased( SDL_BUTTON_LEFT );
-            },
-            std::function<void()>()
-        )
-    );
 }
 
 bool GameState::update( float dt ) {

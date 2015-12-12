@@ -3,6 +3,7 @@
 
 #include <SDL2/SDL_events.h>
 #include "app/Window.h"
+#include "system/ImGuiRenderer.h"
 #include "manager/MeshManager.h"
 #include "manager/ShaderManager.h"
 #include "manager/TextFileManager.h"
@@ -29,18 +30,16 @@ struct Context {
 
     /// @brief Get real-time input for the mouse.
     Mouse mouse()     const { return mouse_; }
-    /// @brief Get the elapsed time since the program started!
-    float elapsedTime() const;
     
     MeshManager     meshManager{};
     ShaderManager   shaderManager{};
     TextFileManager textFileManager{ *this };
     bool            running{ true };
     Window*         window{ nullptr };
-    
+    system::ImGuiRenderer* imguiRenderer{ nullptr };
+
     private:
         Mouse  mouse_{};
-        float  time_{0.0f};
 
 };
 

@@ -11,11 +11,11 @@
 #include <chrono>
 #include <thread>
 
-namespace pg {
-
 namespace {
     std::chrono::duration<float, std::ratio<1,1>> TargetDeltaTime{ 0.016667f };
 }
+
+namespace pg {
 
 void Application::run() { 
     initialize_();
@@ -31,8 +31,7 @@ void Application::run() {
         /*
          * Update mouse current mouse coordinates here
          * */
-        updateContext_();
-        context_.time_ = time.count();
+        mouse_.update();
         /*
          * Handle events here
          * */
@@ -47,11 +46,13 @@ void Application::run() {
             running_ = false;
         }
 
+        context_.imguiRenderer->newFrame( dt.count(), mouse_.getMouseCoords().x, mouse_.getMouseCoords().y );
         context_.textFileManager.update();
         stateStack_.update( dt.count() );
 
         glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
         stateStack_.render( dt.count() );
+        context_.imguiRenderer->render();
 
         window_.display();
         time += dt;
@@ -91,8 +92,6 @@ void Application::initialize_() {
 
     window_.initialize( settings );
 
-    context_.window = &window_;
-
     /*
      * Create app states here
      * */
@@ -115,18 +114,48 @@ void Application::initialize_() {
     wrenly::Wren::writeFn = []( WrenVM* vm, const char* text ) -> void {
         LOG_INFO << text;
     };
-}
 
-void Application::updateContext_() {
-    // update real-time input
-    int oldx = context_.mouse_.x;
-    int oldy = context_.mouse_.y;
-    int newx, newy;
-    SDL_GetMouseState( &newx, &newy );
-    context_.mouse_.dx = newx - oldx;
-    context_.mouse_.dy = newy - oldy;
-    context_.mouse_.x = newx;
-    context_.mouse_.y = newy;
+    /*
+     * Load resources that all app states will depend on
+     * */
+    context_.textFileManager.addWatch( "data", false );
+    // everything here should eventually go into a loading state
+    context_.shaderManager.addShader( "data/basic.vert.glsl", GL_VERTEX_SHADER );
+    context_.shaderManager.addShader( "data/basic.frag.glsl", GL_FRAGMENT_SHADER );
+    context_.shaderManager.compile( "basic" );
+
+    context_.shaderManager.addShader( "data/specular.vert.glsl", GL_VERTEX_SHADER );
+    context_.shaderManager.addShader( "data/specular.frag.glsl", GL_FRAGMENT_SHADER );
+    context_.shaderManager.compile( "specular" );
+
+    context_.shaderManager.addShader( "data/panel.vert.glsl", GL_VERTEX_SHADER );
+    context_.shaderManager.addShader( "data/panel.frag.glsl", GL_FRAGMENT_SHADER );
+    context_.shaderManager.compile( "panel" );
+
+    /*
+     * Finally, set the application context
+     * */
+    context_.window = &window_;
+    context_.imguiRenderer = new system::ImGuiRenderer( context_ );
+
+    mouse_.setPressCallback(
+        SDL_BUTTON_LEFT,
+        Command(
+            [ this ] () -> void {
+                this->context_.imguiRenderer->mouseButtonPressed( SDL_BUTTON_LEFT );
+            },
+            std::function<void()>()
+        )
+    );
+    mouse_.setReleaseCallback(
+        SDL_BUTTON_LEFT,
+        Command(
+            [ this ] () -> void {
+                this->context_.imguiRenderer->mouseButtonReleased( SDL_BUTTON_LEFT );
+            },
+            std::function<void()>()
+        )
+    );
 }
 
 }

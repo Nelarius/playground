@@ -7,7 +7,7 @@
 namespace pg {
 namespace system {
 
-class Ui: public ecs::System<Ui>, public ImGuiRenderer {
+class Ui: public ecs::System<Ui> {
     public:
         Ui() = delete;
         explicit Ui( Context& context );
