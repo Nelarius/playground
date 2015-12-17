@@ -95,6 +95,7 @@ TESTOBJ = src/Test.o \
 	src/test/EntityManagerTest.o \
 	src/test/SparseGraphTest.o \
 	src/test/ContainerTest.o \
+    src/test/RingBufferTest.o \
 	src/ecs/Component.o \
 	src/ecs/Entity.o \
 	src/ecs/Event.o \
