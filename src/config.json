@@ -8,10 +8,10 @@
         "opengl": {
             "major": 3,
             "minor": 1,
-            "stencil_bits": 8,
-            "depth_bits": 24,
-            "multisample_buffers": 1,
-            "multisample_samples": 4
+            "stencilBits": 8,
+            "depthBits": 24,
+            "multisampleBuffers": 1,
+            "multisampleSamples": 4
         }
     }
 }

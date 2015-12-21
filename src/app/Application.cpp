@@ -85,10 +85,10 @@ void Application::initialize_() {
     settings.name = window["name"].string_value();
     settings.glMajor = opengl["major"].int_value();
     settings.glMinor = opengl["minor"].int_value();
-    settings.stencilBits = opengl["stencil_bits"].int_value();
-    settings.depthBits = opengl["depth_bits"].int_value();
-    settings.multisampleBuffer = opengl["multisample_buffers"].int_value();
-    settings.multisampleSamples = opengl["multisample_samples"].int_value();
+    settings.stencilBits = opengl["stencilBits"].int_value();
+    settings.depthBits = opengl["depthBits"].int_value();
+    settings.multisampleBuffer = opengl["multisampleBuffers"].int_value();
+    settings.multisampleSamples = opengl["multisampleSamples"].int_value();
 
     window_.initialize( settings );
 
