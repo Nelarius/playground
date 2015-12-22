@@ -7,10 +7,16 @@
 #include "ecs/Include.h"
 #include "component/Include.h"
 #include "wren/WrenEntity.h"
+#include "imgui/imgui.h"
+#include "wren/WrenImgui.h"
+#include "wren/WrenArray.h"
 #include <cmath>
+#include <vector>
 
 namespace pg {
 namespace wren {
+
+namespace ig = ImGui;
 
 void bindMathModule() {
     wrenly::beginModule( "builtin/math" )
@@ -35,10 +41,56 @@ void bindMathModule() {
             .bindFunction< decltype(static_cast<double(*)(void)>(&pg::Randd)), static_cast<double(*)(void)>(&pg::Randd) >( true, "rand()" );
 }
 
+void bindImguiModule() {
+    wrenly::beginModule( "builtin/imgui" )
+        .bindClass< wren::ImGuiWindowFlag >( "ImguiFlag" )
+            .bindCFunction( false, "setTitleBar()", wren::setTitleBar )
+            .bindCFunction( false, "unsetTitleBar()", wren::unsetTitleBar )
+            .bindCFunction( false, "setResize()", wren::setResize )
+            .bindCFunction( false, "unsetResize()", wren::unsetResize )
+            .bindCFunction( false, "setMove()", wren::setMove )
+            .bindCFunction( false, "unsetMove()", wren::unsetMove )
+            .bindCFunction( false, "setShowBorders()", wren::setShowBorders )
+            .bindCFunction( false, "unsetShowBorders()", wren::unsetShowBorders )
+        .endClass()
+        .beginClass( "Imgui" )
+            // windows & their formatting
+            .bindCFunction( true, "begin(_)", wren::begin )
+            .bindCFunction( true, "begin(_,_)", wren::beginWithFlags )
+            .bindFunction< decltype(&ig::End), &ig::End>( true, "end()" )
+            .bindCFunction( true, "setNextWindowPos(_)", wren::setWindowPos )
+            .bindCFunction( true, "setNextWindowSize(_)", wren::setWindowSize )
+            .bindFunction< decltype(static_cast<bool(*)(const char*)>(&ig::TreeNode)), &ig::TreeNode >( true, "treeNode(_)" )
+            .bindFunction< decltype(&ig::Spacing), &ig::Spacing >( true, "spacing()" )
+            .bindFunction< decltype(&ig::Indent), &ig::Indent >( true, "indent()" )
+            .bindFunction< decltype(&ig::Unindent), &ig::Unindent >( true, "unindent()" )
+            .bindFunction< decltype(&ig::TreePop), &ig::TreePop>( true, "treePop()" )
+            .bindCFunction( true, "text(_)", wren::text )
+            .bindCFunction( true, "textColored(_,_)", wren::textColored )
+            .bindCFunction( true, "dummy(_)", wren::dummy )
+            // elements
+            .bindCFunction( true, "bulletText(_)", wren::bulletText )
+            .bindFunction< decltype(&ig::Bullet), &ig::Bullet >(true, "bullet()" )
+            .bindCFunction( true, "button(_,_)", wren::buttonSized )
+            .bindCFunction( true, "button(_)", wren::button )
+            .bindFunction< decltype(static_cast<bool(*)(const char*, bool)>(&ig::RadioButton)), static_cast<bool(*)(const char*, bool)>(&ig::RadioButton) >( true, "radioButton(_,_)" )
+            .bindCFunction( true, "plotNumberArray(_,_,_)", wren::plotNumberArray )
+            .bindCFunction( true, "plotNumberArray(_,_,_,_)", wren::plotNumberArrayWithOffset )
+            .bindCFunction( true, "plotNumberArray(_,_,_,_,_)", wren::plotNumberArrayWithOffsetAndSize )
+        .endClass();
+}
+
+void bindNumberArrayModule() {
+    wrenly::beginModule( "builtin/array" )
+        .bindClass< std::vector<float> >( "NumberArray" )
+            .bindCFunction( false, "pushBack(_)", wren::arrayPushBack )
+            .bindCFunction( false, "at(_)", wren::arrayAt )
+        .endClass();
+}
+
 void bindVectorModule() {
     wrenly::beginModule( "builtin/vector" )
         .bindClass< math::Vector3f, float, float, float >( "Vec3" )
-            // properties
             // properties 
             .bindGetter< decltype(math::Vector3f::x), &math::Vector3f::x >( false, "x" )
             .bindSetter< decltype(math::Vector3f::x), &math::Vector3f::x >( false, "x=(_)" )
@@ -54,6 +106,28 @@ void bindVectorModule() {
             .bindCFunction( false, "plus(_)", wren::plus3f )
             .bindCFunction( false, "minus(_)", wren::minus3f )
             .bindCFunction( false, "hadamard(_)", wren::hadamard3f )
+        .endClass()
+        .bindClass< math::Vector2f, float, float >( "Vec2" )
+            .bindGetter< decltype(math::Vector2f::x), &math::Vector2f::x >( false, "x" )
+            .bindSetter< decltype(math::Vector2f::x), &math::Vector2f::x >( false, "x=(_)" )
+            .bindGetter< decltype(math::Vector2f::y), &math::Vector2f::y >( false, "y" )
+            .bindSetter< decltype(math::Vector2f::y), &math::Vector2f::y >( false, "y=(_)" )
+            .bindMethod< decltype(&math::Vector2f::norm), &math::Vector2f::norm >( false, "norm()" )
+            .bindMethod< decltype(&math::Vector2f::normSquared), math::Vector2f::normSquared >( false, "normSquared()" )
+            .bindMethod< decltype(&math::Vector2f::dot), math::Vector2f::dot >( false, "dot(_)" )
+        .endClass()
+        .bindClass< math::Vector4f, float, float, float, float >( "Vec4" )
+            .bindGetter< decltype(math::Vector4f::x), &math::Vector4f::x >( false, "x" )
+            .bindSetter< decltype(math::Vector4f::x), &math::Vector4f::x >( false, "x=(_)" )
+            .bindGetter< decltype(math::Vector4f::y), &math::Vector4f::y >( false, "y" )
+            .bindSetter< decltype(math::Vector4f::y), &math::Vector4f::y >( false, "y=(_)" )
+            .bindGetter< decltype(math::Vector4f::z), &math::Vector4f::z >( false, "z" )
+            .bindSetter< decltype(math::Vector4f::z), &math::Vector4f::z >( false, "z=(_)" )
+            .bindGetter< decltype(math::Vector4f::w), &math::Vector4f::w >( false, "w" )
+            .bindSetter< decltype(math::Vector4f::w), &math::Vector4f::w >( false, "w=(_)" )
+            .bindMethod< decltype(&math::Vector4f::norm), &math::Vector4f::norm >( false, "norm()" )
+            .bindMethod< decltype(&math::Vector4f::normSquared), math::Vector4f::normSquared >( false, "normSquared()" )
+            .bindMethod< decltype(&math::Vector4f::dot), math::Vector4f::dot >( false, "dot(_)" )
         .endClass()
     .endModule();
 }

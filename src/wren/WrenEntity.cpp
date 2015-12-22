@@ -1,6 +1,7 @@
+#include "component/Include.h"
+#include "math/Vector.h"
 #include "wren/WrenEntity.h"
 #include "ecs/Include.h"
-#include "component/Include.h"
 #include "utils/Locator.h"
 #include <cstdint>
 
