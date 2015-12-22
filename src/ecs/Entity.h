@@ -117,20 +117,6 @@ class Entity {
         Id              id_{ Invalid };
 };
 
-class LuaEntity: public Entity {
-    public:
-        LuaEntity( const Entity& );
-        LuaEntity()                               = delete;
-        LuaEntity( const LuaEntity& )             = default;
-        LuaEntity( LuaEntity&& )                  = default;
-        LuaEntity& operator=( const LuaEntity& )  = default;
-        LuaEntity& operator=( LuaEntity&& )       = default;
-        virtual ~LuaEntity()                      = default;
-        
-        template<typename C>
-        C* componentPointer() const;
-};
-
 /**
  * @class EntityCreatedEvent
  * @author Muszynski Johann M
@@ -457,14 +443,7 @@ C* Entity::componentPointer() const {
     return manager_->component_<C>( id_ );
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// LuaEntity implementation
-/////////////////////////////////////////////////////////////////////////////
 
-template<typename C>
-C* LuaEntity::componentPointer() const {
-    return manager_->component_<C>( id_ );
-}
 
 /////////////////////////////////////////////////////////////////////////////
 // EntityManager implementation
