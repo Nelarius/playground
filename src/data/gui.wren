@@ -1,5 +1,6 @@
 import "builtin/imgui" for Imgui, ImguiFlag
 import "builtin/array" for NumberArray
+import "builtin/ringbuffer" for NumberRingBuffer
 import "builtin/math" for Math
 import "builtin/vector" for Vec2
 
@@ -14,13 +15,14 @@ var deactivate = Fn.new{
 var pi = 3.1415927
 var t = 0.0
 var size = Vec2.new(400, 300)
-var graphSize = Vec2.new(300, 150)
+var graphSize = Vec2.new(500, 300)
+
+
+var r = NumberRingBuffer.new( 600 )
 
 var update = Fn.new { | dt |
-    var a = NumberArray.new()
-    for (i in 1..10) {
-        a.pushBack(Math.rand(0.0, 3.0))
-    }
+    t = t + dt
+    r.pushBack(Math.sin(t))
 
     var opt = ImguiFlag.new()
     opt.setShowBorders()
@@ -31,9 +33,9 @@ var update = Fn.new { | dt |
         Imgui.treePop()
     }
     var node2 = Fn.new {
-        Imgui.text("testing the wrapper")
-        Imgui.plotNumberArray( "asdf", a, 10, 0, graphSize )
+        //Imgui.plotArray( "asdf", a, 10, 0, graphSize )
+        Imgui.plotRingBuffer( "noise", r, graphSize )
     }
-    Imgui.treeNode( "node2", node2 )
+    Imgui.treeNode( "graph node", node2 )
     Imgui.end()
 }

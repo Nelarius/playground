@@ -10,8 +10,11 @@
 #include "imgui/imgui.h"
 #include "wren/WrenImgui.h"
 #include "wren/WrenArray.h"
+#include "wren/WrenRingBuffer.h"
+#include "utils/RingBuffer.h"
 #include <cmath>
 #include <vector>
+#include <cstdlib>
 
 namespace pg {
 namespace wren {
@@ -74,9 +77,11 @@ void bindImguiModule() {
             .bindCFunction( true, "button(_,_)", wren::buttonSized )
             .bindCFunction( true, "button(_)", wren::button )
             .bindFunction< decltype(static_cast<bool(*)(const char*, bool)>(&ig::RadioButton)), static_cast<bool(*)(const char*, bool)>(&ig::RadioButton) >( true, "radioButton(_,_)" )
-            .bindCFunction( true, "plotNumberArray(_,_,_)", wren::plotNumberArray )
-            .bindCFunction( true, "plotNumberArray(_,_,_,_)", wren::plotNumberArrayWithOffset )
-            .bindCFunction( true, "plotNumberArray(_,_,_,_,_)", wren::plotNumberArrayWithOffsetAndSize )
+            .bindCFunction( true, "plotArray(_,_,_)", wren::plotNumberArray )
+            .bindCFunction( true, "plotArray(_,_,_,_)", wren::plotNumberArrayWithOffset )
+            .bindCFunction( true, "plotArray(_,_,_,_,_)", wren::plotNumberArrayWithOffsetAndSize )
+            .bindCFunction( true, "plotRingBuffer(_,_)", wren::plotRingBuffer )
+            .bindCFunction( true, "plotRingBuffer(_,_,_)", wren::plotRingBufferWithSize )
         .endClass();
 }
 
@@ -85,6 +90,25 @@ void bindNumberArrayModule() {
         .bindClass< std::vector<float> >( "NumberArray" )
             .bindCFunction( false, "pushBack(_)", wren::arrayPushBack )
             .bindCFunction( false, "at(_)", wren::arrayAt )
+        .endClass();
+}
+
+void bindRingBufferModule() {
+    wrenly::beginModule( "builtin/ringbuffer" )
+        .bindClass< RingBuffer<float>, std::size_t >( "NumberRingBuffer" )
+            // element access
+            .bindMethod< decltype((float&(RingBuffer<float>::*)(std::size_t))&RingBuffer<float>::at), &RingBuffer<float>::at >( false, "at(_)" )
+            .bindMethod< decltype((float&(RingBuffer<float>::*)())&RingBuffer<float>::front), &RingBuffer<float>::front >( false, "front()" )
+            .bindMethod< decltype((float&(RingBuffer<float>::*)())&RingBuffer<float>::back), &RingBuffer<float>::back >( false, "back()" )
+            // modifiers
+            //.bindMethod< decltype(&RingBuffer<float>::pushBack), &RingBuffer<float>::pushBack >( false, "pushBack(_)" )
+            .bindCFunction( false, "pushBack(_)", wren::ringBufferPushBack )
+            .bindMethod< decltype(&RingBuffer<float>::popBack), &RingBuffer<float>::popBack >( false, "popBack()" )
+            .bindMethod< decltype(&RingBuffer<float>::popFront), &RingBuffer<float>::popFront >( false, "popFront()" )
+            .bindMethod< decltype(&RingBuffer<float>::clear), &RingBuffer<float>::clear >( false, "clear()" )
+            // container data
+            .bindMethod< decltype(&RingBuffer<float>::size), &RingBuffer<float>::size >( false, "size" )
+            .bindMethod< decltype(&RingBuffer<float>::capacity ), &RingBuffer<float>::capacity >( false, "capacity" )
         .endClass();
 }
 

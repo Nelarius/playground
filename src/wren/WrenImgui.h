@@ -26,6 +26,8 @@ void buttonSized( WrenVM* );
 void plotNumberArray( WrenVM* );
 void plotNumberArrayWithOffset( WrenVM* );
 void plotNumberArrayWithOffsetAndSize( WrenVM* );
+void plotRingBuffer( WrenVM* );
+void plotRingBufferWithSize( WrenVM* );
 
 // ImGuiWindowFlags functions
 void setTitleBar( WrenVM* );

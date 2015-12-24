@@ -1,6 +1,8 @@
 #include "imgui/imgui.h"
 #include "wren/WrenImgui.h"
 #include "math/Vector.h"
+#include "utils/BasicStorage.h"
+#include "utils/RingBuffer.h"
 #include "utils/Log.h"
 #include <vector>
 
@@ -85,6 +87,36 @@ void plotNumberArrayWithOffsetAndSize( WrenVM* vm ) {
         int( wrenGetArgumentDouble( vm, 3 ) ), int( wrenGetArgumentDouble( vm, 4 ) ),
         NULL, FLT_MAX, FLT_MAX,
         *(const ImVec2*)wrenGetArgumentForeign( vm, 5 ),
+        sizeof(float)
+    );
+}
+
+void plotRingBuffer( WrenVM* vm ) {
+    RingBuffer<float>* buffer = (RingBuffer<float>*)wrenGetArgumentForeign( vm, 2 );
+    BasicStorage<float> numbers{ buffer->size() };
+    for ( unsigned int i = 0; i < buffer->size(); i++ ) {
+        *numbers.at(i) = buffer->at(i);
+    }
+    ImGui::PlotLines(
+        wrenGetArgumentString( vm, 1 ), numbers.at(0),
+        buffer->size(), 0,
+        NULL, FLT_MAX, FLT_MAX,
+        ImVec2(140, 80),
+        sizeof(float)
+    );
+}
+
+void plotRingBufferWithSize( WrenVM* vm ) {
+    RingBuffer<float>* buffer = (RingBuffer<float>*)wrenGetArgumentForeign( vm, 2 );
+    BasicStorage<float> numbers{ buffer->size() };
+    for ( unsigned int i = 0; i < buffer->size(); i++ ) {
+        *numbers.at(i) = buffer->at(i);
+    }
+    ImGui::PlotLines(
+        wrenGetArgumentString( vm, 1 ), numbers.at(0),
+        buffer->size(), 0,
+        NULL, FLT_MAX, FLT_MAX,
+        *(const ImVec2*)wrenGetArgumentForeign( vm, 3 ),
         sizeof(float)
     );
 }

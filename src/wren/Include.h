@@ -10,6 +10,7 @@ namespace wren {
     void bindImguiModule();
     void bindVectorModule();
     void bindNumberArrayModule();
+    void bindRingBufferModule();
     void bindQuaternionModule();
     void bindEntityModule();
     void bindComponentModule();

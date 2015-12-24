@@ -33,6 +33,7 @@ void WorldIO::read(
     wren::bindQuaternionModule();
     wren::bindEntityModule();
     wren::bindNumberArrayModule();
+    wren::bindRingBufferModule();
     wren::bindImguiModule();
 
     auto json = pg::FileToString( "data/scene.json" );
