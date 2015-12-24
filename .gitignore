@@ -28,8 +28,10 @@ playground.txt
 *.hh
 *.cc
 
-# Project files/folders
-Build/
+# Project/library files/folders
+build/
 Objects/
 modelling
+lib/
+bin/
 
