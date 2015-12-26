@@ -5,7 +5,7 @@
 #include <iostream>
 
 //defined as a do-while so that a semicolon can be used
-#ifdef ASSERTIONS_ENABLED
+#ifdef DEBUG
     #define ASSERT( condition ) \
     do { \
         if (! (condition)) { \
