@@ -1,7 +1,7 @@
 
 #pragma once
 
-#include <SDL2/SDL_events.h>
+#include <SDL_events.h>
 #include "app/Window.h"
 #include "system/ImGuiRenderer.h"
 #include "manager/MeshManager.h"

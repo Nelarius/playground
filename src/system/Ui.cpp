@@ -3,10 +3,6 @@
 #include "GL/glew.h"
 #include "imgui/imgui.h"
 #include <GL/glew.h>
-#include <SDL2/SDL_events.h>
-#include <SDL2/SDL_scancode.h>
-#include <SDL2/SDL_clipboard.h>
-#include <SDL2/SDL_timer.h>
 #include <string>
 
 namespace pg {

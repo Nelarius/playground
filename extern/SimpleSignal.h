@@ -1,7 +1,6 @@
 // CC0 Public Domain: http://creativecommons.org/publicdomain/zero/1.0/
 #pragma once
 
-#include <unistd.h>
 #include <assert.h>
 #include <stdint.h>
 #include <functional>

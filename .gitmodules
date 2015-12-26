@@ -1,3 +1,4 @@
+
 [submodule "wrenly"]
 	path = extern/wrenly
 	url = https://github.com/nelarius/wrenly
@@ -6,13 +7,13 @@
 	url = https://github.com/nelarius/filesentry
 [submodule "extern/assimp"]
 	path = extern/assimp
-	url = https://github.com/assimp/assimp
-[submodule "extern/SDL2"]
-	path = extern/SDL2
-	url = https://github.com/nelarius/SDL-mirror
+	url = https://github.com/Nelarius/assimp
 [submodule "extern/wren"]
 	path = extern/wren
 	url = https://github.com/munificent/wren
 [submodule "extern/unittest++"]
 	path = extern/unittest++
-	url = https://github.com/unittest-cpp/unittest-cpp
+	url = https://github.com/Nelarius/unittest-cpp
+[submodule "extern/SDL"]
+	path = extern/SDL
+	url = https://github.com/Nelarius/SDL

@@ -1,6 +1,5 @@
 #include "app/KeyboardManager.h"
 #include "utils/Log.h"
-#include <SDL2/SDL_events.h>
 #include <cstdint>
 
 namespace pg {

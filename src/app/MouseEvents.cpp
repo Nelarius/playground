@@ -1,6 +1,6 @@
 #include "app/MouseEvents.h"
 #include "utils/Log.h"
-#include <SDL2/SDL_mouse.h>
+#include <SDL_mouse.h>
 
 namespace pg {
 

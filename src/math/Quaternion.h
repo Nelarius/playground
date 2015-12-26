@@ -18,7 +18,7 @@ class Quaternion {
         Quaternion& operator=( Quaternion&& )       = default;
         
         static Quaternion<T> Identity() {
-            return Quaternion<T>{ 0.0, 0.0, 0.0, 1.0 };
+            return Quaternion<T>{ 0.0f, 0.0f, 0.0f, 1.0f };
         }
         
         Quaternion( const Vector3<T>& i, T r )
@@ -36,7 +36,7 @@ class Quaternion {
         }
         
         Quaternion<T> inverse() const {
-            T factor = 1.0 / normSquared();
+            T factor = 1.0f / normSquared();
             return conjugate() * factor;
         }
         

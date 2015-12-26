@@ -7,12 +7,15 @@
 #include "Wrenly.h"
 #include "wren/Include.h"
 #include "json11/json11.hpp"
+#include <SDL_timer.h>
 #include <string>
-#include <chrono>
-#include <thread>
+#include <cstdint>
 
 namespace {
-    std::chrono::duration<float, std::ratio<1,1>> TargetDeltaTime{ 0.016667f };
+    uint32_t targetDeltaTime{ 16u  };
+    inline float SDLTimeToPgTime(uint32_t dt) {
+        return float(dt) / 1000.f;
+    }
 }
 
 namespace pg {
@@ -21,13 +24,10 @@ void Application::run() {
     initialize_();
 
     running_ = true;
-    auto currentTime = std::chrono::steady_clock::now();
-    std::chrono::duration<float, std::ratio<1,1>> time( 0.0f );
+    uint32_t tdelta{ targetDeltaTime };
 
     while( running_ ) {
-        auto newTime = std::chrono::steady_clock::now();
-        std::chrono::duration<float, std::ratio<1,1>> dt = newTime - currentTime;
-        currentTime = std::chrono::steady_clock::now();
+        uint32_t start = SDL_GetTicks();
         /*
          * Update mouse current mouse coordinates here
          * */
@@ -46,23 +46,24 @@ void Application::run() {
             running_ = false;
         }
 
-        context_.imguiRenderer->newFrame( dt.count(), mouse_.getMouseCoords().x, mouse_.getMouseCoords().y );
+        context_.imguiRenderer->newFrame( SDLTimeToPgTime( tdelta ), mouse_.getMouseCoords().x, mouse_.getMouseCoords().y );
         context_.textFileManager.update();
-        stateStack_.update( dt.count() );
+        stateStack_.update( SDLTimeToPgTime( tdelta ) );
 
         glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-        stateStack_.render( dt.count() );
+        stateStack_.render( SDLTimeToPgTime( tdelta ) );
         context_.imguiRenderer->render();
 
         window_.display();
-        time += dt;
 
         /*
          * Sleep for the remainder of the frame, if we have time for it
          * */
-        auto remainder = TargetDeltaTime - (std::chrono::steady_clock::now() - newTime);
-        if ( remainder.count() > 0.0f ) {
-            std::this_thread::sleep_for( remainder );
+        uint32_t end = SDL_GetTicks();
+        tdelta = end - start;
+        if ( tdelta < targetDeltaTime ) {
+            tdelta = targetDeltaTime;
+            SDL_Delay( targetDeltaTime - tdelta );
         }
     }
 }
@@ -77,7 +78,8 @@ void Application::initialize_() {
     auto window = obj["window"].object_items();
     auto opengl = window["opengl"].object_items();
 
-    TargetDeltaTime = std::chrono::duration<float, std::ratio<1,1>>( 1.0f /  obj["frameRate"].number_value() );
+    //TargetDeltaTime = std::chrono::duration<float, std::ratio<1,1>>( 1.0f /  obj["frameRate"].number_value() );
+    targetDeltaTime = uint32_t(1.0f / obj["frameRate"].number_value());
 
     WindowSettings settings{};
     settings.width = window["width"].int_value();
@@ -117,7 +119,7 @@ void Application::initialize_() {
 
     /*
      * Load resources that all app states will depend on
-     * */
+     **/
     context_.textFileManager.addWatch( "data", false );
     // everything here should eventually go into a loading state
     context_.shaderManager.addShader( "data/basic.vert.glsl", GL_VERTEX_SHADER );

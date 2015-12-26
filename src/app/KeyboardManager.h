@@ -2,9 +2,9 @@
 
 #include "app/Command.h"
 #include "app/Context.h"
-#include <SDL2/SDL_events.h>
-#include <SDL2/SDL_keycode.h>
-#include <SDL2/SDL_scancode.h>
+#include <SDL_events.h>
+#include <SDL_keycode.h>
+#include <SDL_scancode.h>
 #include <functional>
 #include <vector>
 #include <unordered_map>

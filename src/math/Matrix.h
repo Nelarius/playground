@@ -377,7 +377,7 @@ struct Matrix4 {
         T trA = trace();
         T trAA = AA.trace();
         T trAAA = AAA.trace();
-        return factor * ( Matrix4<T>{}*0.1666666667*(trA*trA*trA - 3.0*trA*trAA + 2.0*trAAA) - A*0.5*(trA*trA - trAA) + AA*trA - AAA );
+        return factor * ( Matrix4<T>{}*0.1666666667f*(trA*trA*trA - 3.0f*trA*trAA + 2.0f*trAAA) - A*0.5f*(trA*trA - trAA) + AA*trA - AAA );
     }
 };
 

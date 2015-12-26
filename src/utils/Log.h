@@ -22,8 +22,6 @@ enum LogLevel {
     All
 };
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wreturn-type"
 inline std::string LogLevelToString( LogLevel level ) {
     switch ( level ) {
         case LogLevel::Inhibit:   return "Inhibit";   break;
@@ -37,10 +35,6 @@ inline std::string LogLevelToString( LogLevel level ) {
         case LogLevel::All:       return "All";       break;
     }
 }
-#pragma GCC diagnostic pop
-
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wreturn-type"
 inline LogLevel StringToLogLevel( const std::string& level ) {
     if ( level == "Inhibit" ) {
         return LogLevel::Inhibit;
@@ -64,7 +58,6 @@ inline LogLevel StringToLogLevel( const std::string& level ) {
         ASSERT( false );
     }
 }
-#pragma GCC diagnostic pop
 
 inline std::string NowTime() {
     time_t rawtime;

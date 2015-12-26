@@ -4,7 +4,7 @@
 #include "app/AppState.h"
 #include "app/Context.h"
 #include "StateIdentifiers.h"
-#include <SDL2/SDL_events.h>
+#include <SDL_events.h>
 #include <vector>
 #include <map>
 #include <memory>

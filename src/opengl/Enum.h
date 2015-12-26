@@ -8,8 +8,6 @@
 namespace pg {
 namespace opengl {
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wreturn-type"
 inline GLenum GetBindingTarget( GLenum type ) {
     switch( type ) {
         case GL_ARRAY_BUFFER:               return GL_ARRAY_BUFFER_BINDING;
@@ -43,7 +41,6 @@ inline GLenum GetBindingTarget( GLenum type ) {
         default:    LOG(ce::LogLevel::Error) << "An unknown GL binding target was queried!";
     }
 }
-#pragma GCC diagnostic pop
 
 /**
  * @brief 
@@ -52,8 +49,6 @@ inline GLenum GetBindingTarget( GLenum type ) {
  * Valid OpenGL types are GL_FLOAT, GL_DOUBLE, GL_HALF_FLOAT, GL_BYTE, GL_UNSIGNED_BYTE,
  * GL_SHORT, GL_UNSIGNED_SHORT, GL_INT, GL_UNSIGNED_INT, GL_FIXED.
  */
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wreturn-type"
 inline std::size_t SizeOfGlType( GLenum type ) {
     switch ( type ) {
         case GL_FLOAT:          return 4u;
@@ -69,7 +64,6 @@ inline std::size_t SizeOfGlType( GLenum type ) {
         default:    LOG(ce::LogLevel::Error) << "An unknown GL type was queried!";
     }
 }
-#pragma GCC diagnostic pop
 
 }   // opengl 
 }   // pg

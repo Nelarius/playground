@@ -8,7 +8,7 @@ namespace pg {
 void ShaderManager::addShader( const std::string file, GLenum type ) {
     try {
         shaderStages_.emplace_back( new opengl::Shader( pg::FileToString( file ), type ) );
-    } catch ( const PlaygroundException& e ) {
+    } catch ( const PlaygroundException& ) {
         // this is kinda lame. It looks like I'm ignoring the exception, when in fact it is logged.
     }
 }

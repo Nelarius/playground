@@ -8,10 +8,10 @@ foreign class Entity {
     foreign isValid()
     foreign index
     foreign version
-    foreign hasTransform()
-    foreign hasRenderable()
-    foreign hasCamera()
-    foreign hasPointLight()
+    //foreign hasTransform()
+    //foreign hasRenderable()
+    //foreign hasCamera()
+    //foreign hasPointLight()
 }
 
 foreign class Transform {

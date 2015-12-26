@@ -7,12 +7,12 @@
 #include "utils/Assert.h"
 #include "utils/Log.h"
 #include <GL/glew.h>
-#include <SDL2/SDL_events.h>
-#include <SDL2/SDL_scancode.h>
-#include <SDL2/SDL_clipboard.h>
-#include <SDL2/SDL_mouse.h>
-#include <SDL2/SDL_timer.h>
-#include <SDL2/SDL_syswm.h>
+#include <SDL_events.h>
+#include <SDL_scancode.h>
+#include <SDL_clipboard.h>
+#include <SDL_mouse.h>
+#include <SDL_timer.h>
+#include <SDL_syswm.h>
 
 // link to where I got some of the code from:
 // https://github.com/ocornut/imgui/blob/master/examples/opengl3_example/imgui_impl_glfw_gl3.cpp#L31
@@ -23,7 +23,7 @@ namespace {
     pg::opengl::BufferObject*       gVbo{ nullptr };
     pg::opengl::VertexArrayObject*  gVao{ nullptr };
     pg::opengl::Texture*            gFont{ nullptr };
-    
+
     void RenderDrawLists( ImDrawData* drawData ) {
         // Setup render state: alpha-blending enabled, no face culling, no depth testing, scissor enabled
         GLint last_program; glGetIntegerv(GL_CURRENT_PROGRAM, &last_program);
@@ -32,12 +32,12 @@ namespace {
         GLint last_blend_dst; glGetIntegerv(GL_BLEND_DST, &last_blend_dst);
         GLint last_blend_equation_rgb; glGetIntegerv(GL_BLEND_EQUATION_RGB, &last_blend_equation_rgb);
         GLint last_blend_equation_alpha; glGetIntegerv(GL_BLEND_EQUATION_ALPHA, &last_blend_equation_alpha);
-        
+
         GLboolean last_enable_blend = glIsEnabled(GL_BLEND);
         GLboolean last_enable_cull_face = glIsEnabled(GL_CULL_FACE);
         GLboolean last_enable_depth_test = glIsEnabled(GL_DEPTH_TEST);
         GLboolean last_enable_scissor_test = glIsEnabled(GL_SCISSOR_TEST);
-    
+
         // Setup render state: alpha-blending enabled, no face culling, no depth testing, scissor enabled
         glEnable(GL_BLEND);
         glBlendEquation(GL_FUNC_ADD);
@@ -46,12 +46,12 @@ namespace {
         glDisable(GL_DEPTH_TEST);
         glEnable(GL_SCISSOR_TEST);
         glActiveTexture(GL_TEXTURE0);
-        
+
         ImGuiIO& io = ImGui::GetIO();
-        
+
         float fbHeight = io.DisplaySize.y * io.DisplayFramebufferScale.y;
         drawData->ScaleClipRects( io.DisplayFramebufferScale );
-        
+
         const float orthoProjection[4][4] = { 
             { 2.0f/io.DisplaySize.x,  0.0f,                   0.0f, 0.0f },
             { 0.0f,                   -2.0f/io.DisplaySize.y, 0.0f, 0.0f },
@@ -63,7 +63,7 @@ namespace {
         for ( int n = 0; n < drawData->CmdListsCount; n++ ) {
             const ImDrawList* commandList = drawData->CmdLists[n];
             const ImDrawIdx* idxBuffer = &commandList->IdxBuffer.front();
-            
+
             // set vertex data
             gVbo->dataStore(
                 ( GLsizeiptr ) commandList->VtxBuffer.size(), 
@@ -71,9 +71,9 @@ namespace {
                 ( GLvoid* ) &commandList->VtxBuffer.front(),
                 GL_STREAM_DRAW
             );
-            
+
             gVao->bind();
-            
+
             for ( int cmdIndex = 0; cmdIndex < commandList->CmdBuffer.size(); cmdIndex++ ) {
                 const ImDrawCmd* pcmd = &commandList->CmdBuffer[ cmdIndex ];
                 if ( pcmd->UserCallback ) {
@@ -108,11 +108,11 @@ namespace {
         if (last_enable_depth_test) glEnable(GL_DEPTH_TEST); else glDisable(GL_DEPTH_TEST);
         if (last_enable_scissor_test) glEnable(GL_SCISSOR_TEST); else glDisable(GL_SCISSOR_TEST);
     }
-    
+
     void SetClipboardText( const char* text ) {
         SDL_SetClipboardText( text );
     }
-    
+
     const char* GetClipboardText() {
         return SDL_GetClipboardText();
     }

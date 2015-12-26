@@ -1,5 +1,6 @@
 #include "wren/WrenArray.h"
 #include "utils/Log.h"
+#include <vector>
 
 namespace pg {
 namespace wren {

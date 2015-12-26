@@ -8,8 +8,6 @@
 #include "system/Events.h"
 #include "utils/Locator.h"
 
-#include <SDL2/SDL_scancode.h>
-#include <SDL2/SDL_mouse.h>
 #include <cmath>
 #include <vector>
 #include <unordered_map>

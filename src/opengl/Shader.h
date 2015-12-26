@@ -3,10 +3,11 @@
 
 #include <GL/glew.h>
 #include <memory>
+#include <string>
 
 namespace pg {
 namespace opengl {
-    
+
 /// \brief Contains an OpenGL shader object.
 class Shader {
     public:

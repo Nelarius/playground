@@ -8,7 +8,7 @@
 
 namespace pg {
 
-class Context;
+struct Context;
 
 class TextFileManager {
     public:
