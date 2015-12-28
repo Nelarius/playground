@@ -2,18 +2,6 @@
 
 A small, experimental, data-driven, entity-component-based, and Wren-scriptable game engine. I'm using this project for learning how game engines work.
 
-## Compiling
-
-The source code uses GCC pragmas and C++14.
-
-#### Linux
-
-On Linux, once the dependencies have been installed, just run `make` to build the program and run the tests. The result will appear in the `./Build` folder.
-
-#### Windows
-
-Compiling on Windows isn't a great experience at the moment. Your locations of the dependencies should be entered into the `*_COMP` and `*_LINK` fields, at the beginning of the Makefile. Once that has been done, the build is done the same way as on Linux.
-
 ## Building
 
 The build system uses premake5, although some dependencies have to be built separately before buiding the engine iteslf. All dependencies are included in the `extern/` folder. SDL, Assimp, UnitTest++, and GLEW have to be built first. Currently, only the Visual Studio build has actually been tested, although full Linux and OSX support is possible, in theory.
