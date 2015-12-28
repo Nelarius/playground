@@ -14,6 +14,19 @@ On Linux, once the dependencies have been installed, just run `make` to build th
 
 Compiling on Windows isn't a great experience at the moment. Your locations of the dependencies should be entered into the `*_COMP` and `*_LINK` fields, at the beginning of the Makefile. Once that has been done, the build is done the same way as on Linux.
 
+## Building
+
+The build system uses premake5, although some dependencies have to be built separately before buiding the engine iteslf. All dependencies are included in the `extern/` folder. SDL, Assimp, UnitTest++, and GLEW have to be built first. Currently, only the Visual Studio build has actually been tested, although full Linux and OSX support is possible, in theory.
+
+The submodules that have to be built have been modified in such a way, that all `build/` folders are ignored.
+
+### Visual Studio
+
+* SDL can be built by building the solution in `VisualC/`.
+* Assimp can be built by first generating the solution via CMake. IMPORTANT: remove library suffixes in the configuration stage, we don't want the compiler's name in the library. Premake links with the shared library.
+* Glew: build the solution in the `vc14/` folder. Premake links with the shared library.
+* CMake, then build the solution. Premake links with the static library.
+
 ## Organization
 
 The C/C++ source code is in `src/`. Some documentation exists within the `src` folder for the contained modules. The engine depends on some data, such as scripting files and shader source. These are located in `builtin/`.
