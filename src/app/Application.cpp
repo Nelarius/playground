@@ -4,6 +4,7 @@
 #include "utils/Assert.h"
 #include "utils/File.h"
 #include "utils/Log.h"
+#include "utils/Locator.h"
 #include "Wrenly.h"
 #include "wren/Include.h"
 #include "json11/json11.hpp"
@@ -70,6 +71,12 @@ void Application::run() {
 
 void Application::initialize_() {
     /*
+     * Add managers to the locators
+     **/
+    Locator<MeshManager>::set(&context_.meshManager);
+    Locator<TextFileManager>::set(&context_.textFileManager);
+
+    /*
      * Initialize app state here
      * */
     auto json = pg::FileToString( "config.json" );
@@ -78,7 +85,6 @@ void Application::initialize_() {
     auto window = obj["window"].object_items();
     auto opengl = window["opengl"].object_items();
 
-    //TargetDeltaTime = std::chrono::duration<float, std::ratio<1,1>>( 1.0f /  obj["frameRate"].number_value() );
     targetDeltaTime = uint32_t(1.0f / obj["frameRate"].number_value());
 
     WindowSettings settings{};

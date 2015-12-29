@@ -1,5 +1,5 @@
 import "builtin/math" for Math
-import "builtin/entity" for Transform
+import "builtin/component" for Transform
 import "builtin/vector" for Vec3
 import "builtin/quaternion" for Quat
 

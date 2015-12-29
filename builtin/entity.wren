@@ -6,6 +6,8 @@ foreign class Entity {
     foreign transform=( t )
 
     foreign isValid()
+    foreign destroy()
+    foreign invalidate()
     foreign index
     foreign version
     foreign hasTransform()
@@ -14,6 +16,11 @@ foreign class Entity {
     foreign hasPointLight()
 }
 
-foreign class Transform {
-    construct new( position, rotation, scale ) {}
+var createEntity = Fn.new {
+    return Entity.new()
+}
+
+class EntityManager {
+    foreign static create()    // returns a new Entity
+    foreign static entityCount
 }

@@ -35,3 +35,5 @@ modelling
 lib/
 bin/
 
+# Shell scripts
+*.sh

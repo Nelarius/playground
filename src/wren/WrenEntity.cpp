@@ -8,26 +8,26 @@
 namespace pg {
 namespace wren {
 
-void set( WrenVM* vm ) {
-    ecs::Entity* e = (ecs::Entity*)wrenGetArgumentForeign( vm, 0 );
-    uint32_t id = wrenGetArgumentDouble( vm, 1 );
+void set(WrenVM* vm) {
+    ecs::Entity* e = (ecs::Entity*)wrenGetArgumentForeign(vm, 0);
+    uint32_t id = wrenGetArgumentDouble(vm, 1);
     ecs::EntityManager* entityManager = Locator< ecs::EntityManager >::get();
-    *e = entityManager->get( id );
+    *e = entityManager->get(id);
 }
 
-void entityIndex( WrenVM* vm ) {
-    const ecs::Entity* e = (const ecs::Entity*)wrenGetArgumentForeign( vm, 0 );
-    wrenReturnDouble( vm, double(e->id().index()) );
+void entityIndex(WrenVM* vm) {
+    const ecs::Entity* e = (const ecs::Entity*)wrenGetArgumentForeign(vm, 0);
+    wrenReturnDouble(vm, double(e->id().index()));
 }
 
-void entityVersion( WrenVM* vm ) {
-    const ecs::Entity* e = (const ecs::Entity*)wrenGetArgumentForeign( vm, 0 );
-    wrenReturnDouble( vm, double(e->id().version()) );
+void entityVersion(WrenVM* vm) {
+    const ecs::Entity* e = (const ecs::Entity*)wrenGetArgumentForeign(vm, 0);
+    wrenReturnDouble(vm, double(e->id().version()));
 }
 
-void setTransform( WrenVM* vm ) {
-    ecs::Entity* e = (ecs::Entity*)wrenGetArgumentForeign( vm, 0 );
-    component::Transform* t = (component::Transform*)wrenGetArgumentForeign( vm, 1 );
+void setTransform(WrenVM* vm) {
+    ecs::Entity* e = (ecs::Entity*)wrenGetArgumentForeign(vm, 0);
+    component::Transform* t = (component::Transform*)wrenGetArgumentForeign(vm, 1);
     *e->componentPointer< component::Transform >() = *t;
 }
 
@@ -50,5 +50,17 @@ void hasPointLight(WrenVM* vm) {
     const ecs::Entity* e = (const ecs::Entity*)wrenGetArgumentForeign(vm, 0);
     wrenReturnBool(vm, e->has<component::PointLight>());
 }
+
+void createEntity(WrenVM* vm) {
+    ecs::Entity entity = Locator<ecs::EntityManager>::get()->create();
+    WrenValue* constructor = wrenGetMethod(vm, "builtin/entity", "createEntity", "call()");
+    WrenValue* ret;
+    wrenCall(vm, constructor, &ret, "");
+}
+
+void entityCount(WrenVM* vm) {
+    wrenReturnDouble(vm, double(Locator<ecs::EntityManager>::get()->size()));
+}
+
 }
 }

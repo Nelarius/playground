@@ -185,14 +185,23 @@ void bindEntityModule() {
             .bindCFunction(false, "hasRenderable()", wren::hasRenderable)
             .bindCFunction(false, "hasCamera()", wren::hasCamera)
             .bindCFunction(false, "hasPointLight()", wren::hasPointLight)
-            .bindCFunction( false, "set(_)", wren::set )
-            .bindCFunction( false, "index", wren::entityIndex )
-            .bindCFunction( false, "version", wren::entityVersion )
-            .bindCFunction( false, "transform=(_)", wren::setTransform )
+            .bindCFunction(false, "set(_)", wren::set)
+            .bindCFunction(false, "index", wren::entityIndex)
+            .bindCFunction(false, "version", wren::entityVersion)
+            .bindCFunction(false, "transform=(_)", wren::setTransform)
         .endClass()
-        .bindClass< component::Transform, math::Vector3f, math::Quatf, math::Vector3f >( "Transform" )
+        .beginClass("EntityManager")
+            .bindCFunction(true, "create()", wren::createEntity)
+            .bindCFunction(true, "entityCount", wren::entityCount)
         .endClass()
     .endModule();
+}
+
+void bindComponentModule() {
+    wrenly::beginModule("builtin/component")
+        .bindClass<component::Transform, math::Vector3f, math::Quatf, math::Vector3f>("Transform")
+        .endClass()
+   .endModule();
 }
 
 }   // wren

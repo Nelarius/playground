@@ -1,7 +1,7 @@
 import "builtin/vector" for Vec3
 import "builtin/quaternion" for Quat
 import "builtin/math" for Math
-import "builtin/entity" for Transform
+import "builtin/component" for Transform
 
 var pos = Vec3.new( 0.0, 0.0, 0.0 )
 var scale = Vec3.new( 1.0, 1.0, 1.0 )

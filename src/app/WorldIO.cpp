@@ -32,6 +32,7 @@ void WorldIO::read(
     wren::bindMathModule();
     wren::bindQuaternionModule();
     wren::bindEntityModule();
+    wren::bindComponentModule();
     wren::bindNumberArrayModule();
     wren::bindRingBufferModule();
     wren::bindImguiModule();
