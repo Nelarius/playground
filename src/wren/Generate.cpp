@@ -191,7 +191,7 @@ void bindEntityModule() {
             .bindCFunction(false, "transform=(_)", wren::setTransform)
         .endClass()
         .beginClass("EntityManager")
-            .bindCFunction(true, "create()", wren::createEntity)
+            .bindCFunction(true, "createEntity_()", wren::createEntity)
             .bindCFunction(true, "entityCount", wren::entityCount)
         .endClass()
     .endModule();

@@ -21,6 +21,12 @@ var createEntity = Fn.new {
 }
 
 class EntityManager {
-    foreign static create()    // returns a new Entity
+    static create() {   // returns a new Entity
+        var entity = Entity.new()
+        var id = createEntity_()
+        entity.set(id)
+        return entity
+    }
+    foreign static createEntity_()   // creates a new Entity and returns it's id
     foreign static entityCount
 }

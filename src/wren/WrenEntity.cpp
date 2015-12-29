@@ -3,6 +3,7 @@
 #include "wren/WrenEntity.h"
 #include "ecs/Include.h"
 #include "utils/Locator.h"
+#include "utils/Assert.h"
 #include <cstdint>
 
 namespace pg {
@@ -53,9 +54,7 @@ void hasPointLight(WrenVM* vm) {
 
 void createEntity(WrenVM* vm) {
     ecs::Entity entity = Locator<ecs::EntityManager>::get()->create();
-    WrenValue* constructor = wrenGetMethod(vm, "builtin/entity", "createEntity", "call()");
-    WrenValue* ret;
-    wrenCall(vm, constructor, &ret, "");
+    wrenReturnDouble(vm, double(entity.id().index()));
 }
 
 void entityCount(WrenVM* vm) {
