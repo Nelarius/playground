@@ -176,13 +176,15 @@ void bindQuaternionModule() {
 }
 
 void bindEntityModule() {
-    wrenly::beginModule( "builtin/entity" )
-        .bindClass< ecs::Entity >( "Entity" )
-            .bindMethod< decltype(&ecs::Entity::isValid), &ecs::Entity::isValid >( false, "isValid()" )
-            //.bindMethod< decltype(&ecs::Entity::has<component::Transform>), &ecs::Entity::has<component::Transform> >( false, "hasTransform()" )
-            //.bindMethod< decltype(&ecs::Entity::has<component::Renderable>), &ecs::Entity::has<component::Renderable> >( false, "hasRenderable()" )
-            //.bindMethod< decltype(&ecs::Entity::has<component::Camera>), &ecs::Entity::has<component::Camera> >( false, "hasCamera()" )
-            //.bindMethod< decltype(&ecs::Entity::has<component::PointLight>), &ecs::Entity::has<component::PointLight> >( false, "hasPointLight()" )
+    wrenly::beginModule("builtin/entity")
+        .bindClass< ecs::Entity >("Entity")
+            .bindMethod<decltype(&ecs::Entity::isValid), &ecs::Entity::isValid>(false, "isValid()")
+            .bindMethod<decltype(&ecs::Entity::destroy), &ecs::Entity::destroy>(false, "destroy()")
+            .bindMethod<decltype(&ecs::Entity::invalidate), &ecs::Entity::invalidate>(false, "invalidate()")
+            .bindCFunction(false, "hasTransform()", wren::hasTransform)
+            .bindCFunction(false, "hasRenderable()", wren::hasRenderable)
+            .bindCFunction(false, "hasCamera()", wren::hasCamera)
+            .bindCFunction(false, "hasPointLight()", wren::hasPointLight)
             .bindCFunction( false, "set(_)", wren::set )
             .bindCFunction( false, "index", wren::entityIndex )
             .bindCFunction( false, "version", wren::entityVersion )

@@ -31,5 +31,24 @@ void setTransform( WrenVM* vm ) {
     *e->componentPointer< component::Transform >() = *t;
 }
 
+void hasTransform(WrenVM* vm) {
+    const ecs::Entity* e = (const ecs::Entity*)wrenGetArgumentForeign(vm, 0);
+    wrenReturnBool(vm, e->has<component::Transform>());
+}
+
+void hasRenderable(WrenVM* vm) {
+    const ecs::Entity* e = (const ecs::Entity*)wrenGetArgumentForeign(vm, 0);
+    wrenReturnBool(vm, e->has<component::Renderable>());
+}
+
+void hasCamera(WrenVM* vm) {
+    const ecs::Entity* e = (const ecs::Entity*)wrenGetArgumentForeign(vm, 0);
+    wrenReturnBool(vm, e->has<component::Camera>());
+}
+
+void hasPointLight(WrenVM* vm) {
+    const ecs::Entity* e = (const ecs::Entity*)wrenGetArgumentForeign(vm, 0);
+    wrenReturnBool(vm, e->has<component::PointLight>());
+}
 }
 }
