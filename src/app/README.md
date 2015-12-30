@@ -38,3 +38,11 @@ A Command is a simple class containing two callables. The first callable execute
 You can use `MouseEvents` to trigger specific commands. Set a command for a specific mouse button and event by calling the `*set` methods.
 
 Call `MouseEvents::update` in the update-handling portion of your loop. This is when `MouseEvents` will check if any state has changed and fire any commands.
+
+## Handling keyboard events
+
+`KeyboardManager` is a class which can conveniently handle keyboard events for you. You register callbacks with the manager, and then, given an SDL event, it will call the appropriate callback.
+
+#### Additional state
+
+The `app/KeyboardManager.cpp` has a static map.

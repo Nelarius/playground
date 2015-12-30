@@ -6,17 +6,21 @@
 #include <SDL_keycode.h>
 #include <SDL_scancode.h>
 #include <functional>
-#include <vector>
-#include <unordered_map>
 #include <map>
+#include <vector>
+#include <string>
 
 namespace pg {
+
+namespace ecs {
+class Entity;
+}
 
 /**
 * These enumerations correspond to SDL_Keycode values and can be used interchangeably,
 * if both are converted to an integer first.
 * 
-* See https://wiki.libsdl.org/SDLKeycodeLookup and 
+* See https://wiki.libsdl.org/SDLKeycodeLookup and
 * http://hg.libsdl.org/SDL/file/default/include/SDL_keycode.h for documentation.
 */
 enum Keycode {
@@ -32,7 +36,7 @@ enum Keycode {
     KeyPercent = '%',
     KeyDollar = '$',
     KeyAmpersand = '&',
-    
+
     KeyA = 'a',
     KeyB = 'b',
     KeyC = 'c',
@@ -69,7 +73,7 @@ enum Keycode {
     Key7 = '7',
     Key8 = '8',
     Key9 = '9',
-    
+
     KeyF1 = SDL_SCANCODE_F1 | 0x40000000,
     KeyF2 = SDL_SCANCODE_F2 | 0x40000000,
     KeyF3 = SDL_SCANCODE_F3 | 0x40000000,
@@ -84,10 +88,11 @@ enum Keycode {
     KeyF12 = SDL_SCANCODE_F12 | 0x40000000
 };
 
+const std::string& toString(Keycode key);
+Keycode toEnum(std::string str);
+
 /**
  * @class KeyboardManager
- * @author Johann
- * @date 06/09/2015
  * @file KeyboardManager.h
  * @brief Use this class to register commands to certain keyboard events.
  * This class will handle what to do with an event.
@@ -96,19 +101,13 @@ class KeyboardManager {
     public:
         KeyboardManager() = default;
         ~KeyboardManager() = default;
-        
-        /**
-        * @brief Register a command with a specific key down event.
-        */
-        void registerKeyDownCommand( Keycode, const Command& );
-        /**
-        * @brief Register a command to be executed whenever a certain key is pressed.
-        */
-        void registerKeyPressedCommand( Keycode, const Command& );
-        /**
-        * @brief Register a command with a specific key up event.
-        */
-        void registerKeyUpCommand( Keycode, const Command& );
+
+        void registerKeyDownScriptCallback(std::string, ecs::Entity*);
+        void registerKeyPressedScriptCallback(std::string, ecs::Entity*);
+        void registerKeyUpScriptCallback(std::string, ecs::Entity*);
+        void registerKeyDownCallback(Keycode, std::function<void()>);
+        void registerKeyPressedCallback(Keycode, std::function<void()>);
+        void registerKeyUpCallback(Keycode, std::function<void()>);
         /**
         * @brief Execute a command corresponding to a registered event.
         */
@@ -117,12 +116,29 @@ class KeyboardManager {
         * @brief Execute registered key pressed commands.
         * This method must be called only once during the update loop.
         */
-        void handleKeyPressedCommands();
-        
-    private:        
-        std::unordered_map< int, Command >          keyDownCommands_{};
-        std::vector< std::pair< int, Command > >    keyPressedCommands_{};
-        std::unordered_map< int, Command >          keyUpCommands_{};
+        void handleKeyPressedCallbacks();
+
+    private:
+
+        struct CallbackData {
+            explicit CallbackData(ecs::Entity* entity)
+                : entities(),
+                callback() {
+                entities.push_back(entity);
+            }
+            explicit CallbackData(std::function<void()> callable)
+                : entities(),
+                callback(callable) {}
+            std::vector<ecs::Entity*>   entities;
+            std::function<void()>       callback;
+        };
+
+        void addToMap_(std::map<int, CallbackData>&, Keycode, ecs::Entity*);
+        void addToMap_(std::map<int, CallbackData>&, Keycode, std::function<void()>);
+
+        std::map<int, CallbackData> keyDownCallbacks_{};
+        std::map<int, CallbackData> keyPressedCallbacks_{};
+        std::map<int, CallbackData> keyUpCallbacks_{};
 };
 
 }   // pg

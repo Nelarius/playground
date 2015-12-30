@@ -37,23 +37,19 @@ void GameState::activate() {
     WorldIO world( context_ );
     world.read( "data/scene.json", entities_, events_ );
 
-    keyboard_.registerKeyDownCommand( Keycode::KeyF1, Command(
+    keyboard_.registerKeyDownCallback( Keycode::KeyF1,
       [ this ]() -> void {
           auto ui = this->systems_.system< system::Ui >();
           ui->toggleDisplay();
-      },
-      std::function<void()>()
-    ) );
-    keyboard_.registerKeyDownCommand( Keycode::KeyP, Command(
+      });
+    keyboard_.registerKeyDownCallback( Keycode::KeyP,
         [ this ]() -> void {
           this->requestStackPush_( states::Pause );
-      },
-      std::function<void()>()
-    ) );
+      });
 }
 
 bool GameState::update( float dt ) {
-    keyboard_.handleKeyPressedCommands();
+    keyboard_.handleKeyPressedCallbacks();
     mouse_.update();
     systems_.update< system::ScriptHandler >( dt );
     return false;

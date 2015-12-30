@@ -7,12 +7,10 @@ PauseState::PauseState( Context& context, AppStateStack& stack )
     {}
 
 void PauseState::activate() {
-    keyboard_.registerKeyDownCommand( Keycode::KeyP, Command(
+    keyboard_.registerKeyDownCallback( Keycode::KeyP,
         [ this ]() -> void {
           this->requestStackPop_();
-      },
-      std::function<void()>()
-    ) );
+      });
 }
 
 bool PauseState::update( float dt ) {
