@@ -57,7 +57,6 @@ workspace "playground"
         --flags { "FatalWarnings" } // This should be enabled once all VC warnings get fixed
         configuration "vs*"
             prebuildcommands {
-                "if not exist \"..\\..\\bin\\data\" mkdir ..\\..\\bin\\data",
                 "if not exist \"..\\..\\bin\\builtin\" mkdir ..\\..\\bin\\builtin"
             }
             links { "SDL2", "assimp", "wren_static",  "glew32", "opengl32"  }
@@ -67,7 +66,6 @@ workspace "playground"
             }
             postbuildcommands {
                 "copy ..\\..\\src\\config.json ..\\..\\bin",
-                "xcopy ..\\..\\src\\data ..\\..\\bin\\data /E /Y"
             }
             -- exlcude *.wren files from build, just copy them to the correct directory
             filter "files:**.wren"
