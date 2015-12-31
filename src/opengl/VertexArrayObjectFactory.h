@@ -51,7 +51,7 @@ class VertexArrayObjectFactory {
          */
         void addAttribute(
             const std::string& attrib, GLint size, GLenum type,
-            GLboolean normalized, GLsizei stride, std::size_t offset = 0u
+            bool normalized, GLsizei stride, std::size_t offset = 0u
         );
         
         /**

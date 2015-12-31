@@ -18,7 +18,7 @@ class Quaternion {
         Quaternion& operator=( Quaternion&& )       = default;
         
         static Quaternion<T> Identity() {
-            return Quaternion<T>{ 0.0f, 0.0f, 0.0f, 1.0f };
+            return Quaternion<T>{ 0.0, 0.0f, 0.0f, 1.0f };
         }
         
         Quaternion( const Vector3<T>& i, T r )
@@ -73,15 +73,15 @@ class Quaternion {
         
         Vector3<T> axis() const {
             T angle = this->angle();
-            return v * ( 1.0 / sin( angle / 2.0 ) );
+            return v * ( static_cast<T>(1.0) / sin( angle / static_cast<T>(2.0) ) );
         }
         
         T angle() const {
-            return 2 * acos( w );
+            return static_cast<T>(2.0 * acos( w ));
         }
         
         Vector3<T>  v{};    // the imaginary part
-        T           w{ 1.0 }; // the real part
+        T           w{ static_cast<T>(1.0) }; // the real part
 };
 
 template<typename T>

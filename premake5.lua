@@ -31,8 +31,14 @@ workspace "playground"
         kind "StaticLib"
         language "C++"
         targetdir "lib"
-        files { "extern/filesentry/source/**.cpp", "extern/filesentry/include/filesentry/**.h" }
+        files { "extern/filesentry/source/FileWatcher.cpp" }
         includedirs { "extern/filesentry/include" }
+        filter "system:windows"
+            files { "extern/filesentry/source/FileWatcherWin32.cpp" }
+        filter "system:macosx"
+            files { "extern/filesentry/source/FileWatcherOSX.cpp" }
+        filter "system:linux"
+            files { "extern/filesentry/source/FileWatcherLinux.cpp" }
 
     project "wrenly"
         kind "StaticLib"
@@ -56,6 +62,7 @@ workspace "playground"
         --This should be enabled once all VC warnings get fixed:
         --flags { "FatalWarnings" } // This should be enabled once all VC warnings get fixed
         configuration "vs*"
+            defines { "_CRT_SECURE_NO_WARNINGS" } -- This is to turn off warnings about 'localtime'
             prebuildcommands {
                 "if not exist \"..\\..\\bin\\builtin\" mkdir ..\\..\\bin\\builtin"
             }

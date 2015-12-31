@@ -38,7 +38,7 @@ inline GLenum GetBindingTarget( GLenum type ) {
         case GL_FRAMEBUFFER:                return GL_FRAMEBUFFER_BINDING;
         case GL_DRAW_FRAMEBUFFER:           return GL_DRAW_FRAMEBUFFER_BINDING;
         case GL_READ_FRAMEBUFFER:           return GL_READ_FRAMEBUFFER_BINDING;
-        default:    LOG(ce::LogLevel::Error) << "An unknown GL binding target was queried!";
+        default:    LOG(pg::LogLevel::Error) << "An unknown GL binding target was queried!"; return 0;
     }
 }
 
@@ -61,7 +61,7 @@ inline std::size_t SizeOfGlType( GLenum type ) {
         case GL_INT:            return 4u;
         case GL_UNSIGNED_INT:   return 4u;
         case GL_FIXED:          return 4u;
-        default:    LOG(ce::LogLevel::Error) << "An unknown GL type was queried!";
+        default:    LOG(pg::LogLevel::Error) << "An unknown GL type was queried!"; return 0;
     }
 }
 

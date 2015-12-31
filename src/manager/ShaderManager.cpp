@@ -17,7 +17,7 @@ void ShaderManager::compile( const std::string& tag ) {
     try {
         auto index = buffer_.emplace( shaderStages_ );
         resources_.emplace( tag, &buffer_[index] );
-    } catch( const PlaygroundException& e ) {
+    } catch( const PlaygroundException& ) {
         LOG_ERROR << "Exception in compiling " << tag << " shader.";
     }
     shaderStages_.clear();

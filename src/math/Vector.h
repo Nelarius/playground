@@ -12,13 +12,13 @@ template<typename T>
 struct Vector2 {
     
     Vector2()
-    :   x( 0.0 ),
-        y( 0.0 )
+    :   x(static_cast<T>(0.0) ),
+        y(static_cast<T>(0.0) )
         {}
     
     Vector2( std::initializer_list<T> l ) {
         int i = 0;
-        for ( float e: l ) {
+        for ( T e: l ) {
             data[i] = e;
             i++;
         }
@@ -91,14 +91,14 @@ template<typename T>
 struct Vector3 {
     
     Vector3()
-    :   x( 0.0 ),
-        y( 0.0 ),
-        z( 0.0 )
+    :   x(static_cast<T>(0.0) ),
+        y(static_cast<T>(0.0) ),
+        z(static_cast<T>(0.0) )
         {}
     
     Vector3( std::initializer_list<T> l ) {
         int i = 0;
-        for ( float e: l ) {
+        for ( T e: l ) {
             data[i] = e;
             i++;
         }
@@ -181,10 +181,10 @@ template<typename T>
 struct Vector4 {
     
     Vector4()
-    :   x( 0.0 ),
-        y( 0.0 ),
-        z( 0.0 ),
-        w( 0.0 )
+    :   x(static_cast<T>(0.0) ),
+        y(static_cast<T>(0.0) ),
+        z(static_cast<T>(0.0) ),
+        w(static_cast<T>(0.0) )
         {}
     
     Vector4( const Vector3<T>& v, T w )
@@ -193,7 +193,7 @@ struct Vector4 {
         
     Vector4( std::initializer_list<T> l ) {
         int i = 0;
-        for ( float e: l ) {
+        for ( T e: l ) {
             data[i] = e;
             i++;
         }

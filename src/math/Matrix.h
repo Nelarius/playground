@@ -236,7 +236,7 @@ struct Matrix4 {
     }
     
     static Matrix4<T> Rotation( const Quaternion<T>& q ) {
-        T s = 2.0 / q.norm();
+        T s = static_cast<T>(2.0) / q.norm();
         return Matrix4<T> {
             1 - s*(q.v.y*q.v.y + q.v.z*q.v.z),  s*(q.v.x*q.v.y - q.w*q.v.z),        s*(q.v.x*q.v.z + q.w*q.v.y),        0.0,
             s*(q.v.x*q.v.y + q.w*q.v.z),        1 - s*(q.v.x*q.v.x + q.v.z*q.v.z),  s*(q.v.y*q.v.z - q.w*q.v.x),        0.0,
@@ -370,14 +370,14 @@ struct Matrix4 {
     
     Matrix4<T> inverse() const {
         // obtained using the Cayley-Hamilton method
-        T factor = 1.0 / determinant();
+        T factor = static_cast<T>(1.0) / determinant();
         const Matrix4<T>& A = *this;
         Matrix4<T> AA = A*A;
         Matrix4<T> AAA = AA*A;
         T trA = trace();
         T trAA = AA.trace();
         T trAAA = AAA.trace();
-        return factor * ( Matrix4<T>{}*0.1666666667f*(trA*trA*trA - 3.0f*trA*trAA + 2.0f*trAAA) - A*0.5f*(trA*trA - trAA) + AA*trA - AAA );
+        return factor * ( Matrix4<T>{}*static_cast<T>(0.1666666667*(trA*trA*trA - 3.0*trA*trAA + 2.0*trAAA)) - A*static_cast<T>(0.5)*(trA*trA - trAA) + AA*trA - AAA );
     }
 };
 
@@ -395,7 +395,6 @@ using Matrix2f = Matrix2<float>;
 using Matrix3f = Matrix3<float>;
 using Matrix4f = Matrix4<float>;
 
-    
 }   // math
-}   // ce
+}   // pg
 

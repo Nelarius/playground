@@ -31,7 +31,7 @@ std::int32_t Randi( std::int32_t a, std::int32_t b ) {
 float Randf( float a, float b ) {
     static std::uniform_real_distribution<> d{};
     using parm_t = decltype(d)::param_type;
-    return d( global_urng(), parm_t{ a, b } );
+    return float(d( global_urng(), parm_t{ a, b } ));
 }
 
 float Randf() {

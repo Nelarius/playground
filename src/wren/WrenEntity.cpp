@@ -11,7 +11,7 @@ namespace wren {
 
 void set(WrenVM* vm) {
     ecs::Entity* e = (ecs::Entity*)wrenGetArgumentForeign(vm, 0);
-    uint32_t id = wrenGetArgumentDouble(vm, 1);
+    uint32_t id = static_cast<uint32_t>(wrenGetArgumentDouble(vm, 1));
     ecs::EntityManager* entityManager = Locator< ecs::EntityManager >::get();
     *e = entityManager->get(id);
 }

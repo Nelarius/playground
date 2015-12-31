@@ -500,7 +500,7 @@ ComponentHandle<C> EntityManager::assign_( Id id, Args&&... args ) {
     
     if ( componentMasks_[id.index()].test( family ) ) {
         // if there already is a component, then log it and return the existing component
-        LOG(ce::LogLevel::Error) << "Tried to assign a component on top of an already existing one!";
+        LOG_ERROR << "Tried to assign a component on top of an already existing one!";
         return ComponentHandle<C>{ this, id };
     }
     

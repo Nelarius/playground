@@ -56,9 +56,9 @@ void WorldIO::read(
             auto rot = contents["rotation"].array_items();
             auto sca = contents["scale"].array_items();
             entity.assign< component::Transform >(
-                math::Vector3f( pos[0].number_value(), pos[1].number_value(), pos[2].number_value() ),
-                math::Quatf( rot[0].number_value(), rot[1].number_value(), rot[2].number_value(), rot[3].number_value() ),
-                math::Vector3f( sca[0].number_value(), sca[1].number_value(), sca[2].number_value() )
+                math::Vector3f(float(pos[0].number_value()), float(pos[1].number_value()), float(pos[2].number_value()) ),
+                math::Quatf(float(rot[0].number_value()), float(rot[1].number_value()), float(rot[2].number_value()), float(rot[3].number_value()) ),
+                math::Vector3f( float(sca[0].number_value()), float(sca[1].number_value()), float(sca[2].number_value()) )
             );
         }   // transform
 
@@ -72,18 +72,18 @@ void WorldIO::read(
             if ( !contents[ "material"].is_null() ) {
                 auto specular = contents[ "material" ].object_items();
                 std::unordered_map<std::string, float> uniforms{};
-                uniforms.emplace( "shininess", specular[ "shininess" ].number_value() );
+                uniforms.emplace( "shininess", float(specular[ "shininess" ].number_value()) );
                 auto scolor = specular[ "specularColor" ].array_items();
                 math::Vector3f specColor(
-                    scolor[0].number_value(), scolor[1].number_value(), scolor[2].number_value()
+                    float(scolor[0].number_value()), float(scolor[1].number_value()), float(scolor[2].number_value())
                 );
                 auto acolor = specular[ "ambientColor" ].array_items();
                 math::Vector3f surfColor(
-                    acolor[0].number_value(), acolor[1].number_value(), acolor[2].number_value()
+                    float(acolor[0].number_value()), float(acolor[1].number_value()), float(acolor[2].number_value())
                 );
                 auto bcolor = specular[ "baseColor" ].array_items();
                 math::Vector3f baseColor(
-                    bcolor[0].number_value(), bcolor[1].number_value(), bcolor[2].number_value()
+                    float(bcolor[0].number_value()), float(bcolor[1].number_value()), float(bcolor[2].number_value())
                 );
                 uniforms.emplace( "specColor_r", specColor.r );
                 uniforms.emplace( "specColor_g", specColor.g );

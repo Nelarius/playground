@@ -8,7 +8,7 @@
 #include <iostream>
 #include <algorithm>
 
-namespace ce {
+namespace pg {
 
 enum LogLevel {
     Inhibit = 0,
@@ -33,8 +33,10 @@ inline std::string LogLevelToString( LogLevel level ) {
         case LogLevel::Debug3:    return "Debug3";    break;
         case LogLevel::Debug4:    return "Debug4";    break;
         case LogLevel::All:       return "All";       break;
+        default:                  return "All";
     }
 }
+
 inline LogLevel StringToLogLevel( const std::string& level ) {
     if ( level == "Inhibit" ) {
         return LogLevel::Inhibit;
@@ -55,7 +57,7 @@ inline LogLevel StringToLogLevel( const std::string& level ) {
     } else if ( level == "All" ) {
         return LogLevel::All;
     } else {
-        ASSERT( false );
+        return LogLevel::All;
     }
 }
 
@@ -101,13 +103,13 @@ class Log {
 }
 
 #define LOG(level) \
-if ( level > ce::Log::ReportingLevel() ) ; \
-else ce::Log().get( level )
+if ( level > pg::Log::ReportingLevel() ) ; \
+else pg::Log().get( level )
 
-#define LOG_ERROR LOG(ce::LogLevel::Error)
-#define LOG_WARNING LOG(ce::LogLevel::Warning)
-#define LOG_INFO LOG(ce::LogLevel::Info)
-#define LOG_DEBUG LOG(ce::LogLevel::Debug)
-#define LOG_DEBUG2 LOG(ce::LogLevel::Debug2)
-#define LOG_DEBUG3 LOG(ce::LogLevel::Debug3)
-#define LOG_DEBUG4 LOG(ce::LogLevel::Debug4)
+#define LOG_ERROR LOG(pg::LogLevel::Error)
+#define LOG_WARNING LOG(pg::LogLevel::Warning)
+#define LOG_INFO LOG(pg::LogLevel::Info)
+#define LOG_DEBUG LOG(pg::LogLevel::Debug)
+#define LOG_DEBUG2 LOG(pg::LogLevel::Debug2)
+#define LOG_DEBUG3 LOG(pg::LogLevel::Debug3)
+#define LOG_DEBUG4 LOG(pg::LogLevel::Debug4)

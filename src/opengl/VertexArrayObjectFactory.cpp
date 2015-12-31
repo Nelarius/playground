@@ -19,11 +19,11 @@ void VertexArrayObjectFactory::addAttribute(
     const std::string& attrib,
     GLint size, 
     GLenum type,
-    GLboolean normalized, 
+    bool normalized, 
     GLsizei stride, 
     std::size_t offset ) {
     if ( !standardAttributeQueue_.empty() ) {
-        LOG( ce::LogLevel::Error ) << "Adding custom and standard attributes to the same vertex array object is prohibited!";
+        LOG_ERROR << "Adding custom and standard attributes to the same vertex array object is prohibited!";
         return;
     }
     attributeQueue_.emplace_back(
@@ -38,7 +38,7 @@ void VertexArrayObjectFactory::addAttribute(
 
 void VertexArrayObjectFactory::addStandardAttribute( VertexAttribute attribute ) {
     if ( !attributeQueue_.empty() ) {
-        LOG( ce::LogLevel::Error ) << "Adding standard and custom attributes to the same vertex array object is prohibited!";
+        LOG_ERROR << "Adding standard and custom attributes to the same vertex array object is prohibited!";
         return;
     }
     GLint program;
@@ -47,30 +47,30 @@ void VertexArrayObjectFactory::addStandardAttribute( VertexAttribute attribute )
     switch( attribute ) {
         case VertexAttribute::Vertex: {
             standardAttributeQueue_.emplace_back(
-                "vertex", 3, GL_FLOAT, GL_FALSE, 0, 0u
+                "vertex", 3, GL_FLOAT, false, 0, 0u
             );
             break;
         }
         case VertexAttribute::Normal: {
             standardAttributeQueue_.emplace_back(
-                "normal", 3, GL_FLOAT, GL_FALSE, 0, 0u
+                "normal", 3, GL_FLOAT, false, 0, 0u
             );
             break;
         }
         case VertexAttribute::Color: {
             standardAttributeQueue_.emplace_back(
-                "color", 3, GL_FLOAT, GL_FALSE, 0, 0u 
+                "color", 3, GL_FLOAT, false, 0, 0u 
             );
             break;
         }
         case VertexAttribute::UVCoordinate: {
             standardAttributeQueue_.emplace_back(
-                "uvcoordinate", 2, GL_FLOAT, GL_FALSE, 0, 0u
+                "uvcoordinate", 2, GL_FLOAT, false, 0, 0u
             );
             break;
         }
         
-        default: LOG( ce::LogLevel::Error ) << "Trying to add incorrect attribute to vertex array object.";
+        default: LOG_ERROR << "Trying to add incorrect attribute to vertex array object.";
     }
 }
 
