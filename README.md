@@ -101,33 +101,57 @@ The camera component is used for rendering the renderable components.
 
 ## Scripting interface
 
-See the `builtin` folder the Wren modules, and the `src/data` folder for any actual script files. It's very, very minimal for now. Here's an example for what a script looks like which makes an object rotate around the origin:
+See the `builtin` folder the Wren modules, and the `src/data` folder for actual script files. It's very, very minimal for now. For example, here's a WASD movement script:
 
 ```js
 import "builtin/math" for Math
-import "builtin/entity" for Transform
 import "builtin/vector" for Vec3
 import "builtin/quaternion" for Quat
+import "builtin/event" for EventManager
+import "builtin/component" for Transform
 
-var activate = Fn.new {
-  // gets called when the script component is created
+var activate = Fn.new{
+    EventManager.listenToKeyPressed(entity, "KeyW")
+    EventManager.listenToKeyPressed(entity, "KeyA")
+    EventManager.listenToKeyPressed(entity, "KeyS")
+    EventManager.listenToKeyPressed(entity, "KeyD")
 }
 
-var deactivate = Fn.new {
-  // gets called just before the component is destroyed
+var deactivate = Fn.new{
+    //
 }
 
-var t = 0.0
-var r = 6.0
-var pos = Vec3.new( 0.5, 0.5, 0.5 )
+var onKeyDown = Fn.new { |key|
+    //
+}
+
+var speed = 10.0
+
+var pos = Vec3.new( 0.0, 0.0, 10.0 )
+var scale = Vec3.new( 1.0, 1.0, 1.0 )
 var rot = Quat.new( 0.0, 0.0, 0.0, 1.0 )
-var scale = Vec3.new( 0.001, 0.001, 0.001 )
+
+var timeDelta = 0.016
+
+var onKeyPressed = Fn.new { |key|
+    if (key == "KeyW") {
+        pos.z = pos.z - speed * timeDelta
+    } else if (key == "KeyA") {
+        pos.x = pos.x - speed * timeDelta
+    } else if (key == "KeyS") {
+        pos.z = pos.z + speed * timeDelta
+    } else if (key == "KeyD") {
+        pos.x = pos.x + speed * timeDelta
+    }
+    entity.transform = Transform.new(pos, rot, scale)
+}
+
+var onKeyUp = Fn.new { |key|
+    //
+}
 
 var update = Fn.new { | dt |
-  t = t + dt
-  pos.x = r * Math.cos(t)
-  pos.z = r * Math.sin(t)
-  entity.transform = Transform.new( pos, rot, scale )
+    timeDelta = dt
 }
 ```
 
