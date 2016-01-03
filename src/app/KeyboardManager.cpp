@@ -1,5 +1,6 @@
 #include "app/KeyboardManager.h"
 #include "ecs/Include.h"
+#include "system/ScriptHandler.h"
 #include "utils/StringBimap.h"
 #include "utils/Log.h"
 #include <cstdint>
@@ -87,8 +88,8 @@ const pg::StringBimap<pg::Keycode>& keymapInstance() {
 
 namespace pg {
 
-const std::string& toString(Keycode key) {
-    return keymapInstance().at(key);
+const char* toString(Keycode key) {
+    return keymapInstance().at(key).c_str();
 }
 
 Keycode toEnum(std::string str) {
@@ -120,12 +121,18 @@ void KeyboardManager::handleEvent(const SDL_Event& event) {
         auto it = keyDownCallbacks_.find(int(event.key.keysym.sym));
         if (it != keyDownCallbacks_.end()) {
             it->second.callback();
+            for (auto entity : it->second.entities) {
+                scriptSystem_->onKeyDown(toString(Keycode(it->first)), entity);
+            }
         }
     }
     else if (event.type == SDL_KEYUP) {
         auto it = keyUpCallbacks_.find(int(event.key.keysym.sym));
         if (it != keyUpCallbacks_.end()) {
             it->second.callback();
+            for (auto entity : it->second.entities) {
+                scriptSystem_->onKeyUp(toString(Keycode(it->first)), entity);
+            }
         }
     }
 }
@@ -133,10 +140,13 @@ void KeyboardManager::handleEvent(const SDL_Event& event) {
 void KeyboardManager::handleKeyPressedCallbacks() {
     // handle real time input
     const uint8_t* state = SDL_GetKeyboardState(NULL);
-    for (auto& c : keyPressedCallbacks_) {
+    for (std::pair<const int, CallbackData>& c : keyPressedCallbacks_) {
         // the key code is the index
         if (state[SDL_GetScancodeFromKey(int(c.first))]) {
             c.second.callback();
+            for (ecs::Entity* entity : c.second.entities) {
+                scriptSystem_->onKeyPressed(toString(Keycode(c.first)), entity);
+            }
         }
     }
 }
@@ -163,6 +173,10 @@ void KeyboardManager::registerKeyPressedCallback(Keycode code, std::function<voi
 
 void KeyboardManager::registerKeyUpCallback(Keycode code, std::function<void()> callable) {
     addToMap_(keyUpCallbacks_, code, callable);
+}
+
+void KeyboardManager::setScriptHandler(system::ScriptHandler& system) {
+    scriptSystem_ = &system;
 }
 
 }

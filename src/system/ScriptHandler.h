@@ -12,18 +12,26 @@
 namespace pg {
 
 struct Context;
+class KeyboardManager;
 
 namespace system {
 
 class ScriptHandler: public ecs::System<ScriptHandler>, public ecs::Receiver {
     public:
-        ScriptHandler( Context& context );
+        ScriptHandler( Context& context, KeyboardManager& );
         void configure( ecs::EventManager& ) override;
         void update( ecs::EntityManager&, ecs::EventManager&, float ) override;
 
         void receive( const ecs::ComponentAssignedEvent< component::Script >& );
         void receive( const ecs::ComponentRemovedEvent< component::Script >& );
         void receive( const system::TextFileUpdated& );
+
+        void onKeyDown(const char*, ecs::Entity*);
+        void onKeyPressed(const char*, ecs::Entity*);
+        void onKeyUp(const char*, ecs::Entity*);
+        void listenToKeyDown(std::string, ecs::Entity*);
+        void listenToKeyPressed(std::string, ecs::Entity*);
+        void listenToKeyUp(std::string, ecs::Entity*);
 
     private:
         // used to keep track of which scripts are currently in use
@@ -41,6 +49,7 @@ class ScriptHandler: public ecs::System<ScriptHandler>, public ecs::Receiver {
         };
 
         Context&                context_;
+        KeyboardManager&        keyboardManager_;
         IdSet                   containedScripts_;
         std::set< std::size_t > updatedScripts_;
 };

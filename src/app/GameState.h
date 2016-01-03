@@ -39,8 +39,6 @@ class GameState : public AppState {
         ecs::EventManager   events_;
         ecs::EntityManager  entities_;
         ecs::SystemManager  systems_;
-        //KeyboardManager      keyboard_;
-        //MouseEvents          mouse_;
 };
 
 }

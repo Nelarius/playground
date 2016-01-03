@@ -17,7 +17,6 @@ var t = 0.0
 var size = Vec2.new(400, 300)
 var graphSize = Vec2.new(500, 300)
 
-
 var r = NumberRingBuffer.new( 600 )
 
 var update = Fn.new { | dt |

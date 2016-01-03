@@ -10,7 +10,8 @@
             "fov": 1.32,
             "nearPlane": 0.1,
             "farPlane": 1000.0
-        }
+        },
+        "wren": "data/camera"
     },
     {
         "transform": {

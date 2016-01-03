@@ -4,6 +4,7 @@
 #include "ecs/Include.h"
 #include "utils/Locator.h"
 #include "utils/Assert.h"
+#include "system/ScriptHandler.h"
 #include <cstdint>
 
 namespace pg {
@@ -59,6 +60,21 @@ void createEntity(WrenVM* vm) {
 
 void entityCount(WrenVM* vm) {
     wrenReturnDouble(vm, double(Locator<ecs::EntityManager>::get()->size()));
+}
+
+void listenToKeyDown(WrenVM* vm) {
+    ecs::Entity* entity = (ecs::Entity*)wrenGetArgumentForeign(vm, 1);
+    Locator<system::ScriptHandler>::get()->listenToKeyDown(wrenGetArgumentString(vm, 2), entity);
+}
+
+void listenToKeyPressed(WrenVM* vm) {
+    ecs::Entity* entity = (ecs::Entity*)wrenGetArgumentForeign(vm, 1);
+    Locator<system::ScriptHandler>::get()->listenToKeyPressed(wrenGetArgumentString(vm, 2), entity);
+}
+
+void listenToKeyUp(WrenVM* vm) {
+    ecs::Entity* entity = (ecs::Entity*)wrenGetArgumentForeign(vm, 1);
+    Locator<system::ScriptHandler>::get()->listenToKeyUp(wrenGetArgumentString(vm, 2), entity);
 }
 
 }

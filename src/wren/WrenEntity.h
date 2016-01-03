@@ -17,6 +17,9 @@ void hasCamera(WrenVM*);
 void hasPointLight(WrenVM*);
 void createEntity(WrenVM*);
 void entityCount(WrenVM*);
+void listenToKeyDown(WrenVM*);
+void listenToKeyPressed(WrenVM*);
+void listenToKeyUp(WrenVM*);
 
 }
 }

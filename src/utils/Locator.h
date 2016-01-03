@@ -1,11 +1,14 @@
 #pragma once
 
+#include "utils/Assert.h"
+
 namespace pg {
 
 template< typename T >
 class Locator {
     public:
         static T* get() {
+            ASSERT(service_ != nullptr);
             return service_;
         }
 

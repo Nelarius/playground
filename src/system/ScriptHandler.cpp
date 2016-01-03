@@ -1,6 +1,8 @@
 #include "system/ScriptHandler.h"
+#include "app/KeyboardManager.h"
 #include "app/Context.h"
 #include "utils/Assert.h"
+#include "utils/Log.h"
 
 namespace pg {
 namespace system {
@@ -31,16 +33,17 @@ void ScriptHandler::IdSet::remove( std::size_t id ) {
     }
 }
 
-ScriptHandler::ScriptHandler( Context& context )
-:   context_{ context },
+ScriptHandler::ScriptHandler( Context& context, KeyboardManager& keyboard )
+:   context_{context},
+    keyboardManager_{keyboard},
     containedScripts_{},
-    updatedScripts_{}
-    {}
+    updatedScripts_{} {}
 
 void ScriptHandler::configure( ecs::EventManager& events ) {
     events.subscribe< ecs::ComponentAssignedEvent< component::Script> >( *this );
     events.subscribe< ecs::ComponentRemovedEvent< component::Script > >( *this );
     events.subscribe< system::TextFileUpdated >( *this );
+    keyboardManager_.setScriptHandler(*this);
 }
 
 void ScriptHandler::update( ecs::EntityManager& entities, ecs::EventManager& events, float dt ) {
@@ -98,6 +101,33 @@ void ScriptHandler::receive( const system::TextFileUpdated& event ) {
     if ( containedScripts_.contains( event.id ) ) {
         updatedScripts_.insert( event.id );
     }
+}
+
+void ScriptHandler::onKeyDown(const char* str, ecs::Entity* entity) {
+    auto callback = entity->component<component::Script>()->vm.method("main", "onKeyDown", "call(_)");
+    callback(str);
+}
+
+void ScriptHandler::onKeyPressed(const char* str, ecs::Entity* entity) {
+    auto callback = entity->component<component::Script>()->vm.method("main", "onKeyPressed", "call(_)");
+    callback(str);
+}
+
+void ScriptHandler::onKeyUp(const char* str, ecs::Entity* entity) {
+    auto callback = entity->component<component::Script>()->vm.method("main", "onKeyUp", "call(_)");
+    callback(str);
+}
+
+void ScriptHandler::listenToKeyDown(std::string str, ecs::Entity* entity) {
+    keyboardManager_.registerKeyDownScriptCallback(str, entity);
+}
+
+void ScriptHandler::listenToKeyPressed(std::string str, ecs::Entity* entity) {
+    keyboardManager_.registerKeyPressedScriptCallback(str, entity);
+}
+
+void ScriptHandler::listenToKeyUp(std::string str, ecs::Entity* entity) {
+    keyboardManager_.registerKeyUpScriptCallback(str, entity);
 }
 
 }

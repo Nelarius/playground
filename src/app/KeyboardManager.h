@@ -16,6 +16,10 @@ namespace ecs {
 class Entity;
 }
 
+namespace system {
+class ScriptHandler;
+}
+
 /**
 * These enumerations correspond to SDL_Keycode values and can be used interchangeably,
 * if both are converted to an integer first.
@@ -88,7 +92,7 @@ enum Keycode {
     KeyF12 = SDL_SCANCODE_F12 | 0x40000000
 };
 
-const std::string& toString(Keycode key);
+const char* toString(Keycode key);
 Keycode toEnum(std::string str);
 
 /**
@@ -118,17 +122,19 @@ class KeyboardManager {
         */
         void handleKeyPressedCallbacks();
 
+        void setScriptHandler(system::ScriptHandler&);
+
     private:
 
         struct CallbackData {
             explicit CallbackData(ecs::Entity* entity)
-                : entities(),
-                callback() {
+                : entities{},
+                callback{ []() -> void {} } {
                 entities.push_back(entity);
             }
             explicit CallbackData(std::function<void()> callable)
-                : entities(),
-                callback(callable) {}
+                : entities{},
+                callback{callable} {}
             std::vector<ecs::Entity*>   entities;
             std::function<void()>       callback;
         };
@@ -139,6 +145,7 @@ class KeyboardManager {
         std::map<int, CallbackData> keyDownCallbacks_{};
         std::map<int, CallbackData> keyPressedCallbacks_{};
         std::map<int, CallbackData> keyUpCallbacks_{};
+        system::ScriptHandler*      scriptSystem_{nullptr};
 };
 
 }   // pg

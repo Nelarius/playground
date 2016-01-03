@@ -195,6 +195,13 @@ void bindEntityModule() {
             .bindCFunction(true, "entityCount", wren::entityCount)
         .endClass()
     .endModule();
+    wrenly::beginModule("builtin/event")
+        .beginClass("EventManager")
+            .bindCFunction(true, "listenToKeyDown(_,_)", wren::listenToKeyDown)
+            .bindCFunction(true, "listenToKeyPressed(_,_)", wren::listenToKeyPressed)
+            .bindCFunction(true, "listenToKeyUp(_,_)", wren::listenToKeyUp)
+        .endClass()
+    .endModule();
 }
 
 void bindComponentModule() {
