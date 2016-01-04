@@ -3,6 +3,7 @@
 #include "utils/Assert.h"
 #include <cstdlib>
 #include <cstring>
+#include <cstdint>
 
 namespace pg {
 
@@ -47,7 +48,7 @@ class BasicStorage {
         std::size_t capacity() const;
 
     private:
-        char* buffer_{ nullptr };
+        uint8_t* buffer_{ nullptr };
         std::size_t capacity_{ 0u };
 };
 
@@ -57,7 +58,7 @@ BasicStorage<T>::BasicStorage( std::size_t capacity ) {
         return;
     }
     capacity_ = capacity;
-    buffer_ = new char[ sizeof(T) * capacity ];
+    buffer_ = new uint8_t[ sizeof(T) * capacity ];
 }
 
 template< typename T >
@@ -115,7 +116,7 @@ void BasicStorage<T>::resize( std::size_t newSize ) {
         return;
     }
     if ( capacity_ < newSize ) {
-        char* newBuffer = new char[ sizeof(T) * newSize ];
+        uint8_t* newBuffer = new uint8_t[ sizeof(T) * newSize ];
         std::memcpy( newBuffer, buffer_, sizeof(T) * capacity_ );
         if ( buffer_ ) {
             delete buffer_;
