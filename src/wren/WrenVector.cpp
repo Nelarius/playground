@@ -7,8 +7,9 @@ void cross3f(WrenVM* vm) {
     const math::Vector3f* lhs = (const math::Vector3f*)wrenGetSlotForeign(vm, 0);
     const math::Vector3f* rhs = (const math::Vector3f*)wrenGetSlotForeign(vm, 1);
     math::Vector3f res = lhs->cross(*rhs);
+    wrenGetVariable(vm, "builtin/vector", "createVec3", 1);
     WrenValue* function = wrenGetSlotValue(vm, 1);
-    WrenValue* handle = wrenMakeCallHandle(vm, "call_,_,_");
+    WrenValue* handle = wrenMakeCallHandle(vm, "call(_,_,_)");
     wrenSetSlotValue(vm, 0, function);
     wrenSetSlotDouble(vm, 1, res.x);
     wrenSetSlotDouble(vm, 2, res.y);
@@ -22,8 +23,9 @@ void plus3f(WrenVM* vm) {
     const math::Vector3f* lhs = (const math::Vector3f*)wrenGetSlotForeign(vm, 0);
     const math::Vector3f* rhs = (const math::Vector3f*)wrenGetSlotForeign(vm, 1);
     math::Vector3f res = lhs->operator+(*rhs);
+    wrenGetVariable(vm, "builtin/vector", "createVec3", 1);
     WrenValue* function = wrenGetSlotValue(vm, 1);
-    WrenValue* handle = wrenMakeCallHandle(vm, "call_,_,_");
+    WrenValue* handle = wrenMakeCallHandle(vm, "call(_,_,_)");
     wrenSetSlotValue(vm, 0, function);
     wrenSetSlotDouble(vm, 1, res.x);
     wrenSetSlotDouble(vm, 2, res.y);
@@ -37,8 +39,9 @@ void minus3f(WrenVM* vm) {
     const math::Vector3f* lhs = (const math::Vector3f*)wrenGetSlotForeign(vm, 0);
     const math::Vector3f* rhs = (const math::Vector3f*)wrenGetSlotForeign(vm, 1);
     math::Vector3f res = lhs->operator-(*rhs);
+    wrenGetVariable(vm, "builtin/vector", "createVec3", 1);
     WrenValue* function = wrenGetSlotValue(vm, 1);
-    WrenValue* handle = wrenMakeCallHandle(vm, "call_,_,_");
+    WrenValue* handle = wrenMakeCallHandle(vm, "call(_,_,_)");
     wrenSetSlotValue(vm, 0, function);
     wrenSetSlotDouble(vm, 1, res.x);
     wrenSetSlotDouble(vm, 2, res.y);
@@ -53,7 +56,7 @@ void hadamard3f(WrenVM* vm) {
     const math::Vector3f* rhs = (const math::Vector3f*)wrenGetSlotForeign(vm, 1);
     math::Vector3f res = lhs->hadamard(*rhs);
     WrenValue* function = wrenGetSlotValue(vm, 1);
-    WrenValue* handle = wrenMakeCallHandle(vm, "call_,_,_");
+    WrenValue* handle = wrenMakeCallHandle(vm, "call(_,_,_)");
     wrenSetSlotValue(vm, 0, function);
     wrenSetSlotDouble(vm, 1, res.x);
     wrenSetSlotDouble(vm, 2, res.y);

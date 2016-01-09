@@ -92,9 +92,6 @@ enum Keycode {
     KeyF12 = SDL_SCANCODE_F12 | 0x40000000
 };
 
-const char* toString(Keycode key);
-Keycode toEnum(std::string str);
-
 /**
  * @class KeyboardManager
  * @file KeyboardManager.h

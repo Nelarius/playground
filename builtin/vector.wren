@@ -56,7 +56,7 @@ var createVec4 = Fn.new { | x, y, z, w |
     return Vec4.new( x, y, z, w )
 }
 
-var createVector3 = Fn.new { | x, y, z |
+var createVec3 = Fn.new { | x, y, z |
     return Vec3.new( x, y, z )
 }
 

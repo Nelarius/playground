@@ -1,8 +1,9 @@
 
 import "builtin/math" for Math
-import "builtin/vector" for Vec2, Vec3
+import "builtin/vector" for Vec2, Vec3, createVec2
 import "builtin/quaternion" for Quat
 import "builtin/event" for EventManager
+import "builtin/mouse" for Mouse
 import "builtin/component" for Transform
 
 var activate = Fn.new{
@@ -10,6 +11,7 @@ var activate = Fn.new{
     EventManager.listenToKeyPressed(entity, "KeyA")
     EventManager.listenToKeyPressed(entity, "KeyS")
     EventManager.listenToKeyPressed(entity, "KeyD")
+    EventManager.listenToMousePressed(entity, "Left")
 }
 
 var deactivate = Fn.new{
@@ -26,6 +28,10 @@ var pos = Vec3.new( 0.0, 0.0, 10.0 )
 var scale = Vec3.new( 1.0, 1.0, 1.0 )
 var rot = Quat.new( 0.0, 0.0, 0.0, 1.0 )
 
+var xAxis = Vec3.new(1.0, 0.0, 0.0)
+var yAxis = Vec3.new(0.0, 1.0, 0.0)
+var zAxis = Vec3.new(0.0, 0.0, -1.0)
+
 var timeDelta = 0.016
 
 var onKeyPressed = Fn.new { |key|
@@ -39,6 +45,12 @@ var onKeyPressed = Fn.new { |key|
         pos.x = pos.x + speed * timeDelta
     }
     entity.transform = Transform.new(pos, rot, scale)
+}
+
+var onMousePressed = Fn.new { |button|
+    var delta = Vec2.new(Mouse.dx, Mouse.dy)
+    var coords = Vec2.new(Mouse.x, Mouse.y)
+    System.print("dx: %(delta.x), x: %(coords.x)")
 }
 
 var onKeyUp = Fn.new { |key|

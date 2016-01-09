@@ -84,17 +84,17 @@ const pg::StringBimap<pg::Keycode>& keymapInstance() {
     return instance;
 }
 
-}
-
-namespace pg {
-
-const char* toString(Keycode key) {
+const char* toString(pg::Keycode key) {
     return keymapInstance().at(key).c_str();
 }
 
-Keycode toEnum(std::string str) {
+pg::Keycode toEnum(std::string str) {
     return keymapInstance().at(str);
 }
+
+}
+
+namespace pg {
 
 void KeyboardManager::addToMap_(std::map<int, CallbackData>& m, Keycode code, ecs::Entity* entity) {
     auto it = m.find(int(code));

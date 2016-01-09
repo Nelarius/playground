@@ -22,12 +22,13 @@ GameState::GameState( Context& context, AppStateStack& stack )
     systems_( events_, entities_ ) {
     Locator< ecs::EntityManager >::set( &entities_ );
     Locator< ecs::EventManager >::set ( &events_ );
+    Locator<MouseEvents>::set(&mouse_); // the Wren script needs these
 }
 
 void GameState::activate() {
     systems_.add< system::Renderer >( context_ );
     systems_.add< system::Debug >();
-    systems_.add< system::ScriptHandler >( context_, keyboard_ );
+    systems_.add< system::ScriptHandler >( context_, keyboard_, mouse_ );
     systems_.add< system::Ui >( context_ );
     systems_.configure< system::Debug >();
     systems_.configure< system::Renderer >();
@@ -55,7 +56,7 @@ void GameState::activate() {
 
 bool GameState::update( float dt ) {
     keyboard_.handleKeyPressedCallbacks();
-    mouse_.update();
+    mouse_.handleMousePressedCallbacks();
     systems_.update< system::ScriptHandler >( dt );
     return false;
 }

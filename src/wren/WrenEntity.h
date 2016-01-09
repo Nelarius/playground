@@ -20,6 +20,13 @@ void entityCount(WrenVM*);
 void listenToKeyDown(WrenVM*);
 void listenToKeyPressed(WrenVM*);
 void listenToKeyUp(WrenVM*);
+void listenToMouseDown(WrenVM*);
+void listenToMousePressed(WrenVM*);
+void listenToMouseUp(WrenVM*);
+void mouseX(WrenVM*);
+void mouseY(WrenVM*);
+void mouseDx(WrenVM*);
+void mouseDy(WrenVM*);
 
 }
 }

@@ -30,15 +30,12 @@ void Application::run() {
     while( running_ ) {
         uint32_t start = SDL_GetTicks();
         /*
-         * Update mouse current mouse coordinates here
-         * */
-        mouse_.update();
-        /*
          * Handle events here
          * */
         SDL_Event event;
         while( SDL_PollEvent( &event ) ) {
-            stateStack_.handleEvent( event );
+            mouse_.handleEvent(event);
+            stateStack_.handleEvent(event);
         }
         /*
          * A state might have called quits
@@ -46,6 +43,11 @@ void Application::run() {
         if ( !context_.running ) {
             running_ = false;
         }
+
+        /*
+        * Update mouse current mouse coordinates here
+        * */
+        mouse_.handleMousePressedCallbacks();
 
         context_.imguiRenderer->newFrame( SDLTimeToPgTime( tdelta ), mouse_.getMouseCoords().x, mouse_.getMouseCoords().y );
         context_.textFileManager.update();
@@ -146,23 +148,17 @@ void Application::initialize_() {
     context_.window = &window_;
     context_.imguiRenderer = new system::ImGuiRenderer( context_ );
 
-    mouse_.setPressCallback(
-        SDL_BUTTON_LEFT,
-        Command(
+    mouse_.registerMouseDownCallback(
+        MouseButton::Left,
             [ this ] () -> void {
                 this->context_.imguiRenderer->mouseButtonPressed( SDL_BUTTON_LEFT );
-            },
-            std::function<void()>()
-        )
+            }
     );
-    mouse_.setReleaseCallback(
-        SDL_BUTTON_LEFT,
-        Command(
+    mouse_.registerMouseUpCallback(
+        MouseButton::Left,
             [ this ] () -> void {
                 this->context_.imguiRenderer->mouseButtonReleased( SDL_BUTTON_LEFT );
-            },
-            std::function<void()>()
-        )
+            }
     );
 }
 

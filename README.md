@@ -75,7 +75,7 @@ Here's the way shading works. The base color, diffuse color and specular color a
 
 #### PointLight
 
-** Component dependency: Transform**
+**Component dependency: Transform**
 
 ```
 "pointLight": {
