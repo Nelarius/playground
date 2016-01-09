@@ -2,6 +2,8 @@
 
 #include "utils/Assert.h"
 #include <utility>
+#include <string>
+#include <map>
 
 namespace pg {
 

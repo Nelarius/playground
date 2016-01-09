@@ -2,18 +2,36 @@
 
 #include "app/Command.h"
 #include "math/Vector.h"
+#include <SDL_events.h>
 #include <vector>
 #include <utility>
 #include <unordered_map>
+#include <map>
 
 namespace pg {
+
+namespace ecs {
+class Entity;
+}
+
+namespace system {
+class ScriptHandler;
+}
+
+/*
+ * These enumerations correspond to SDL_BUTTON_* values,
+ * defined in http://hg.libsdl.org/SDL/file/default/include/SDL_mouse.h
+ */
+enum MouseButton {
+    Left = 1,
+    Middle,
+    Right
+};
+
 /**
  * @class MouseEvents
  * @file MouseEvents.h
- * @brief Bind commands to mouse events.
- * Internally uses SDL. Mouse button ID's are denoted by integers. Get the corresponding value
- * by doing SDL_BUTTON_LEFT, SDL_BUTTON_MIDDLE, SDL_BUTTON_RIGHT. Get the correct mask by
- * writing SDL_BUTTON( SDL_BUTTON_LEFT ), etc.
+ * @brief Bind callbacks to mouse events.
  */
 class MouseEvents{
     public:
@@ -23,26 +41,43 @@ class MouseEvents{
         math::Vec2i getMouseCoords() const;
         math::Vec2i getMouseDelta() const;
 
-        /*
-        * @brief set a callback command for when a mouse button is pressed.
-        * @param button The SDL button id defined in SDL_mouse.h
-        * @param command The command 
-        **/
-        void setPressCallback( int button, const Command& command );
-        /*
-        * @brief set a callback command for when a mouse button is released.
-        * @param button The SDL button id defined in SDL_mouse.h
-        * @param command The command 
-        **/
-        void setReleaseCallback( int button, const Command& command );
-        void update();
+        void registerMouseDownScriptCallback(std::string, ecs::Entity*);
+        void registerMousePressedScriptCallback(std::string, ecs::Entity*);
+        void registerMouseUpScriptCallback(std::string, ecs::Entity*);
+        void registerMouseDownCallback(MouseButton button, std::function<void()>);
+        void registerMousePressedCallback(MouseButton button, std::function<void()>);
+        void registerMouseUpCallback(MouseButton button, std::function<void()>);
+        void handleEvent(const SDL_Event&);
+        void handleMousePressedCallbacks();
+
+        void setScriptHandler(system::ScriptHandler&);
 
     private:
+
+        struct CallbackData {
+            explicit CallbackData(ecs::Entity* entity)
+                : entities{},
+                callback{ []() -> void {} } {
+                entities.push_back(entity);
+            }
+            explicit CallbackData(std::function<void()> callable)
+                : entities{},
+                callback{ callable } {}
+            std::vector<ecs::Entity*>   entities;
+            std::function<void()>       callback;
+        };
+
         uint32_t    previousState_; // the mouse state mask
         math::Vec2i previousCoords_;
         math::Vec2i currentCoords_;
-        std::unordered_map< int, Command >  pressed_{};
-        std::unordered_map< int, Command >  released_{};
+
+        void addToMap_(std::map<int, CallbackData>&, MouseButton, std::function<void()>);
+        void addToMap_(std::map<int, CallbackData>&, MouseButton, ecs::Entity*);
+
+        std::map<int, CallbackData> mouseDownCallbacks_{};
+        std::map<int, CallbackData> mousePressedCallbacks_{};
+        std::map<int, CallbackData> mouseUpCallbacks_{};
+        system::ScriptHandler*      scriptSystem_{ nullptr };
 };
 
 }

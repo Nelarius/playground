@@ -83,6 +83,11 @@ workspace "playground"
         }
         filter "configurations:Debug"
             debugdir "bin"
+            links { "wren_static_d" }
+            libdirs { "extern/wren/lib/Debug" }
+        filter "configurations:Release or Test"
+            links { "wren_static" }
+            libdirs { "extern/wren/lib/Release" }
         project "engine"
         --This should be enabled once all VC warnings get fixed:
         --flags { "FatalWarnings" } // This should be enabled once all VC warnings get fixed
@@ -98,10 +103,10 @@ workspace "playground"
             prebuildcommands {
                 "if not exist \"..\\..\\bin\\builtin\" mkdir ..\\..\\bin\\builtin"
             }
-            links { "SDL2", "assimp", "wren_static",  "glew32", "opengl32"  }
+            links { "SDL2", "assimp", "glew32", "opengl32"  }
             libdirs { 
                 "extern/SDL/VisualC/Win32/Release", "extern/assimp/build/code/Release", 
-                "extern/wren/lib/Release", "extern/glew-1.13.0/lib/Release/Win32"
+                "extern/glew-1.13.0/lib/Release/Win32"
             }
             postbuildcommands {
                 "copy ..\\..\\src\\config.json ..\\..\\bin",
@@ -111,7 +116,7 @@ workspace "playground"
                 --buildmessage "Copying %{file.relpath}..."
                 buildcommands { "copy ..\\..\\builtin\\%{file.name} ..\\..\\bin\\builtin" }
                 buildoutputs { "..\\..\\bin\\builtin\\%{file.name}" }
-        project "engine"
+            project "engine"
         --[[
    __  ___     __       ____ __   
   /  |/  /__ _/ /_____ / _(_) /__ 
@@ -119,6 +124,7 @@ workspace "playground"
 /_/  /_/\_,_/_/\_\\__/_//_/_/\__/ 
                                   
 --]]
+
         configuration "gmake"
             -- Mac and Linux support go here
             prebuildcommands {

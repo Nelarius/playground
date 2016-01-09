@@ -200,6 +200,17 @@ void bindEntityModule() {
             .bindCFunction(true, "listenToKeyDown(_,_)", wren::listenToKeyDown)
             .bindCFunction(true, "listenToKeyPressed(_,_)", wren::listenToKeyPressed)
             .bindCFunction(true, "listenToKeyUp(_,_)", wren::listenToKeyUp)
+            .bindCFunction(true, "listenToMouseDown(_,_)", wren::listenToMouseDown)
+            .bindCFunction(true, "listenToMousePressed(_,_)", wren::listenToMousePressed)
+            .bindCFunction(true, "listenToMouseUp(_,_)", wren::listenToMouseUp)
+        .endClass()
+    .endModule();
+    wrenly::beginModule("builtin/mouse")
+        .beginClass("Mouse")
+            .bindCFunction(true, "x", wren::mouseX)
+            .bindCFunction(true, "y", wren::mouseY)
+            .bindCFunction(true, "dx", wren::mouseDx)
+            .bindCFunction(true, "dy", wren::mouseDy)
         .endClass()
     .endModule();
 }
