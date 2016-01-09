@@ -26,7 +26,14 @@ workspace "playground"
 
     filter "action:gmake"
         buildoptions { "-std=gnu++14" }
-    
+
+    --[[
+   ____ __                 __          
+  / _(_) /__ ___ ___ ___  / /_______ __
+ / _/ / / -_|_-</ -_) _ \/ __/ __/ // /
+/_//_/_/\__/___/\__/_//_/\__/_/  \_, / 
+                                /___/  
+--]]
     project "filesentry"
         kind "StaticLib"
         language "C++"
@@ -40,6 +47,13 @@ workspace "playground"
         filter "system:linux"
             files { "extern/filesentry/source/FileWatcherLinux.cpp" }
 
+    --[[
+                      __    
+ _    _________ ___  / /_ __
+| |/|/ / __/ -_) _ \/ / // /
+|__,__/_/  \__/_//_/_/\_, / 
+                     /___/  
+--]]
     project "wrenly"
         kind "StaticLib"
         language "C++"
@@ -48,6 +62,14 @@ workspace "playground"
         files { "extern/wrenly/src/**.cpp", "extern/wrenly/src/**.h"  }
         includedirs { "extern/wrenly/src", "extern/wren/src/include" }
 
+
+    --[[
+                _         
+ ___ ___  ___ _(_)__  ___ 
+/ -_) _ \/ _ `/ / _ \/ -_)
+\__/_//_/\_, /_/_//_/\__/ 
+        /___/             
+--]]
     project "engine"
         kind "ConsoleApp"
         language "C++"
@@ -59,8 +81,18 @@ workspace "playground"
             "extern", "extern/assimp/include", "extern/SDL/include",
             "extern/wren/src/include", "extern/glew-1.13.0/include"
         }
+        filter "configurations:Debug"
+            debugdir "bin"
+        project "engine"
         --This should be enabled once all VC warnings get fixed:
         --flags { "FatalWarnings" } // This should be enabled once all VC warnings get fixed
+        --[[
+  _   ___               __  ______          ___    
+ | | / (_)__ __ _____ _/ / / __/ /___ _____/ (_)__ 
+ | |/ / (_-</ // / _ `/ / _\ \/ __/ // / _  / / _ \
+ |___/_/___/\_,_/\_,_/_/ /___/\__/\_,_/\_,_/_/\___/
+                                                   
+--]]
         configuration "vs*"
             defines { "_CRT_SECURE_NO_WARNINGS" } -- This is to turn off warnings about 'localtime'
             prebuildcommands {
@@ -79,6 +111,14 @@ workspace "playground"
                 --buildmessage "Copying %{file.relpath}..."
                 buildcommands { "copy ..\\..\\builtin\\%{file.name} ..\\..\\bin\\builtin" }
                 buildoutputs { "..\\..\\bin\\builtin\\%{file.name}" }
+        project "engine"
+        --[[
+   __  ___     __       ____ __   
+  /  |/  /__ _/ /_____ / _(_) /__ 
+ / /|_/ / _ `/  '_/ -_) _/ / / -_)
+/_/  /_/\_,_/_/\_\\__/_//_/_/\__/ 
+                                  
+--]]
         configuration "gmake"
             -- Mac and Linux support go here
             prebuildcommands {
