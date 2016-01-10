@@ -14,7 +14,7 @@
 #include "utils/Assert.h"
 #include "utils/File.h"
 #include "Wrenly.h"
-#include "wren/Include.h"
+#include "system/WrenBindings.h"
 
 namespace pg {
 

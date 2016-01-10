@@ -1,23 +1,22 @@
-#include "wren/Include.h"
-#include "utils/Random.h"
+
 #include "math/Vector.h"
-#include "wren/WrenVector.h"
 #include "math/Quaternion.h"
-#include "wren/WrenQuaternion.h"
 #include "ecs/Include.h"
 #include "component/Include.h"
-#include "wren/WrenEntity.h"
 #include "imgui/imgui.h"
-#include "wren/WrenImgui.h"
-#include "wren/WrenArray.h"
-#include "wren/WrenRingBuffer.h"
 #include "utils/RingBuffer.h"
+#include "utils/Random.h"
+#include "system/WrenBindingsImpl.h"
 #include <cmath>
 #include <vector>
 #include <cstdlib>
 
 namespace pg {
 namespace wren {
+
+extern void arrayPushBack(WrenVM*);
+extern void arrayAt(WrenVM*);
+extern void set(WrenVM*);
 
 namespace ig = ImGui;
 
@@ -115,7 +114,7 @@ void bindRingBufferModule() {
 void bindVectorModule() {
     wrenly::beginModule( "builtin/vector" )
         .bindClass< math::Vector3f, float, float, float >( "Vec3" )
-            // properties 
+            // properties
             .bindGetter< decltype(math::Vector3f::x), &math::Vector3f::x >( false, "x" )
             .bindSetter< decltype(math::Vector3f::x), &math::Vector3f::x >( false, "x=(_)" )
             .bindGetter< decltype(math::Vector3f::y), &math::Vector3f::y >( false, "y" )

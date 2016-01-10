@@ -6,7 +6,6 @@
 #include "utils/Log.h"
 #include "utils/Locator.h"
 #include "Wrenly.h"
-#include "wren/Include.h"
 #include "json11/json11.hpp"
 #include <SDL_timer.h>
 #include <string>
