@@ -72,7 +72,7 @@ BasicStorage<T>::BasicStorage( BasicStorage&& other )
 template< typename T >
 BasicStorage<T>& BasicStorage<T>::operator=( BasicStorage&& rhs ) {
     if ( buffer_ ) {
-        delete buffer_;
+        delete[] buffer_;
     }
     buffer_ = rhs.buffer_;
     capacity_ = rhs.capacity_;
@@ -84,7 +84,7 @@ BasicStorage<T>& BasicStorage<T>::operator=( BasicStorage&& rhs ) {
 template< typename T >
 BasicStorage<T>::~BasicStorage() {
     if ( buffer_ ) {
-        delete buffer_;
+        delete[] buffer_;
     }
 }
 
