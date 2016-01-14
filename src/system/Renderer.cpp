@@ -128,22 +128,21 @@ void Renderer::debugRender_( ecs::EntityManager& entities, ecs::EventManager& ev
     auto vao = factory.getVao();
 
     shader->use();
-    shader->setUniform( "color", math::Vector3f{ 1.0f, 0.2f, 0.2f } );
+    shader->setUniform( "color", math::Vector3f{ 1.0f, 0.1f, 0.1f } );
     shader->setUniform( "camera", cameraMatrix );
     // loop over bounding boxes
     for ( ecs::Entity entity: entities.join< component::Transform, component::BoundingBox >() ) {
         auto t = entity.component< component::Transform >();
         auto bb = entity.component< component::BoundingBox >();
-        // calculate the center of each bounding box
         math::Vector3f min = t->scale.hadamard( bb->min );
         math::Vector3f max = t->scale.hadamard( bb->max );
-        math::Vector3f center = 0.5f * ( min + max );
+        math::Vector3f center = 0.5f * (min + max);
         math::Vector3f scale{ max.x - min.x, max.y - min.y, max.z - min.z };
         math::Matrix4f S = math::Matrix4f::Scale( scale );      // scale to current model dimensions
-        math::Matrix4f T1 = math::Matrix4f::Translation( center );  // translate to model coordinates
-        math::Matrix4f R = math::Matrix4f::Rotation( t->rotation ); // rotate to world coordinates
-        math::Matrix4f T2 = math::Matrix4f::Translation( t->position ); // translate to world coordinates
-        math::Matrix4f TRS = T2 * R * T1 * S;
+        math::Matrix4f R = math::Matrix4f::Rotation( t->rotation ); // rotate to local coords
+        math::Matrix4f Tl = math::Matrix4f::Translation(center); // translate to world coords
+        math::Matrix4f Tw = math::Matrix4f::Translation(t->position);
+        math::Matrix4f TRS = Tw * R  * Tl * S;
 
         shader->use();
         shader->setUniform( "model", TRS );
