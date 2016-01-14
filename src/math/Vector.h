@@ -172,8 +172,8 @@ template<typename T>
 Vector3<T> operator*( T scale, const Vector3<T>& rhs ) {
     return Vector3<T>{
         rhs.x * scale,
-        rhs.x * scale,
-        rhs.x * scale
+        rhs.y * scale,
+        rhs.z * scale
     };
 }
 
