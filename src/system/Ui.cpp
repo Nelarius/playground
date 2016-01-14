@@ -26,19 +26,16 @@ void Ui::toggleDisplay() {
 void Ui::ui_( ecs::EventManager& events, float dt ) {
     static bool debugRendererOn = false;
 
-    ImGui::Begin( "Control panel" );
+    ImGui::Begin( "System settings" );
 
     if ( ImGui::TreeNode( "Renderer") ) {
+        ImGui::Text("OpenGL info:");
+        ImGui::Text("  GL_VERSION: %s", (const char*)glGetString(GL_VERSION));
+        ImGui::Text("  GLSL_VERSION: %s", (const char*)glGetString(GL_SHADING_LANGUAGE_VERSION));
+        ImGui::Text("  GL_VENDOR: %s", (const char*)glGetString(GL_VENDOR));
+        ImGui::Text("  GL_RENDERER: %s", (const char*)glGetString(GL_RENDERER));
         ImGui::Checkbox( "bounding box", &debugRendererOn );
         events.emit< ToggleDebugRenderer >( debugRendererOn );
-
-        ImGui::TreePop();
-    }
-    if ( ImGui::TreeNode( "OpenGL renderer") ) {
-        ImGui::Text( "GL_VERSION: %s", ( const char* ) glGetString( GL_VERSION ) );
-        ImGui::Text( "GLSL_VERSION: %s", ( const char* ) glGetString( GL_SHADING_LANGUAGE_VERSION ) );
-        ImGui::Text( "GL_VENDOR: %s", ( const char* ) glGetString( GL_VENDOR ) );
-        ImGui::Text( "GL_RENDERER: %s", ( const char* ) glGetString( GL_RENDERER ) );
 
         ImGui::TreePop();
     }

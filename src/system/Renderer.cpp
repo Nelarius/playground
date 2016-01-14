@@ -138,10 +138,10 @@ void Renderer::debugRender_( ecs::EntityManager& entities, ecs::EventManager& ev
         math::Vector3f max = t->scale.hadamard( bb->max );
         math::Vector3f center = 0.5f * (min + max);
         math::Vector3f scale{ max.x - min.x, max.y - min.y, max.z - min.z };
-        math::Matrix4f S = math::Matrix4f::Scale( scale );      // scale to current model dimensions
-        math::Matrix4f R = math::Matrix4f::Rotation( t->rotation ); // rotate to local coords
-        math::Matrix4f Tl = math::Matrix4f::Translation(center); // translate to world coords
-        math::Matrix4f Tw = math::Matrix4f::Translation(t->position);
+        math::Matrix4f S = math::Matrix4f::Scale( scale );              // scale to current model dimensions
+        math::Matrix4f R = math::Matrix4f::Rotation( t->rotation );     // rotate to world coords
+        math::Matrix4f Tl = math::Matrix4f::Translation(center);        // translate to local coords
+        math::Matrix4f Tw = math::Matrix4f::Translation(t->position);   // translate to world coords
         math::Matrix4f TRS = Tw * R  * Tl * S;
 
         shader->use();
