@@ -13,7 +13,7 @@ struct Matrix2 {
     T data[4];
     
     Matrix2()
-    :   data{ 1.0, 0.0, 0.0, 1.0 }
+    :   data{ T(1.0), T(0.0), T(0.0), T(1.0) }
         {}
         
     Matrix2( std::initializer_list<T> l ) {
@@ -107,7 +107,7 @@ struct Matrix3 {
             }
         }
         Matrix3()
-        :   data{ 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0 }
+        :   data{ T(1.0), T(0.0), T(0.0), T(0.0), T(1.0), T(0.0), T(0.0), T(0.0), T(1.0) }
             {}
             
         Matrix3( const Vector3<T>& r1, const Vector3<T>& r2, const Vector3<T>& r3 )
@@ -219,7 +219,7 @@ struct Matrix4 {
     }
     
     Matrix4()
-    :   data{ 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0 }
+    :   data{ T(1.0), T(0.0), T(0.0), T(0.0), T(0.0), T(1.0), T(0.0), T(0.0), T(0.0), T(0.0), T(1.0), T(0.0), T(0.0), T(0.0), T(0.0), T(1.0) }
         {}
         
     Matrix4( const Vector4<T>& r1, const Vector4<T>& r2, const Vector4<T>& r3, const Vector4<T>& r4 )
@@ -228,29 +228,29 @@ struct Matrix4 {
     
     static Matrix4<T> Translation( const Vector3<T>& v ) {
         return Matrix4<T>{
-                1.0f, 0.0f, 0.0f, v.x,
-                0.0f, 1.0f, 0.0f, v.y,
-                0.0f, 0.0f, 1.0f, v.z,
-                0.0f, 0.0f, 0.0f, 1.0f
+                T(1.0), T(0.0), T(0.0), v.x,
+                T(0.0), T(1.0), T(0.0), v.y,
+                T(0.0), T(0.0), T(1.0), v.z,
+                T(0.0), T(0.0), T(0.0), T(1.0)
         };
     }
     
     static Matrix4<T> Rotation( const Quaternion<T>& q ) {
-        T s = static_cast<T>(2.0) / q.norm();
+        T s = T(2.0) / q.norm();
         return Matrix4<T> {
-            1 - s*(q.v.y*q.v.y + q.v.z*q.v.z),  s*(q.v.x*q.v.y - q.w*q.v.z),        s*(q.v.x*q.v.z + q.w*q.v.y),        0.0,
-            s*(q.v.x*q.v.y + q.w*q.v.z),        1 - s*(q.v.x*q.v.x + q.v.z*q.v.z),  s*(q.v.y*q.v.z - q.w*q.v.x),        0.0,
-            s*(q.v.x*q.v.z - q.w*q.v.y),        s*(q.v.y*q.v.z + q.w*q.v.x),        1 - s*(q.v.x*q.v.x + q.v.y*q.v.y),  0.0,
-            0.0,                                0.0,                                0.0,                                1.0
+            1 - s*(q.v.y*q.v.y + q.v.z*q.v.z),  s*(q.v.x*q.v.y - q.w*q.v.z),        s*(q.v.x*q.v.z + q.w*q.v.y),        T(0.0),
+            s*(q.v.x*q.v.y + q.w*q.v.z),        1 - s*(q.v.x*q.v.x + q.v.z*q.v.z),  s*(q.v.y*q.v.z - q.w*q.v.x),        T(0.0),
+            s*(q.v.x*q.v.z - q.w*q.v.y),        s*(q.v.y*q.v.z + q.w*q.v.x),        1 - s*(q.v.x*q.v.x + q.v.y*q.v.y),  T(0.0),
+            T(0.0),                             T(0.0),                             T(0.0),                             T(1.0)
         };
     }
     
     static Matrix4<T> Scale( const Vector3<T>& s ) {
         return Matrix4<T> {
-            s.x, 0.0, 0.0, 0.0,
-            0.0, s.y, 0.0, 0.0,
-            0.0, 0.0, s.z, 0.0,
-            0.0, 0.0, 0.0, 1.0
+            s.x,    T(0.0), T(0.0), T(0.0),
+            T(0.0), s.y,    T(0.0), T(0.0),
+            T(0.0), T(0.0), s.z,    T(0.0),
+            T(0.0), T(0.0), T(0.0), T(1.0)
         };
     }
     
@@ -262,12 +262,12 @@ struct Matrix4 {
      * @param far
      * @return 
      */
-    static Matrix4<T> Orthographic( float width, float height, float near, float far ) {
+    static Matrix4<T> Orthographic( T width, T height, T near, T far ) {
         return Matrix4<T>{
-            2.0f/width,     0.0f,           0.0f,                       0.0f,
-            0.0f,           2.0f/height,    0.0f,                       0.0f,
-            0.0f,           0.0f,           2.0f / (near - far),        (near + far) / (near - far),
-            0.0f,           0.0f,           0.0f,                       1.0f
+            T(2.0/width),     T(0.0),        T(0.0),                    T(0.0),
+            T(0.0),           2.0/height,    T(0.0),                    T(0.0),
+            T(0.0),           T(0.0),        2.0 / (near - far),        (near + far) / (near - far),
+            T(0.0),           T(0.0),        T(0.0),                    T(1.0)
         };
     }
     
@@ -279,14 +279,14 @@ struct Matrix4 {
      * @param f The far plane
      * @return The OpenGL perspective projection matrix
      */
-    static Matrix4<T> Perspective( float vfov, float ar, float n, float f ) {
-        T h = 2.0f * n * tan( 0.5f * vfov );
+    static Matrix4<T> Perspective( T vfov, T ar, T n, T f ) {
+        T h = T(2.0) * n * tan( T(0.5) * vfov );
         T w = ar * h;
         return Matrix4<T>{
-            2.0f*n / w,     0.0f,           0.0f,                   0.0f,
-            0.0f,           2.0f*n / h,     0.0f,                   0.0f,
-            0.0f,           0.0f,           -(f + n) / (f - n),     -(2.0f*f*n) / (f - n),
-            0.0f,           0.0f,           -1.0f,                  0.0f
+            T(2.0)*n / w,     T(0.0),        T(0.0),               T(0.0),
+            T(0.0),           T(2.0)*n / h,  T(0.0),               T(0.0),
+            T(0.0),           T(0.0),        -(f + n) / (f - n),   -(T(2.0)*f*n) / (f - n),
+            T(0.0),           T(0.0),        T(-1.0),              T(0.0)
         };
     }
     
@@ -370,14 +370,14 @@ struct Matrix4 {
     
     Matrix4<T> inverse() const {
         // obtained using the Cayley-Hamilton method
-        T factor = static_cast<T>(1.0) / determinant();
+        T factor = T(1.0) / determinant();
         const Matrix4<T>& A = *this;
         Matrix4<T> AA = A*A;
         Matrix4<T> AAA = AA*A;
         T trA = trace();
         T trAA = AA.trace();
         T trAAA = AAA.trace();
-        return factor * ( Matrix4<T>{}*static_cast<T>(0.1666666667*(trA*trA*trA - 3.0*trA*trAA + 2.0*trAAA)) - A*static_cast<T>(0.5)*(trA*trA - trAA) + AA*trA - AAA );
+        return factor * ( Matrix4<T>{}*T(0.1666666667*(trA*trA*trA - 3.0*trA*trAA + 2.0*trAAA)) - A*T(0.5)*(trA*trA - trAA) + AA*trA - AAA );
     }
 };
 
@@ -397,4 +397,3 @@ using Matrix4f = Matrix4<float>;
 
 }   // math
 }   // pg
-

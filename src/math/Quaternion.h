@@ -9,28 +9,37 @@ namespace math {
 
 template<typename T> 
 class Quaternion {
-    
+
     public:
         Quaternion()                                = default;
-        Quaternion( const Quaternion& )             = default;
-        Quaternion( Quaternion&& )                  = default;
-        Quaternion& operator=( const Quaternion& )  = default;
-        Quaternion& operator=( Quaternion&& )       = default;
-        
+        Quaternion(const Quaternion&)               = default;
+        Quaternion(Quaternion&&)                    = default;
+        Quaternion& operator=(const Quaternion&)    = default;
+        Quaternion& operator=(Quaternion&&)         = default;
+
         static Quaternion<T> Identity() {
             return Quaternion<T>{ 0.0, 0.0f, 0.0f, 1.0f };
         }
-        
-        Quaternion( const Vector3<T>& i, T r )
-        :   v( i ),
-            w( r )
-            {}
-            
+
+        Quaternion(const Vector3<T>& i, T r)
+            : v(i),
+            w(r)
+        {}
+
+        Quaternion(const Vector4<T>& vec)
+            :   v{vec.x, vec.y, vec.z},
+                w{vec.w}
+        {}
+
         Quaternion( T x, T y, T z, T w )
         :   v( x, y, z ),
             w( w )
             {}
-        
+
+        operator Vector4<T>() const {
+            return Vector4<T> {v.x, v.y, v.z, v.w};
+        }
+
         Quaternion<T> conjugate() const {
             return Quaternion<T>{ -v.x, -v.y, -v.z, w };
         }
@@ -54,7 +63,7 @@ class Quaternion {
                 w*rhs.w - v.dot( rhs.v )
             };
         }
-        
+
         Quaternion<T> operator*( T rhs ) const {
             return Quaternion<T> {
                 rhs*v.x,
@@ -63,25 +72,31 @@ class Quaternion {
                 rhs*w
             };
         }
-        
+
         Quaternion<T> multiply( const Quaternion& rhs ) const {
             return Quaternion<T> {
                 v.cross( rhs.v ) + rhs.w*v + w*rhs.v,
                 w*rhs.w - v.dot( rhs.v )
             };
         }
-        
+
+        Vector4<T> rotate(const Vector4<T>& rhs) const {
+            // this could use optimization to get rid of the intermediates...
+            Quaternion<T> intermediate = this->multiply(*reinterpret_cast<const Quaternion<T>*>(&rhs));
+            return intermediate.multiply(this->conjugate());
+        }
+
         Vector3<T> axis() const {
             T angle = this->angle();
-            return v * ( static_cast<T>(1.0) / sin( angle / static_cast<T>(2.0) ) );
+            return v * ( T(1.0) / sin( angle / T(2.0) ) );
         }
-        
+
         T angle() const {
-            return static_cast<T>(2.0 * acos( w ));
+            return T(2.0 * acos( w ));
         }
         
         Vector3<T>  v{};    // the imaginary part
-        T           w{ static_cast<T>(1.0) }; // the real part
+        T           w{ T(1.0) }; // the real part
 };
 
 template<typename T>

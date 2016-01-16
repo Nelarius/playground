@@ -12,8 +12,8 @@ template<typename T>
 struct Vector2 {
     
     Vector2()
-    :   x(static_cast<T>(0.0) ),
-        y(static_cast<T>(0.0) )
+    :   x(T(0.0) ),
+        y(T(0.0) )
         {}
     
     Vector2( std::initializer_list<T> l ) {
@@ -91,9 +91,9 @@ template<typename T>
 struct Vector3 {
     
     Vector3()
-    :   x(static_cast<T>(0.0) ),
-        y(static_cast<T>(0.0) ),
-        z(static_cast<T>(0.0) )
+    :   x(T(0.0) ),
+        y(T(0.0) ),
+        z(T(0.0) )
         {}
     
     Vector3( std::initializer_list<T> l ) {
@@ -115,7 +115,7 @@ struct Vector3 {
     Vector3& operator=( const Vector3& )    = default;
     Vector3& operator=( Vector3&& )         = default;
     ~Vector3()                              = default;
-    
+
     T norm() const {
         return sqrt( x*x + y*y + z*z );
     }
@@ -181,10 +181,10 @@ template<typename T>
 struct Vector4 {
     
     Vector4()
-    :   x(static_cast<T>(0.0) ),
-        y(static_cast<T>(0.0) ),
-        z(static_cast<T>(0.0) ),
-        w(static_cast<T>(0.0) )
+    :   x(T(0.0) ),
+        y(T(0.0) ),
+        z(T(0.0) ),
+        w(T(0.0) )
         {}
     
     Vector4( const Vector3<T>& v, T w )
