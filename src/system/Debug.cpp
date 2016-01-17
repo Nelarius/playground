@@ -11,13 +11,13 @@ void Debug::configure( ecs::EventManager& events ) {
     events.subscribe<ecs::ComponentAssignedEvent<component::Camera>>( *this );
     events.subscribe<ecs::ComponentAssignedEvent<component::Transform>>( *this );
     events.subscribe<ecs::ComponentAssignedEvent<component::Renderable>>( *this );
-    events.subscribe<ecs::ComponentAssignedEvent<component::BoundingBox>>( *this );
+    events.subscribe<ecs::ComponentAssignedEvent<math::AABox>>( *this );
     events.subscribe< ecs::ComponentAssignedEvent<component::PointLight> >( *this );
     events.subscribe< ecs::ComponentAssignedEvent<component::Script>>( *this );
     events.subscribe<ecs::ComponentRemovedEvent<component::Camera>>( *this );
     events.subscribe<ecs::ComponentRemovedEvent<component::Transform>>( *this );
     events.subscribe<ecs::ComponentRemovedEvent<component::Renderable>>( *this );
-    events.subscribe<ecs::ComponentRemovedEvent<component::BoundingBox>>( *this );
+    events.subscribe<ecs::ComponentRemovedEvent<math::AABox>>( *this );
     events.subscribe< ecs::ComponentRemovedEvent<component::PointLight> >( *this );
     events.subscribe< ecs::ComponentRemovedEvent< component::Script>>( *this );
 }
@@ -44,7 +44,7 @@ void Debug::receive( const ecs::ComponentAssignedEvent< component::Renderable >&
     LOG_DEBUG << "Renderable component assigned to Entity " << event.entity.id().index() << "." << event.entity.id().version();
 }
 
-void Debug::receive( const ecs::ComponentAssignedEvent< component::BoundingBox >& event ) {
+void Debug::receive( const ecs::ComponentAssignedEvent< math::AABox >& event ) {
     LOG_DEBUG << "BoundingBox component assigned to Entity " << event.entity.id().index() << "." << event.entity.id().version();
 }
 
@@ -68,7 +68,7 @@ void Debug::receive( const ecs::ComponentRemovedEvent< component::Renderable >& 
     LOG_DEBUG << "Renderable component removed from Entity " << event.entity.id().index() << "." << event.entity.id().version();
 }
 
-void Debug::receive( const ecs::ComponentRemovedEvent< component::BoundingBox >& event ) {
+void Debug::receive( const ecs::ComponentRemovedEvent< math::AABox >& event ) {
     LOG_DEBUG << "BoundingBox component removed from Entity " << event.entity.id().index() << "." << event.entity.id().version();
 }
 

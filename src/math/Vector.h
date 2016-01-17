@@ -43,9 +43,15 @@ struct Vector2 {
         return x*x + y*y;
     }
     
-    Vector2 normalize() const {
-        T norm = 1.0 / this->norm();
+    Vector2 normalized() const {
+        T norm = 1.0 / norm();
         return Vector2<T>{ x*norm, y*norm };
+    }
+
+    void normalize() {
+        T n = T(1.0) / norm();
+        n*x;
+        n*y;
     }
     
     T dot( const Vector2<T>& rhs ) const {
@@ -124,9 +130,16 @@ struct Vector3 {
         return x*x + y*y + z*z;
     }
     
-    Vector3 normalize() const {
-        T norm = 1.0 / this->norm();
+    Vector3 normalized() const {
+        T norm = 1.0 / norm();
         return Vector3<T>{ x*norm, y*norm, z*norm };
+    }
+
+    void normalize() {
+        T n = T(1.0) / norm();
+        n*x;
+        n*y;
+        n*z;
     }
     
     T dot( const Vector3<T>& rhs ) const {
@@ -220,12 +233,20 @@ struct Vector4 {
     T normSquared() const {
         return x*x + y*y + z*z + w*w;
     }
-    
-    Vector4 normalize() const {
-        T norm = 1.0 / this->norm();
+
+    Vector4 normalized() const {
+        T norm = 1.0 / norm();
         return Vector4<T>{ x*norm, y*norm, z*norm, w*norm };
     }
-    
+
+    void normalize() {
+        T n = T(1.0) / norm();
+        n*x;
+        n*y;
+        n*z;
+        n*w;
+    }
+
     T dot( const Vector4<T>& rhs ) const {
         return x*rhs.x + y*rhs.y + z*rhs.z + w*rhs.w;
     }

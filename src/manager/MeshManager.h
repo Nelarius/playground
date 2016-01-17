@@ -3,7 +3,7 @@
 
 #include "opengl/BufferObject.h"
 #include "utils/Container.h"
-#include "component/BoundingBox.h"
+#include "math/Geometry.h"
 #include <memory>
 #include <unordered_map>
 #include <utility>
@@ -35,7 +35,7 @@ class MeshManager {
         * @param file 
         * @returns The bounding box corresponding to the given file name.
         */
-        component::BoundingBox  getBoundingBox( const std::string& file ) const;
+        math::AABox getBoundingBox( const std::string& file ) const;
         /**
          * @brief Clear all elements.
          */
@@ -48,7 +48,7 @@ class MeshManager {
     private:
         mutable Container< opengl::BufferObject >                           buffer_{};
         mutable std::unordered_map< std::string, opengl::BufferObject* >    resources_{};
-        mutable std::unordered_map< std::string, component::BoundingBox >   boxes_{};
+        mutable std::unordered_map< std::string, math::AABox >              boxes_{};
 };
 
 }

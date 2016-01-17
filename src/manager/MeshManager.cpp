@@ -84,7 +84,7 @@ opengl::BufferObject* MeshManager::get( const std::string& file ) const {
 
     boxes_.emplace(
         file,
-        component::BoundingBox{
+        math::AABox {
             math::Vector3f{ minx, miny, minz },
             math::Vector3f{ maxx, maxy, maxz }
         }
@@ -93,7 +93,7 @@ opengl::BufferObject* MeshManager::get( const std::string& file ) const {
     return vbo;
 }
 
-component::BoundingBox MeshManager::getBoundingBox( const std::string& file ) const {
+math::AABox MeshManager::getBoundingBox( const std::string& file ) const {
     auto it = boxes_.find( file );
     ASSERT( it != boxes_.end() );
     return it->second;

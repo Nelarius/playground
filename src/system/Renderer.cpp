@@ -131,9 +131,9 @@ void Renderer::debugRender_( ecs::EntityManager& entities, ecs::EventManager& ev
     shader->setUniform( "color", math::Vector3f{ 1.0f, 0.1f, 0.1f } );
     shader->setUniform( "camera", cameraMatrix );
     // loop over bounding boxes
-    for ( ecs::Entity entity: entities.join< component::Transform, component::BoundingBox >() ) {
+    for ( ecs::Entity entity: entities.join< component::Transform, math::AABox >() ) {
         auto t = entity.component< component::Transform >();
-        auto bb = entity.component< component::BoundingBox >();
+        auto bb = entity.component<math::AABox>();
         math::Vector3f min = t->scale.hadamard( bb->min );
         math::Vector3f max = t->scale.hadamard( bb->max );
         math::Vector3f center = 0.5f * (min + max);
