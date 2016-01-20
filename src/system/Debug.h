@@ -1,10 +1,21 @@
-
 #pragma once
 
 #include "ecs/Include.h"
-#include "component/Include.h"
 
 namespace pg {
+
+namespace math {
+struct AABox;
+}
+
+namespace component {
+struct Camera;
+struct Transform;
+struct Renderable;
+struct PointLight;
+struct Script;
+}
+
 namespace system {
 
 class Debug : public ecs::System<Debug>, public ecs::Receiver {
@@ -31,4 +42,3 @@ class Debug : public ecs::System<Debug>, public ecs::Receiver {
 
 }
 }
-
