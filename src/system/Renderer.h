@@ -6,6 +6,9 @@
 #include "system/Events.h"
 #include "app/Context.h"
 #include "opengl/Program.h"
+#include "math/Geometry.h"
+#include "opengl/BufferObject.h"
+#include <vector>
 
 namespace pg {
 namespace system {
@@ -17,11 +20,13 @@ class Renderer : public ecs::System< Renderer >, public ecs::Receiver {
 
         void configure( ecs::EventManager& ) override;
         void update( ecs::EntityManager&, ecs::EventManager&, float ) override;
-        void receive( const ecs::ComponentAssignedEvent<component::Camera>& );
-        void receive( const ecs::ComponentAssignedEvent<component::PointLight>& );
-        void receive( const ToggleDebugRenderer& );
+        void receive(const ecs::ComponentAssignedEvent<component::Camera>&);
+        void receive(const ecs::ComponentAssignedEvent<component::PointLight>&);
+        void receive(const ToggleDebugRenderer&);
+        void receive(const RenderDebugLine&);
 
     private:
+
         // camera position passed as parameter
         void setSpecularUniforms_( const math::Vector3f&, opengl::Program* );
         void debugRender_( ecs::EntityManager&, ecs::EventManager&, const math::Matrix4f& cameraMatrix );
@@ -32,9 +37,14 @@ class Renderer : public ecs::System< Renderer >, public ecs::Receiver {
         // render state math
         math::Matrix4f  defaultProjection_;
 
+        std::vector<math::Line> debugLines_;
+        std::vector<float>      lineLifeTimes_;
+        opengl::BufferObject    lineBuffer_;
+        opengl::VertexArrayObject lineBufferArray_;
+
         Context& context_;
         bool    debug_;
 };
 
-}   //system
-}   //ce
+}
+}

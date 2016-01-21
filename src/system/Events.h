@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ecs/Entity.h"
+#include "math/Vector.h"
 #include <cstdlib>
 
 namespace pg {
@@ -17,6 +18,12 @@ struct ToggleDebugRenderer {
 // emitted when a text file is updated in the file system
 struct TextFileUpdated {
     std::size_t id;
+};
+
+struct RenderDebugLine {
+    math::Vector3f start;
+    math::Vector3f end;
+    float lifeTime; // in seconds
 };
 
 }

@@ -38,8 +38,8 @@ class BufferObject {
         /// This method should be called with a null pointer before the buffer object is mapped to our memory space.
         /// The usage flag can be one of the following: GL_STREAM_DRAW, GL_STREAM_READ, GL_STREAM_COPY,
         /// GL_STATIC_DRAW, GL_STATIC_READ, GL_STATIC_COPY, GL_DYNAMIC_WRITE, GL_DYNAMIC_READ, GL_DYNAMIC_COPY.
-        /// For more information, see glBufferData doc entry.
-        //void    dataStore( GLsizeiptr size, const GLvoid* data, int usage );
+        /// For more information, see glBufferData doc entry,
+        /// e.g. here: http://docs.gl/gl4/glBufferData
         void    dataStore( GLsizeiptr count, GLsizei elementSize, const GLvoid* data, int usage );
 
         /// @brief Map the data store memory range to local memory space.
