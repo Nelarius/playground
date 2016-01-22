@@ -25,8 +25,8 @@ struct TextFileUpdated {
 };
 
 struct RenderDebugLine {
-    math::Vector3f start;
-    math::Vector3f end;
+    math::Vec3f start;
+    math::Vec3f end;
     float lifeTime; // in seconds
 };
 

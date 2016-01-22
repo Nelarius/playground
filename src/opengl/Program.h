@@ -68,9 +68,9 @@ class Program {
         void setUniform( const GLchar*, GLfloat, GLfloat, GLfloat ) const;
         void setUniform( const GLchar*, GLfloat, GLfloat, GLfloat, GLfloat ) const;
         /// A wrapper for glUniform*fv
-        void setUniform( const GLchar*, const pg::math::Vector2f& ) const;
-        void setUniform( const GLchar*, const pg::math::Vector3f& ) const;
-        void setUniform( const GLchar*, const pg::math::Vector4f& ) const;
+        void setUniform( const GLchar*, const pg::math::Vec2f& ) const;
+        void setUniform( const GLchar*, const pg::math::Vec3f& ) const;
+        void setUniform( const GLchar*, const pg::math::Vec4f& ) const;
 
         /// A wrapper for glUniformMatrix*fv
         void setUniform( const GLchar*, const pg::math::Matrix3f& ) const;

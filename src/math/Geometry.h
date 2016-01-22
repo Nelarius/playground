@@ -6,20 +6,20 @@ namespace pg {
 namespace math {
 
 struct Ray {
-    Vector3f origin;
-    Vector3f direction;
+    Vec3f origin;
+    Vec3f direction;
     float t;
 };
 
 struct Line {
-    Vector3f origin;
-    Vector3f end;
+    Vec3f origin;
+    Vec3f end;
 };
 
 // Axis-aligned box
 struct AABox {
-    Vector3f min;
-    Vector3f max;
+    Vec3f min;
+    Vec3f max;
 };
 
 }

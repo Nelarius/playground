@@ -143,17 +143,17 @@ void Program::setUniform( const GLchar* name, GLfloat v0, GLfloat v1, GLfloat v2
     glUniform4f( uniform(name), v0, v1, v2, v3 );
 }
 
-void Program::setUniform( const GLchar* name, const pg::math::Vector2f& v ) const {
+void Program::setUniform( const GLchar* name, const pg::math::Vec2f& v ) const {
     ASSERT( isInUse() );
     glUniform2fv( uniform(name), 1, v.data );
 }
 
-void Program::setUniform( const GLchar* name, const pg::math::Vector3f& v ) const {
+void Program::setUniform( const GLchar* name, const pg::math::Vec3f& v ) const {
     ASSERT( isInUse() );
     glUniform3fv( uniform(name), 1, v.data );
 }
 
-void Program::setUniform( const GLchar* name, const pg::math::Vector4f& v ) const {
+void Program::setUniform( const GLchar* name, const pg::math::Vec4f& v ) const {
     ASSERT( isInUse() );
     glUniform4fv( uniform(name), 1, v.data );
 }

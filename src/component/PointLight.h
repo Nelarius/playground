@@ -7,7 +7,7 @@ namespace pg {
 namespace component {
 
 struct PointLight {
-    math::Vector3f intensity;
+    math::Vec3f intensity;
     float attenuation;
     float ambientCoefficient;
 };

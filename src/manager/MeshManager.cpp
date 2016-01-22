@@ -85,8 +85,8 @@ opengl::BufferObject* MeshManager::get( const std::string& file ) const {
     boxes_.emplace(
         file,
         math::AABox {
-            math::Vector3f{ minx, miny, minz },
-            math::Vector3f{ maxx, maxy, maxz }
+            math::Vec3f{ minx, miny, minz },
+            math::Vec3f{ maxx, maxy, maxz }
         }
     );
 

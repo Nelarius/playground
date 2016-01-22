@@ -200,7 +200,7 @@ void text( WrenVM* vm ) {
 }
 
 void dummy( WrenVM* vm ) {
-    const math::Vector2f* v = (const math::Vector2f*)wrenGetSlotForeign( vm, 1 );
+    const math::Vec2f* v = (const math::Vec2f*)wrenGetSlotForeign( vm, 1 );
     ImGui::Dummy( (const ImVec2&)(*v) );
 }
 
@@ -384,7 +384,7 @@ void multiply( WrenVM* vm ) {
 
 void axis( WrenVM* vm ) {
     const math::Quatf* q = (const math::Quatf*)wrenGetSlotForeign( vm, 0 );
-    math::Vector3f res = q->axis();
+    math::Vec3f res = q->axis();
     wrenGetVariable(vm, "builtin/vector", "createVec3", 1);
     WrenValue* function = wrenGetSlotValue(vm, 1);
     WrenValue* handle = wrenMakeCallHandle(vm, "call(_,_,_)");
@@ -419,9 +419,9 @@ void ringBufferPushBack( WrenVM* vm ) {
  */
 
 void cross3f(WrenVM* vm) {
-    const math::Vector3f* lhs = (const math::Vector3f*)wrenGetSlotForeign(vm, 0);
-    const math::Vector3f* rhs = (const math::Vector3f*)wrenGetSlotForeign(vm, 1);
-    math::Vector3f res = lhs->cross(*rhs);
+    const math::Vec3f* lhs = (const math::Vec3f*)wrenGetSlotForeign(vm, 0);
+    const math::Vec3f* rhs = (const math::Vec3f*)wrenGetSlotForeign(vm, 1);
+    math::Vec3f res = lhs->cross(*rhs);
     wrenGetVariable(vm, "builtin/vector", "createVec3", 1);
     WrenValue* function = wrenGetSlotValue(vm, 1);
     WrenValue* handle = wrenMakeCallHandle(vm, "call(_,_,_)");
@@ -435,9 +435,9 @@ void cross3f(WrenVM* vm) {
 }
 
 void plus3f(WrenVM* vm) {
-    const math::Vector3f* lhs = (const math::Vector3f*)wrenGetSlotForeign(vm, 0);
-    const math::Vector3f* rhs = (const math::Vector3f*)wrenGetSlotForeign(vm, 1);
-    math::Vector3f res = lhs->operator+(*rhs);
+    const math::Vec3f* lhs = (const math::Vec3f*)wrenGetSlotForeign(vm, 0);
+    const math::Vec3f* rhs = (const math::Vec3f*)wrenGetSlotForeign(vm, 1);
+    math::Vec3f res = lhs->operator+(*rhs);
     wrenGetVariable(vm, "builtin/vector", "createVec3", 1);
     WrenValue* function = wrenGetSlotValue(vm, 1);
     WrenValue* handle = wrenMakeCallHandle(vm, "call(_,_,_)");
@@ -451,9 +451,9 @@ void plus3f(WrenVM* vm) {
 }
 
 void minus3f(WrenVM* vm) {
-    const math::Vector3f* lhs = (const math::Vector3f*)wrenGetSlotForeign(vm, 0);
-    const math::Vector3f* rhs = (const math::Vector3f*)wrenGetSlotForeign(vm, 1);
-    math::Vector3f res = lhs->operator-(*rhs);
+    const math::Vec3f* lhs = (const math::Vec3f*)wrenGetSlotForeign(vm, 0);
+    const math::Vec3f* rhs = (const math::Vec3f*)wrenGetSlotForeign(vm, 1);
+    math::Vec3f res = lhs->operator-(*rhs);
     wrenGetVariable(vm, "builtin/vector", "createVec3", 1);
     WrenValue* function = wrenGetSlotValue(vm, 1);
     WrenValue* handle = wrenMakeCallHandle(vm, "call(_,_,_)");
@@ -467,9 +467,9 @@ void minus3f(WrenVM* vm) {
 }
 
 void hadamard3f(WrenVM* vm) {
-    const math::Vector3f* lhs = (const math::Vector3f*)wrenGetSlotForeign(vm, 0);
-    const math::Vector3f* rhs = (const math::Vector3f*)wrenGetSlotForeign(vm, 1);
-    math::Vector3f res = lhs->hadamard(*rhs);
+    const math::Vec3f* lhs = (const math::Vec3f*)wrenGetSlotForeign(vm, 0);
+    const math::Vec3f* rhs = (const math::Vec3f*)wrenGetSlotForeign(vm, 1);
+    math::Vec3f res = lhs->hadamard(*rhs);
     WrenValue* function = wrenGetSlotValue(vm, 1);
     WrenValue* handle = wrenMakeCallHandle(vm, "call(_,_,_)");
     wrenSetSlotValue(vm, 0, function);

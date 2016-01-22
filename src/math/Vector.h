@@ -288,12 +288,12 @@ Vector4<T> operator*( T scale, const Vector4<T>& rhs ) {
     };
 }
 
-using Vector2f = Vector2<float>;
-using Vector3f = Vector3<float>;
-using Vector4f = Vector4<float>;
+using Vec2f = Vector2<float>;
+using Vec3f = Vector3<float>;
+using Vec4f = Vector4<float>;
 using Vec2i = Vector2<int>;
 using Vec3i = Vector3<int>;
 using Vec4i = Vector4<int>;
 
-}   // math
-}   // ce
+}
+}

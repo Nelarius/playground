@@ -48,9 +48,9 @@ void Renderer::update(
     float dt 
 ) {
     math::Matrix4f cameraMatrix{ defaultProjection_ };
-    math::Vector3f cameraPos{};
-    math::Vector3f lightPos{};
-    math::Vector3f lightIntensity{};
+    math::Vec3f cameraPos{};
+    math::Vec3f lightPos{};
+    math::Vec3f lightIntensity{};
     float attenuation = 1.0f;
     float ambientCoefficient = 0.5f;
 
@@ -106,7 +106,7 @@ void Renderer::update(
     }
 }
 
-void Renderer::setSpecularUniforms_( const math::Vector3f& pos, opengl::Program* p ) {
+void Renderer::setSpecularUniforms_( const math::Vec3f& pos, opengl::Program* p ) {
     p->setUniform( "cameraPosition", pos );
 }
 

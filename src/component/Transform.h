@@ -8,9 +8,9 @@ namespace pg {
 namespace component {
 
 struct Transform {
-    pg::math::Vector3f      position;
+    pg::math::Vec3f      position;
     pg::math::Quatf         rotation;
-    pg::math::Vector3f      scale;
+    pg::math::Vec3f      scale;
 };
 
 }   //namespace component

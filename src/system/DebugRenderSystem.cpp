@@ -77,7 +77,7 @@ void DebugRenderSystem::update(ecs::EntityManager& entities, ecs::EventManager& 
     auto vao = factory.getVao();
 
     shader->use();
-    shader->setUniform("color", math::Vector3f{ 1.0f, 0.2f, 0.2f });
+    shader->setUniform("color", math::Vec3f{ 1.0f, 0.2f, 0.2f });
     shader->setUniform("camera", cameraMatrix);
     if (showBoxes_) {
         /// BOUNDING BOXES
@@ -85,10 +85,10 @@ void DebugRenderSystem::update(ecs::EntityManager& entities, ecs::EventManager& 
         for (ecs::Entity entity : entities.join< component::Transform, math::AABox >()) {
             auto t = entity.component< component::Transform >();
             auto bb = entity.component<math::AABox>();
-            math::Vector3f min = t->scale.hadamard(bb->min);
-            math::Vector3f max = t->scale.hadamard(bb->max);
-            math::Vector3f center = 0.5f * (min + max);
-            math::Vector3f scale{ max.x - min.x, max.y - min.y, max.z - min.z };
+            math::Vec3f min = t->scale.hadamard(bb->min);
+            math::Vec3f max = t->scale.hadamard(bb->max);
+            math::Vec3f center = 0.5f * (min + max);
+            math::Vec3f scale{ max.x - min.x, max.y - min.y, max.z - min.z };
             math::Matrix4f S = math::Matrix4f::Scale(scale);              // scale to current model dimensions
             math::Matrix4f R = math::Matrix4f::Rotation(t->rotation);     // rotate to world coords
             math::Matrix4f Tl = math::Matrix4f::Translation(center);        // translate to local coords
@@ -107,7 +107,7 @@ void DebugRenderSystem::update(ecs::EntityManager& entities, ecs::EventManager& 
         /// LINES
         ///////////////////////////////////////////////////////////
         const std::size_t LineCount = debugLines_.size();
-        math::Vector3f* lines = (math::Vector3f*)lineBuffer_.mapBufferRange(0, LineCount * 6u * sizeof(float), GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT);
+        math::Vec3f* lines = (math::Vec3f*)lineBuffer_.mapBufferRange(0, LineCount * 6u * sizeof(float), GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT);
         for (unsigned i = 0u; i < 2u * LineCount; i += 2u) {
             unsigned index = i / 2u;
             lines[i] = debugLines_[index].origin;
@@ -115,7 +115,7 @@ void DebugRenderSystem::update(ecs::EntityManager& entities, ecs::EventManager& 
         }
         lineBuffer_.unmapBuffer();
 
-        shader->setUniform("color", math::Vector3f{ 0.9f, 0.6f, 0.15f });
+        shader->setUniform("color", math::Vec3f{ 0.9f, 0.6f, 0.15f });
         shader->setUniform("model", math::Matrix4f{});
         lineBufferArray_.bind();
         glDrawArrays(GL_LINES, 0, debugLines_.size());

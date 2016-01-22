@@ -56,9 +56,9 @@ void WorldIO::read(
             auto rot = contents["rotation"].array_items();
             auto sca = contents["scale"].array_items();
             entity.assign< component::Transform >(
-                math::Vector3f(float(pos[0].number_value()), float(pos[1].number_value()), float(pos[2].number_value()) ),
+                math::Vec3f(float(pos[0].number_value()), float(pos[1].number_value()), float(pos[2].number_value()) ),
                 math::Quatf(float(rot[0].number_value()), float(rot[1].number_value()), float(rot[2].number_value()), float(rot[3].number_value()) ),
-                math::Vector3f( float(sca[0].number_value()), float(sca[1].number_value()), float(sca[2].number_value()) )
+                math::Vec3f( float(sca[0].number_value()), float(sca[1].number_value()), float(sca[2].number_value()) )
             );
         }   // transform
 
@@ -74,15 +74,15 @@ void WorldIO::read(
                 std::unordered_map<std::string, float> uniforms{};
                 uniforms.emplace( "shininess", float(specular[ "shininess" ].number_value()) );
                 auto scolor = specular[ "specularColor" ].array_items();
-                math::Vector3f specColor(
+                math::Vec3f specColor(
                     float(scolor[0].number_value()), float(scolor[1].number_value()), float(scolor[2].number_value())
                 );
                 auto acolor = specular[ "ambientColor" ].array_items();
-                math::Vector3f surfColor(
+                math::Vec3f surfColor(
                     float(acolor[0].number_value()), float(acolor[1].number_value()), float(acolor[2].number_value())
                 );
                 auto bcolor = specular[ "baseColor" ].array_items();
-                math::Vector3f baseColor(
+                math::Vec3f baseColor(
                     float(bcolor[0].number_value()), float(bcolor[1].number_value()), float(bcolor[2].number_value())
                 );
                 uniforms.emplace( "specColor_r", specColor.r );
@@ -113,7 +113,7 @@ void WorldIO::read(
             auto contents = pointLight.object_items();
             auto intensity = contents["intensity"].array_items();
             entity.assign< component::PointLight >(
-                math::Vector3f( float( intensity[0].number_value() ), float( intensity[1].number_value() ), float( intensity[2].number_value() ) ),
+                math::Vec3f( float( intensity[0].number_value() ), float( intensity[1].number_value() ), float( intensity[2].number_value() ) ),
                 float( contents["attenuation"].number_value() ),
                 float( contents["ambientCoefficient"].number_value() )
             );

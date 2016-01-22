@@ -7,7 +7,7 @@ namespace pg {
 namespace component {
 
 struct DirectionalLight {
-    math::Vector3f intensity;
+    math::Vec3f intensity;
     float ambientCoefficient;
 };
 

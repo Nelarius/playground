@@ -26,7 +26,7 @@ class Renderer : public ecs::System< Renderer >, public ecs::Receiver {
     private:
 
         // camera position passed as parameter
-        void setSpecularUniforms_( const math::Vector3f&, opengl::Program* );
+        void setSpecularUniforms_( const math::Vec3f&, opengl::Program* );
 
         // render state entities
         ecs::Entity     cameraEntity_;
