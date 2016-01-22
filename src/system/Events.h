@@ -6,12 +6,16 @@
 
 namespace pg {
 namespace system {
- 
+
 struct CameraActivated {
     ecs::Entity entity;
 };
 
-struct ToggleDebugRenderer {
+struct ShowDebugBoxes {
+    bool show;
+};
+
+struct ShowDebugLines {
     bool show;
 };
 

@@ -24,7 +24,8 @@ void Ui::toggleDisplay() {
 }
 
 void Ui::ui_( ecs::EventManager& events, float dt ) {
-    static bool debugRendererOn = false;
+    static bool debugBoundingBoxes = false;
+    static bool debugLines = false;
 
     ImGui::Begin( "System settings" );
 
@@ -34,8 +35,15 @@ void Ui::ui_( ecs::EventManager& events, float dt ) {
         ImGui::Text("  GLSL_VERSION: %s", (const char*)glGetString(GL_SHADING_LANGUAGE_VERSION));
         ImGui::Text("  GL_VENDOR: %s", (const char*)glGetString(GL_VENDOR));
         ImGui::Text("  GL_RENDERER: %s", (const char*)glGetString(GL_RENDERER));
-        ImGui::Checkbox( "bounding box", &debugRendererOn );
-        events.emit< ToggleDebugRenderer >( debugRendererOn );
+
+        ImGui::TreePop();
+    }
+
+    if (ImGui::TreeNode("Debug renderer")) {
+        ImGui::Checkbox("bounding box", &debugBoundingBoxes);
+        ImGui::Checkbox("debug lines", &debugLines);
+        events.emit<system::ShowDebugBoxes>(debugBoundingBoxes);
+        events.emit<system::ShowDebugLines>(debugLines);
 
         ImGui::TreePop();
     }
