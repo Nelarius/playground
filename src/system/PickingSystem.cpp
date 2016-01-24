@@ -1,4 +1,5 @@
 #include "app/Context.h"
+#include "component/Camera.h"
 #include "system/PickingSystem.h"
 #include "system/Events.h"
 #include "ecs/Include.h"
@@ -6,6 +7,14 @@
 #include "math/Intersection.h"
 #include "math/Quaternion.h"
 #include "utils/Log.h"
+
+namespace {
+
+/*inline pg::math::Ray generateCameraRay(const pg::math::Vec3f& cameraPos, const pg::component::Camera& camera, int x, int y) {
+    //
+}*/
+
+}
 
 namespace pg {
 namespace system {
@@ -30,17 +39,21 @@ void PickingSystem::update(ecs::EntityManager& entities, ecs::EventManager& even
 bool PickingSystem::rayCast(ecs::EntityManager& entities, ecs::EventManager& events, int x, int y) {
     // ray calculations go here
 
-    math::Vector3f eye = cameraEntity_.component<component::Transform>()->position;
+    math::Vec3f eye = cameraEntity_.component<component::Transform>()->position;
     float halfFov = 0.5f * cameraEntity_.component<component::Camera>()->verticalFov;
     float ar = float(context_.window->width()) / context_.window->height();
     float near = cameraEntity_.component<component::Camera>()->nearPlane;
     float ntan = near * tan(halfFov);
-    math::Vector3f pixelCoord{
+    math::Vec3f pixelCoord{
         ntan * (float(x) * 2.f / context_.window->width() - 1.f),
         ntan * ar * (1.f - float(y) * 2.f / context_.window->height()),
-        near
+        -near
     };
-    pixelCoord = cameraEntity_.component<component::Transform>()->rotation.rotate(math::Vector4f(pixelCoord, 0.f));
+
+    //auto cameraRay = generateCameraRay(eye, *(cameraEntity_.component<component::Camera>().operator->()), x, y);
+
+    auto temp = math::Matrix4f::Rotation(cameraEntity_.component<component::Transform>()->rotation) * math::Vec4f(pixelCoord, 1.f);
+    pixelCoord = math::Vec3f(temp.x, temp.y, temp.z);
     pixelCoord.normalize();
 
     events.emit<RenderDebugLine>(eye, pixelCoord * 50.f, 5.f);
@@ -55,6 +68,7 @@ bool PickingSystem::rayCast(ecs::EntityManager& entities, ecs::EventManager& eve
             math::Matrix4f::Translation(transform->position)
             * math::Matrix4f::Rotation(transform->rotation)
             * math::Matrix4f::Scale(transform->scale);
+
         result = math::rayIntersectsAABox(ray, *(aabb.operator->()), TRS);
     }
     return result;

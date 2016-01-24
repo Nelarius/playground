@@ -37,7 +37,7 @@ class Quaternion {
             {}
 
         operator Vector4<T>() const {
-            return Vector4<T> {v.x, v.y, v.z, v.w};
+            return Vector4<T> {v.x, v.y, v.z, w};
         }
 
         Quaternion<T> conjugate() const {

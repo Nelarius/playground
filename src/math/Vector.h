@@ -131,15 +131,15 @@ struct Vector3 {
     }
     
     Vector3 normalized() const {
-        T norm = 1.0 / norm();
-        return Vector3<T>{ x*norm, y*norm, z*norm };
+        T n = T(1.0) / norm();
+        return Vector3<T>{ x*n, y*n, z*n };
     }
 
     void normalize() {
         T n = T(1.0) / norm();
-        n*x;
-        n*y;
-        n*z;
+        x *= n;
+        y *= n;
+        z *= n;
     }
     
     T dot( const Vector3<T>& rhs ) const {
@@ -235,7 +235,7 @@ struct Vector4 {
     }
 
     Vector4 normalized() const {
-        T norm = 1.0 / norm();
+        T norm = T(1.0) / norm();
         return Vector4<T>{ x*norm, y*norm, z*norm, w*norm };
     }
 

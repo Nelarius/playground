@@ -6,6 +6,8 @@
 #include "system/ScriptHandler.h"
 #include "system/Ui.h"
 #include "system/Events.h"
+#include "system/PickingSystem.h"
+#include "system/DebugRenderSystem.h"
 #include "utils/Locator.h"
 
 #include <cmath>
@@ -27,11 +29,15 @@ GameState::GameState( Context& context, AppStateStack& stack )
 
 void GameState::activate() {
     systems_.add< system::Renderer >( context_ );
+    systems_.add<system::DebugRenderSystem>( context_);
+    systems_.add< system::PickingSystem >(context_);
     systems_.add< system::Debug >();
     systems_.add< system::ScriptHandler >( context_, keyboard_, mouse_ );
     systems_.add< system::Ui >( context_ );
     systems_.configure< system::Debug >();
     systems_.configure< system::Renderer >();
+    systems_.configure<system::DebugRenderSystem>();
+    systems_.configure<system::PickingSystem>();
     systems_.configure< system::ScriptHandler >();
 
     // NOTICE
@@ -44,14 +50,27 @@ void GameState::activate() {
     world.read( "data/scene.json", entities_, events_ );
 
     keyboard_.registerKeyDownCallback( Keycode::KeyF1,
-      [ this ]() -> void {
+      [this]() -> void {
           auto ui = this->systems_.system< system::Ui >();
           ui->toggleDisplay();
       });
     keyboard_.registerKeyDownCallback( Keycode::KeyP,
-        [ this ]() -> void {
+        [this]() -> void {
           this->requestStackPush_( states::Pause );
       });
+
+    mouse_.registerMouseDownCallback(MouseButton::Left,
+        [this]() -> void {
+        auto pick = this->systems_.system<system::PickingSystem>();
+        auto coords = mouse_.getMouseCoords();
+        bool hit = pick->rayCast(entities_, events_, coords.x, coords.y);
+        if (hit) {
+            LOG_DEBUG << "HIT";
+        }
+        else {
+            LOG_DEBUG << "MISS";
+        }
+    });
 }
 
 bool GameState::update( float dt ) {
@@ -66,12 +85,14 @@ bool GameState::handleEvent( const SDL_Event& event ) {
         requestStackClear_();
         context_.running = false;
     }
-    keyboard_.handleEvent( event );
+    keyboard_.handleEvent(event);
+    mouse_.handleEvent(event);
     return false; 
 }
 
 void GameState::render( float dt ) {
     systems_.update< system::Renderer >( dt );
+    systems_.update<system::DebugRenderSystem>(dt);
     systems_.update< system::Ui >( dt );
 }
 
