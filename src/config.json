@@ -13,5 +13,7 @@
             "multisampleBuffers": 1,
             "multisampleSamples": 4
         }
-    }
+    },
+    "dataPrefix": "data",
+    "builtinPrefix": "builtin"
 }

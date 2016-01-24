@@ -75,7 +75,7 @@ workspace "playground"
         language "C++"
         targetdir "bin"
         links { "wrenly", "filesentry" }
-        files { "src/**.cpp", "src/**.h", "extern/json11/json11.cpp", "extern/imgui/**.cpp", "builtin/**.wren" }
+        files { "src/**.cpp", "src/**.h", "extern/json11/json11.cpp", "extern/imgui/**.cpp", "builtin/**.wren", "builtin/**.glsl" }
         includedirs {
             "src", "extern/wrenly/src", "extern/filesentry/include",
             "extern", "extern/assimp/include", "extern/SDL/include",
@@ -112,7 +112,7 @@ workspace "playground"
                 "copy ..\\..\\src\\config.json ..\\..\\bin",
             }
             -- exlcude *.wren files from build, just copy them to the correct directory
-            filter "files:**.wren"
+            filter "files:**.wren or **.glsl"
                 --buildmessage "Copying %{file.relpath}..."
                 buildcommands { "copy ..\\..\\builtin\\%{file.name} ..\\..\\bin\\builtin" }
                 buildoutputs { "..\\..\\bin\\builtin\\%{file.name}" }
@@ -124,7 +124,6 @@ workspace "playground"
 /_/  /_/\_,_/_/\_\\__/_//_/_/\__/ 
                                   
 --]]
-
         configuration "gmake"
             -- Mac and Linux support go here
             prebuildcommands {
@@ -135,9 +134,10 @@ workspace "playground"
                 "cp ../../config.json ../../bin",
                 "cp -rf ../../src/data ../../bin"
             }
-            filter "files:**.wren"
+            filter "files:**.wren or **.glsl"
                 buildcommands { "cp ../../builtin/%{file.name} ../../bin/builtin" }
                 buildoutputs { "../../bin/builtin/%{file.name}" }
+            project "engine"
 
     -- This requires that the engine is split out into a DLL and the main application is its own executable
     -- Then the test application can just be linked with the engine

@@ -100,6 +100,9 @@ void Application::initialize_() {
     settings.multisampleSamples = opengl["multisampleSamples"].int_value();
 
     window_.initialize( settings );
+    
+    std::string data = obj["dataPrefix"].string_value();
+    std::string shaders = obj["builtinPrefix"].string_value();
 
     /*
      * Create app states here
@@ -127,18 +130,18 @@ void Application::initialize_() {
     /*
      * Load resources that all app states will depend on
      **/
-    context_.textFileManager.addWatch( "data", false );
+    context_.textFileManager.addWatch( data, false );
     // everything here should eventually go into a loading state
-    context_.shaderManager.addShader( "data/basic.vert.glsl", GL_VERTEX_SHADER );
-    context_.shaderManager.addShader( "data/basic.frag.glsl", GL_FRAGMENT_SHADER );
+    context_.shaderManager.addShader( shaders + "/basic.vert.glsl", GL_VERTEX_SHADER );
+    context_.shaderManager.addShader( shaders + "/basic.frag.glsl", GL_FRAGMENT_SHADER );
     context_.shaderManager.compile( "basic" );
 
-    context_.shaderManager.addShader( "data/specular.vert.glsl", GL_VERTEX_SHADER );
-    context_.shaderManager.addShader( "data/specular.frag.glsl", GL_FRAGMENT_SHADER );
+    context_.shaderManager.addShader( shaders + "/specular.vert.glsl", GL_VERTEX_SHADER );
+    context_.shaderManager.addShader( shaders + "/specular.frag.glsl", GL_FRAGMENT_SHADER );
     context_.shaderManager.compile( "specular" );
 
-    context_.shaderManager.addShader( "data/panel.vert.glsl", GL_VERTEX_SHADER );
-    context_.shaderManager.addShader( "data/panel.frag.glsl", GL_FRAGMENT_SHADER );
+    context_.shaderManager.addShader( shaders + "/panel.vert.glsl", GL_VERTEX_SHADER );
+    context_.shaderManager.addShader( shaders + "/panel.frag.glsl", GL_FRAGMENT_SHADER );
     context_.shaderManager.compile( "panel" );
 
     /*
