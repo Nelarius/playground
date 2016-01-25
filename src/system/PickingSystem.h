@@ -1,6 +1,7 @@
 #pragma once
 
 #include "component/Include.h"
+#include "ecs/Entity.h"
 
 namespace pg {
 
@@ -23,7 +24,7 @@ public:
     void update(ecs::EntityManager&, ecs::EventManager&, float) override;
 
     // cast a ray from mouse coordinates
-    bool rayCast(ecs::EntityManager&, ecs::EventManager&, int x, int y);
+    ecs::Entity rayCast(ecs::EntityManager&, ecs::EventManager&, int x, int y);
 
 private:
     ecs::Entity cameraEntity_;

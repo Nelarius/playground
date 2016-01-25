@@ -2,7 +2,6 @@
 #include "component/Camera.h"
 #include "system/PickingSystem.h"
 #include "system/Events.h"
-#include "ecs/Include.h"
 #include "math/Geometry.h"
 #include "math/Intersection.h"
 #include "math/Quaternion.h"
@@ -36,9 +35,7 @@ void PickingSystem::update(ecs::EntityManager& entities, ecs::EventManager& even
     // do nothing
 }
 
-bool PickingSystem::rayCast(ecs::EntityManager& entities, ecs::EventManager& events, int x, int y) {
-    // ray calculations go here
-
+ecs::Entity PickingSystem::rayCast(ecs::EntityManager& entities, ecs::EventManager& events, int x, int y) {
     math::Vec3f eye = cameraEntity_.component<component::Transform>()->position;
     float halfFov = 0.5f * cameraEntity_.component<component::Camera>()->verticalFov;
     float ar = float(context_.window->width()) / context_.window->height();
@@ -61,17 +58,24 @@ bool PickingSystem::rayCast(ecs::EntityManager& entities, ecs::EventManager& eve
     math::Ray ray{ eye, pixelCoord, std::numeric_limits<float>::max()};
     bool result = false;
 
+    float smallest = std::numeric_limits<float>::max();
+    ecs::Entity target{};
+
     for (ecs::Entity entity : entities.join<component::Transform, math::AABox>()) {
         auto transform = entity.component<component::Transform>();
         auto aabb = entity.component<math::AABox>();
-        math::Matrix4f TRS =
-            math::Matrix4f::Translation(transform->position)
-            * math::Matrix4f::Rotation(transform->rotation)
-            * math::Matrix4f::Scale(transform->scale);
 
-        result = math::rayIntersectsAABox(ray, *(aabb.operator->()), TRS);
+        result = math::rayIntersectsAABox(
+            ray,
+            *(aabb.operator->()),
+            transform->position, transform->rotation, transform->scale
+        );
+        if (ray.t < smallest) {
+            smallest = ray.t;
+            target = entity;
+        }
     }
-    return result;
+    return target;
 }
 
 }

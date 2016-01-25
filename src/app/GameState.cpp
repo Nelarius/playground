@@ -63,8 +63,8 @@ void GameState::activate() {
         [this]() -> void {
         auto pick = this->systems_.system<system::PickingSystem>();
         auto coords = mouse_.getMouseCoords();
-        bool hit = pick->rayCast(entities_, events_, coords.x, coords.y);
-        if (hit) {
+        ecs::Entity target = pick->rayCast(entities_, events_, coords.x, coords.y);
+        if (target.isValid()) {
             LOG_DEBUG << "HIT";
         }
         else {

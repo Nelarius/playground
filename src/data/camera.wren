@@ -48,9 +48,11 @@ var onKeyPressed = Fn.new { |key|
 }
 
 var onMousePressed = Fn.new { |button|
-    var delta = Vec2.new(Mouse.dx, Mouse.dy)
-    var coords = Vec2.new(Mouse.x, Mouse.y)
-    System.print("dx: %(delta.x), x: %(coords.x)")
+    var ndcx = Mouse.x
+    var ndcy = Mouse.y
+    ndcx = ndcx * 2.0 / 1200.0 - 1.0
+    ndcy = 1.0 - ndcy * 2.0 / 800.0
+    //System.print("ndcx: %(ndcx), ndcy: %(ndcy)")
 }
 
 var onKeyUp = Fn.new { |key|
