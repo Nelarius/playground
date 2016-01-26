@@ -13,6 +13,7 @@ extern "C" {
 #include <wren.h>
 }
 #include <vector>
+#include <cstdlib>
 
 namespace pg {
 namespace wren {
@@ -418,67 +419,42 @@ void ringBufferPushBack(WrenVM* vm) {
  *
  */
 
+inline void returnVectorValue(WrenVM* vm, const math::Vec3f& result) {
+    wrenGetVariable(vm, "builtin/vector", "Vec3", 0);
+    void* data = wrenSetSlotNewForeign(vm, 0, 0, sizeof(math::Vec3f));
+    memcpy(data, (void*)&result, sizeof(math::Vec3f));
+}
+
 void cross3f(WrenVM* vm) {
+    wrenEnsureSlots(vm, 2);
     const math::Vec3f* lhs = (const math::Vec3f*)wrenGetSlotForeign(vm, 0);
     const math::Vec3f* rhs = (const math::Vec3f*)wrenGetSlotForeign(vm, 1);
     math::Vec3f res = lhs->cross(*rhs);
-    wrenGetVariable(vm, "builtin/vector", "createVec3", 1);
-    WrenValue* function = wrenGetSlotValue(vm, 1);
-    WrenValue* handle = wrenMakeCallHandle(vm, "call(_,_,_)");
-    wrenSetSlotValue(vm, 0, function);
-    wrenSetSlotDouble(vm, 1, res.x);
-    wrenSetSlotDouble(vm, 2, res.y);
-    wrenSetSlotDouble(vm, 3, res.z);
-    wrenCall(vm, handle);
-    wrenReleaseValue(vm, function);
-    wrenReleaseValue(vm, handle);
+    returnVectorValue(vm, res);
 }
 
 void plus3f(WrenVM* vm) {
+    wrenEnsureSlots(vm, 2);
     const math::Vec3f* lhs = (const math::Vec3f*)wrenGetSlotForeign(vm, 0);
     const math::Vec3f* rhs = (const math::Vec3f*)wrenGetSlotForeign(vm, 1);
     math::Vec3f res = lhs->operator+(*rhs);
-    wrenGetVariable(vm, "builtin/vector", "createVec3", 1);
-    WrenValue* function = wrenGetSlotValue(vm, 1);
-    WrenValue* handle = wrenMakeCallHandle(vm, "call(_,_,_)");
-    wrenSetSlotValue(vm, 0, function);
-    wrenSetSlotDouble(vm, 1, res.x);
-    wrenSetSlotDouble(vm, 2, res.y);
-    wrenSetSlotDouble(vm, 3, res.z);
-    wrenCall(vm, handle);
-    wrenReleaseValue(vm, function);
-    wrenReleaseValue(vm, handle);
+    returnVectorValue(vm, res);
 }
 
 void minus3f(WrenVM* vm) {
+    wrenEnsureSlots(vm, 2);
     const math::Vec3f* lhs = (const math::Vec3f*)wrenGetSlotForeign(vm, 0);
     const math::Vec3f* rhs = (const math::Vec3f*)wrenGetSlotForeign(vm, 1);
     math::Vec3f res = lhs->operator-(*rhs);
-    wrenGetVariable(vm, "builtin/vector", "createVec3", 1);
-    WrenValue* function = wrenGetSlotValue(vm, 1);
-    WrenValue* handle = wrenMakeCallHandle(vm, "call(_,_,_)");
-    wrenSetSlotValue(vm, 0, function);
-    wrenSetSlotDouble(vm, 1, res.x);
-    wrenSetSlotDouble(vm, 2, res.y);
-    wrenSetSlotDouble(vm, 3, res.z);
-    wrenCall(vm, handle);
-    wrenReleaseValue(vm, function);
-    wrenReleaseValue(vm, handle);
+    returnVectorValue(vm, res);
 }
 
 void hadamard3f(WrenVM* vm) {
+    wrenEnsureSlots(vm, 2);
     const math::Vec3f* lhs = (const math::Vec3f*)wrenGetSlotForeign(vm, 0);
     const math::Vec3f* rhs = (const math::Vec3f*)wrenGetSlotForeign(vm, 1);
     math::Vec3f res = lhs->hadamard(*rhs);
-    WrenValue* function = wrenGetSlotValue(vm, 1);
-    WrenValue* handle = wrenMakeCallHandle(vm, "call(_,_,_)");
-    wrenSetSlotValue(vm, 0, function);
-    wrenSetSlotDouble(vm, 1, res.x);
-    wrenSetSlotDouble(vm, 2, res.y);
-    wrenSetSlotDouble(vm, 3, res.z);
-    wrenCall(vm, handle);
-    wrenReleaseValue(vm, function);
-    wrenReleaseValue(vm, handle);
+    returnVectorValue(vm, res);
 }
 
 }   // wren

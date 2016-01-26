@@ -52,14 +52,20 @@ foreign class Vec4 {
  * and return them back to Wren
  */
 
-var createVec4 = Fn.new { | x, y, z, w |
-    return Vec4.new( x, y, z, w )
+var createVec4 = Fn.new {
+    return Vec4.new(0.0, 0.0, 0.0, 0.0)
 }
 
-var createVec3 = Fn.new { | x, y, z |
-    return Vec3.new( x, y, z )
+var createVec3 = Fn.new {
+    System.print("Creating a new Vec3!")
+    return Vec3.new(0.0, 0.0, 0.0)
 }
 
-var createVec2 = Fn.new { | x, y |
-    return Vec2.new( x, y )
+var createVec2 = Fn.new {
+    return Vec2.new(0.0, 0.0)
 }
+
+var greet = Fn.new {
+    System.print("Hello, sir!")
+}
+
