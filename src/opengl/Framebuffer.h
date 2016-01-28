@@ -16,30 +16,30 @@ namespace opengl {
  * of glBindFramebuffer for more.
  */
 class Framebuffer {
-    public:
-        Framebuffer();
-        Framebuffer( const Framebuffer& )               = delete;
-        Framebuffer( Framebuffer&& )                    = delete;
-        Framebuffer& operator=( const Framebuffer& )    = delete;
-        Framebuffer& operator=( Framebuffer&& )         = delete;
-        ~Framebuffer();
+public:
+    Framebuffer();
+    Framebuffer(const Framebuffer&) = delete;
+    Framebuffer(Framebuffer&&) = delete;
+    Framebuffer& operator=(const Framebuffer&) = delete;
+    Framebuffer& operator=(Framebuffer&&) = delete;
+    ~Framebuffer();
 
-        /**
-         * @brief Attach a buffer to this frame buffer object
-         * @param attachment The attachment type.
-         * The attachment type has to be one of the following: GL_COLOR_ATTACHMENT,
-         * GL_DEPTH_ATTACHMENT, GL_STENCIL_ATTACHMENT, GL_DEPTH_STENCIL_ATTACHMENT
-         */
-        void attach( const Texture& texture, GLenum attachment );
+    /**
+     * @brief Attach a buffer to this frame buffer object
+     * @param attachment The attachment type.
+     * The attachment type has to be one of the following: GL_COLOR_ATTACHMENT,
+     * GL_DEPTH_ATTACHMENT, GL_STENCIL_ATTACHMENT, GL_DEPTH_STENCIL_ATTACHMENT
+     */
+    void attach(const Texture& texture, GLenum attachment);
 
-        void bind();
-        void unbind();
+    void bind();
+    void unbind();
 
-        GLuint object() const;
+    GLuint object() const;
 
-    private:
-        GLint   old_;
-        GLuint  object_;
+private:
+    GLint   old_;
+    GLuint  object_;
 };
 
 }

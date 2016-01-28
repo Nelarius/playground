@@ -19,59 +19,59 @@ namespace pg {
  */
 template< typename T >
 class BasicStorage {
-    public:
-        /**
-         * @brief Construct with zero capacity
-         */
-        BasicStorage() = default;
-        /*
-         * @brief Construct with a capacity to store capacity instances of T.
-         */
-        explicit BasicStorage( std::size_t capacity );
-        BasicStorage( const BasicStorage& )             = delete;
-        BasicStorage& operator=( const BasicStorage& )  = delete;
-        BasicStorage( BasicStorage&& );
-        BasicStorage& operator=( BasicStorage&& );
-        ~BasicStorage();
+public:
+    /**
+     * @brief Construct with zero capacity
+     */
+    BasicStorage() = default;
+    /*
+     * @brief Construct with a capacity to store capacity instances of T.
+     */
+    explicit BasicStorage(std::size_t capacity);
+    BasicStorage(const BasicStorage&) = delete;
+    BasicStorage& operator=(const BasicStorage&) = delete;
+    BasicStorage(BasicStorage&&);
+    BasicStorage& operator=(BasicStorage&&);
+    ~BasicStorage();
 
-        T* at( std::size_t index );
-        const T* at( std::size_t index ) const;
-        T* operator[]( std::size_t index );
-        const T* operator[]( std::size_t index ) const;
+    T* at(std::size_t index);
+    const T* at(std::size_t index) const;
+    T* operator[](std::size_t index);
+    const T* operator[](std::size_t index) const;
 
-        /*
-         * @brief Resize to store at least newSize instances of T.
-         * The actual capacity may remain the same if the requested capacity is
-         * smaller than the current capacity.
-         */
-        void resize( std::size_t newSize );
-        std::size_t capacity() const;
+    /*
+     * @brief Resize to store at least newSize instances of T.
+     * The actual capacity may remain the same if the requested capacity is
+     * smaller than the current capacity.
+     */
+    void resize(std::size_t newSize);
+    std::size_t capacity() const;
 
-    private:
-        uint8_t* buffer_{ nullptr };
-        std::size_t capacity_{ 0u };
+private:
+    uint8_t* buffer_{ nullptr };
+    std::size_t capacity_{ 0u };
 };
 
 template< typename T >
-BasicStorage<T>::BasicStorage( std::size_t capacity ) {
-    if ( capacity == 0u ) {
+BasicStorage<T>::BasicStorage(std::size_t capacity) {
+    if (capacity == 0u) {
         return;
     }
     capacity_ = capacity;
-    buffer_ = new uint8_t[ sizeof(T) * capacity ];
+    buffer_ = new uint8_t[sizeof(T) * capacity];
 }
 
 template< typename T >
-BasicStorage<T>::BasicStorage( BasicStorage&& other )
-:   buffer_( other.buffer_ ),
-    capacity_( other.capacity_ ) {
+BasicStorage<T>::BasicStorage(BasicStorage&& other)
+    : buffer_(other.buffer_),
+    capacity_(other.capacity_) {
     other.buffer_ = nullptr;
     other.capacity_ = nullptr;
 }
 
 template< typename T >
-BasicStorage<T>& BasicStorage<T>::operator=( BasicStorage&& rhs ) {
-    if ( buffer_ ) {
+BasicStorage<T>& BasicStorage<T>::operator=(BasicStorage&& rhs) {
+    if (buffer_) {
         delete[] buffer_;
     }
     buffer_ = rhs.buffer_;
@@ -83,42 +83,42 @@ BasicStorage<T>& BasicStorage<T>::operator=( BasicStorage&& rhs ) {
 
 template< typename T >
 BasicStorage<T>::~BasicStorage() {
-    if ( buffer_ ) {
+    if (buffer_) {
         delete[] buffer_;
     }
 }
 
 template< typename T >
-T* BasicStorage<T>::at( std::size_t index ) {
-    ASSERT( index < capacity_ );
-    return reinterpret_cast< T* >( buffer_ ) + index;
+T* BasicStorage<T>::at(std::size_t index) {
+    ASSERT(index < capacity_);
+    return reinterpret_cast<T*>(buffer_) + index;
 }
 
 template< typename T >
-const T* BasicStorage<T>::at( std::size_t index ) const {
-    ASSERT( index < capacity_ );
-    return reinterpret_cast< const T* >( buffer_ ) + index;
+const T* BasicStorage<T>::at(std::size_t index) const {
+    ASSERT(index < capacity_);
+    return reinterpret_cast<const T*>(buffer_) + index;
 }
 
 template< typename T >
-T* BasicStorage<T>::operator[]( std::size_t index ) {
-    return at( index );
+T* BasicStorage<T>::operator[](std::size_t index) {
+    return at(index);
 }
 
 template< typename T >
-const T* BasicStorage<T>::operator[]( std::size_t index ) const {
-    return at( index );
+const T* BasicStorage<T>::operator[](std::size_t index) const {
+    return at(index);
 }
 
 template< typename T >
-void BasicStorage<T>::resize( std::size_t newSize ) {
-    if ( newSize == 0) {
+void BasicStorage<T>::resize(std::size_t newSize) {
+    if (newSize == 0) {
         return;
     }
-    if ( capacity_ < newSize ) {
-        uint8_t* newBuffer = new uint8_t[ sizeof(T) * newSize ];
-        std::memcpy( newBuffer, buffer_, sizeof(T) * capacity_ );
-        if ( buffer_ ) {
+    if (capacity_ < newSize) {
+        uint8_t* newBuffer = new uint8_t[sizeof(T) * newSize];
+        std::memcpy(newBuffer, buffer_, sizeof(T) * capacity_);
+        if (buffer_) {
             delete buffer_;
         }
         buffer_ = newBuffer;

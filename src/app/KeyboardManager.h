@@ -23,7 +23,7 @@ class ScriptHandler;
 /**
 * These enumerations correspond to SDL_Keycode values and can be used interchangeably,
 * if both are converted to an integer first.
-* 
+*
 * See https://wiki.libsdl.org/SDLKeycodeLookup and
 * http://hg.libsdl.org/SDL/file/default/include/SDL_keycode.h for documentation.
 */
@@ -99,50 +99,50 @@ enum Keycode {
  * This class will handle what to do with an event.
  */
 class KeyboardManager {
-    public:
-        KeyboardManager() = default;
-        ~KeyboardManager() = default;
+public:
+    KeyboardManager() = default;
+    ~KeyboardManager() = default;
 
-        void registerKeyDownScriptCallback(std::string, ecs::Entity*);
-        void registerKeyPressedScriptCallback(std::string, ecs::Entity*);
-        void registerKeyUpScriptCallback(std::string, ecs::Entity*);
-        void registerKeyDownCallback(Keycode, std::function<void()>);
-        void registerKeyPressedCallback(Keycode, std::function<void()>);
-        void registerKeyUpCallback(Keycode, std::function<void()>);
-        /**
-        * @brief Execute a command corresponding to a registered event.
-        */
-        void handleEvent( const SDL_Event& events );
-        /**
-        * @brief Execute registered key pressed commands.
-        * This method must be called only once during the update loop.
-        */
-        void handleKeyPressedCallbacks();
+    void registerKeyDownScriptCallback(std::string, ecs::Entity*);
+    void registerKeyPressedScriptCallback(std::string, ecs::Entity*);
+    void registerKeyUpScriptCallback(std::string, ecs::Entity*);
+    void registerKeyDownCallback(Keycode, std::function<void()>);
+    void registerKeyPressedCallback(Keycode, std::function<void()>);
+    void registerKeyUpCallback(Keycode, std::function<void()>);
+    /**
+    * @brief Execute a command corresponding to a registered event.
+    */
+    void handleEvent(const SDL_Event& events);
+    /**
+    * @brief Execute registered key pressed commands.
+    * This method must be called only once during the update loop.
+    */
+    void handleKeyPressedCallbacks();
 
-        void setScriptHandler(system::ScriptHandler&);
+    void setScriptHandler(system::ScriptHandler&);
 
-    private:
+private:
 
-        struct CallbackData {
-            explicit CallbackData(ecs::Entity* entity)
-                : entities{},
-                callback{ []() -> void {} } {
-                entities.push_back(entity);
-            }
-            explicit CallbackData(std::function<void()> callable)
-                : entities{},
-                callback{callable} {}
-            std::vector<ecs::Entity*>   entities;
-            std::function<void()>       callback;
-        };
+    struct CallbackData {
+        explicit CallbackData(ecs::Entity* entity)
+            : entities{},
+            callback{ []() -> void {} } {
+            entities.push_back(entity);
+        }
+        explicit CallbackData(std::function<void()> callable)
+            : entities{},
+            callback{ callable } {}
+        std::vector<ecs::Entity*>   entities;
+        std::function<void()>       callback;
+    };
 
-        void addToMap_(std::map<int, CallbackData>&, Keycode, ecs::Entity*);
-        void addToMap_(std::map<int, CallbackData>&, Keycode, std::function<void()>);
+    void addToMap_(std::map<int, CallbackData>&, Keycode, ecs::Entity*);
+    void addToMap_(std::map<int, CallbackData>&, Keycode, std::function<void()>);
 
-        std::map<int, CallbackData> keyDownCallbacks_{};
-        std::map<int, CallbackData> keyPressedCallbacks_{};
-        std::map<int, CallbackData> keyUpCallbacks_{};
-        system::ScriptHandler*      scriptSystem_{nullptr};
+    std::map<int, CallbackData> keyDownCallbacks_{};
+    std::map<int, CallbackData> keyPressedCallbacks_{};
+    std::map<int, CallbackData> keyUpCallbacks_{};
+    system::ScriptHandler*      scriptSystem_{ nullptr };
 };
 
 }   // pg

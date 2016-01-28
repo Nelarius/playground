@@ -5,7 +5,6 @@
 #include <array>
 #include <iostream>
 
-// hide the implementation details
 namespace {
 
 std::minstd_rand& global_urng() {
@@ -17,35 +16,35 @@ std::minstd_rand& global_urng() {
 
 namespace pg {
 
-void Randomize() {
+void randomize() {
     std::random_device rd{};
-    global_urng().seed( rd() );
+    global_urng().seed(rd());
 }
 
-std::int32_t Randi( std::int32_t a, std::int32_t b ) {
+std::int32_t randi(std::int32_t a, std::int32_t b) {
     static std::uniform_int_distribution<> d{};
     using parm_t = decltype(d)::param_type;
-    return d( global_urng(), parm_t{ a, b } );
+    return d(global_urng(), parm_t{ a, b });
 }
 
-float Randf( float a, float b ) {
+float randf(float a, float b) {
     static std::uniform_real_distribution<> d{};
     using parm_t = decltype(d)::param_type;
-    return float(d( global_urng(), parm_t{ a, b } ));
+    return float(d(global_urng(), parm_t{ a, b }));
 }
 
-float Randf() {
-    return Randf( 0.0f, 1.0f );
+float randf() {
+    return randf(0.0f, 1.0f);
 }
 
-double Randd( double a, double b ) {
+double randd(double a, double b) {
     static std::uniform_real_distribution<> d{};
     using parm_t = decltype(d)::param_type;
-    return d( global_urng(), parm_t{ a, b } );
+    return d(global_urng(), parm_t{ a, b });
 }
 
-double Randd() {
-    return Randd( 0.0, 1.0 );
+double randd() {
+    return randd(0.0, 1.0);
 }
 
 }

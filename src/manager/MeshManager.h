@@ -21,34 +21,34 @@ namespace pg {
  * Use this class to gain access to the vertex buffer object.
  */
 class MeshManager {
-    public:        
-        MeshManager() = default;
-        ~MeshManager() = default;
+public:
+    MeshManager() = default;
+    ~MeshManager() = default;
 
-        /**
-         * @brief
-         * @param file The mesh file to get.
-         */
-        opengl::BufferObject*   get( const std::string& file ) const;
-        /**
-        * @brief 
-        * @param file 
-        * @returns The bounding box corresponding to the given file name.
-        */
-        math::AABox getBoundingBox( const std::string& file ) const;
-        /**
-         * @brief Clear all elements.
-         */
-        void            clear();
-        /**
-         * @brief Get the number of elements.
-         */
-        std::size_t     size() const;
+    /**
+     * @brief
+     * @param file The mesh file to get.
+     */
+    opengl::BufferObject*   get(const std::string& file) const;
+    /**
+    * @brief
+    * @param file
+    * @returns The bounding box corresponding to the given file name.
+    */
+    math::AABox getBoundingBox(const std::string& file) const;
+    /**
+     * @brief Clear all elements.
+     */
+    void            clear();
+    /**
+     * @brief Get the number of elements.
+     */
+    std::size_t     size() const;
 
-    private:
-        mutable Container< opengl::BufferObject >                           buffer_{};
-        mutable std::unordered_map< std::string, opengl::BufferObject* >    resources_{};
-        mutable std::unordered_map< std::string, math::AABox >              boxes_{};
+private:
+    mutable Container< opengl::BufferObject >                           buffer_{};
+    mutable std::unordered_map< std::string, opengl::BufferObject* >    resources_{};
+    mutable std::unordered_map< std::string, math::AABox >              boxes_{};
 };
 
 }

@@ -14,7 +14,7 @@ struct Context;
 
 namespace system {
 
-class DebugRenderSystem: public ecs::System<DebugRenderSystem>, public ecs::Receiver {
+class DebugRenderSystem : public ecs::System<DebugRenderSystem>, public ecs::Receiver {
 public:
     DebugRenderSystem() = delete;
     explicit DebugRenderSystem(Context& context);

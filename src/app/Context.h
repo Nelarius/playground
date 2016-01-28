@@ -14,10 +14,10 @@ namespace pg {
 struct Mouse {
     Mouse() = default;
 
-    int x{0};
-    int y{0};
-    int dx{0};
-    int dy{0};
+    int x{ 0 };
+    int y{ 0 };
+    int dx{ 0 };
+    int dy{ 0 };
 };
 
 /// @brief This struct holds variables that are used by the systems at runtime.
@@ -30,7 +30,7 @@ struct Context {
 
     /// @brief Get real-time input for the mouse.
     Mouse mouse()     const { return mouse_; }
-    
+
     MeshManager     meshManager{};
     ShaderManager   shaderManager{};
     TextFileManager textFileManager{ *this };
@@ -38,8 +38,8 @@ struct Context {
     Window*         window{ nullptr };
     system::ImGuiRenderer* imguiRenderer{ nullptr };
 
-    private:
-        Mouse  mouse_{};
+private:
+    Mouse  mouse_{};
 
 };
 

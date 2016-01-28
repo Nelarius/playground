@@ -17,23 +17,23 @@
 
 namespace pg {
 
-GameState::GameState( Context& context, AppStateStack& stack ) 
-:   AppState( context, stack ),
+GameState::GameState(Context& context, AppStateStack& stack)
+    : AppState(context, stack),
     events_(),
-    entities_( events_ ),
-    systems_( events_, entities_ ) {
-    Locator< ecs::EntityManager >::set( &entities_ );
-    Locator< ecs::EventManager >::set ( &events_ );
+    entities_(events_),
+    systems_(events_, entities_) {
+    Locator< ecs::EntityManager >::set(&entities_);
+    Locator< ecs::EventManager >::set(&events_);
     Locator<MouseEvents>::set(&mouse_); // the Wren script needs these
 }
 
 void GameState::activate() {
-    systems_.add< system::Renderer >( context_ );
-    systems_.add<system::DebugRenderSystem>( context_);
+    systems_.add< system::Renderer >(context_);
+    systems_.add<system::DebugRenderSystem>(context_);
     systems_.add< system::PickingSystem >(context_);
     systems_.add< system::Debug >();
-    systems_.add< system::ScriptHandler >( context_, keyboard_, mouse_ );
-    systems_.add< system::Ui >( context_ );
+    systems_.add< system::ScriptHandler >(context_, keyboard_, mouse_);
+    systems_.add< system::Ui >(context_);
     systems_.configure< system::Debug >();
     systems_.configure< system::Renderer >();
     systems_.configure<system::DebugRenderSystem>();
@@ -46,18 +46,18 @@ void GameState::activate() {
     Locator<system::ScriptHandler>::set(systems_.system<system::ScriptHandler>().get());
 
     // the full capacity of the systems are used in parsing, so the systems must be configured and ready to go!
-    WorldIO world( context_ );
-    world.read( "data/scene.json", entities_, events_ );
+    WorldIO world(context_);
+    world.read("data/scene.json", entities_, events_);
 
-    keyboard_.registerKeyDownCallback( Keycode::KeyF1,
-      [this]() -> void {
-          auto ui = this->systems_.system< system::Ui >();
-          ui->toggleDisplay();
-      });
-    keyboard_.registerKeyDownCallback( Keycode::KeyP,
+    keyboard_.registerKeyDownCallback(Keycode::KeyF1,
         [this]() -> void {
-          this->requestStackPush_( states::Pause );
-      });
+        auto ui = this->systems_.system< system::Ui >();
+        ui->toggleDisplay();
+    });
+    keyboard_.registerKeyDownCallback(Keycode::KeyP,
+        [this]() -> void {
+        this->requestStackPush_(states::Pause);
+    });
 
     mouse_.registerMouseDownCallback(MouseButton::Left,
         [this]() -> void {
@@ -73,27 +73,27 @@ void GameState::activate() {
     });
 }
 
-bool GameState::update( float dt ) {
+bool GameState::update(float dt) {
     keyboard_.handleKeyPressedCallbacks();
     mouse_.handleMousePressedCallbacks();
-    systems_.update< system::ScriptHandler >( dt );
+    systems_.update< system::ScriptHandler >(dt);
     return false;
 }
 
-bool GameState::handleEvent( const SDL_Event& event ) { 
-    if ( event.type == SDL_QUIT ) {
+bool GameState::handleEvent(const SDL_Event& event) {
+    if (event.type == SDL_QUIT) {
         requestStackClear_();
         context_.running = false;
     }
     keyboard_.handleEvent(event);
     mouse_.handleEvent(event);
-    return false; 
+    return false;
 }
 
-void GameState::render( float dt ) {
-    systems_.update< system::Renderer >( dt );
+void GameState::render(float dt) {
+    systems_.update< system::Renderer >(dt);
     systems_.update<system::DebugRenderSystem>(dt);
-    systems_.update< system::Ui >( dt );
+    systems_.update< system::Ui >(dt);
 }
 
 }

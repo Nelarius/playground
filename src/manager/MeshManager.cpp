@@ -11,23 +11,23 @@
 
 namespace pg {
 
-opengl::BufferObject* MeshManager::get( const std::string& file ) const {
-    auto it = resources_.find( file );
+opengl::BufferObject* MeshManager::get(const std::string& file) const {
+    auto it = resources_.find(file);
 
-    if ( it != resources_.end() ) {
+    if (it != resources_.end()) {
         return it->second;
     }
 
-    ASSERT( pg::FileExists( file ) );
+    ASSERT(pg::fileExists(file));
 
     Assimp::Importer importer;
-    const aiScene* scene = importer.ReadFile( 
+    const aiScene* scene = importer.ReadFile(
         file.c_str(),
-        aiProcess_Triangulate            | 
+        aiProcess_Triangulate |
         aiProcess_GenSmoothNormals
-    );
+        );
 
-    ASSERT( scene );
+    ASSERT(scene);
 
     float minx = std::numeric_limits< float >::max();
     float maxx = std::numeric_limits< float >::min();
@@ -38,64 +38,67 @@ opengl::BufferObject* MeshManager::get( const std::string& file ) const {
 
     std::vector<float> data;
 
-    for ( std::size_t i = 0u; i < scene->mNumMeshes; i++ ) {
+    for (std::size_t i = 0u; i < scene->mNumMeshes; i++) {
         aiMesh* mesh = scene->mMeshes[i];
         int numFaces = mesh->mNumFaces;
-        for ( int j = 0; j < numFaces; j++ ) {
+        for (int j = 0; j < numFaces; j++) {
             const aiFace& face = mesh->mFaces[j];
-            for ( std::size_t k = 0u; k < 3u; k++ ) {
+            for (std::size_t k = 0u; k < 3u; k++) {
 
-                aiVector3D vert = mesh->mVertices[ face.mIndices[k] ];
+                aiVector3D vert = mesh->mVertices[face.mIndices[k]];
 
                 // find aabb bounding min/max extents
-                if ( vert.x < minx ) {
+                if (vert.x < minx) {
                     minx = vert.x;
-                } else if ( vert.x > maxx ) {
+                }
+                else if (vert.x > maxx) {
                     maxx = vert.x;
                 }
-                if ( vert.y < miny ) {
+                if (vert.y < miny) {
                     miny = vert.y;
-                } else if ( vert.y > maxy ) {
+                }
+                else if (vert.y > maxy) {
                     maxy = vert.y;
                 }
-                if ( vert.z < minz ) {
+                if (vert.z < minz) {
                     minz = vert.z;
-                } else if ( vert.z > maxz ) {
+                }
+                else if (vert.z > maxz) {
                     maxz = vert.z;
                 }
 
                 // stick the vertex into memory
-                data.push_back( vert.x ); data.push_back( vert.y ); data.push_back( vert.z );
-                
+                data.push_back(vert.x); data.push_back(vert.y); data.push_back(vert.z);
+
                 // get the normal vector
-                if ( mesh->HasNormals() ) {
-                    aiVector3D norm = mesh->mNormals[ face.mIndices[k] ];
-                    data.push_back( norm.x ); data.push_back( norm.y ); data.push_back( norm.z );
+                if (mesh->HasNormals()) {
+                    aiVector3D norm = mesh->mNormals[face.mIndices[k]];
+                    data.push_back(norm.x); data.push_back(norm.y); data.push_back(norm.z);
                 }
             }
         }
     }
-    auto index = buffer_.emplace<GLenum>( GL_ARRAY_BUFFER );
-    resources_.emplace( file, &buffer_[index] );
-    opengl::BufferObject* vbo = resources_.find( file )->second;
+    auto index = buffer_.emplace<GLenum>(GL_ARRAY_BUFFER);
+    resources_.emplace(file, &buffer_[index]);
+    opengl::BufferObject* vbo = resources_.find(file)->second;
     vbo->dataStore(
         data.size(), sizeof(float), &data[0], GL_STATIC_DRAW
-    );
+        );
 
     boxes_.emplace(
         file,
-        math::AABox {
+        math::AABox{
             math::Vec3f{ minx, miny, minz },
             math::Vec3f{ maxx, maxy, maxz }
-        }
+    }
     );
 
     return vbo;
 }
 
-math::AABox MeshManager::getBoundingBox( const std::string& file ) const {
-    auto it = boxes_.find( file );
-    ASSERT( it != boxes_.end() );
+math::AABox MeshManager::getBoundingBox(const std::string& file) const {
+    auto it = boxes_.find(file);
+    ASSERT(it != boxes_.end());
     return it->second;
 }
 

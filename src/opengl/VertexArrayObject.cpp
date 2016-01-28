@@ -4,25 +4,25 @@
 
 namespace pg {
 namespace opengl {
-VertexArrayObject::VertexArrayObject( int elements )
-:   object_( 0u ),
-    old_( 0 ),
-    elements_( elements ),
-    refCount_( nullptr ) {
-    glGenVertexArrays( 1, &object_ );  
+VertexArrayObject::VertexArrayObject(int elements)
+    : object_(0u),
+    old_(0),
+    elements_(elements),
+    refCount_(nullptr) {
+    glGenVertexArrays(1, &object_);
     refCount_ = new unsigned;
     *refCount_ = 1u;
 }
 
-VertexArrayObject::VertexArrayObject( const VertexArrayObject& other )
-:   object_( other.object_ ),
-    old_( other.old_ ),
-    elements_( other.elements_ ),
-    refCount_( other.refCount_ ) {
+VertexArrayObject::VertexArrayObject(const VertexArrayObject& other)
+    : object_(other.object_),
+    old_(other.old_),
+    elements_(other.elements_),
+    refCount_(other.refCount_) {
     retain_();
 }
 
-VertexArrayObject& VertexArrayObject::operator=( const VertexArrayObject& rhs ) {
+VertexArrayObject& VertexArrayObject::operator=(const VertexArrayObject& rhs) {
     release_();
     object_ = rhs.object_;
     old_ = rhs.old_;
@@ -32,16 +32,16 @@ VertexArrayObject& VertexArrayObject::operator=( const VertexArrayObject& rhs ) 
     return *this;
 }
 
-VertexArrayObject::VertexArrayObject( VertexArrayObject&& other )
-:   object_( other.object_ ),
-    old_( other.old_ ),
-    elements_( other.elements_ ),
-    refCount_( other.refCount_ ) {
+VertexArrayObject::VertexArrayObject(VertexArrayObject&& other)
+    : object_(other.object_),
+    old_(other.old_),
+    elements_(other.elements_),
+    refCount_(other.refCount_) {
     other.object_ = 0u;
     other.refCount_ = nullptr;
 }
 
-VertexArrayObject& VertexArrayObject::operator=( VertexArrayObject&& rhs ) {
+VertexArrayObject& VertexArrayObject::operator=(VertexArrayObject&& rhs) {
     release_();
     object_ = rhs.object_;
     old_ = rhs.old_;
@@ -66,24 +66,24 @@ int VertexArrayObject::elementsPerIndex() const {
 }
 
 void VertexArrayObject::bind() {
-    glGetIntegerv( GL_VERTEX_ARRAY_BINDING, &old_ );
-    glBindVertexArray( object_ );
+    glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &old_);
+    glBindVertexArray(object_);
 }
 
 void VertexArrayObject::unbind() {
-    glBindVertexArray( old_ );
+    glBindVertexArray(old_);
 }
 
 void VertexArrayObject::retain_() {
-    ASSERT( refCount_ );
+    ASSERT(refCount_);
     *refCount_ += 1u;
 }
 
 void VertexArrayObject::release_() {
-    if ( refCount_ ) {
+    if (refCount_) {
         *refCount_ -= 1u;
-        if ( *refCount_ == 0u ) {
-            glDeleteVertexArrays( 1, &object_ );
+        if (*refCount_ == 0u) {
+            glDeleteVertexArrays(1, &object_);
             delete refCount_;
             refCount_ = nullptr;
         }

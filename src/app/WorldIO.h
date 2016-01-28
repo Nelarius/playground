@@ -8,7 +8,7 @@
 #include <string>
 
 namespace pg {
-    
+
 /**
  * @class WorldIO
  * @author Nelarius
@@ -17,18 +17,18 @@ namespace pg {
  * @brief Read and write the world to file.
  */
 class WorldIO {
-    public:
-        WorldIO( Context& context );
-        WorldIO()   = delete;
-        ~WorldIO()  = default;
-        void read( 
-            const std::string& file, 
-            ecs::EntityManager&,
-            ecs::EventManager&
+public:
+    WorldIO(Context& context);
+    WorldIO() = delete;
+    ~WorldIO() = default;
+    void read(
+        const std::string& file,
+        ecs::EntityManager&,
+        ecs::EventManager&
         );
-        
-    private:
-        Context& context_;
+
+private:
+    Context& context_;
 };
 
 }

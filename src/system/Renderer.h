@@ -14,28 +14,28 @@ namespace pg {
 namespace system {
 
 class Renderer : public ecs::System< Renderer >, public ecs::Receiver {
-    public:
-        Renderer() = delete;
-        explicit Renderer( Context& context );
+public:
+    Renderer() = delete;
+    explicit Renderer(Context& context);
 
-        void configure( ecs::EventManager& ) override;
-        void update( ecs::EntityManager&, ecs::EventManager&, float ) override;
-        void receive(const ecs::ComponentAssignedEvent<component::Camera>&);
-        void receive(const ecs::ComponentAssignedEvent<component::PointLight>&);
+    void configure(ecs::EventManager&) override;
+    void update(ecs::EntityManager&, ecs::EventManager&, float) override;
+    void receive(const ecs::ComponentAssignedEvent<component::Camera>&);
+    void receive(const ecs::ComponentAssignedEvent<component::PointLight>&);
 
-    private:
+private:
 
-        // camera position passed as parameter
-        void setSpecularUniforms_( const math::Vec3f&, opengl::Program* );
+    // camera position passed as parameter
+    void setSpecularUniforms_(const math::Vec3f&, opengl::Program*);
 
-        // render state entities
-        ecs::Entity     cameraEntity_;
-        ecs::Entity     lightEntity_;   // for now the world shall have one light
-        // render state math
-        math::Matrix4f  defaultProjection_;
+    // render state entities
+    ecs::Entity     cameraEntity_;
+    ecs::Entity     lightEntity_;   // for now the world shall have one light
+    // render state math
+    math::Matrix4f  defaultProjection_;
 
-        Context& context_;
-        bool    debug_;
+    Context& context_;
+    bool    debug_;
 };
 
 }

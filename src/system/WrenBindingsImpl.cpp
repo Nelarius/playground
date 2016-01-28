@@ -10,7 +10,7 @@
 #include "utils/Log.h"
 #include "utils/RingBuffer.h"
 extern "C" {
-    #include <wren.h>
+#include <wren.h>
 }
 #include <vector>
 
@@ -18,26 +18,26 @@ namespace pg {
 namespace wren {
 
 /***
- *       _  __           __           ___                    
+ *       _  __           __           ___
  *      / |/ /_ ____ _  / /  ___ ____/ _ | ___________ ___ __
  *     /    / // /  ' \/ _ \/ -_) __/ __ |/ __/ __/ _ `/ // /
- *    /_/|_/\_,_/_/_/_/_.__/\__/_/ /_/ |_/_/ /_/  \_,_/\_, / 
- *                                                    /___/  
+ *    /_/|_/\_,_/_/_/_/_.__/\__/_/ /_/ |_/_/ /_/  \_,_/\_, /
+ *                                                    /___/
  */
 
-void arrayPushBack( WrenVM* vm ) {
-    std::vector<float>* array = (std::vector<float>*)wrenGetSlotForeign( vm, 0 );
-    array->push_back( float(wrenGetSlotDouble( vm, 1 )) );
+void arrayPushBack(WrenVM* vm) {
+    std::vector<float>* array = (std::vector<float>*)wrenGetSlotForeign(vm, 0);
+    array->push_back(float(wrenGetSlotDouble(vm, 1)));
 }
 
-void arrayAt( WrenVM* vm ) {
-    const std::vector<float>* array = (const std::vector<float>*)wrenGetSlotForeign( vm, 0 );
-    std::size_t i = (std::size_t)wrenGetSlotDouble( vm, 1 );
-    if ( i >= array->size() ) {
+void arrayAt(WrenVM* vm) {
+    const std::vector<float>* array = (const std::vector<float>*)wrenGetSlotForeign(vm, 0);
+    std::size_t i = (std::size_t)wrenGetSlotDouble(vm, 1);
+    if (i >= array->size()) {
         LOG_ERROR << "Script error> NumberArray: index out of bounds. Size: " << array->size() << ", index: " << i;
         return;
     }
-    wrenSetSlotDouble( vm, 0, double( array->at(i) ) );
+    wrenSetSlotDouble(vm, 0, double(array->at(i)));
 }
 
 /***
@@ -167,173 +167,173 @@ void mouseDy(WrenVM* vm) {
 }
 
 /***
- *       ____                _ 
+ *       ____                _
  *      /  _/_ _  ___ ___ __(_)
- *     _/ //  ' \/ _ `/ // / / 
- *    /___/_/_/_/\_, /\_,_/_/  
- *              /___/          
+ *     _/ //  ' \/ _ `/ // / /
+ *    /___/_/_/_/\_, /\_,_/_/
+ *              /___/
  */
 
-void begin( WrenVM* vm ) {
-    ImGui::Begin( (const char*)wrenGetSlotString( vm, 1 ), NULL, 0 );
+void begin(WrenVM* vm) {
+    ImGui::Begin((const char*)wrenGetSlotString(vm, 1), NULL, 0);
 }
 
-void beginWithFlags( WrenVM* vm ) {
+void beginWithFlags(WrenVM* vm) {
     ImGui::Begin(
-        (const char*)wrenGetSlotString( vm, 1 ),
+        (const char*)wrenGetSlotString(vm, 1),
         NULL,
-        *(uint32_t*)wrenGetSlotForeign( vm, 2 )
-    );
+        *(uint32_t*)wrenGetSlotForeign(vm, 2)
+        );
 }
 
-void setWindowPos( WrenVM* vm ) {
-    ImGui::SetNextWindowPos( *(const ImVec2*)wrenGetSlotForeign( vm, 1 ) );
+void setWindowPos(WrenVM* vm) {
+    ImGui::SetNextWindowPos(*(const ImVec2*)wrenGetSlotForeign(vm, 1));
 }
 
-void setWindowSize( WrenVM* vm ) {
-    ImGui::SetNextWindowSize( *(const ImVec2*)wrenGetSlotForeign( vm, 1 ) );
+void setWindowSize(WrenVM* vm) {
+    ImGui::SetNextWindowSize(*(const ImVec2*)wrenGetSlotForeign(vm, 1));
 }
 
-void text( WrenVM* vm ) {
-    const char* str = wrenGetSlotString( vm, 1 );
-    ImGui::Text( str );
+void text(WrenVM* vm) {
+    const char* str = wrenGetSlotString(vm, 1);
+    ImGui::Text(str);
 }
 
-void dummy( WrenVM* vm ) {
-    const math::Vec2f* v = (const math::Vec2f*)wrenGetSlotForeign( vm, 1 );
-    ImGui::Dummy( (const ImVec2&)(*v) );
+void dummy(WrenVM* vm) {
+    const math::Vec2f* v = (const math::Vec2f*)wrenGetSlotForeign(vm, 1);
+    ImGui::Dummy((const ImVec2&)(*v));
 }
 
-void textColored( WrenVM* vm ) {
+void textColored(WrenVM* vm) {
     // do nothing for now
     //const math::Vector2f* v = (const math::Vector2f*)wrenGetSlotForeign( vm, 1 );
     //const char* t = wrenGetSlotString( vm, 2 );
     //ImGui::TextColored();
 }
-void bulletText( WrenVM* vm ) {
-    ImGui::BulletText( (const char*)wrenGetSlotString( vm, 1 ) );
+void bulletText(WrenVM* vm) {
+    ImGui::BulletText((const char*)wrenGetSlotString(vm, 1));
 }
 
-void button( WrenVM* vm ) {
-    ImGui::Button( (const char*)wrenGetSlotString( vm, 1 ) );
+void button(WrenVM* vm) {
+    ImGui::Button((const char*)wrenGetSlotString(vm, 1));
 }
 
-void buttonSized( WrenVM* vm ) {
+void buttonSized(WrenVM* vm) {
     ImGui::Button(
-        (const char*)wrenGetSlotString( vm, 1 ),
-        *(const ImVec2*)wrenGetSlotForeign( vm, 2 )
-    );
+        (const char*)wrenGetSlotString(vm, 1),
+        *(const ImVec2*)wrenGetSlotForeign(vm, 2)
+        );
 }
 
-void plotNumberArray( WrenVM* vm ) {
-    const std::vector<float>* array = (const std::vector<float>*)wrenGetSlotForeign( vm, 2 );
+void plotNumberArray(WrenVM* vm) {
+    const std::vector<float>* array = (const std::vector<float>*)wrenGetSlotForeign(vm, 2);
     ImGui::PlotLines(
-        wrenGetSlotString( vm, 1 ),
+        wrenGetSlotString(vm, 1),
         array->data(),
-        int( wrenGetSlotDouble( vm, 3 ) ),
+        int(wrenGetSlotDouble(vm, 3)),
         0, NULL, FLT_MAX, FLT_MAX, ImVec2(140, 80), sizeof(float)
-    );
+        );
 }
 
-void plotNumberArrayWithOffset( WrenVM* vm ) {
-    const std::vector<float>* array = (const std::vector<float>*)wrenGetSlotForeign( vm, 2 );
+void plotNumberArrayWithOffset(WrenVM* vm) {
+    const std::vector<float>* array = (const std::vector<float>*)wrenGetSlotForeign(vm, 2);
     ImGui::PlotLines(
-        wrenGetSlotString( vm, 1 ), array->data(),
-        int( wrenGetSlotDouble( vm, 3 ) ), int( wrenGetSlotDouble( vm, 4 ) ),
+        wrenGetSlotString(vm, 1), array->data(),
+        int(wrenGetSlotDouble(vm, 3)), int(wrenGetSlotDouble(vm, 4)),
         NULL, FLT_MAX, FLT_MAX, ImVec2(140, 80), sizeof(float)
-    );
+        );
 }
 
-void plotNumberArrayWithOffsetAndSize( WrenVM* vm ) {
-    const std::vector<float>* array = (const std::vector<float>*)wrenGetSlotForeign( vm, 2 );
+void plotNumberArrayWithOffsetAndSize(WrenVM* vm) {
+    const std::vector<float>* array = (const std::vector<float>*)wrenGetSlotForeign(vm, 2);
     ImGui::PlotLines(
-        wrenGetSlotString( vm, 1 ), array->data(),
-        int( wrenGetSlotDouble( vm, 3 ) ), int( wrenGetSlotDouble( vm, 4 ) ),
+        wrenGetSlotString(vm, 1), array->data(),
+        int(wrenGetSlotDouble(vm, 3)), int(wrenGetSlotDouble(vm, 4)),
         NULL, FLT_MAX, FLT_MAX,
-        *(const ImVec2*)wrenGetSlotForeign( vm, 5 ),
+        *(const ImVec2*)wrenGetSlotForeign(vm, 5),
         sizeof(float)
-    );
+        );
 }
 
-void plotRingBuffer( WrenVM* vm ) {
-    RingBuffer<float>* buffer = (RingBuffer<float>*)wrenGetSlotForeign( vm, 2 );
+void plotRingBuffer(WrenVM* vm) {
+    RingBuffer<float>* buffer = (RingBuffer<float>*)wrenGetSlotForeign(vm, 2);
     BasicStorage<float> numbers{ buffer->size() };
-    for ( unsigned int i = 0; i < buffer->size(); i++ ) {
+    for (unsigned int i = 0; i < buffer->size(); i++) {
         *numbers.at(i) = buffer->at(i);
     }
     ImGui::PlotLines(
-        wrenGetSlotString( vm, 1 ), numbers.at(0),
+        wrenGetSlotString(vm, 1), numbers.at(0),
         buffer->size(), 0,
         NULL, FLT_MAX, FLT_MAX,
         ImVec2(140, 80),
         sizeof(float)
-    );
+        );
 }
 
-void plotRingBufferWithSize( WrenVM* vm ) {
-    RingBuffer<float>* buffer = (RingBuffer<float>*)wrenGetSlotForeign( vm, 2 );
+void plotRingBufferWithSize(WrenVM* vm) {
+    RingBuffer<float>* buffer = (RingBuffer<float>*)wrenGetSlotForeign(vm, 2);
     BasicStorage<float> numbers{ buffer->size() };
-    for ( unsigned int i = 0; i < buffer->size(); i++ ) {
+    for (unsigned int i = 0; i < buffer->size(); i++) {
         *numbers.at(i) = buffer->at(i);
     }
     ImGui::PlotLines(
-        wrenGetSlotString( vm, 1 ), numbers.at(0),
+        wrenGetSlotString(vm, 1), numbers.at(0),
         buffer->size(), 0,
         NULL, FLT_MAX, FLT_MAX,
-        *(const ImVec2*)wrenGetSlotForeign( vm, 3 ),
+        *(const ImVec2*)wrenGetSlotForeign(vm, 3),
         sizeof(float)
-    );
+        );
 }
 
-void setTitleBar( WrenVM* vm ) {
-    uint32_t* bits = (uint32_t*)wrenGetSlotForeign( vm, 0 );
+void setTitleBar(WrenVM* vm) {
+    uint32_t* bits = (uint32_t*)wrenGetSlotForeign(vm, 0);
     *bits &= ~ImGuiWindowFlags_NoTitleBar;
 }
 
-void unsetTitleBar( WrenVM* vm ) {
-    uint32_t* bits = (uint32_t*)wrenGetSlotForeign( vm, 0 );
+void unsetTitleBar(WrenVM* vm) {
+    uint32_t* bits = (uint32_t*)wrenGetSlotForeign(vm, 0);
     (*bits) |= ImGuiWindowFlags_NoTitleBar;
 }
 
-void setResize( WrenVM* vm ) {
-    uint32_t* bits = (uint32_t*)wrenGetSlotForeign( vm, 0 );
+void setResize(WrenVM* vm) {
+    uint32_t* bits = (uint32_t*)wrenGetSlotForeign(vm, 0);
     *bits &= ~ImGuiWindowFlags_NoResize;
 }
 
-void setMove( WrenVM* vm ) {
-    uint32_t* bits = (uint32_t*)wrenGetSlotForeign( vm, 0 );
+void setMove(WrenVM* vm) {
+    uint32_t* bits = (uint32_t*)wrenGetSlotForeign(vm, 0);
     *bits &= ~ImGuiWindowFlags_NoMove;
 }
 
-void unsetMove( WrenVM* vm ) {
-    uint32_t* bits = (uint32_t*)wrenGetSlotForeign( vm, 0 );
+void unsetMove(WrenVM* vm) {
+    uint32_t* bits = (uint32_t*)wrenGetSlotForeign(vm, 0);
     *bits |= ImGuiWindowFlags_NoMove;
 }
 
-void unsetResize( WrenVM* vm ) {
-    uint32_t* bits = (uint32_t*)wrenGetSlotForeign( vm, 0 );
+void unsetResize(WrenVM* vm) {
+    uint32_t* bits = (uint32_t*)wrenGetSlotForeign(vm, 0);
     *bits |= ImGuiWindowFlags_NoResize;
 }
 
-void setShowBorders( WrenVM* vm ) {
-    uint32_t* bits = (uint32_t*)wrenGetSlotForeign( vm, 0 );
+void setShowBorders(WrenVM* vm) {
+    uint32_t* bits = (uint32_t*)wrenGetSlotForeign(vm, 0);
     *bits |= ImGuiWindowFlags_ShowBorders;
 }
-void unsetShowBorders( WrenVM* vm ) {
-    uint32_t* bits = (uint32_t*)wrenGetSlotForeign( vm, 0 );
+void unsetShowBorders(WrenVM* vm) {
+    uint32_t* bits = (uint32_t*)wrenGetSlotForeign(vm, 0);
     *bits &= ~ImGuiWindowFlags_ShowBorders;
 }
 
 /***
- *      ____            __               _         
- *     / __ \__ _____ _/ /____ _______  (_)__  ___ 
+ *      ____            __               _
+ *     / __ \__ _____ _/ /____ _______  (_)__  ___
  *    / /_/ / // / _ `/ __/ -_) __/ _ \/ / _ \/ _ \
  *    \___\_\_,_/\_,_/\__/\__/_/ /_//_/_/\___/_//_/
- *                                                 
+ *
  */
 
-void conjugate( WrenVM* vm ) {
-    const math::Quatf* q = (const math::Quatf*)wrenGetSlotForeign( vm, 0 );
+void conjugate(WrenVM* vm) {
+    const math::Quatf* q = (const math::Quatf*)wrenGetSlotForeign(vm, 0);
     math::Quatf res = q->conjugate();
     wrenGetVariable(vm, "builtin/quaternion", "createQuaternion", 1);
     WrenValue* function = wrenGetSlotValue(vm, 1);
@@ -348,8 +348,8 @@ void conjugate( WrenVM* vm ) {
     wrenReleaseValue(vm, handle);
 }
 
-void inverse( WrenVM* vm ) {
-    const math::Quatf* q = (const math::Quatf*)wrenGetSlotForeign( vm, 0 );
+void inverse(WrenVM* vm) {
+    const math::Quatf* q = (const math::Quatf*)wrenGetSlotForeign(vm, 0);
     math::Quatf res = q->inverse();
     wrenGetVariable(vm, "builtin/quaternion", "createQuaternion", 1);
     WrenValue* function = wrenGetSlotValue(vm, 1);
@@ -364,11 +364,11 @@ void inverse( WrenVM* vm ) {
     wrenReleaseValue(vm, handle);
 }
 
-void multiply( WrenVM* vm ) {
-    const math::Quatf* lhs = (const math::Quatf*)wrenGetSlotForeign( vm, 0 );
-    const math::Quatf* rhs = (const math::Quatf*)wrenGetSlotForeign( vm, 1 );
-    wrenEnsureSlots( vm, 5 );
-    math::Quatf res = lhs->multiply( *rhs );
+void multiply(WrenVM* vm) {
+    const math::Quatf* lhs = (const math::Quatf*)wrenGetSlotForeign(vm, 0);
+    const math::Quatf* rhs = (const math::Quatf*)wrenGetSlotForeign(vm, 1);
+    wrenEnsureSlots(vm, 5);
+    math::Quatf res = lhs->multiply(*rhs);
     wrenGetVariable(vm, "builtin/quaternion", "createQuaternion", 1);
     WrenValue* function = wrenGetSlotValue(vm, 1);
     WrenValue* handle = wrenMakeCallHandle(vm, "call(_,_,_,_)");
@@ -382,8 +382,8 @@ void multiply( WrenVM* vm ) {
     wrenReleaseValue(vm, handle);
 }
 
-void axis( WrenVM* vm ) {
-    const math::Quatf* q = (const math::Quatf*)wrenGetSlotForeign( vm, 0 );
+void axis(WrenVM* vm) {
+    const math::Quatf* q = (const math::Quatf*)wrenGetSlotForeign(vm, 0);
     math::Vec3f res = q->axis();
     wrenGetVariable(vm, "builtin/vector", "createVec3", 1);
     WrenValue* function = wrenGetSlotValue(vm, 1);
@@ -398,24 +398,24 @@ void axis( WrenVM* vm ) {
 }
 
 /***
- *       ___  _           __        ______       
+ *       ___  _           __        ______
  *      / _ \(_)__  ___ _/ /  __ __/ _/ _/__ ____
  *     / , _/ / _ \/ _ `/ _ \/ // / _/ _/ -_) __/
- *    /_/|_/_/_//_/\_, /_.__/\_,_/_//_/ \__/_/   
- *                /___/                          
+ *    /_/|_/_/_//_/\_, /_.__/\_,_/_//_/ \__/_/
+ *                /___/
  */
 
-void ringBufferPushBack( WrenVM* vm ) {
-    RingBuffer<float>* ring = (RingBuffer<float>*)wrenGetSlotForeign( vm, 0 );
-    ring->pushBack( float(wrenGetSlotDouble( vm, 1 )) );
+void ringBufferPushBack(WrenVM* vm) {
+    RingBuffer<float>* ring = (RingBuffer<float>*)wrenGetSlotForeign(vm, 0);
+    ring->pushBack(float(wrenGetSlotDouble(vm, 1)));
 }
 
 /***
- *      _   __        __          
+ *      _   __        __
  *     | | / /__ ____/ /____  ____
  *     | |/ / -_) __/ __/ _ \/ __/
- *     |___/\__/\__/\__/\___/_/   
- *                                
+ *     |___/\__/\__/\__/\___/_/
+ *
  */
 
 void cross3f(WrenVM* vm) {

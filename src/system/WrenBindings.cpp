@@ -39,8 +39,8 @@ void bindMathModule() {
             .bindFunction< decltype(static_cast<double(*)(double)>(&floor)), &floor >( true, "floor(_)" )
             .bindFunction< decltype(static_cast<double(*)(double)>(&round)), &round >( true, "round(_)" )
             .bindFunction< decltype(static_cast<double(*)(double)>(&abs)),  &abs    >( true, "abs(_)" )
-            .bindFunction< decltype(static_cast<double(*)(double, double)>(&pg::Randd) ), static_cast<double(*)(double, double)>(&pg::Randd) >( true, "rand(_,_)" )
-            .bindFunction< decltype(static_cast<double(*)(void)>(&pg::Randd)), static_cast<double(*)(void)>(&pg::Randd) >( true, "rand()" );
+            .bindFunction< decltype(static_cast<double(*)(double, double)>(&pg::randd) ), static_cast<double(*)(double, double)>(&pg::randd) >( true, "rand(_,_)" )
+            .bindFunction< decltype(static_cast<double(*)(void)>(&pg::randd)), static_cast<double(*)(void)>(&pg::randd) >( true, "rand()" );
 }
 
 void bindImguiModule() {

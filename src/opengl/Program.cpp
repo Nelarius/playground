@@ -7,48 +7,48 @@
 namespace pg {
 namespace opengl {
 
-Program::Program( const std::vector<std::unique_ptr<Shader>>& shaders ) {
-    this->link( shaders );
+Program::Program(const std::vector<std::unique_ptr<Shader>>& shaders) {
+    this->link(shaders);
 }
 
 Program::~Program() {
-    glDeleteProgram( object_ );
+    glDeleteProgram(object_);
     object_ = 0;
 }
 
-void Program::link( const std::vector<std::unique_ptr<Shader>>& shaders ) {
-    if ( shaders.size() == 0u ) {
+void Program::link(const std::vector<std::unique_ptr<Shader>>& shaders) {
+    if (shaders.size() == 0u) {
         std::cerr << "No shaders were provided to create the program.\n";
-        std::exit( EXIT_SUCCESS );
+        std::exit(EXIT_SUCCESS);
     }
-    
+
     object_ = glCreateProgram();
-    if ( object_ == 0 ) {
-        throw PlaygroundException( "glCreateProgram() failed" );
+    if (object_ == 0) {
+        throw PlaygroundException("glCreateProgram() failed");
     }
 
-    for ( auto& shader: shaders ) {
-        glAttachShader( object_, shader->object() );
+    for (auto& shader : shaders) {
+        glAttachShader(object_, shader->object());
     }
 
-    glLinkProgram( object_ );
+    glLinkProgram(object_);
 
     //check the linking status
     GLint status;
-    glGetProgramiv( object_, GL_LINK_STATUS, &status );
-    if ( status == GL_FALSE ) {
+    glGetProgramiv(object_, GL_LINK_STATUS, &status);
+    if (status == GL_FALSE) {
         std::string msg("Program linking failure: ");
 
         GLint infoLogLength;
-        glGetProgramiv( object_, GL_INFO_LOG_LENGTH, &infoLogLength );
-        char* infoLogStr = new char[ infoLogLength + 1 ];
-        glGetProgramInfoLog( object_, infoLogLength, NULL, infoLogStr );
+        glGetProgramiv(object_, GL_INFO_LOG_LENGTH, &infoLogLength);
+        char* infoLogStr = new char[infoLogLength + 1];
+        glGetProgramInfoLog(object_, infoLogLength, NULL, infoLogStr);
         msg += infoLogStr;
-        delete [] infoLogStr;
+        delete[] infoLogStr;
 
-        glDeleteProgram( object_ );
+        glDeleteProgram(object_);
         object_ = 0;
-        throw PlaygroundException( msg );
+        throw PlaygroundException(msg);
     }
 }
 
@@ -56,116 +56,116 @@ GLuint Program::object() const {
     return object_;
 }
 
-GLint Program::attribute( const GLchar* attribName ) const {
-    ASSERT( attribName );
+GLint Program::attribute(const GLchar* attribName) const {
+    ASSERT(attribName);
 
-    GLint attrib = glGetAttribLocation( object_, attribName );
-    ASSERT( attrib != -1 );
+    GLint attrib = glGetAttribLocation(object_, attribName);
+    ASSERT(attrib != -1);
 
     return attrib;
 }
 
-GLint Program::uniform( const GLchar* uniformName ) const {
-    ASSERT( uniformName );
+GLint Program::uniform(const GLchar* uniformName) const {
+    ASSERT(uniformName);
 
-    GLint uniform = glGetUniformLocation( object_, uniformName );
-    ASSERT( uniform != -1 );
+    GLint uniform = glGetUniformLocation(object_, uniformName);
+    ASSERT(uniform != -1);
     return uniform;
 }
 
-GLint Program::subroutineUniform( const GLchar* uniformName, GLenum shaderType ) const {
-    ASSERT( uniformName );
-    GLint uniform = glGetSubroutineUniformLocation( object_, shaderType, uniformName );
-    ASSERT( uniform != -1 );
+GLint Program::subroutineUniform(const GLchar* uniformName, GLenum shaderType) const {
+    ASSERT(uniformName);
+    GLint uniform = glGetSubroutineUniformLocation(object_, shaderType, uniformName);
+    ASSERT(uniform != -1);
     return uniform;
 }
 
-GLuint Program::subroutineIndex( const GLchar* functionName, GLenum shaderType ) const {
-    ASSERT( functionName );
-    GLuint index = glGetSubroutineIndex( object_, shaderType, functionName );
-    ASSERT( index != GL_INVALID_INDEX );
+GLuint Program::subroutineIndex(const GLchar* functionName, GLenum shaderType) const {
+    ASSERT(functionName);
+    GLuint index = glGetSubroutineIndex(object_, shaderType, functionName);
+    ASSERT(index != GL_INVALID_INDEX);
     return index;
 }
 
 void Program::use() const {
-    glUseProgram( object_ );
+    glUseProgram(object_);
 }
 
 bool Program::isInUse() const {
     GLint currentProgram = 0;
-    glGetIntegerv( GL_CURRENT_PROGRAM, &currentProgram );
-    return ( currentProgram == (GLint) object_ );
+    glGetIntegerv(GL_CURRENT_PROGRAM, &currentProgram);
+    return (currentProgram == (GLint)object_);
 }
 
 void Program::stopUsing() const {
-    ASSERT( isInUse() );
-    glUseProgram( 0 );
+    ASSERT(isInUse());
+    glUseProgram(0);
 }
 
-void Program::setUniform( const GLchar* name, GLint v0 ) const {
-    ASSERT( isInUse() );
-    glUniform1i( uniform(name), v0 );
+void Program::setUniform(const GLchar* name, GLint v0) const {
+    ASSERT(isInUse());
+    glUniform1i(uniform(name), v0);
 }
 
-void Program::setUniform( const GLchar* name, GLint v0, GLint v1 ) const {
-    ASSERT( isInUse() );
-    glUniform2i( uniform(name), v0, v1);
+void Program::setUniform(const GLchar* name, GLint v0, GLint v1) const {
+    ASSERT(isInUse());
+    glUniform2i(uniform(name), v0, v1);
 }
 
-void Program::setUniform( const GLchar* name, GLint v0, GLint v1, GLint v2 ) const {
-    ASSERT( isInUse() );
-    glUniform3i( uniform(name), v0, v1, v2 );
+void Program::setUniform(const GLchar* name, GLint v0, GLint v1, GLint v2) const {
+    ASSERT(isInUse());
+    glUniform3i(uniform(name), v0, v1, v2);
 }
 
-void Program::setUniform( const GLchar* name, GLint v0, GLint v1, GLint v2, GLint v3 ) const {
-    ASSERT( isInUse() );
-    glUniform4i( uniform(name), v0, v1, v2, v3 );
+void Program::setUniform(const GLchar* name, GLint v0, GLint v1, GLint v2, GLint v3) const {
+    ASSERT(isInUse());
+    glUniform4i(uniform(name), v0, v1, v2, v3);
 }
 
-void Program::setUniform( const GLchar* name, GLfloat v0 ) const {
-    ASSERT( isInUse() );
-    glUniform1f( uniform(name), v0);
+void Program::setUniform(const GLchar* name, GLfloat v0) const {
+    ASSERT(isInUse());
+    glUniform1f(uniform(name), v0);
 }
 
-void Program::setUniform( const GLchar* name, GLfloat v0, GLfloat v1 ) const {
-    ASSERT( isInUse() );
-    glUniform2f( uniform(name), v0, v1 );
+void Program::setUniform(const GLchar* name, GLfloat v0, GLfloat v1) const {
+    ASSERT(isInUse());
+    glUniform2f(uniform(name), v0, v1);
 }
 
-void Program::setUniform( const GLchar* name, GLfloat v0, GLfloat v1, GLfloat v2 ) const {
-    ASSERT( isInUse() );
-    glUniform3f( uniform(name), v0, v1, v2 );
+void Program::setUniform(const GLchar* name, GLfloat v0, GLfloat v1, GLfloat v2) const {
+    ASSERT(isInUse());
+    glUniform3f(uniform(name), v0, v1, v2);
 }
 
-void Program::setUniform( const GLchar* name, GLfloat v0, GLfloat v1, GLfloat v2, GLfloat v3 ) const
+void Program::setUniform(const GLchar* name, GLfloat v0, GLfloat v1, GLfloat v2, GLfloat v3) const
 {
-    ASSERT( isInUse() );
-    glUniform4f( uniform(name), v0, v1, v2, v3 );
+    ASSERT(isInUse());
+    glUniform4f(uniform(name), v0, v1, v2, v3);
 }
 
-void Program::setUniform( const GLchar* name, const pg::math::Vec2f& v ) const {
-    ASSERT( isInUse() );
-    glUniform2fv( uniform(name), 1, v.data );
+void Program::setUniform(const GLchar* name, const pg::math::Vec2f& v) const {
+    ASSERT(isInUse());
+    glUniform2fv(uniform(name), 1, v.data);
 }
 
-void Program::setUniform( const GLchar* name, const pg::math::Vec3f& v ) const {
-    ASSERT( isInUse() );
-    glUniform3fv( uniform(name), 1, v.data );
+void Program::setUniform(const GLchar* name, const pg::math::Vec3f& v) const {
+    ASSERT(isInUse());
+    glUniform3fv(uniform(name), 1, v.data);
 }
 
-void Program::setUniform( const GLchar* name, const pg::math::Vec4f& v ) const {
-    ASSERT( isInUse() );
-    glUniform4fv( uniform(name), 1, v.data );
+void Program::setUniform(const GLchar* name, const pg::math::Vec4f& v) const {
+    ASSERT(isInUse());
+    glUniform4fv(uniform(name), 1, v.data);
 }
 
-void Program::setUniform( const GLchar* name, const pg::math::Matrix3f& M ) const {
-    ASSERT( isInUse() );
-    glUniformMatrix3fv( uniform(name), 1, GL_TRUE, M.data );
+void Program::setUniform(const GLchar* name, const pg::math::Matrix3f& M) const {
+    ASSERT(isInUse());
+    glUniformMatrix3fv(uniform(name), 1, GL_TRUE, M.data);
 }
 
-void Program::setUniform( const GLchar* name, const pg::math::Matrix4f& M ) const {
-    ASSERT( isInUse() );
-    glUniformMatrix4fv( uniform(name), 1, GL_TRUE, M.data );
+void Program::setUniform(const GLchar* name, const pg::math::Matrix4f& M) const {
+    ASSERT(isInUse());
+    glUniformMatrix4fv(uniform(name), 1, GL_TRUE, M.data);
 }
 
 }   // opengl

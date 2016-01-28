@@ -6,7 +6,7 @@
 
 namespace pg {
 namespace system {
-    
+
 enum class MaterialType {
     Ambient,
     Diffuse,
@@ -17,6 +17,6 @@ struct Material {
     MaterialType                            type;
     std::unordered_map<std::string, float>  uniforms;
 };
-    
+
 }   // system
 }   // pg

@@ -7,22 +7,22 @@
 
 namespace pg {
 namespace opengl {
-    
 
-VertexArrayObjectFactory::VertexArrayObjectFactory( BufferObject* buffer, Program* program )
-:   attributeQueue_(),
+
+VertexArrayObjectFactory::VertexArrayObjectFactory(BufferObject* buffer, Program* program)
+    : attributeQueue_(),
     standardAttributeQueue_(),
-    buffer_( buffer ),
-    program_( program ) {}
+    buffer_(buffer),
+    program_(program) {}
 
 void VertexArrayObjectFactory::addAttribute(
     const std::string& attrib,
-    GLint size, 
+    GLint size,
     GLenum type,
-    bool normalized, 
-    GLsizei stride, 
-    std::size_t offset ) {
-    if ( !standardAttributeQueue_.empty() ) {
+    bool normalized,
+    GLsizei stride,
+    std::size_t offset) {
+    if (!standardAttributeQueue_.empty()) {
         LOG_ERROR << "Adding custom and standard attributes to the same vertex array object is prohibited!";
         return;
     }
@@ -33,64 +33,65 @@ void VertexArrayObjectFactory::addAttribute(
         normalized,
         stride,
         offset
-    );
+        );
 }
 
-void VertexArrayObjectFactory::addStandardAttribute( VertexAttribute attribute ) {
-    if ( !attributeQueue_.empty() ) {
+void VertexArrayObjectFactory::addStandardAttribute(VertexAttribute attribute) {
+    if (!attributeQueue_.empty()) {
         LOG_ERROR << "Adding standard and custom attributes to the same vertex array object is prohibited!";
         return;
     }
     GLint program;
-    glGetIntegerv( GL_CURRENT_PROGRAM, &program );
-    
-    switch( attribute ) {
-        case VertexAttribute::Vertex: {
-            standardAttributeQueue_.emplace_back(
-                "vertex", 3, GL_FLOAT, false, 0, 0u
+    glGetIntegerv(GL_CURRENT_PROGRAM, &program);
+
+    switch (attribute) {
+    case VertexAttribute::Vertex: {
+        standardAttributeQueue_.emplace_back(
+            "vertex", 3, GL_FLOAT, false, 0, 0u
             );
-            break;
-        }
-        case VertexAttribute::Normal: {
-            standardAttributeQueue_.emplace_back(
-                "normal", 3, GL_FLOAT, false, 0, 0u
+        break;
+    }
+    case VertexAttribute::Normal: {
+        standardAttributeQueue_.emplace_back(
+            "normal", 3, GL_FLOAT, false, 0, 0u
             );
-            break;
-        }
-        case VertexAttribute::Color: {
-            standardAttributeQueue_.emplace_back(
-                "color", 3, GL_FLOAT, false, 0, 0u 
+        break;
+    }
+    case VertexAttribute::Color: {
+        standardAttributeQueue_.emplace_back(
+            "color", 3, GL_FLOAT, false, 0, 0u
             );
-            break;
-        }
-        case VertexAttribute::UVCoordinate: {
-            standardAttributeQueue_.emplace_back(
-                "uvcoordinate", 2, GL_FLOAT, false, 0, 0u
+        break;
+    }
+    case VertexAttribute::UVCoordinate: {
+        standardAttributeQueue_.emplace_back(
+            "uvcoordinate", 2, GL_FLOAT, false, 0, 0u
             );
-            break;
-        }
-        
-        default: LOG_ERROR << "Trying to add incorrect attribute to vertex array object.";
+        break;
+    }
+
+    default: LOG_ERROR << "Trying to add incorrect attribute to vertex array object.";
     }
 }
 
 VertexArrayObject VertexArrayObjectFactory::getVao() {
     buffer_->bind();
     program_->use();
-    
+
     // for custom attributes, the stride may be larger than the actual number
     // of elements used. Hence, we need to get the number of elements per
     // index needs to be deduced from the stride.
-    int elements =  standardAttributeQueue_.empty() ? 
-                    attributeQueue_[0].stride / SizeOfGlType( attributeQueue_[0].type ) :
-                    accumulateAttributes_( standardAttributeQueue_ );
+    int elements = standardAttributeQueue_.empty() ?
+        attributeQueue_[0].stride / SizeOfGlType(attributeQueue_[0].type) :
+        accumulateAttributes_(standardAttributeQueue_);
     VertexArrayObject vao{ elements };
-    if ( !standardAttributeQueue_.empty() ) {
+    if (!standardAttributeQueue_.empty()) {
         vao.bind();
         enableStandardAttributes_();
         standardAttributeQueue_.clear();
         vao.unbind();
-    } else if ( !attributeQueue_.empty() ) {
+    }
+    else if (!attributeQueue_.empty()) {
         vao.bind();
         enableAttributes_();
         attributeQueue_.clear();
@@ -104,7 +105,7 @@ VertexArrayObject VertexArrayObjectFactory::getVao() {
 /*
  * This class creates a vertex attribute pointer for each attribute,
  * and then enables the array.
- * 
+ *
  * Does not clear the queue.
  * */
 void VertexArrayObjectFactory::enableStandardAttributes_() {
@@ -112,49 +113,49 @@ void VertexArrayObjectFactory::enableStandardAttributes_() {
     /*
      * Get the total stride
      * */
-    for ( auto& attrib: standardAttributeQueue_ ) {
+    for (auto& attrib : standardAttributeQueue_) {
         strideAccumulator += attrib.size;
     }
     /*
      * enable the attributes
      * */
     std::size_t offsetAccumulator{ 0u };
-    for ( auto& attrib: standardAttributeQueue_ ) {
-        GLint index = glGetAttribLocation( program_->object(), attrib.name.c_str() );
-        ASSERT( index != -1 );
+    for (auto& attrib : standardAttributeQueue_) {
+        GLint index = glGetAttribLocation(program_->object(), attrib.name.c_str());
+        ASSERT(index != -1);
         glVertexAttribPointer(
             index,
             attrib.size,
             attrib.type,
             attrib.normalized,
             strideAccumulator * sizeof(float),
-            ( const GLvoid* ) ( offsetAccumulator * sizeof(float) )
-        );
+            (const GLvoid*)(offsetAccumulator * sizeof(float))
+            );
         offsetAccumulator += attrib.size;
-        glEnableVertexAttribArray( index );
-        
+        glEnableVertexAttribArray(index);
+
     }
 }
 
 void VertexArrayObjectFactory::enableAttributes_() {
-    for ( auto& attrib: attributeQueue_ ) {
-        GLint index = glGetAttribLocation( program_->object(), attrib.name.c_str() );
-        ASSERT( index != -1 );
+    for (auto& attrib : attributeQueue_) {
+        GLint index = glGetAttribLocation(program_->object(), attrib.name.c_str());
+        ASSERT(index != -1);
         glVertexAttribPointer(
             index,
             attrib.size,
             attrib.type,
             attrib.normalized,
             attrib.stride,
-            ( const GLvoid* ) attrib.offset
-        );
-        glEnableVertexAttribArray( index );
+            (const GLvoid*)attrib.offset
+            );
+        glEnableVertexAttribArray(index);
     }
 }
 
-int VertexArrayObjectFactory::accumulateAttributes_( const std::vector<VertexArrayObjectFactory::Attribute>& attributes ) const {
+int VertexArrayObjectFactory::accumulateAttributes_(const std::vector<VertexArrayObjectFactory::Attribute>& attributes) const {
     int accumulator{ 0 };
-    for ( auto& attrib: attributes ) {
+    for (auto& attrib : attributes) {
         accumulator += attrib.size;
     }
     return accumulator;

@@ -12,34 +12,34 @@
 #include <cstdint>
 
 namespace {
-    uint32_t targetDeltaTime{ 16u  };
-    inline float SDLTimeToPgTime(uint32_t dt) {
-        return float(dt) / 1000.f;
-    }
+uint32_t targetDeltaTime{ 16u };
+inline float SDLTimeToPgTime(uint32_t dt) {
+    return float(dt) / 1000.f;
+}
 }
 
 namespace pg {
 
-void Application::run() { 
+void Application::run() {
     initialize_();
 
     running_ = true;
     uint32_t tdelta{ targetDeltaTime };
 
-    while( running_ ) {
+    while (running_) {
         uint32_t start = SDL_GetTicks();
         /*
          * Handle events here
          * */
         SDL_Event event;
-        while( SDL_PollEvent( &event ) ) {
+        while (SDL_PollEvent(&event)) {
             mouse_.handleEvent(event);
             stateStack_.handleEvent(event);
         }
         /*
          * A state might have called quits
          * */
-        if ( !context_.running ) {
+        if (!context_.running) {
             running_ = false;
         }
 
@@ -48,12 +48,12 @@ void Application::run() {
         * */
         mouse_.handleMousePressedCallbacks();
 
-        context_.imguiRenderer->newFrame( SDLTimeToPgTime( tdelta ), mouse_.getMouseCoords().x, mouse_.getMouseCoords().y );
+        context_.imguiRenderer->newFrame(SDLTimeToPgTime(tdelta), mouse_.getMouseCoords().x, mouse_.getMouseCoords().y);
         context_.textFileManager.update();
-        stateStack_.update( SDLTimeToPgTime( tdelta ) );
+        stateStack_.update(SDLTimeToPgTime(tdelta));
 
-        glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-        stateStack_.render( SDLTimeToPgTime( tdelta ) );
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        stateStack_.render(SDLTimeToPgTime(tdelta));
         context_.imguiRenderer->render();
 
         window_.display();
@@ -63,9 +63,9 @@ void Application::run() {
          * */
         uint32_t end = SDL_GetTicks();
         tdelta = end - start;
-        if ( tdelta < targetDeltaTime ) {
+        if (tdelta < targetDeltaTime) {
             tdelta = targetDeltaTime;
-            SDL_Delay( targetDeltaTime - tdelta );
+            SDL_Delay(targetDeltaTime - tdelta);
         }
     }
 }
@@ -80,9 +80,9 @@ void Application::initialize_() {
     /*
      * Initialize app state here
      * */
-    auto json = pg::FileToString( "config.json" );
-    std::string error{""};
-    auto obj = json11::Json::parse( json, error ).object_items();
+    auto json = pg::fileToString("config.json");
+    std::string error{ "" };
+    auto obj = json11::Json::parse(json, error).object_items();
     auto window = obj["window"].object_items();
     auto opengl = window["opengl"].object_items();
 
@@ -99,68 +99,68 @@ void Application::initialize_() {
     settings.multisampleBuffer = opengl["multisampleBuffers"].int_value();
     settings.multisampleSamples = opengl["multisampleSamples"].int_value();
 
-    window_.initialize( settings );
-    
+    window_.initialize(settings);
+
     std::string data = obj["dataPrefix"].string_value();
     std::string shaders = obj["builtinPrefix"].string_value();
 
     /*
      * Create app states here
      * */
-    stateStack_.registerState< GameState >( states::Game );
-    stateStack_.registerState< PauseState >( states::Pause );
-    stateStack_.pushState( states::Game );
+    stateStack_.registerState< GameState >(states::Game);
+    stateStack_.registerState< PauseState >(states::Pause);
+    stateStack_.pushState(states::Game);
 
     /*
      * Initialize Wren state
      * */
-     wrenly::Wren::loadModuleFn = [this]( const char* mod ) -> char* {
-        std::string path( mod );
+    wrenly::Wren::loadModuleFn = [this](const char* mod) -> char* {
+        std::string path(mod);
         path += ".wren";
-        const std::string& source = this->context_.textFileManager.get( path );
-        char* buffer = (char*) malloc( source.size() + 1 );
+        const std::string& source = this->context_.textFileManager.get(path);
+        char* buffer = (char*)malloc(source.size() + 1);
         buffer[source.size()] = '\0';
-        memcpy( buffer, source.c_str(), source.size() );
+        memcpy(buffer, source.c_str(), source.size());
         return buffer;
     };
-    wrenly::Wren::writeFn = []( WrenVM* vm, const char* text ) -> void {
+    wrenly::Wren::writeFn = [](WrenVM* vm, const char* text) -> void {
         LOG_INFO << text;
     };
 
     /*
      * Load resources that all app states will depend on
      **/
-    context_.textFileManager.addWatch( data, false );
+    context_.textFileManager.addWatch(data, false);
     // everything here should eventually go into a loading state
-    context_.shaderManager.addShader( shaders + "/basic.vert.glsl", GL_VERTEX_SHADER );
-    context_.shaderManager.addShader( shaders + "/basic.frag.glsl", GL_FRAGMENT_SHADER );
-    context_.shaderManager.compile( "basic" );
+    context_.shaderManager.addShader(shaders + "/basic.vert.glsl", GL_VERTEX_SHADER);
+    context_.shaderManager.addShader(shaders + "/basic.frag.glsl", GL_FRAGMENT_SHADER);
+    context_.shaderManager.compile("basic");
 
-    context_.shaderManager.addShader( shaders + "/specular.vert.glsl", GL_VERTEX_SHADER );
-    context_.shaderManager.addShader( shaders + "/specular.frag.glsl", GL_FRAGMENT_SHADER );
-    context_.shaderManager.compile( "specular" );
+    context_.shaderManager.addShader(shaders + "/specular.vert.glsl", GL_VERTEX_SHADER);
+    context_.shaderManager.addShader(shaders + "/specular.frag.glsl", GL_FRAGMENT_SHADER);
+    context_.shaderManager.compile("specular");
 
-    context_.shaderManager.addShader( shaders + "/panel.vert.glsl", GL_VERTEX_SHADER );
-    context_.shaderManager.addShader( shaders + "/panel.frag.glsl", GL_FRAGMENT_SHADER );
-    context_.shaderManager.compile( "panel" );
+    context_.shaderManager.addShader(shaders + "/panel.vert.glsl", GL_VERTEX_SHADER);
+    context_.shaderManager.addShader(shaders + "/panel.frag.glsl", GL_FRAGMENT_SHADER);
+    context_.shaderManager.compile("panel");
 
     /*
      * Finally, set the application context
      * */
     context_.window = &window_;
-    context_.imguiRenderer = new system::ImGuiRenderer( context_ );
+    context_.imguiRenderer = new system::ImGuiRenderer(context_);
 
     mouse_.registerMouseDownCallback(
         MouseButton::Left,
-            [ this ] () -> void {
-                this->context_.imguiRenderer->mouseButtonPressed( SDL_BUTTON_LEFT );
-            }
+        [this]() -> void {
+        this->context_.imguiRenderer->mouseButtonPressed(SDL_BUTTON_LEFT);
+    }
     );
     mouse_.registerMouseUpCallback(
         MouseButton::Left,
-            [ this ] () -> void {
-                this->context_.imguiRenderer->mouseButtonReleased( SDL_BUTTON_LEFT );
-            }
+        [this]() -> void {
+        this->context_.imguiRenderer->mouseButtonReleased(SDL_BUTTON_LEFT);
+    }
     );
 }
 

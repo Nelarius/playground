@@ -1,18 +1,18 @@
 #pragma once
 
 extern "C" {
-    #include <wren.h>
+#include <wren.h>
 }
 
 namespace pg {
 namespace wren {
 
 // NumberArray
-void arrayPushBack( WrenVM* );
-void arrayAt( WrenVM* );
+void arrayPushBack(WrenVM*);
+void arrayAt(WrenVM*);
 
 // Entity
-void set( WrenVM* );
+void set(WrenVM*);
 void entityIndex(WrenVM*);
 void entityVersion(WrenVM*);
 void setTransform(WrenVM*);
@@ -39,46 +39,46 @@ struct ImGuiWindowFlag {
 };
 
 // ImGui functions
-void begin( WrenVM* );
-void beginWithFlags( WrenVM* );
-void setWindowPos( WrenVM* );
-void setWindowSize( WrenVM* );
-void text( WrenVM* );
-void dummy( WrenVM* );
-void textColored( WrenVM* );
-void bulletText( WrenVM* );
-void button( WrenVM* );
-void buttonSized( WrenVM* );
-void plotNumberArray( WrenVM* );
-void plotNumberArrayWithOffset( WrenVM* );
-void plotNumberArrayWithOffsetAndSize( WrenVM* );
-void plotRingBuffer( WrenVM* );
-void plotRingBufferWithSize( WrenVM* );
+void begin(WrenVM*);
+void beginWithFlags(WrenVM*);
+void setWindowPos(WrenVM*);
+void setWindowSize(WrenVM*);
+void text(WrenVM*);
+void dummy(WrenVM*);
+void textColored(WrenVM*);
+void bulletText(WrenVM*);
+void button(WrenVM*);
+void buttonSized(WrenVM*);
+void plotNumberArray(WrenVM*);
+void plotNumberArrayWithOffset(WrenVM*);
+void plotNumberArrayWithOffsetAndSize(WrenVM*);
+void plotRingBuffer(WrenVM*);
+void plotRingBufferWithSize(WrenVM*);
 
 // ImGuiWindowFlags functions
-void setTitleBar( WrenVM* );
-void unsetTitleBar( WrenVM* );
-void setResize( WrenVM* );
-void unsetResize( WrenVM* );
-void setMove( WrenVM* );
-void unsetMove( WrenVM* );
-void setShowBorders( WrenVM* );
-void unsetShowBorders( WrenVM* );
+void setTitleBar(WrenVM*);
+void unsetTitleBar(WrenVM*);
+void setResize(WrenVM*);
+void unsetResize(WrenVM*);
+void setMove(WrenVM*);
+void unsetMove(WrenVM*);
+void setShowBorders(WrenVM*);
+void unsetShowBorders(WrenVM*);
 
 // Quaternion
-void conjugate( WrenVM* vm );
-void inverse( WrenVM* vm );
-void multiply( WrenVM* vm );
-void axis( WrenVM* vm );
+void conjugate(WrenVM* vm);
+void inverse(WrenVM* vm);
+void multiply(WrenVM* vm);
+void axis(WrenVM* vm);
 
 // Ringbuffer
-void ringBufferPushBack( WrenVM* );
+void ringBufferPushBack(WrenVM*);
 
 // Vector
-void cross3f( WrenVM* vm );
-void plus3f( WrenVM* vm );
-void minus3f( WrenVM* vm );
-void hadamard3f( WrenVM* vm );
+void cross3f(WrenVM* vm);
+void plus3f(WrenVM* vm);
+void minus3f(WrenVM* vm);
+void hadamard3f(WrenVM* vm);
 
 }
 }

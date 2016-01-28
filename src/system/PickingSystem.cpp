@@ -49,13 +49,13 @@ ecs::Entity PickingSystem::rayCast(ecs::EntityManager& entities, ecs::EventManag
 
     //auto cameraRay = generateCameraRay(eye, *(cameraEntity_.component<component::Camera>().operator->()), x, y);
 
-    auto temp = math::Matrix4f::Rotation(cameraEntity_.component<component::Transform>()->rotation) * math::Vec4f(pixelCoord, 1.f);
+    auto temp = math::Matrix4f::rotation(cameraEntity_.component<component::Transform>()->rotation) * math::Vec4f(pixelCoord, 1.f);
     pixelCoord = math::Vec3f(temp.x, temp.y, temp.z);
     pixelCoord.normalize();
 
     events.emit<RenderDebugLine>(eye, pixelCoord * 50.f, 5.f);
 
-    math::Ray ray{ eye, pixelCoord, std::numeric_limits<float>::max()};
+    math::Ray ray{ eye, pixelCoord, std::numeric_limits<float>::max() };
     bool result = false;
 
     float smallest = std::numeric_limits<float>::max();
@@ -69,7 +69,7 @@ ecs::Entity PickingSystem::rayCast(ecs::EntityManager& entities, ecs::EventManag
             ray,
             *(aabb.operator->()),
             transform->position, transform->rotation, transform->scale
-        );
+            );
         if (ray.t < smallest) {
             smallest = ray.t;
             target = entity;

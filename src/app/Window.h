@@ -9,7 +9,7 @@ namespace pg {
 struct WindowSettings {
     WindowSettings() = default;
     ~WindowSettings() = default;
-    
+
     int width{ 800 };
     int height{ 600 };
     std::string name{ "Crowd engine" };
@@ -28,53 +28,53 @@ struct WindowSettings {
 /// @brief A platform-independent window.
 /// This window contains a valid OpenGL 4.3 context.
 class Window {
-    public:
-        /// @brief Construct the window.
-        /// The OpenGL context and window are ready for use after construction.
-        Window();
-        ~Window();
+public:
+    /// @brief Construct the window.
+    /// The OpenGL context and window are ready for use after construction.
+    Window();
+    ~Window();
 
-        Window( const Window& )             = delete;
-        Window& operator=( const Window& )  = delete;
-        Window( Window&& )                  = delete;
-        Window& operator=( Window&& )       = delete;
+    Window(const Window&) = delete;
+    Window& operator=(const Window&) = delete;
+    Window(Window&&) = delete;
+    Window& operator=(Window&&) = delete;
 
-        /// @brief Display the window and any changes made to the back buffer.
-        void display();
-        
-        /// @brief Initialize the window with window settings
-        void initialize( const WindowSettings& settings );
+    /// @brief Display the window and any changes made to the back buffer.
+    void display();
 
-        unsigned width() const;
-        unsigned height() const;
-        
-        /**
-         * @brief Get the underlying SDL window.
-         * @return 
-         * This pointer is managed and should not be deleted!
-         */
-        SDL_Window* SDLwindow();
+    /// @brief Initialize the window with window settings
+    void initialize(const WindowSettings& settings);
 
-    private:
-        void initialize_();
-        void initializeSDL_();
-        void initializeOpenGL_();
+    unsigned width() const;
+    unsigned height() const;
 
-        SDL_Window*     window_;
-        SDL_GLContext   glContext_;
-        std::string     name_;
-        int             width_;
-        int             height_;
-        int             glMajor_;
-        int             glMinor_;
-        int             stencilBits_;
-        int             depthBits_;
-        int             msBuffer_;  // multisample buffer
-        int             msSamples_; // number of multisamples
-        float           clearColorR_;
-        float           clearColorB_;
-        float           clearColorG_;
-        float           clearColorA_;
+    /**
+     * @brief Get the underlying SDL window.
+     * @return
+     * This pointer is managed and should not be deleted!
+     */
+    SDL_Window* SDLwindow();
+
+private:
+    void initialize_();
+    void initializeSDL_();
+    void initializeOpenGL_();
+
+    SDL_Window*     window_;
+    SDL_GLContext   glContext_;
+    std::string     name_;
+    int             width_;
+    int             height_;
+    int             glMajor_;
+    int             glMinor_;
+    int             stencilBits_;
+    int             depthBits_;
+    int             msBuffer_;  // multisample buffer
+    int             msSamples_; // number of multisamples
+    float           clearColorR_;
+    float           clearColorB_;
+    float           clearColorG_;
+    float           clearColorA_;
 
 };
 

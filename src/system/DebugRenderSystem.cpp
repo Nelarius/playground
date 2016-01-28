@@ -15,15 +15,15 @@ namespace pg {
 namespace system {
 
 DebugRenderSystem::DebugRenderSystem(Context& context)
-    : context_{context},
+    : context_{ context },
     defaultProjection_{},
     debugLines_{},
     lineLifeTimes_{},
-    lineBuffer_{GL_ARRAY_BUFFER},
-    lineBufferArray_{0},
-    showLines_{false},
-    showBoxes_{false} {
-    defaultProjection_ = math::Matrix4f::Perspective(70.0f, 1.5f, 0.1f, 100.0f);
+    lineBuffer_{ GL_ARRAY_BUFFER },
+    lineBufferArray_{ 0 },
+    showLines_{ false },
+    showBoxes_{ false } {
+    defaultProjection_ = math::Matrix4f::perspective(70.0f, 1.5f, 0.1f, 100.0f);
 
     // set up the debug buffers and VAOs
     lineBuffer_.dataStore(MaxDebugLines, 6 * sizeof(float), NULL, GL_STREAM_DRAW);
@@ -56,11 +56,11 @@ void DebugRenderSystem::update(ecs::EntityManager& entities, ecs::EventManager& 
     if (cameraEntity_.isValid()) {
         float aspectRatio = float(context_.window->width()) / context_.window->height();
         auto transform = cameraEntity_.component< component::Transform >();
-        auto view = math::Matrix4f::Translation(transform->position)
-            * math::Matrix4f::Rotation(transform->rotation)
-            * math::Matrix4f::Scale(transform->scale);
+        auto view = math::Matrix4f::translation(transform->position)
+            * math::Matrix4f::rotation(transform->rotation)
+            * math::Matrix4f::scale(transform->scale);
         auto camera = cameraEntity_.component< component::Camera >();
-        auto proj = math::Matrix4f::Perspective(
+        auto proj = math::Matrix4f::perspective(
             camera->verticalFov,
             aspectRatio,
             camera->nearPlane,
@@ -91,10 +91,10 @@ void DebugRenderSystem::update(ecs::EntityManager& entities, ecs::EventManager& 
                 math::Vec3f max = t->scale.hadamard(bb->max);
                 math::Vec3f center = 0.5f * (min + max);
                 math::Vec3f scale{ max.x - min.x, max.y - min.y, max.z - min.z };
-                math::Matrix4f S = math::Matrix4f::Scale(scale);              // scale to current model dimensions
-                math::Matrix4f R = math::Matrix4f::Rotation(t->rotation);     // rotate to world coords
-                math::Matrix4f Tl = math::Matrix4f::Translation(center);        // translate to local coords
-                math::Matrix4f Tw = math::Matrix4f::Translation(t->position);   // translate to world coords
+                math::Matrix4f S = math::Matrix4f::scale(scale);              // scale to current model dimensions
+                math::Matrix4f R = math::Matrix4f::rotation(t->rotation);     // rotate to world coords
+                math::Matrix4f Tl = math::Matrix4f::translation(center);        // translate to local coords
+                math::Matrix4f Tw = math::Matrix4f::translation(t->position);   // translate to world coords
                 math::Matrix4f TRS = Tw * R  * Tl * S;
 
                 shader->setUniform("model", TRS);

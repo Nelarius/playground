@@ -8,10 +8,10 @@ namespace ecs {
 
 uint32_t BaseSystem::familyCounter_ = 0u;
 
-SystemManager::SystemManager( EventManager& events, EntityManager& entities )
-:   events_( events ),
-    entities_( entities )
-    {}
+SystemManager::SystemManager(EventManager& events, EntityManager& entities)
+    : events_(events),
+    entities_(entities)
+{}
 
 }
 }

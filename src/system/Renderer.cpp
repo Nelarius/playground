@@ -20,34 +20,34 @@ const float Pi = 3.141592653f;
 namespace pg {
 namespace system {
 
-Renderer::Renderer( Context& context )
-:   System< Renderer >(),
+Renderer::Renderer(Context& context)
+    : System< Renderer >(),
     cameraEntity_{},
     lightEntity_{},
     defaultProjection_{},
     context_{ context },
     debug_{ false } {
-    defaultProjection_ = math::Matrix4f::Perspective( 70.0f, 1.5f, 0.1f, 100.0f );
+    defaultProjection_ = math::Matrix4f::perspective(70.0f, 1.5f, 0.1f, 100.0f);
 }
 
-void Renderer::configure( ecs::EventManager& events ) {
-    events.subscribe< ecs::ComponentAssignedEvent<component::Camera> >( *this );
-    events.subscribe< ecs::ComponentAssignedEvent<component::PointLight> >( *this );
+void Renderer::configure(ecs::EventManager& events) {
+    events.subscribe< ecs::ComponentAssignedEvent<component::Camera> >(*this);
+    events.subscribe< ecs::ComponentAssignedEvent<component::PointLight> >(*this);
 }
 
-void Renderer::receive( const ecs::ComponentAssignedEvent< component::Camera >& event ) {
+void Renderer::receive(const ecs::ComponentAssignedEvent< component::Camera >& event) {
     cameraEntity_ = event.entity;
 }
 
-void Renderer::receive( const ecs::ComponentAssignedEvent< component::PointLight >& event ) {
+void Renderer::receive(const ecs::ComponentAssignedEvent< component::PointLight >& event) {
     lightEntity_ = event.entity;
 }
 
 void Renderer::update(
     ecs::EntityManager& entities,
     ecs::EventManager& events,
-    float dt 
-) {
+    float dt
+    ) {
     math::Matrix4f cameraMatrix{ defaultProjection_ };
     math::Vec3f cameraPos{};
     math::Vec3f lightPos{};
@@ -55,23 +55,23 @@ void Renderer::update(
     float attenuation = 1.0f;
     float ambientCoefficient = 0.5f;
 
-    if ( cameraEntity_.isValid() ) {
-        float aspectRatio = float( context_.window->width() ) / context_.window->height();
+    if (cameraEntity_.isValid()) {
+        float aspectRatio = float(context_.window->width()) / context_.window->height();
         auto transform = cameraEntity_.component< component::Transform >();
-        auto view = math::Matrix4f::Translation( transform->position )
-                    * math::Matrix4f::Rotation( transform->rotation )
-                    * math::Matrix4f::Scale( transform->scale );
+        auto view = math::Matrix4f::translation(transform->position)
+            * math::Matrix4f::rotation(transform->rotation)
+            * math::Matrix4f::scale(transform->scale);
         auto camera = cameraEntity_.component< component::Camera >();
-        auto proj = math::Matrix4f::Perspective( 
-            camera->verticalFov, 
+        auto proj = math::Matrix4f::perspective(
+            camera->verticalFov,
             aspectRatio,
             camera->nearPlane,
             camera->farPlane
-        );
+            );
         cameraMatrix = proj * view.inverse();
     }
 
-    if ( lightEntity_.isValid() ) {
+    if (lightEntity_.isValid()) {
         lightPos = lightEntity_.component< component::Transform >()->position;
         lightIntensity = lightEntity_.component< component::PointLight >()->intensity;
         attenuation = lightEntity_.component< component::PointLight >()->attenuation;
@@ -90,9 +90,9 @@ void Renderer::update(
             auto transform = entity.component< component::Transform>();
             shader->setUniform(
                 "model",
-                math::Matrix4f::Translation(transform->position)
-                * math::Matrix4f::Rotation(transform->rotation)
-                * math::Matrix4f::Scale(transform->scale)
+                math::Matrix4f::translation(transform->position)
+                * math::Matrix4f::rotation(transform->rotation)
+                * math::Matrix4f::scale(transform->scale)
                 );
             shader->setUniform("camera", cameraMatrix);
             for (const auto& it : renderable->material.uniforms) {
@@ -109,8 +109,8 @@ void Renderer::update(
     }
 }
 
-void Renderer::setSpecularUniforms_( const math::Vec3f& pos, opengl::Program* p ) {
-    p->setUniform( "cameraPosition", pos );
+void Renderer::setSpecularUniforms_(const math::Vec3f& pos, opengl::Program* p) {
+    p->setUniform("cameraPosition", pos);
 }
 
 }

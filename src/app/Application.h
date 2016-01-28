@@ -15,24 +15,24 @@ namespace pg {
  * @brief Wraps all systems and managers, contains the main game loop.
  */
 class Application {
-    public:
-        Application() = default;
-        ~Application() = default;
+public:
+    Application() = default;
+    ~Application() = default;
 
-        /**
-         * @brief Execute the main game loop.
-         */
-        void run();
+    /**
+     * @brief Execute the main game loop.
+     */
+    void run();
 
-    private:
-        void initialize_();
+private:
+    void initialize_();
 
-        bool            running_{ false };
-        Window          window_{};
-        Context         context_{};
-        MouseEvents     mouse_{};
+    bool            running_{ false };
+    Window          window_{};
+    Context         context_{};
+    MouseEvents     mouse_{};
 
-        AppStateStack   stateStack_{ context_ };
+    AppStateStack   stateStack_{ context_ };
 };
 
 }

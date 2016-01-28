@@ -4,36 +4,36 @@
 namespace pg {
 namespace opengl {
 
-Shader::Shader( const std::string& shaderCode, GLenum shaderType ) {
+Shader::Shader(const std::string& shaderCode, GLenum shaderType) {
     //create the shader object, returns 0 on error
-    object_ = glCreateShader( shaderType );
-    ASSERT( object_ != 0 );
+    object_ = glCreateShader(shaderType);
+    ASSERT(object_ != 0);
 
     const char* code = shaderCode.c_str();
-    glShaderSource( object_, 1, (const GLchar**)& code, NULL );
+    glShaderSource(object_, 1, (const GLchar**)& code, NULL);
 
-    glCompileShader( object_ );
+    glCompileShader(object_);
 
     //check for compilation error
     GLint status;
-    glGetShaderiv( object_, GL_COMPILE_STATUS, &status );
-    if (status == GL_FALSE ) {
+    glGetShaderiv(object_, GL_COMPILE_STATUS, &status);
+    if (status == GL_FALSE) {
         std::string msg("Compile failure\n");
         GLint infoLogLength;
-        glGetShaderiv( object_, GL_INFO_LOG_LENGTH, &infoLogLength );
-        char* infoLogStr = new char[ infoLogLength + 1 ];
-        glGetShaderInfoLog( object_, infoLogLength, NULL, infoLogStr );
+        glGetShaderiv(object_, GL_INFO_LOG_LENGTH, &infoLogLength);
+        char* infoLogStr = new char[infoLogLength + 1];
+        glGetShaderInfoLog(object_, infoLogLength, NULL, infoLogStr);
         msg += infoLogStr;
-        delete [] infoLogStr;
+        delete[] infoLogStr;
 
-        glDeleteShader( object_ );
+        glDeleteShader(object_);
         object_ = 0;
         std::cerr << msg << std::endl;
     }
 }
 
 Shader::~Shader() {
-    glDeleteShader( object_ );
+    glDeleteShader(object_);
     object_ = 0;
 }
 

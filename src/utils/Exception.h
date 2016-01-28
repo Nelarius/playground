@@ -13,16 +13,16 @@ namespace pg {
  * @file Exception.h
  * @brief A logged runtime exception class.
  */
-class PlaygroundException: public std::runtime_error {
-    public:
-        explicit PlaygroundException( const std::string& what )
-        :   std::runtime_error( what ) {
-            LOG_ERROR << "PlaygroundException was thrown: " << what;
-        }
-        explicit PlaygroundException( const char* what )
-        :   std::runtime_error( what ) {
-            LOG_ERROR << "PlaygroundException was thrown: " << what;
-        }
+class PlaygroundException : public std::runtime_error {
+public:
+    explicit PlaygroundException(const std::string& what)
+        : std::runtime_error(what) {
+        LOG_ERROR << "PlaygroundException was thrown: " << what;
+    }
+    explicit PlaygroundException(const char* what)
+        : std::runtime_error(what) {
+        LOG_ERROR << "PlaygroundException was thrown: " << what;
+    }
 };
 
 }
