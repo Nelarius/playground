@@ -1,4 +1,5 @@
 #include "system/DebugRenderSystem.h"
+#include "opengl/Use.h"
 #include "opengl/VertexArrayObjectFactory.h"
 #include "app/Context.h"
 #include <GL/glew.h>
@@ -76,53 +77,54 @@ void DebugRenderSystem::update(ecs::EntityManager& entities, ecs::EventManager& 
     factory.addAttribute("vertex", 3, GL_FLOAT, GL_FALSE, 24);    // skip the normals
     auto vao = factory.getVao();
 
-    shader->use();
-    shader->setUniform("color", math::Vec3f{ 1.0f, 0.2f, 0.2f });
-    shader->setUniform("camera", cameraMatrix);
-    if (showBoxes_) {
-        /// BOUNDING BOXES
-        ///////////////////////////////////////////////////////////
-        for (ecs::Entity entity : entities.join< component::Transform, math::AABox >()) {
-            auto t = entity.component< component::Transform >();
-            auto bb = entity.component<math::AABox>();
-            math::Vec3f min = t->scale.hadamard(bb->min);
-            math::Vec3f max = t->scale.hadamard(bb->max);
-            math::Vec3f center = 0.5f * (min + max);
-            math::Vec3f scale{ max.x - min.x, max.y - min.y, max.z - min.z };
-            math::Matrix4f S = math::Matrix4f::Scale(scale);              // scale to current model dimensions
-            math::Matrix4f R = math::Matrix4f::Rotation(t->rotation);     // rotate to world coords
-            math::Matrix4f Tl = math::Matrix4f::Translation(center);        // translate to local coords
-            math::Matrix4f Tw = math::Matrix4f::Translation(t->position);   // translate to world coords
-            math::Matrix4f TRS = Tw * R  * Tl * S;
+    {
+        opengl::UseProgram use{ *shader };
+        shader->setUniform("color", math::Vec3f{ 1.0f, 0.2f, 0.2f });
+        shader->setUniform("camera", cameraMatrix);
+        if (showBoxes_) {
+            /// BOUNDING BOXES
+            ///////////////////////////////////////////////////////////
+            for (ecs::Entity entity : entities.join< component::Transform, math::AABox >()) {
+                auto t = entity.component< component::Transform >();
+                auto bb = entity.component<math::AABox>();
+                math::Vec3f min = t->scale.hadamard(bb->min);
+                math::Vec3f max = t->scale.hadamard(bb->max);
+                math::Vec3f center = 0.5f * (min + max);
+                math::Vec3f scale{ max.x - min.x, max.y - min.y, max.z - min.z };
+                math::Matrix4f S = math::Matrix4f::Scale(scale);              // scale to current model dimensions
+                math::Matrix4f R = math::Matrix4f::Rotation(t->rotation);     // rotate to world coords
+                math::Matrix4f Tl = math::Matrix4f::Translation(center);        // translate to local coords
+                math::Matrix4f Tw = math::Matrix4f::Translation(t->position);   // translate to world coords
+                math::Matrix4f TRS = Tw * R  * Tl * S;
 
-            shader->use();
-            shader->setUniform("model", TRS);
-            vao.bind();
-            glDrawArrays(GL_LINES, 0, vbo->count() / vao.elementsPerIndex());
-            vao.unbind();
+                shader->setUniform("model", TRS);
+                {
+                    opengl::UseArray array(vao);
+                    glDrawArrays(GL_LINES, 0, vbo->count() / vao.elementsPerIndex());
+                }
+            }
+        }
+
+        if (showLines_) {
+            /// LINES
+            ///////////////////////////////////////////////////////////
+            const std::size_t LineCount = debugLines_.size();
+            math::Vec3f* lines = (math::Vec3f*)lineBuffer_.mapBufferRange(0, LineCount * 6u * sizeof(float), GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT);
+            for (unsigned i = 0u; i < 2u * LineCount; i += 2u) {
+                unsigned index = i / 2u;
+                lines[i] = debugLines_[index].origin;
+                lines[i + 1u] = debugLines_[index].end;
+            }
+            lineBuffer_.unmapBuffer();
+
+            shader->setUniform("color", math::Vec3f{ 0.9f, 0.6f, 0.15f });
+            shader->setUniform("model", math::Matrix4f{});
+            {
+                opengl::UseArray array(lineBufferArray_);
+                glDrawArrays(GL_LINES, 0, debugLines_.size());
+            }
         }
     }
-
-    if (showLines_) {
-        /// LINES
-        ///////////////////////////////////////////////////////////
-        const std::size_t LineCount = debugLines_.size();
-        math::Vec3f* lines = (math::Vec3f*)lineBuffer_.mapBufferRange(0, LineCount * 6u * sizeof(float), GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT);
-        for (unsigned i = 0u; i < 2u * LineCount; i += 2u) {
-            unsigned index = i / 2u;
-            lines[i] = debugLines_[index].origin;
-            lines[i + 1u] = debugLines_[index].end;
-        }
-        lineBuffer_.unmapBuffer();
-
-        shader->setUniform("color", math::Vec3f{ 0.9f, 0.6f, 0.15f });
-        shader->setUniform("model", math::Matrix4f{});
-        lineBufferArray_.bind();
-        glDrawArrays(GL_LINES, 0, debugLines_.size());
-        lineBufferArray_.unbind();
-    }
-
-    shader->stopUsing();
 }
 
 void DebugRenderSystem::receive(const ecs::ComponentAssignedEvent<component::Camera>& event) {

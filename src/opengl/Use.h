@@ -1,28 +1,39 @@
 #ifndef USE_H_INCLUDED
 #define USE_H_INCLUDED
 
+#include "opengl/Program.h"
+#include "opengl/VertexArrayObject.h"
+
 namespace pg {
 namespace opengl {
-    
-/// \brief A RAII for OpenGL resources which have to bound to the current context.
-/// The type T is a pointer to the OpenGL resource.
-/// The underlying type T has to have the use() and stopUsing() methods defined and implemented.
-template<typename T>
-class Use {
-    public:
-        Use( T& t )
-        :   resource_( t )
-            { resource_->use(); }
 
-        ~Use() { resource_->stopUsing(); }
+class UseProgram {
+public:
+    UseProgram(Program& program)
+        : program_{ program } {
+        program_.use();
+    }
 
-    private:
-        T&  resource_;
-
+    ~UseProgram() {
+        program_.stopUsing();
+    }
+private:
+    Program&    program_;
 };
 
-#include <opengl/Program.h>
-typedef Use<Program::ptr> UseProgram;
+class UseArray {
+public:
+    UseArray(VertexArrayObject& array)
+        :array_{ array } {
+        array.bind();
+    }
+
+    ~UseArray() {
+        array_.unbind();
+    }
+private:
+    VertexArrayObject&  array_;
+};
 
 }
 }

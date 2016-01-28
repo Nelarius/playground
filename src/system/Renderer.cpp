@@ -1,5 +1,6 @@
 #include "system/Renderer.h"
 #include "system/Material.h"
+#include "opengl/Use.h"
 #include "opengl/VertexArrayObjectFactory.h"
 #include "component/Include.h"
 #include "utils/Log.h"
@@ -77,32 +78,34 @@ void Renderer::update(
         ambientCoefficient = lightEntity_.component< component::PointLight >()->ambientCoefficient;
     }
 
-     /*
-      * Then, iterate over renderables
-      */
-    for ( ecs::Entity entity: entities.join< component::Transform, component::Renderable>() ) {
-        auto renderable = entity.component< component::Renderable>();
-        auto transform = entity.component< component::Transform>();
-        auto shader = renderable->shader;
-        shader->use();
-        shader->setUniform( 
-            "model",
-            math::Matrix4f::Translation( transform->position )
-            * math::Matrix4f::Rotation( transform->rotation )
-            * math::Matrix4f::Scale( transform->scale )
-        );
-        shader->setUniform( "camera", cameraMatrix );
-        for ( const auto& it: renderable->material.uniforms ) {
-            shader->setUniform( it.first.c_str(), it.second );
+    {
+        opengl::Program* shader = context_.shaderManager.get("specular");
+        opengl::UseProgram use(*shader);
+
+        /*
+        * Then, iterate over renderables
+        */
+        for (ecs::Entity entity : entities.join< component::Transform, component::Renderable>()) {
+            auto renderable = entity.component< component::Renderable>();
+            auto transform = entity.component< component::Transform>();
+            shader->setUniform(
+                "model",
+                math::Matrix4f::Translation(transform->position)
+                * math::Matrix4f::Rotation(transform->rotation)
+                * math::Matrix4f::Scale(transform->scale)
+                );
+            shader->setUniform("camera", cameraMatrix);
+            for (const auto& it : renderable->material.uniforms) {
+                shader->setUniform(it.first.c_str(), it.second);
+            }
+            shader->setUniform("pointLight.position", lightPos);
+            shader->setUniform("pointLight.intensity", lightIntensity);
+            shader->setUniform("pointLight.attenuation", attenuation);
+            shader->setUniform("pointLight.ambientCoefficient", ambientCoefficient);
+            renderable->vao.bind();
+            glDrawArrays(GL_TRIANGLES, 0, renderable->vbo->count() / renderable->vao.elementsPerIndex());
+            renderable->vao.unbind();
         }
-        shader->setUniform( "pointLight.position", lightPos );
-        shader->setUniform( "pointLight.intensity", lightIntensity );
-        shader->setUniform( "pointLight.attenuation", attenuation );
-        shader->setUniform( "pointLight.ambientCoefficient", ambientCoefficient );
-        renderable->vao.bind();
-        glDrawArrays( GL_TRIANGLES, 0, renderable->vbo->count() / renderable->vao.elementsPerIndex() );
-        renderable->vao.unbind();
-        shader->stopUsing();
     }
 }
 
