@@ -23,11 +23,22 @@ inline void returnQuatValue(WrenVM* vm, const pg::math::Quatf& quat) {
     memcpy(data, (void*)&quat, sizeof(pg::math::Quatf));
 }
 
+inline void returnVec2fValue(WrenVM* vm, const pg::math::Vec2f& result) {
+    wrenGetVariable(vm, "builtin/vector", "Vec2", 0);
+    void* data = wrenSetSlotNewForeign(vm, 0, 0, sizeof(pg::math::Vec2f));
+    memcpy(data, (void*)&result, sizeof(pg::math::Vec2f));
+}
 
-inline void returnVectorValue(WrenVM* vm, const pg::math::Vec3f& result) {
+inline void returnVec3fValue(WrenVM* vm, const pg::math::Vec3f& result) {
     wrenGetVariable(vm, "builtin/vector", "Vec3", 0);
     void* data = wrenSetSlotNewForeign(vm, 0, 0, sizeof(pg::math::Vec3f));
     memcpy(data, (void*)&result, sizeof(pg::math::Vec3f));
+}
+
+inline void returnVec4fValue(WrenVM* vm, const pg::math::Vec4f& result) {
+    wrenGetVariable(vm, "builtin/vector", "Vec4", 0);
+    void* data = wrenSetSlotNewForeign(vm, 0, 0, sizeof(pg::math::Vec4f));
+    memcpy(data, (void*)&result, sizeof(pg::math::Vec4f));
 }
 
 }
@@ -118,8 +129,12 @@ void hasPointLight(WrenVM* vm) {
 */
 
 void createEntity(WrenVM* vm) {
+    //ecs::Entity entity = Locator<ecs::EntityManager>::get()->create();
+    //wrenSetSlotDouble(vm, 0, double(entity.id().index()));
     ecs::Entity entity = Locator<ecs::EntityManager>::get()->create();
-    wrenSetSlotDouble(vm, 0, double(entity.id().index()));
+    wrenGetVariable(vm, "builtin/entity", "Entity", 0);
+    void* data = wrenSetSlotNewForeign(vm, 0, 0, sizeof(ecs::Entity));
+    memcpy(data, (void*)&entity, sizeof(ecs::Entity));
 }
 
 void entityCount(WrenVM* vm) {
@@ -352,29 +367,32 @@ void unsetShowBorders(WrenVM* vm) {
  */
 
 void conjugate(WrenVM* vm) {
+    wrenEnsureSlots(vm, 1);
     const math::Quatf* q = (const math::Quatf*)wrenGetSlotForeign(vm, 0);
     math::Quatf res = q->conjugate();
     returnQuatValue(vm, res);
 }
 
 void inverse(WrenVM* vm) {
+    wrenEnsureSlots(vm, 1);
     const math::Quatf* q = (const math::Quatf*)wrenGetSlotForeign(vm, 0);
     math::Quatf res = q->inverse();
     returnQuatValue(vm, res);
 }
 
 void multiply(WrenVM* vm) {
+    wrenEnsureSlots(vm, 2);
     const math::Quatf* lhs = (const math::Quatf*)wrenGetSlotForeign(vm, 0);
     const math::Quatf* rhs = (const math::Quatf*)wrenGetSlotForeign(vm, 1);
-    wrenEnsureSlots(vm, 5);
     math::Quatf res = lhs->multiply(*rhs);
     returnQuatValue(vm, res);
 }
 
 void axis(WrenVM* vm) {
+    wrenEnsureSlots(vm, 1);
     const math::Quatf* q = (const math::Quatf*)wrenGetSlotForeign(vm, 0);
     math::Vec3f res = q->axis();
-    returnVectorValue(vm, res);
+    returnVec3fValue(vm, res);
 }
 
 /***
@@ -398,12 +416,36 @@ void ringBufferPushBack(WrenVM* vm) {
  *
  */
 
+void hadamard2f(WrenVM* vm) {
+    wrenEnsureSlots(vm, 2);
+    const math::Vec2f* lhs = (const math::Vec2f*)wrenGetSlotForeign(vm, 0);
+    const math::Vec2f* rhs = (const math::Vec2f*)wrenGetSlotForeign(vm, 1);
+    math::Vec2f res = lhs->hadamard(*rhs);
+    returnVec2fValue(vm, res);
+}
+
+void plus2f(WrenVM* vm) {
+    wrenEnsureSlots(vm, 2);
+    const math::Vec2f* lhs = (const math::Vec2f*)wrenGetSlotForeign(vm, 0);
+    const math::Vec2f* rhs = (const math::Vec2f*)wrenGetSlotForeign(vm, 1);
+    math::Vec2f res = lhs->operator+(*rhs);
+    returnVec2fValue(vm, res);
+}
+
+void minus2f(WrenVM* vm) {
+    wrenEnsureSlots(vm, 2);
+    const math::Vec2f* lhs = (const math::Vec2f*)wrenGetSlotForeign(vm, 0);
+    const math::Vec2f* rhs = (const math::Vec2f*)wrenGetSlotForeign(vm, 1);
+    math::Vec2f res = lhs->operator-(*rhs);
+    returnVec2fValue(vm, res);
+}
+
 void cross3f(WrenVM* vm) {
     wrenEnsureSlots(vm, 2);
     const math::Vec3f* lhs = (const math::Vec3f*)wrenGetSlotForeign(vm, 0);
     const math::Vec3f* rhs = (const math::Vec3f*)wrenGetSlotForeign(vm, 1);
     math::Vec3f res = lhs->cross(*rhs);
-    returnVectorValue(vm, res);
+    returnVec3fValue(vm, res);
 }
 
 void plus3f(WrenVM* vm) {
@@ -411,7 +453,7 @@ void plus3f(WrenVM* vm) {
     const math::Vec3f* lhs = (const math::Vec3f*)wrenGetSlotForeign(vm, 0);
     const math::Vec3f* rhs = (const math::Vec3f*)wrenGetSlotForeign(vm, 1);
     math::Vec3f res = lhs->operator+(*rhs);
-    returnVectorValue(vm, res);
+    returnVec3fValue(vm, res);
 }
 
 void minus3f(WrenVM* vm) {
@@ -419,7 +461,7 @@ void minus3f(WrenVM* vm) {
     const math::Vec3f* lhs = (const math::Vec3f*)wrenGetSlotForeign(vm, 0);
     const math::Vec3f* rhs = (const math::Vec3f*)wrenGetSlotForeign(vm, 1);
     math::Vec3f res = lhs->operator-(*rhs);
-    returnVectorValue(vm, res);
+    returnVec3fValue(vm, res);
 }
 
 void hadamard3f(WrenVM* vm) {
@@ -427,7 +469,31 @@ void hadamard3f(WrenVM* vm) {
     const math::Vec3f* lhs = (const math::Vec3f*)wrenGetSlotForeign(vm, 0);
     const math::Vec3f* rhs = (const math::Vec3f*)wrenGetSlotForeign(vm, 1);
     math::Vec3f res = lhs->hadamard(*rhs);
-    returnVectorValue(vm, res);
+    returnVec3fValue(vm, res);
+}
+
+void hadamard4f(WrenVM* vm) {
+    wrenEnsureSlots(vm, 2);
+    const math::Vec4f* lhs = (const math::Vec4f*)wrenGetSlotForeign(vm, 0);
+    const math::Vec4f* rhs = (const math::Vec4f*)wrenGetSlotForeign(vm, 1);
+    math::Vec4f res = lhs->hadamard(*rhs);
+    returnVec4fValue(vm, res);
+}
+
+void plus4f(WrenVM* vm) {
+    wrenEnsureSlots(vm, 2);
+    const math::Vec4f* lhs = (const math::Vec4f*)wrenGetSlotForeign(vm, 0);
+    const math::Vec4f* rhs = (const math::Vec4f*)wrenGetSlotForeign(vm, 1);
+    math::Vec4f res = lhs->operator+(*rhs);
+    returnVec4fValue(vm, res);
+}
+
+void minus4f(WrenVM* vm) {
+    wrenEnsureSlots(vm, 2);
+    const math::Vec4f* lhs = (const math::Vec4f*)wrenGetSlotForeign(vm, 0);
+    const math::Vec4f* rhs = (const math::Vec4f*)wrenGetSlotForeign(vm, 1);
+    math::Vec4f res = lhs->operator-(*rhs);
+    returnVec4fValue(vm, res);
 }
 
 }   // wren

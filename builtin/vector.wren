@@ -10,6 +10,9 @@ foreign class Vec2 {
     foreign norm()
     foreign normSquared()
     foreign dot( rhs )
+    foreign hadamard( rhs )
+    foreign plus( rhs )
+    foreign minus( rhs )
 }
 
 foreign class Vec3 {
@@ -45,6 +48,9 @@ foreign class Vec4 {
     foreign norm()
     foreign normSquared()
     foreign dot( rhs )
+    foreign hadamard( rhs )
+    foreign plus( rhs )
+    foreign minus( rhs )
 }
 
 /*

@@ -75,10 +75,16 @@ void axis(WrenVM* vm);
 void ringBufferPushBack(WrenVM*);
 
 // Vector
+void hadamard2f(WrenVM* vm);
+void plus2f(WrenVM* vm);
+void minus2f(WrenVM* vm);
 void cross3f(WrenVM* vm);
+void hadamard3f(WrenVM* vm);
 void plus3f(WrenVM* vm);
 void minus3f(WrenVM* vm);
-void hadamard3f(WrenVM* vm);
+void hadamard4f(WrenVM* vm);
+void plus4f(WrenVM* vm);
+void minus4f(WrenVM* vm);
 
 }
 }

@@ -255,12 +255,12 @@ struct Vector4 {
         return Vector4<T>{ x*rhs.x, y*rhs.y, z*rhs.z, w*rhs.w };
     }
 
-    Vector4 operator+(const Vector3<T>& rhs) const {
-        return Vector4<T>(x + rhs.x, y + rhs.y, z + rhs.z);
+    Vector4 operator+(const Vector4<T>& rhs) const {
+        return Vector4<T>{ x + rhs.x, y + rhs.y, z + rhs.z, w + rhs.w };
     }
 
-    Vector4 operator-(const Vector3<T>& rhs) const {
-        return Vector4<T>(x - rhs.x, y - rhs.y, z - rhs.z);
+    Vector4 operator-(const Vector4<T>& rhs) const {
+        return Vector4<T>{ x - rhs.x, y - rhs.y, z - rhs.z, w - rhs.w };
     }
 
     Vector4 operator*(T val) const {

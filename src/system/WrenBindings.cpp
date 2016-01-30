@@ -138,6 +138,9 @@ void bindVectorModule() {
             .bindMethod< decltype(&math::Vec2f::norm), &math::Vec2f::norm >( false, "norm()" )
             .bindMethod< decltype(&math::Vec2f::normSquared), &math::Vec2f::normSquared >( false, "normSquared()" )
             .bindMethod< decltype(&math::Vec2f::dot), &math::Vec2f::dot >( false, "dot(_)" )
+            .bindCFunction(false, "hadamard(_)", wren::hadamard2f)
+            .bindCFunction(false, "plus(_)", wren::plus2f)
+            .bindCFunction(false, "minus(_)", wren::minus2f)
         .endClass()
         .bindClass< math::Vec4f, float, float, float, float >( "Vec4" )
             .bindGetter< decltype(math::Vec4f::x), &math::Vec4f::x >( false, "x" )
@@ -151,6 +154,9 @@ void bindVectorModule() {
             .bindMethod< decltype(&math::Vec4f::norm), &math::Vec4f::norm >( false, "norm()" )
             .bindMethod< decltype(&math::Vec4f::normSquared), &math::Vec4f::normSquared >( false, "normSquared()" )
             .bindMethod< decltype(&math::Vec4f::dot), &math::Vec4f::dot >( false, "dot(_)" )
+            .bindCFunction(false, "hadamard(_)", wren::hadamard4f)
+            .bindCFunction(false, "plus(_)", wren::plus4f)
+            .bindCFunction(false, "minus(_)", wren::minus4f)
         .endClass()
     .endModule();
 }
@@ -190,7 +196,7 @@ void bindEntityModule() {
             .bindCFunction(false, "transform=(_)", wren::setTransform)
         .endClass()
         .beginClass("EntityManager")
-            .bindCFunction(true, "createEntity_()", wren::createEntity)
+            .bindCFunction(true, "create()", wren::createEntity)
             .bindCFunction(true, "entityCount", wren::entityCount)
         .endClass()
     .endModule();
