@@ -47,7 +47,7 @@ ecs::Entity PickingSystem::rayCast(ecs::EntityManager& entities, ecs::EventManag
         -near
     };
 
-    //auto cameraRay = generateCameraRay(eye, *(cameraEntity_.component<component::Camera>().operator->()), x, y);
+    //auto cameraRay = generateCameraRay(eye, *cameraEntity_.component<component::Camera>(), x, y);
 
     auto temp = math::Matrix4f::rotation(cameraEntity_.component<component::Transform>()->rotation) * math::Vec4f(pixelCoord, 1.f);
     pixelCoord = math::Vec3f(temp.x, temp.y, temp.z);
@@ -67,7 +67,7 @@ ecs::Entity PickingSystem::rayCast(ecs::EntityManager& entities, ecs::EventManag
 
         result = math::rayIntersectsAABox(
             ray,
-            *(aabb.operator->()),
+            *aabb,
             transform->position, transform->rotation, transform->scale
             );
         if (ray.t < smallest) {

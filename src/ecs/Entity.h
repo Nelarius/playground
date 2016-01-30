@@ -42,6 +42,8 @@ public:
 
     C* operator->();
     const C* operator->() const;
+    C& operator*();
+    const C& operator*() const;
     bool valid() const;
     bool operator==(const ComponentHandle<C>& rhs) const;
     bool operator!=(const ComponentHandle<C>& rhs) const;
@@ -402,6 +404,16 @@ C* ComponentHandle<C>::operator->() {
 template<typename C>
 const C* ComponentHandle<C>::operator->() const {
     return manager_->component_<C>(id_);
+}
+
+template<typename C>
+C& ComponentHandle<C>::operator*() {
+    return *manager_->component_<C>(id_);
+}
+
+template<typename C>
+const C& ComponentHandle<C>::operator*() const {
+    return *manager_->component_<C>(id_);
 }
 
 template<typename C>
