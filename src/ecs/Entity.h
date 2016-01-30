@@ -44,7 +44,7 @@ public:
     const C* operator->() const;
     C& operator*();
     const C& operator*() const;
-    bool valid() const;
+    bool isValid() const;
     bool operator==(const ComponentHandle<C>& rhs) const;
     bool operator!=(const ComponentHandle<C>& rhs) const;
 
@@ -398,26 +398,30 @@ private:
 */
 template<typename C>
 C* ComponentHandle<C>::operator->() {
+    ASSERT(isValid());
     return manager_->component_<C>(id_);
 }
 
 template<typename C>
 const C* ComponentHandle<C>::operator->() const {
+    ASSERT(isValid());
     return manager_->component_<C>(id_);
 }
 
 template<typename C>
 C& ComponentHandle<C>::operator*() {
+    ASSERT(isValid());
     return *manager_->component_<C>(id_);
 }
 
 template<typename C>
 const C& ComponentHandle<C>::operator*() const {
+    ASSERT(isValid());
     return *manager_->component_<C>(id_);
 }
 
 template<typename C>
-bool ComponentHandle<C>::valid() const {
+bool ComponentHandle<C>::isValid() const {
     return manager_->isValid_(id_);
 }
 
@@ -440,26 +444,31 @@ bool ComponentHandle<C>::operator!=(const ComponentHandle<C>& rhs) const {
 */
 template<typename C>
 ComponentHandle<C> Entity::component() const {
+    ASSERT(isValid());
     return ComponentHandle<C>{ manager_, id_ };
 }
 
 template<typename C, typename... Args>
 ComponentHandle<C> Entity::assign(Args&& ... args) {
+    ASSERT(isValid());
     return manager_->assign_<C>(id_, std::forward<Args>(args)...);
 }
 
 template<typename C>
 void Entity::remove() {
+    ASSERT(isValid());
     manager_->remove_<C>(id_);
 }
 
 template<typename C>
 bool Entity::has() const {
+    ASSERT(isValid());
     return manager_->hasComponent_<C>(id_);
 }
 
 template<typename C>
 C* Entity::componentPointer() const {
+    ASSERT(isValid());
     return manager_->component_<C>(id_);
 }
 
