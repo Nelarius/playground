@@ -15,6 +15,23 @@ extern "C" {
 #include <vector>
 #include <cstdlib>
 
+namespace {
+
+inline void returnQuatValue(WrenVM* vm, const pg::math::Quatf& quat) {
+    wrenGetVariable(vm, "builtin/quaternion", "Quat", 0);
+    void* data = wrenSetSlotNewForeign(vm, 0, 0, sizeof(pg::math::Quatf));
+    memcpy(data, (void*)&quat, sizeof(pg::math::Quatf));
+}
+
+
+inline void returnVectorValue(WrenVM* vm, const pg::math::Vec3f& result) {
+    wrenGetVariable(vm, "builtin/vector", "Vec3", 0);
+    void* data = wrenSetSlotNewForeign(vm, 0, 0, sizeof(pg::math::Vec3f));
+    memcpy(data, (void*)&result, sizeof(pg::math::Vec3f));
+}
+
+}
+
 namespace pg {
 namespace wren {
 
@@ -320,6 +337,7 @@ void setShowBorders(WrenVM* vm) {
     uint32_t* bits = (uint32_t*)wrenGetSlotForeign(vm, 0);
     *bits |= ImGuiWindowFlags_ShowBorders;
 }
+
 void unsetShowBorders(WrenVM* vm) {
     uint32_t* bits = (uint32_t*)wrenGetSlotForeign(vm, 0);
     *bits &= ~ImGuiWindowFlags_ShowBorders;
@@ -336,33 +354,13 @@ void unsetShowBorders(WrenVM* vm) {
 void conjugate(WrenVM* vm) {
     const math::Quatf* q = (const math::Quatf*)wrenGetSlotForeign(vm, 0);
     math::Quatf res = q->conjugate();
-    wrenGetVariable(vm, "builtin/quaternion", "createQuaternion", 1);
-    WrenValue* function = wrenGetSlotValue(vm, 1);
-    WrenValue* handle = wrenMakeCallHandle(vm, "call(_,_,_,_)");
-    wrenSetSlotValue(vm, 0, function);
-    wrenSetSlotDouble(vm, 1, res.v.x);
-    wrenSetSlotDouble(vm, 2, res.v.y);
-    wrenSetSlotDouble(vm, 3, res.v.z);
-    wrenSetSlotDouble(vm, 4, res.w);
-    wrenCall(vm, handle);
-    wrenReleaseValue(vm, function);
-    wrenReleaseValue(vm, handle);
+    returnQuatValue(vm, res);
 }
 
 void inverse(WrenVM* vm) {
     const math::Quatf* q = (const math::Quatf*)wrenGetSlotForeign(vm, 0);
     math::Quatf res = q->inverse();
-    wrenGetVariable(vm, "builtin/quaternion", "createQuaternion", 1);
-    WrenValue* function = wrenGetSlotValue(vm, 1);
-    WrenValue* handle = wrenMakeCallHandle(vm, "call(_,_,_,_)");
-    wrenSetSlotValue(vm, 0, function);
-    wrenSetSlotDouble(vm, 1, res.v.x);
-    wrenSetSlotDouble(vm, 2, res.v.y);
-    wrenSetSlotDouble(vm, 3, res.v.z);
-    wrenSetSlotDouble(vm, 4, res.w);
-    wrenCall(vm, handle);
-    wrenReleaseValue(vm, function);
-    wrenReleaseValue(vm, handle);
+    returnQuatValue(vm, res);
 }
 
 void multiply(WrenVM* vm) {
@@ -370,32 +368,13 @@ void multiply(WrenVM* vm) {
     const math::Quatf* rhs = (const math::Quatf*)wrenGetSlotForeign(vm, 1);
     wrenEnsureSlots(vm, 5);
     math::Quatf res = lhs->multiply(*rhs);
-    wrenGetVariable(vm, "builtin/quaternion", "createQuaternion", 1);
-    WrenValue* function = wrenGetSlotValue(vm, 1);
-    WrenValue* handle = wrenMakeCallHandle(vm, "call(_,_,_,_)");
-    wrenSetSlotValue(vm, 0, function);
-    wrenSetSlotDouble(vm, 1, res.v.x);
-    wrenSetSlotDouble(vm, 2, res.v.y);
-    wrenSetSlotDouble(vm, 3, res.v.z);
-    wrenSetSlotDouble(vm, 4, res.w);
-    wrenCall(vm, handle);
-    wrenReleaseValue(vm, function);
-    wrenReleaseValue(vm, handle);
+    returnQuatValue(vm, res);
 }
 
 void axis(WrenVM* vm) {
     const math::Quatf* q = (const math::Quatf*)wrenGetSlotForeign(vm, 0);
     math::Vec3f res = q->axis();
-    wrenGetVariable(vm, "builtin/vector", "createVec3", 1);
-    WrenValue* function = wrenGetSlotValue(vm, 1);
-    WrenValue* handle = wrenMakeCallHandle(vm, "call(_,_,_)");
-    wrenSetSlotValue(vm, 0, function);
-    wrenSetSlotDouble(vm, 1, res.x);
-    wrenSetSlotDouble(vm, 2, res.y);
-    wrenSetSlotDouble(vm, 3, res.z);
-    wrenCall(vm, handle);
-    wrenReleaseValue(vm, function);
-    wrenReleaseValue(vm, handle);
+    returnVectorValue(vm, res);
 }
 
 /***
@@ -418,12 +397,6 @@ void ringBufferPushBack(WrenVM* vm) {
  *     |___/\__/\__/\__/\___/_/
  *
  */
-
-inline void returnVectorValue(WrenVM* vm, const math::Vec3f& result) {
-    wrenGetVariable(vm, "builtin/vector", "Vec3", 0);
-    void* data = wrenSetSlotNewForeign(vm, 0, 0, sizeof(math::Vec3f));
-    memcpy(data, (void*)&result, sizeof(math::Vec3f));
-}
 
 void cross3f(WrenVM* vm) {
     wrenEnsureSlots(vm, 2);
