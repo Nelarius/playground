@@ -77,21 +77,21 @@ std::shared_ptr<S> SystemManager::add(Args&&... args) {
 template<typename S>
 std::shared_ptr<S> SystemManager::system() {
     auto it = systems_.find(S::family());
-    ASSERT(it != systems_.end());
+    PG_ASSERT(it != systems_.end());
     return std::shared_ptr<S>(std::static_pointer_cast<S>(it->second));
 }
 
 template<typename S>
 void SystemManager::configure() {
     auto it = systems_.find(S::family());
-    ASSERT(it != systems_.end());
+    PG_ASSERT(it != systems_.end());
     it->second->configure(events_);
 }
 
 template<typename S>
 void SystemManager::update(float dt) {
     auto it = systems_.find(S::family());
-    ASSERT(it != systems_.end());
+    PG_ASSERT(it != systems_.end());
     it->second->update(entities_, events_, dt);
 }
 

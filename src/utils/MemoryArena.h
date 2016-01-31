@@ -94,7 +94,7 @@ public:
     virtual ~MemoryArena() = default;
 
     void destroy(std::size_t n) override {
-        ASSERT(n < capacity_);
+        PG_ASSERT(n < capacity_);
         T* ptr = static_cast<T*>(this->at(n));
         ptr->~T();
     }

@@ -1,12 +1,12 @@
-#ifndef ASSERT_H_INCLUDED
-#define ASSERT_H_INCLUDED
+#ifndef PG_ASSERT_H_INCLUDED
+#define PG_ASSERT_H_INCLUDED
 
 #include <cstdlib>
 #include <iostream>
 
 //defined as a do-while so that a semicolon can be used
 #ifdef DEBUG
-    #define ASSERT( condition ) \
+    #define PG_ASSERT( condition ) \
     do { \
         if (! (condition)) { \
             std::cerr << "Assertion '" #condition "' failed in " << __FILE__ \
@@ -16,8 +16,8 @@
     } while (false) \
 
 #else
-    #define ASSERT( condition ) do {} while (false)
+    #define PG_ASSERT( condition ) do {} while (false)
 #endif
 
 
-#endif // ASSERT_H_INCLUDED
+#endif // PG_ASSERT_H_INCLUDED

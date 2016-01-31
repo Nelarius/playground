@@ -122,7 +122,7 @@ void VertexArrayObjectFactory::enableStandardAttributes_() {
     std::size_t offsetAccumulator{ 0u };
     for (auto& attrib : standardAttributeQueue_) {
         GLint index = glGetAttribLocation(program_->object(), attrib.name.c_str());
-        ASSERT(index != -1);
+        PG_ASSERT(index != -1);
         glVertexAttribPointer(
             index,
             attrib.size,
@@ -140,7 +140,7 @@ void VertexArrayObjectFactory::enableStandardAttributes_() {
 void VertexArrayObjectFactory::enableAttributes_() {
     for (auto& attrib : attributeQueue_) {
         GLint index = glGetAttribLocation(program_->object(), attrib.name.c_str());
-        ASSERT(index != -1);
+        PG_ASSERT(index != -1);
         glVertexAttribPointer(
             index,
             attrib.size,

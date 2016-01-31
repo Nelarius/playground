@@ -50,7 +50,7 @@ bool AppStateStack::isEmpty() const {
 
 std::unique_ptr<AppState> AppStateStack::createState_(states::Id id) {
     auto it = factories_.find(id);
-    ASSERT(it != factories_.end());
+    PG_ASSERT(it != factories_.end());
     //executes the function, returns the constructed managed pointer
     return it->second();
 }

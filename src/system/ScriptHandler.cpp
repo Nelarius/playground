@@ -28,7 +28,7 @@ bool ScriptHandler::IdSet::contains(std::size_t id) const {
 
 void ScriptHandler::IdSet::remove(std::size_t id) {
     auto it = ids_.find(id);
-    ASSERT(it != ids_.end());
+    PG_ASSERT(it != ids_.end());
     it->second--;
     if (it->second == 0) {
         ids_.erase(it);

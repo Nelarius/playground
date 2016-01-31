@@ -8,7 +8,7 @@ template< typename T >
 class Locator {
 public:
     static T* get() {
-        ASSERT(service_ != nullptr);
+        PG_ASSERT(service_ != nullptr);
         return service_;
     }
 

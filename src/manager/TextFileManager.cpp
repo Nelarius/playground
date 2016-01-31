@@ -35,7 +35,7 @@ const std::string& TextFileManager::get(const std::string& file) const {
 
 const std::string& TextFileManager::get(std::size_t uid) const {
     auto it = strings_.find(uid);
-    ASSERT(it != strings_.end());
+    PG_ASSERT(it != strings_.end());
     return it->second;
 }
 
@@ -60,7 +60,7 @@ std::size_t TextFileManager::id(const std::string& file) const {
 
 void TextFileManager::reload(const std::string& file) {
     std::size_t uid = id(file);
-    ASSERT(contains(uid));
+    PG_ASSERT(contains(uid));
     auto it = strings_.find(uid);
     try {
         it->second = fileToString(file);

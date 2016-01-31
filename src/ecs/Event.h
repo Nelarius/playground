@@ -53,7 +53,7 @@ private:
     }
     inline uint32_t connection_(uint32_t family) const {
         auto it = connections_.find(family);
-        ASSERT(it != connections_.end());
+        PG_ASSERT(it != connections_.end());
         return it->second;
     }
     inline void disconnect_(uint32_t family) {
@@ -93,7 +93,7 @@ template<typename E, typename S>
 void EventManager::subscribe(S& system) {
     Receiver& receiver = static_cast<Receiver&>(system);
     const uint32_t family = Event<E>::family();
-    ASSERT(!receiver.isConnected_(family));
+    PG_ASSERT(!receiver.isConnected_(family));
     accommodate_(family);
     std::size_t connection = signals_[family].connect([&system](const void* event) -> void {
         system.receive(*(static_cast<const E*>(event)));
@@ -105,7 +105,7 @@ template<typename E, typename S>
 void EventManager::unsubscribe(S& system) {
     Receiver& receiver = static_cast<Receiver&> (system);
     const uint32_t family = Event<E>::family();
-    ASSERT(receiver.isConnected_(family));
+    PG_ASSERT(receiver.isConnected_(family));
     signals_[family].disconnect(receiver.connection_(family));
     receiver.disconnect_(family);
 }

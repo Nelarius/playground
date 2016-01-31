@@ -28,7 +28,7 @@ void ShaderManager::compile(const std::string& tag) {
 opengl::Program* ShaderManager::get(const std::string& tag) const {
     auto it = resources_.find(tag);
 
-    ASSERT(it != resources_.end());
+    PG_ASSERT(it != resources_.end());
 
     return it->second;
 }

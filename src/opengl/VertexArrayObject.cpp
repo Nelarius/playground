@@ -75,7 +75,7 @@ void VertexArrayObject::unbind() {
 }
 
 void VertexArrayObject::retain_() {
-    ASSERT(refCount_);
+    PG_ASSERT(refCount_);
     *refCount_ += 1u;
 }
 

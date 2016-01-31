@@ -33,7 +33,7 @@ void BaseArena::reserve(std::size_t n) {
 }
 
 const void* BaseArena::at(std::size_t i) const {
-    ASSERT(i < capacity_);
+    PG_ASSERT(i < capacity_);
     return blocks_[i / ChunkSize_] + (i % ChunkSize_) * ElementSize_;
 }
 

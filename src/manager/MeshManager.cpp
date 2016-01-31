@@ -18,7 +18,7 @@ opengl::BufferObject* MeshManager::get(const std::string& file) const {
         return it->second;
     }
 
-    ASSERT(pg::fileExists(file));
+    PG_ASSERT(pg::fileExists(file));
 
     Assimp::Importer importer;
     const aiScene* scene = importer.ReadFile(
@@ -27,7 +27,7 @@ opengl::BufferObject* MeshManager::get(const std::string& file) const {
         aiProcess_GenSmoothNormals
         );
 
-    ASSERT(scene);
+    PG_ASSERT(scene);
 
     float minx = std::numeric_limits< float >::max();
     float maxx = std::numeric_limits< float >::min();
@@ -98,7 +98,7 @@ opengl::BufferObject* MeshManager::get(const std::string& file) const {
 
 math::AABox MeshManager::getBoundingBox(const std::string& file) const {
     auto it = boxes_.find(file);
-    ASSERT(it != boxes_.end());
+    PG_ASSERT(it != boxes_.end());
     return it->second;
 }
 

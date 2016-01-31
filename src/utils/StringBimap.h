@@ -22,13 +22,13 @@ public:
 
     const std::string& at(T t) const {
         auto it = toStringMap_.find(t);
-        ASSERT(it != toStringMap_.end());
+        PG_ASSERT(it != toStringMap_.end());
         return it->second;
     }
 
     T at(const std::string& str) const {
         auto it = toValueMap_.find(str);
-        ASSERT(it != toValueMap_.end());
+        PG_ASSERT(it != toValueMap_.end());
         return it->second;
     }
 

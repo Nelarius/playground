@@ -81,7 +81,7 @@ public:
 private:
     // maps indices in the range (0, size_( to the internal range
     std::size_t internalIndex_(std::size_t i) const {
-        ASSERT(i < size_);
+        PG_ASSERT(i < size_);
         return (head_ + i) % capacity_;
     }
 
@@ -108,7 +108,7 @@ RingBuffer<T>::RingBuffer(std::size_t capacity)
     head_{ 0u },
     tail_{ 0u } {
     storage_.resize(capacity);
-    ASSERT(storage_.capacity() == capacity);
+    PG_ASSERT(storage_.capacity() == capacity);
 }
 
 template< typename T >
@@ -155,7 +155,7 @@ void RingBuffer<T>::clear() {
 
 template< typename T >
 const T& RingBuffer<T>::at(std::size_t i) const {
-    ASSERT(i < size_);
+    PG_ASSERT(i < size_);
     return *storage_.at((head_ + i) % size_);
 }
 
@@ -229,7 +229,7 @@ void RingBuffer<T>::emplaceBack(Args&&... args) {
 
 template< typename T >
 void RingBuffer<T>::popBack() {
-    ASSERT(size_ != 0u);
+    PG_ASSERT(size_ != 0u);
     tail_ = previous_(tail_);
     storage_.at(tail_)->~T();
     size_--;
@@ -237,7 +237,7 @@ void RingBuffer<T>::popBack() {
 
 template< typename T >
 void RingBuffer<T>::popFront() {
-    ASSERT(size_ != 0u);
+    PG_ASSERT(size_ != 0u);
     storage_.at(head_)->~T();
     head_ = next_(head_);
     size_--;

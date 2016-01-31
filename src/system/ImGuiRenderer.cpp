@@ -198,7 +198,7 @@ void ImGuiRenderer::initialize_() {
 
 #ifdef _WIN32
     SDL_Window* window = context_.window->SDLwindow();
-    ASSERT(window != nullptr);
+    PG_ASSERT(window != nullptr);
     SDL_SysWMinfo wmInfo;
     SDL_VERSION(&wmInfo.version);
     SDL_GetWindowWMInfo(window, &wmInfo);

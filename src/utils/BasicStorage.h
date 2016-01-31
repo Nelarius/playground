@@ -90,13 +90,13 @@ BasicStorage<T>::~BasicStorage() {
 
 template< typename T >
 T* BasicStorage<T>::at(std::size_t index) {
-    ASSERT(index < capacity_);
+    PG_ASSERT(index < capacity_);
     return reinterpret_cast<T*>(buffer_) + index;
 }
 
 template< typename T >
 const T* BasicStorage<T>::at(std::size_t index) const {
-    ASSERT(index < capacity_);
+    PG_ASSERT(index < capacity_);
     return reinterpret_cast<const T*>(buffer_) + index;
 }
 

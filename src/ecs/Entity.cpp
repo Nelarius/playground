@@ -122,7 +122,7 @@ void EntityManager::accommodateEntity_(uint32_t index) {
 }
 
 void EntityManager::destroy_(Id id) {
-    ASSERT(isValid_(id));
+    PG_ASSERT(isValid_(id));
     eventDispatcher_.emit<EntityDestroyedEvent>(Entity(this, id));
     uint32_t index = id.index();
     auto& mask = componentMasks_[index];

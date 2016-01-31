@@ -398,25 +398,25 @@ private:
 */
 template<typename C>
 C* ComponentHandle<C>::operator->() {
-    ASSERT(isValid());
+    PG_ASSERT(isValid());
     return manager_->component_<C>(id_);
 }
 
 template<typename C>
 const C* ComponentHandle<C>::operator->() const {
-    ASSERT(isValid());
+    PG_ASSERT(isValid());
     return manager_->component_<C>(id_);
 }
 
 template<typename C>
 C& ComponentHandle<C>::operator*() {
-    ASSERT(isValid());
+    PG_ASSERT(isValid());
     return *manager_->component_<C>(id_);
 }
 
 template<typename C>
 const C& ComponentHandle<C>::operator*() const {
-    ASSERT(isValid());
+    PG_ASSERT(isValid());
     return *manager_->component_<C>(id_);
 }
 
@@ -444,31 +444,31 @@ bool ComponentHandle<C>::operator!=(const ComponentHandle<C>& rhs) const {
 */
 template<typename C>
 ComponentHandle<C> Entity::component() const {
-    ASSERT(isValid());
+    PG_ASSERT(isValid());
     return ComponentHandle<C>{ manager_, id_ };
 }
 
 template<typename C, typename... Args>
 ComponentHandle<C> Entity::assign(Args&& ... args) {
-    ASSERT(isValid());
+    PG_ASSERT(isValid());
     return manager_->assign_<C>(id_, std::forward<Args>(args)...);
 }
 
 template<typename C>
 void Entity::remove() {
-    ASSERT(isValid());
+    PG_ASSERT(isValid());
     manager_->remove_<C>(id_);
 }
 
 template<typename C>
 bool Entity::has() const {
-    ASSERT(isValid());
+    PG_ASSERT(isValid());
     return manager_->hasComponent_<C>(id_);
 }
 
 template<typename C>
 C* Entity::componentPointer() const {
-    ASSERT(isValid());
+    PG_ASSERT(isValid());
     return manager_->component_<C>(id_);
 }
 
@@ -505,7 +505,7 @@ void EntityManager::accommodateComponent_() {
 
 template<typename C, typename... Args>
 ComponentHandle<C> EntityManager::assign_(Id id, Args&&... args) {
-    ASSERT(isValid_(id));
+    PG_ASSERT(isValid_(id));
     const int family = Component<C>::family();
     accommodateComponent_<C>(); // create a new component pool, if not already done
     new (componentPools_[family]->newCapacity(id.index())) C{ std::forward<Args>(args)... };
@@ -524,7 +524,7 @@ ComponentHandle<C> EntityManager::assign_(Id id, Args&&... args) {
 
 template<typename C>
 void EntityManager::remove_(Id id) {
-    ASSERT(isValid_(id));
+    PG_ASSERT(isValid_(id));
     eventDispatcher_.emit<ComponentRemovedEvent<C>>(Entity{ this, id }, ComponentHandle<C>{ this, id });
     const int family = Component<C>::family();
     const uint32_t index = id.index();
@@ -534,14 +534,14 @@ void EntityManager::remove_(Id id) {
 
 template<typename C>
 C* EntityManager::component_(Id id) {
-    ASSERT(isValid_(id));
+    PG_ASSERT(isValid_(id));
     const unsigned family = Component<C>::family();
     return static_cast<C*>(componentPools_[family]->at(id.index()));
 }
 
 template<typename C>
 bool EntityManager::hasComponent_(Id id) const {
-    ASSERT(isValid_(id));
+    PG_ASSERT(isValid_(id));
     const unsigned family = Component<C>::family();
     return componentMasks_[id.index()].test(family);
 }

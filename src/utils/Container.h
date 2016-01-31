@@ -43,7 +43,7 @@ public:
     }
 
     const T& at(std::size_t i) const {
-        ASSERT(i < position_);
+        PG_ASSERT(i < position_);
         return *(static_cast<const T*>(pool_.at(i)));
     }
 
