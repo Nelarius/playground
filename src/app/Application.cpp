@@ -1,7 +1,7 @@
 #include "app/Application.h"
 #include "app/GameState.h"
 #include "app/PauseState.h"
-//#include "utils/Assert.h"
+#include "utils/Assert.h"
 #include "utils/File.h"
 #include "utils/Log.h"
 #include "utils/Locator.h"
@@ -119,7 +119,7 @@ void Application::initialize_() {
         path += ".wren";
         const std::string& source = this->context_.textFileManager.get(path);
         char* buffer = (char*)malloc(source.size() + 1);
-        //PG_ASSERT(buffer != NULL);
+        PG_ASSERT(buffer != NULL);
         buffer[source.size()] = '\0';
         memcpy(buffer, source.c_str(), source.size());
         return buffer;

@@ -58,10 +58,10 @@ workspace "playground"
         kind "StaticLib"
         language "C++"
         targetdir "lib"
-
         files { "extern/wrenly/src/**.cpp", "extern/wrenly/src/**.h"  }
         includedirs { "extern/wrenly/src", "extern/wren/src/include" }
-
+        filter "configurations:Release"
+            defines { "NDEBUG" }
 
     --[[
                 _         
