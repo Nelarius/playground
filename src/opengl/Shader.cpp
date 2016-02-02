@@ -1,5 +1,6 @@
 #include "opengl/Shader.h"
 #include "utils/Assert.h"
+#include <iostream>
 
 namespace pg {
 namespace opengl {
