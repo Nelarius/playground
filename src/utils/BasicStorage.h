@@ -58,7 +58,7 @@ BasicStorage<T>::BasicStorage(std::size_t capacity) {
         return;
     }
     capacity_ = capacity;
-    buffer_ = new uint8_t[sizeof(T) * capacity];
+    buffer_ = (uint8_t*)malloc(sizeof(T) * capacity);
 }
 
 template< typename T >
@@ -72,7 +72,7 @@ BasicStorage<T>::BasicStorage(BasicStorage&& other)
 template< typename T >
 BasicStorage<T>& BasicStorage<T>::operator=(BasicStorage&& rhs) {
     if (buffer_) {
-        delete[] buffer_;
+        free(buffer_);
     }
     buffer_ = rhs.buffer_;
     capacity_ = rhs.capacity_;
@@ -84,7 +84,7 @@ BasicStorage<T>& BasicStorage<T>::operator=(BasicStorage&& rhs) {
 template< typename T >
 BasicStorage<T>::~BasicStorage() {
     if (buffer_) {
-        delete[] buffer_;
+        free(buffer_);
     }
 }
 
@@ -116,10 +116,10 @@ void BasicStorage<T>::resize(std::size_t newSize) {
         return;
     }
     if (capacity_ < newSize) {
-        uint8_t* newBuffer = new uint8_t[sizeof(T) * newSize];
+        uint8_t* newBuffer = (uint8_t*)malloc(sizeof(T) * newSize);
         std::memcpy(newBuffer, buffer_, sizeof(T) * capacity_);
         if (buffer_) {
-            delete buffer_;
+            free(buffer_);
         }
         buffer_ = newBuffer;
         capacity_ = newSize;
