@@ -21,16 +21,15 @@ public:
 
     class Iterator {
     public:
-        Iterator() = delete;
-        Iterator(const Iterator&) = default;
-        Iterator(Iterator&&) = default;
-        Iterator& operator=(const Iterator&) = default;
-        Iterator& operator=(Iterator&&) = default;
+        Iterator()                              = delete;
+        Iterator(const Iterator&)               = default;
+        Iterator(Iterator&&)                    = default;
+        Iterator& operator=(const Iterator&)    = default;
+        Iterator& operator=(Iterator&&)         = default;
         Iterator(RingBuffer<T>* owner, std::size_t start)
             : owner_{ owner },
-            curIndex_{ start }
-        {}
-        ~Iterator() = default;
+            curIndex_{ start } {}
+        ~Iterator()                             = default;
 
         bool operator==(const Iterator& rhs) const {
             return owner_ == rhs.owner_ && curIndex_ == rhs.curIndex_;
@@ -45,8 +44,22 @@ public:
             return *this;
         }
 
-        T* operator*() {
+        Iterator operator++(int) {
+            Iterator was{ *this };
+            ++curIndex_;
+            return was;
+        }
+
+        T& operator*() {
+            return *owner_->storage_.at(owner_->internalIndex_(curIndex_));
+        }
+
+        T* operator->() {
             return owner_->storage_.at(owner_->internalIndex_(curIndex_));
+        }
+
+        operator std::size_t() const {
+            return curIndex_;
         }
 
     private:
@@ -145,8 +158,8 @@ RingBuffer<T>::~RingBuffer() {
 
 template< typename T >
 void RingBuffer<T>::clear() {
-    for (auto* elem : *this) {
-        elem->~T();
+    for (auto& elem : *this) {
+        elem.~T();
     }
     size_ = 0u;
     head_ = 0u;
@@ -196,12 +209,12 @@ const T& RingBuffer<T>::back() const {
 
 template< typename T >
 typename RingBuffer<T>::Iterator RingBuffer<T>::begin() {
-    return Iterator(this, 0u);
+    return Iterator{ this, 0u };
 }
 
 template< typename T >
 typename RingBuffer<T>::Iterator RingBuffer<T>::end() {
-    return Iterator(this, size_);
+    return Iterator{ this, size_ };
 }
 
 template< typename T >

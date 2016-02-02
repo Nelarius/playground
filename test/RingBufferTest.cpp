@@ -66,4 +66,16 @@ SUITE( RingBufferTest ) {
         CHECK_EQUAL( 2, buf.back() );
     }
 
+    TEST(ForwardIteratorWorksAsExpected) {
+        RingBuffer<int> buf{5};
+        buf.pushBack(1);
+        buf.pushBack(2);
+        buf.pushBack(3);
+        auto it = buf.begin();
+        CHECK_EQUAL(1, *(it++));
+        CHECK_EQUAL(2, *(it++));
+        CHECK_EQUAL(3, *(it++));
+        CHECK_EQUAL(buf.end(), it);
+    }
+
 }
