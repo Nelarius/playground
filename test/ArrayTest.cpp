@@ -2,15 +2,28 @@
 #include <UnitTest++/UnitTest++.h>
 
 using pg::DynamicArray;
+using pg::StaticArray;
 
 SUITE(ArrayTest) {
 
     struct DynamicArrayWithElements {
         DynamicArray<int> array{};
+
         DynamicArrayWithElements()
             : array{10} {
             for (int i = 0; i < 10; i++) {
                 array.pushBack(i);
+            }
+        }
+    };
+
+    struct StaticArrayWithElements {
+        StaticArray<int, 3> array{};
+
+        StaticArrayWithElements()
+            : array{} {
+            for (int i = 0; i < 3; i++) {
+                array.fill(i);
             }
         }
     };
@@ -98,4 +111,36 @@ SUITE(ArrayTest) {
         CHECK_EQUAL(1, *(it++));
         CHECK_EQUAL(array.rend(), it);
     }
+
+    TEST(AfterInitializationStaticArraySizeIsZero) {
+        StaticArray<int, 5> array{};
+        CHECK_EQUAL(0, array.size());
+    }
+
+    TEST(FillStaticArrayWorksAsExpected) {
+        StaticArray<int, 5> array{};
+        array.fill(1);
+        CHECK_EQUAL(1u, array.size());
+        CHECK_EQUAL(1, array[0]);
+        array.fill(2);
+        CHECK_EQUAL(2u, array.size());
+        CHECK_EQUAL(2, array[1]);
+    }
+
+    TEST_FIXTURE(StaticArrayWithElements, StaticArrayForwardIteratorWorksAsExpected) {
+        auto it = array.begin();
+        CHECK_EQUAL(0, *(it++));
+        CHECK_EQUAL(1, *(it++));
+        CHECK_EQUAL(2, *(it++));
+        CHECK_EQUAL(array.end(), it);
+    }
+
+    TEST_FIXTURE(StaticArrayWithElements, StaticArrayReverseiteratorWorksAsExpected) {
+        auto it = array.rbegin();
+        CHECK_EQUAL(2, *(it++));
+        CHECK_EQUAL(1, *(it++));
+        CHECK_EQUAL(0, *(it++));
+        CHECK_EQUAL(array.rend(), it);
+    }
+
 }

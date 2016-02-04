@@ -109,12 +109,83 @@ private:
     std::size_t     size_{0u};
 };
 
-template<typename T, std::size_t N>
+template<typename T, std::size_t n>
 class StaticArray {
 public:
+    StaticArray()                               = default;
+    StaticArray(const StaticArray&)             = delete;
+    StaticArray& operator=(const StaticArray&)  = delete;
+    ~StaticArray()                              = default;
+
+    using Iterator = T*;
+
+    struct ReverseIterator {
+        ReverseIterator()                                   = delete;
+        ReverseIterator(const ReverseIterator&)             = default;
+        ReverseIterator(ReverseIterator&&)                  = default;
+        ReverseIterator& operator=(const ReverseIterator&)  = default;
+        ReverseIterator& operator=(ReverseIterator&&)       = default;
+        ReverseIterator(StaticArray<T, n>* owner, std::size_t start)
+            : owner_{ owner },
+            curIndex_{ start } {}
+        ~ReverseIterator()                                  = default;
+
+        bool operator==(const ReverseIterator& rhs) const {
+            return owner_ == rhs.owner_ && curIndex_ == rhs.curIndex_;
+        }
+
+        bool operator!=(const ReverseIterator& rhs) const {
+            return !(this->operator==(rhs));
+        }
+
+        ReverseIterator& operator++() {
+            curIndex_ = curIndex_ - 1u;
+            return *this;
+        }
+
+        ReverseIterator operator++(int) {
+            ReverseIterator was{ *this };
+            curIndex_ = curIndex_ - 1u;
+            return was;
+        }
+
+        T& operator*() {
+            return reinterpret_cast<T*>(&(owner_->storage_[0]))[curIndex_];
+        }
+
+        T* operator->() {
+            return reinterpret_cast<T*>(&(owner_->storage_[0])) + curIndex_;
+        }
+
+        operator std::size_t() const {
+            return curIndex_;
+        }
+
+    private:
+        StaticArray<T, n>*  owner_;
+        std::size_t         curIndex_;
+    };
+
+    // element access
+    T& at(std::size_t);
+    const T& at(std::size_t) const;
+    T& operator[](std::size_t);
+    const T& operator[](std::size_t) const;
+    Iterator begin();
+    Iterator end();
+    ReverseIterator rbegin();
+    ReverseIterator rend();
+
+        // modifiers
+    void fill(const T&);
+
+    // container data
+    std::size_t size() const;
+    std::size_t maxSize() const;
 
 private:
-    uint8_t storage_[sizeof(T) * N];
+    uint8_t     storage_[sizeof(T) *n];
+    std::size_t size_{0u};
 };
 
 /***
@@ -286,6 +357,75 @@ std::size_t DynamicArray<T>::size() const {
 template<typename T>
 std::size_t DynamicArray<T>::capacity() const {
     return storage_.capacity();
+}
+
+/***
+*       ______       __  _     ___
+*      / __/ /____ _/ /_(_)___/ _ | ___________ ___ __
+*     _\ \/ __/ _ `/ __/ / __/ __ |/ __/ __/ _ `/ // /
+*    /___/\__/\_,_/\__/_/\__/_/ |_/_/ /_/  \_,_/\_, /
+*                                              /___/
+*/
+
+template<typename T, std::size_t n>
+T& StaticArray<T, n>::at(std::size_t i) {
+    PG_ASSERT(i < n);
+    return reinterpret_cast<T*>(&storage_[0])[i];
+}
+
+template<typename T, std::size_t n>
+const T& StaticArray<T, n>::at(std::size_t i) const {
+    PG_ASSERT(i < n);
+    return reinterpret_cast<const T*>(&storage_[0])[i];
+}
+
+template<typename T, std::size_t n>
+T& StaticArray<T, n>::operator[](std::size_t i) {
+    return at(i);
+}
+
+template<typename T, std::size_t n>
+const T& StaticArray<T, n>::operator[](std::size_t i) const {
+    return at(i);
+}
+
+template<typename T, std::size_t n>
+typename StaticArray<T, n>::Iterator StaticArray<T, n>::begin() {
+    return reinterpret_cast<T*>(&storage_[0]);
+}
+
+template<typename T, std::size_t n>
+typename StaticArray<T, n>::Iterator StaticArray<T, n>::end() {
+    return reinterpret_cast<T*>(&storage_[0]) + size_;
+}
+
+template<typename T, std::size_t n>
+typename StaticArray<T, n>::ReverseIterator StaticArray<T, n>::rbegin() {
+    PG_ASSERT(size_ != 0u);
+    return ReverseIterator{ this, size_ - 1 };
+}
+
+template<typename T, std::size_t n>
+typename StaticArray<T, n>::ReverseIterator StaticArray<T, n>::rend() {
+    PG_ASSERT(size_ != 0u);
+    return ReverseIterator{ this, std::numeric_limits<std::size_t>::max() };
+}
+
+template<typename T, std::size_t n>
+void StaticArray<T, n>::fill(const T& t) {
+    PG_ASSERT(size_ < n);
+    reinterpret_cast<T*>(&storage_[0])[size_] = t;
+    size_++;
+}
+
+template<typename T, std::size_t n>
+std::size_t StaticArray<T, n>::size() const {
+    return size_;
+}
+
+template<typename T, std::size_t n>
+std::size_t StaticArray<T, n>::maxSize() const {
+    return n;
 }
 
 }
