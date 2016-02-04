@@ -73,8 +73,6 @@ public:
         std::size_t         curIndex_;
     };
 
-    struct ConstReverseIterator {};
-
     // element access
     Iterator begin();
     Iterator end();
@@ -88,6 +86,7 @@ public:
     const T& front() const;
     T& back();
     const T& back() const;
+    T*  data();
 
     // modifiers
     void pushBack(const T&);
@@ -117,6 +116,14 @@ public:
 private:
     uint8_t storage_[sizeof(T) * N];
 };
+
+/***
+*       ___                       _     ___
+*      / _ \__ _____  ___ ___ _  (_)___/ _ | ___________ ___ __
+*     / // / // / _ \/ _ `/  ' \/ / __/ __ |/ __/ __/ _ `/ // /
+*    /____/\_, /_//_/\_,_/_/_/_/_/\__/_/ |_/_/ /_/  \_,_/\_, /
+*         /___/                                         /___/
+*/
 
 template<typename T>
 DynamicArray<T>::DynamicArray( std::size_t capacity)
@@ -176,22 +183,32 @@ const T& DynamicArray<T>::back() const {
 
 template<typename T>
 typename DynamicArray<T>::Iterator DynamicArray<T>::begin() {
+    PG_ASSERT(storage_.capacity() != 0u);
     return storage_.at(0);
 }
 
 template<typename T>
 typename DynamicArray<T>::Iterator DynamicArray<T>::end() {
+    PG_ASSERT(storage_.capacity() != 0u);
     return storage_.at(0) + size_;
 }
 
 template<typename T>
 typename DynamicArray<T>::ReverseIterator DynamicArray<T>::rbegin() {
+    PG_ASSERT(storage_.capacity() != 0u);
     return ReverseIterator{ this, size_ - 1u };
 }
 
 template<typename T>
 typename DynamicArray<T>::ReverseIterator DynamicArray<T>::rend() {
+    PG_ASSERT(storage_.capacity() != 0u);
     return ReverseIterator{ this, std::numeric_limits<std::size_t>::max() };
+}
+
+template<typename T>
+T* DynamicArray<T>::data() {
+    PG_ASSERT(storage_.capacity() != 0u);
+    return storage_.at(0);
 }
 
 template<typename T>
