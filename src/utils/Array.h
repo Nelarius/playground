@@ -115,6 +115,8 @@ public:
     StaticArray()                               = default;
     StaticArray(const StaticArray&)             = delete;
     StaticArray& operator=(const StaticArray&)  = delete;
+    StaticArray(StaticArray&&)                  = delete;
+    StaticArray& operator=(StaticArray&&)       = delete;
     ~StaticArray()                              = default;
 
     using Iterator = T*;
