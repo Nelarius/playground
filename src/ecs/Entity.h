@@ -359,7 +359,6 @@ public:
 
 private:
     friend class Entity;
-    friend class LuaEntity;
     template<typename C> friend class ComponentHandle;
 
     void destroy_(Id id);
