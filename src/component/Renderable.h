@@ -12,13 +12,6 @@
 namespace pg {
 namespace component {
 
-/**
- * @class Renderable
- * @author Muszynski Johann M
- * @date 03/18/15
- * @file Renderable.h
- * @brief 
- */
 struct Renderable {
     opengl::BufferObject* vbo;
     opengl::Program* shader;
