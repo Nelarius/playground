@@ -1,4 +1,4 @@
-#include "system/Debug.h"
+#include "system/DebugSystem.h"
 #include "utils/Log.h"
 #include "component/Include.h"
 #include "math/Geometry.h"
@@ -7,7 +7,7 @@
 namespace pg {
 namespace system {
 
-void Debug::configure(ecs::EventManager& events) {
+void DebugSystem::configure(ecs::EventManager& events) {
     events.subscribe<ecs::EntityDestroyedEvent>(*this);
     events.subscribe<ecs::EntityCreatedEvent>(*this);
     events.subscribe<ecs::ComponentAssignedEvent<component::Camera>>(*this);
@@ -24,61 +24,61 @@ void Debug::configure(ecs::EventManager& events) {
     events.subscribe<ecs::ComponentRemovedEvent< component::Script>>(*this);
 }
 
-void Debug::update(ecs::EntityManager& entities, ecs::EventManager& events, float dt) {}
+void DebugSystem::update(ecs::EntityManager& entities, ecs::EventManager& events, float dt) {}
 
-void Debug::receive(const ecs::EntityCreatedEvent& event) {
+void DebugSystem::receive(const ecs::EntityCreatedEvent& event) {
     LOG_DEBUG << "Entity " << event.entity.id().index() << "." << event.entity.id().version() << " created.";
 }
 
-void Debug::receive(const ecs::EntityDestroyedEvent& event) {
+void DebugSystem::receive(const ecs::EntityDestroyedEvent& event) {
     LOG_DEBUG << "Entity " << event.entity.id().index() << "." << event.entity.id().version() << " destroyed.";
 }
 
-void Debug::receive(const ecs::ComponentAssignedEvent< component::Camera >& event) {
+void DebugSystem::receive(const ecs::ComponentAssignedEvent< component::Camera >& event) {
     LOG_DEBUG << "Camera component assigned to Entity " << event.entity.id().index() << "." << event.entity.id().version();
 }
 
-void Debug::receive(const ecs::ComponentAssignedEvent< component::Transform >& event) {
+void DebugSystem::receive(const ecs::ComponentAssignedEvent< component::Transform >& event) {
     LOG_DEBUG << "Transform component assigned to Entity " << event.entity.id().index() << "." << event.entity.id().version();
 }
 
-void Debug::receive(const ecs::ComponentAssignedEvent< component::Renderable >& event) {
+void DebugSystem::receive(const ecs::ComponentAssignedEvent< component::Renderable >& event) {
     LOG_DEBUG << "Renderable component assigned to Entity " << event.entity.id().index() << "." << event.entity.id().version();
 }
 
-void Debug::receive(const ecs::ComponentAssignedEvent< math::AABox >& event) {
+void DebugSystem::receive(const ecs::ComponentAssignedEvent< math::AABox >& event) {
     LOG_DEBUG << "BoundingBox component assigned to Entity " << event.entity.id().index() << "." << event.entity.id().version();
 }
 
-void Debug::receive(const ecs::ComponentAssignedEvent< component::PointLight >& event) {
+void DebugSystem::receive(const ecs::ComponentAssignedEvent< component::PointLight >& event) {
     LOG_DEBUG << "PointLight component assigned to Entity " << event.entity.id().index() << "." << event.entity.id().version();
 }
 
-void Debug::receive(const ecs::ComponentAssignedEvent< component::Script >& event) {
+void DebugSystem::receive(const ecs::ComponentAssignedEvent< component::Script >& event) {
     LOG_DEBUG << "Script component assigned to Entity " << event.entity.id().index() << "." << event.entity.id().version();
 }
 
-void Debug::receive(const ecs::ComponentRemovedEvent< component::Camera >& event) {
+void DebugSystem::receive(const ecs::ComponentRemovedEvent< component::Camera >& event) {
     LOG_DEBUG << "Camera component removed from Entity " << event.entity.id().index() << "." << event.entity.id().version();
 }
 
-void Debug::receive(const ecs::ComponentRemovedEvent< component::Transform >& event) {
+void DebugSystem::receive(const ecs::ComponentRemovedEvent< component::Transform >& event) {
     LOG_DEBUG << "Transform component removed from Entity " << event.entity.id().index() << "." << event.entity.id().version();
 }
 
-void Debug::receive(const ecs::ComponentRemovedEvent< component::Renderable >& event) {
+void DebugSystem::receive(const ecs::ComponentRemovedEvent< component::Renderable >& event) {
     LOG_DEBUG << "Renderable component removed from Entity " << event.entity.id().index() << "." << event.entity.id().version();
 }
 
-void Debug::receive(const ecs::ComponentRemovedEvent< math::AABox >& event) {
+void DebugSystem::receive(const ecs::ComponentRemovedEvent< math::AABox >& event) {
     LOG_DEBUG << "BoundingBox component removed from Entity " << event.entity.id().index() << "." << event.entity.id().version();
 }
 
-void Debug::receive(const ecs::ComponentRemovedEvent< component::PointLight >& event) {
+void DebugSystem::receive(const ecs::ComponentRemovedEvent< component::PointLight >& event) {
     LOG_DEBUG << "PointLight component removed from Entity " << event.entity.id().index() << "." << event.entity.id().version();
 }
 
-void Debug::receive(const ecs::ComponentRemovedEvent< component::Script >& event) {
+void DebugSystem::receive(const ecs::ComponentRemovedEvent< component::Script >& event) {
     LOG_DEBUG << "Script component removed from Entity " << event.entity.id().index() << "." << event.entity.id().version();
 }
 

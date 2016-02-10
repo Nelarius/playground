@@ -17,7 +17,7 @@ class Entity;
 }
 
 namespace system {
-class ScriptHandler;
+class ScriptSystem;
 }
 
 /**
@@ -119,7 +119,7 @@ public:
     */
     void handleKeyPressedCallbacks();
 
-    void setScriptHandler(system::ScriptHandler&);
+    void setScriptHandler(system::ScriptSystem&);
 
 private:
 
@@ -142,7 +142,7 @@ private:
     std::map<int, CallbackData> keyDownCallbacks_{};
     std::map<int, CallbackData> keyPressedCallbacks_{};
     std::map<int, CallbackData> keyUpCallbacks_{};
-    system::ScriptHandler*      scriptSystem_{ nullptr };
+    system::ScriptSystem*      scriptSystem_{ nullptr };
 };
 
 }   // pg

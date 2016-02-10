@@ -15,7 +15,7 @@ class Entity;
 }
 
 namespace system {
-class ScriptHandler;
+class ScriptSystem;
 }
 
 /*
@@ -50,7 +50,7 @@ public:
     void handleEvent(const SDL_Event&);
     void handleMousePressedCallbacks();
 
-    void setScriptHandler(system::ScriptHandler&);
+    void setScriptHandler(system::ScriptSystem&);
 
 private:
 
@@ -77,7 +77,7 @@ private:
     std::map<int, CallbackData> mouseDownCallbacks_{};
     std::map<int, CallbackData> mousePressedCallbacks_{};
     std::map<int, CallbackData> mouseUpCallbacks_{};
-    system::ScriptHandler*      scriptSystem_{ nullptr };
+    system::ScriptSystem*      scriptSystem_{ nullptr };
 };
 
 }

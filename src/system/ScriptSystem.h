@@ -17,9 +17,9 @@ class MouseEvents;
 
 namespace system {
 
-class ScriptHandler : public ecs::System<ScriptHandler>, public ecs::Receiver {
+class ScriptSystem : public ecs::System<ScriptSystem>, public ecs::Receiver {
 public:
-    ScriptHandler(Context& context, KeyboardManager&, MouseEvents&);
+    ScriptSystem(Context& context, KeyboardManager&, MouseEvents&);
     void configure(ecs::EventManager&) override;
     void update(ecs::EntityManager&, ecs::EventManager&, float) override;
 

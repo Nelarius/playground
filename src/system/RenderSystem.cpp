@@ -1,4 +1,4 @@
-#include "system/Renderer.h"
+#include "system/RenderSystem.h"
 #include "system/Material.h"
 #include "opengl/Use.h"
 #include "opengl/VertexArrayObjectFactory.h"
@@ -20,8 +20,8 @@ const float Pi = 3.141592653f;
 namespace pg {
 namespace system {
 
-Renderer::Renderer(Context& context)
-    : System< Renderer >(),
+RenderSystem::RenderSystem(Context& context)
+    : System< RenderSystem >(),
     cameraEntity_{},
     lightEntity_{},
     defaultProjection_{},
@@ -30,20 +30,20 @@ Renderer::Renderer(Context& context)
     defaultProjection_ = math::Matrix4f::perspective(70.0f, 1.5f, 0.1f, 100.0f);
 }
 
-void Renderer::configure(ecs::EventManager& events) {
+void RenderSystem::configure(ecs::EventManager& events) {
     events.subscribe< ecs::ComponentAssignedEvent<component::Camera> >(*this);
     events.subscribe< ecs::ComponentAssignedEvent<component::PointLight> >(*this);
 }
 
-void Renderer::receive(const ecs::ComponentAssignedEvent< component::Camera >& event) {
+void RenderSystem::receive(const ecs::ComponentAssignedEvent< component::Camera >& event) {
     cameraEntity_ = event.entity;
 }
 
-void Renderer::receive(const ecs::ComponentAssignedEvent< component::PointLight >& event) {
+void RenderSystem::receive(const ecs::ComponentAssignedEvent< component::PointLight >& event) {
     lightEntity_ = event.entity;
 }
 
-void Renderer::update(
+void RenderSystem::update(
     ecs::EntityManager& entities,
     ecs::EventManager& events,
     float dt
@@ -109,7 +109,7 @@ void Renderer::update(
     }
 }
 
-void Renderer::setSpecularUniforms_(const math::Vec3f& pos, opengl::Program* p) {
+void RenderSystem::setSpecularUniforms_(const math::Vec3f& pos, opengl::Program* p) {
     p->setUniform("cameraPosition", pos);
 }
 

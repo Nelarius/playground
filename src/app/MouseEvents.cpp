@@ -1,5 +1,5 @@
 #include "app/MouseEvents.h"
-#include "system/ScriptHandler.h"
+#include "system/ScriptSystem.h"
 #include "utils/Log.h"
 #include "utils/StringBimap.h"
 #include <SDL_mouse.h>
@@ -119,7 +119,7 @@ void MouseEvents::registerMouseUpCallback(MouseButton button, std::function<void
     addToMap_(mouseUpCallbacks_, button, callback);
 }
 
-void MouseEvents::setScriptHandler(system::ScriptHandler& system) {
+void MouseEvents::setScriptHandler(system::ScriptSystem& system) {
     scriptSystem_ = &system;
 }
 

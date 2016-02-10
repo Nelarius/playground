@@ -18,7 +18,7 @@ struct Script;
 
 namespace system {
 
-class Debug : public ecs::System<Debug>, public ecs::Receiver {
+class DebugSystem : public ecs::System<DebugSystem>, public ecs::Receiver {
 public:
     void configure(ecs::EventManager& events) override;
     void update(ecs::EntityManager& entities, ecs::EventManager& events, float dt) override;

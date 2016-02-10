@@ -1,4 +1,4 @@
-#include "system/Ui.h"
+#include "system/UiSystem.h"
 #include "system/Events.h"
 #include "GL/glew.h"
 #include "imgui/imgui.h"
@@ -8,22 +8,22 @@
 namespace pg {
 namespace system {
 
-Ui::Ui(Context& context)
-    : System<Ui>(),
+UiSystem::UiSystem(Context& context)
+    : System<UiSystem>(),
     display_(false)
 {}
 
-void Ui::update(ecs::EntityManager& entities, ecs::EventManager& events, float dt) {
+void UiSystem::update(ecs::EntityManager& entities, ecs::EventManager& events, float dt) {
     if (display_) {
         ui_(events, dt);
     }
 }
 
-void Ui::toggleDisplay() {
+void UiSystem::toggleDisplay() {
     display_ ^= 1;
 }
 
-void Ui::ui_(ecs::EventManager& events, float dt) {
+void UiSystem::ui_(ecs::EventManager& events, float dt) {
     static bool debugBoundingBoxes = false;
     static bool debugLines = false;
 

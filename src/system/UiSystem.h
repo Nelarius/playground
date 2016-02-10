@@ -7,11 +7,11 @@
 namespace pg {
 namespace system {
 
-class Ui : public ecs::System<Ui> {
+class UiSystem : public ecs::System<UiSystem> {
 public:
-    Ui() = delete;
-    explicit Ui(Context& context);
-    virtual ~Ui() = default;
+    UiSystem() = delete;
+    explicit UiSystem(Context& context);
+    virtual ~UiSystem() = default;
 
     void update(ecs::EntityManager&, ecs::EventManager&, float) override;
 

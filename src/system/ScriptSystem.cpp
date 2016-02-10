@@ -1,4 +1,4 @@
-#include "system/ScriptHandler.h"
+#include "system/ScriptSystem.h"
 #include "app/KeyboardManager.h"
 #include "app/MouseEvents.h"
 #include "app/Context.h"
@@ -8,7 +8,7 @@
 namespace pg {
 namespace system {
 
-void ScriptHandler::IdSet::add(std::size_t id) {
+void ScriptSystem::IdSet::add(std::size_t id) {
     auto it = ids_.find(id);
     if (it != ids_.end()) {
         it->second++;
@@ -18,7 +18,7 @@ void ScriptHandler::IdSet::add(std::size_t id) {
     }
 }
 
-bool ScriptHandler::IdSet::contains(std::size_t id) const {
+bool ScriptSystem::IdSet::contains(std::size_t id) const {
     auto it = ids_.find(id);
     if (it != ids_.end()) {
         return true;
@@ -26,7 +26,7 @@ bool ScriptHandler::IdSet::contains(std::size_t id) const {
     return false;
 }
 
-void ScriptHandler::IdSet::remove(std::size_t id) {
+void ScriptSystem::IdSet::remove(std::size_t id) {
     auto it = ids_.find(id);
     PG_ASSERT(it != ids_.end());
     it->second--;
@@ -35,14 +35,14 @@ void ScriptHandler::IdSet::remove(std::size_t id) {
     }
 }
 
-ScriptHandler::ScriptHandler(Context& context, KeyboardManager& keyboard, MouseEvents& mouse)
+ScriptSystem::ScriptSystem(Context& context, KeyboardManager& keyboard, MouseEvents& mouse)
     : context_{ context },
     keyboardManager_{ keyboard },
     mouseManager_{ mouse },
     containedScripts_{},
     updatedScripts_{} {}
 
-void ScriptHandler::configure(ecs::EventManager& events) {
+void ScriptSystem::configure(ecs::EventManager& events) {
     events.subscribe< ecs::ComponentAssignedEvent< component::Script> >(*this);
     events.subscribe< ecs::ComponentRemovedEvent< component::Script > >(*this);
     events.subscribe< system::TextFileUpdated >(*this);
@@ -50,7 +50,7 @@ void ScriptHandler::configure(ecs::EventManager& events) {
     mouseManager_.setScriptHandler(*this);
 }
 
-void ScriptHandler::update(ecs::EntityManager& entities, ecs::EventManager& events, float dt) {
+void ScriptSystem::update(ecs::EntityManager& entities, ecs::EventManager& events, float dt) {
     if (!updatedScripts_.empty()) {
         for (auto entity : entities.join< component::Script>()) {
             for (auto id : updatedScripts_) {
@@ -90,74 +90,74 @@ void ScriptHandler::update(ecs::EntityManager& entities, ecs::EventManager& even
     }
 }
 
-void ScriptHandler::receive(const ecs::ComponentAssignedEvent< component::Script >& event) {
+void ScriptSystem::receive(const ecs::ComponentAssignedEvent< component::Script >& event) {
     event.component->activate();
     containedScripts_.add(event.component->scriptId);
 }
 
-void ScriptHandler::receive(const ecs::ComponentRemovedEvent< component::Script >& event) {
+void ScriptSystem::receive(const ecs::ComponentRemovedEvent< component::Script >& event) {
     event.component->deactivate();
     containedScripts_.remove(event.component->scriptId);
 }
 
-void ScriptHandler::receive(const system::TextFileUpdated& event) {
+void ScriptSystem::receive(const system::TextFileUpdated& event) {
     LOG_DEBUG << "Text file (id: " << event.id << ") updated";
     if (containedScripts_.contains(event.id)) {
         updatedScripts_.insert(event.id);
     }
 }
 
-void ScriptHandler::onKeyDown(const char* str, ecs::Entity* entity) {
+void ScriptSystem::onKeyDown(const char* str, ecs::Entity* entity) {
     auto callback = entity->component<component::Script>()->vm.method("main", "onKeyDown", "call(_)");
     callback(str);
 }
 
-void ScriptHandler::onKeyPressed(const char* str, ecs::Entity* entity) {
+void ScriptSystem::onKeyPressed(const char* str, ecs::Entity* entity) {
     auto callback = entity->component<component::Script>()->vm.method("main", "onKeyPressed", "call(_)");
     callback(str);
 }
 
-void ScriptHandler::onKeyUp(const char* str, ecs::Entity* entity) {
+void ScriptSystem::onKeyUp(const char* str, ecs::Entity* entity) {
     auto callback = entity->component<component::Script>()->vm.method("main", "onKeyUp", "call(_)");
     callback(str);
 }
 
-void ScriptHandler::onMouseDown(const char* str, ecs::Entity* entity) {
+void ScriptSystem::onMouseDown(const char* str, ecs::Entity* entity) {
     auto callback = entity->component<component::Script>()->vm.method("main", "onMouseDown", "call(_)");
     callback(str);
 }
 
-void ScriptHandler::onMousePressed(const char* str, ecs::Entity* entity) {
+void ScriptSystem::onMousePressed(const char* str, ecs::Entity* entity) {
     auto callback = entity->component<component::Script>()->vm.method("main", "onMousePressed", "call(_)");
     callback(str);
 }
 
-void ScriptHandler::onMouseUp(const char* str, ecs::Entity* entity) {
+void ScriptSystem::onMouseUp(const char* str, ecs::Entity* entity) {
     auto callback = entity->component<component::Script>()->vm.method("main", "onMouseUp", "call(_)");
     callback(str);
 }
 
-void ScriptHandler::listenToKeyDown(std::string str, ecs::Entity* entity) {
+void ScriptSystem::listenToKeyDown(std::string str, ecs::Entity* entity) {
     keyboardManager_.registerKeyDownScriptCallback(str, entity);
 }
 
-void ScriptHandler::listenToKeyPressed(std::string str, ecs::Entity* entity) {
+void ScriptSystem::listenToKeyPressed(std::string str, ecs::Entity* entity) {
     keyboardManager_.registerKeyPressedScriptCallback(str, entity);
 }
 
-void ScriptHandler::listenToKeyUp(std::string str, ecs::Entity* entity) {
+void ScriptSystem::listenToKeyUp(std::string str, ecs::Entity* entity) {
     keyboardManager_.registerKeyUpScriptCallback(str, entity);
 }
 
-void ScriptHandler::listenToMouseDown(std::string str, ecs::Entity* entity) {
+void ScriptSystem::listenToMouseDown(std::string str, ecs::Entity* entity) {
     mouseManager_.registerMouseDownScriptCallback(str, entity);
 }
 
-void ScriptHandler::listenToMousePressed(std::string str, ecs::Entity* entity) {
+void ScriptSystem::listenToMousePressed(std::string str, ecs::Entity* entity) {
     mouseManager_.registerMousePressedScriptCallback(str, entity);
 }
 
-void ScriptHandler::listenToMouseUp(std::string str, ecs::Entity* entity) {
+void ScriptSystem::listenToMouseUp(std::string str, ecs::Entity* entity) {
     mouseManager_.registerMouseUpScriptCallback(str, entity);
 }
 

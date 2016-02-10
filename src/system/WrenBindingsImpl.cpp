@@ -2,7 +2,7 @@
 #include "app/MouseEvents.h"
 #include "component/Include.h"
 #include "math/Vector.h"
-#include "system/ScriptHandler.h"
+#include "system/ScriptSystem.h"
 #include "system/WrenBindingsImpl.h"
 #include "ecs/Include.h"
 #include "utils/Locator.h"
@@ -151,32 +151,32 @@ void entityCount(WrenVM* vm) {
 
 void listenToKeyDown(WrenVM* vm) {
     ecs::Entity* entity = (ecs::Entity*)wrenGetSlotForeign(vm, 1);
-    Locator<system::ScriptHandler>::get()->listenToKeyDown(wrenGetSlotString(vm, 2), entity);
+    Locator<system::ScriptSystem>::get()->listenToKeyDown(wrenGetSlotString(vm, 2), entity);
 }
 
 void listenToKeyPressed(WrenVM* vm) {
     ecs::Entity* entity = (ecs::Entity*)wrenGetSlotForeign(vm, 1);
-    Locator<system::ScriptHandler>::get()->listenToKeyPressed(wrenGetSlotString(vm, 2), entity);
+    Locator<system::ScriptSystem>::get()->listenToKeyPressed(wrenGetSlotString(vm, 2), entity);
 }
 
 void listenToKeyUp(WrenVM* vm) {
     ecs::Entity* entity = (ecs::Entity*)wrenGetSlotForeign(vm, 1);
-    Locator<system::ScriptHandler>::get()->listenToKeyUp(wrenGetSlotString(vm, 2), entity);
+    Locator<system::ScriptSystem>::get()->listenToKeyUp(wrenGetSlotString(vm, 2), entity);
 }
 
 void listenToMouseDown(WrenVM* vm) {
     ecs::Entity* entity = (ecs::Entity*)wrenGetSlotForeign(vm, 1);
-    Locator<system::ScriptHandler>::get()->listenToKeyDown(wrenGetSlotString(vm, 2), entity);
+    Locator<system::ScriptSystem>::get()->listenToKeyDown(wrenGetSlotString(vm, 2), entity);
 }
 
 void listenToMousePressed(WrenVM* vm) {
     ecs::Entity* entity = (ecs::Entity*)wrenGetSlotForeign(vm, 1);
-    Locator<system::ScriptHandler>::get()->listenToMousePressed(wrenGetSlotString(vm, 2), entity);
+    Locator<system::ScriptSystem>::get()->listenToMousePressed(wrenGetSlotString(vm, 2), entity);
 }
 
 void listenToMouseUp(WrenVM* vm) {
     ecs::Entity* entity = (ecs::Entity*)wrenGetSlotForeign(vm, 1);
-    Locator<system::ScriptHandler>::get()->listenToMouseUp(wrenGetSlotString(vm, 2), entity);
+    Locator<system::ScriptSystem>::get()->listenToMouseUp(wrenGetSlotString(vm, 2), entity);
 }
 
 void mouseX(WrenVM* vm) {

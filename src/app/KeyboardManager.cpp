@@ -1,6 +1,6 @@
 #include "app/KeyboardManager.h"
 #include "ecs/Include.h"
-#include "system/ScriptHandler.h"
+#include "system/ScriptSystem.h"
 #include "utils/StringBimap.h"
 #include "utils/Log.h"
 #include <cstdint>
@@ -175,7 +175,7 @@ void KeyboardManager::registerKeyUpCallback(Keycode code, std::function<void()> 
     addToMap_(keyUpCallbacks_, code, callable);
 }
 
-void KeyboardManager::setScriptHandler(system::ScriptHandler& system) {
+void KeyboardManager::setScriptHandler(system::ScriptSystem& system) {
     scriptSystem_ = &system;
 }
 
