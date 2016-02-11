@@ -5,6 +5,7 @@
 #include "utils/File.h"
 #include "utils/Log.h"
 #include "utils/Locator.h"
+#include "utils/StringId.h"
 #include "Wrenly.h"
 #include "json11/json11.hpp"
 #include <SDL_timer.h>
@@ -16,11 +17,15 @@ uint32_t targetDeltaTime{ 16u };
 inline float SDLTimeToPgTime(uint32_t dt) {
     return float(dt) / 1000.f;
 }
+
 }
 
 namespace pg {
 
 void Application::run() {
+    StringId::Database stringDb{};
+    StringId::setDatabase(&stringDb);
+
     initialize_();
 
     running_ = true;
