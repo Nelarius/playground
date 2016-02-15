@@ -75,7 +75,7 @@ workspace "playground"
         language "C++"
         targetdir "bin"
         links { "wrenly", "filesentry" }
-        files { "src/**.cpp", "src/**.h", "extern/json11/json11.cpp", "extern/imgui/**.cpp", "builtin/**.wren", "builtin/**.glsl" }
+        files { "src/**.cpp", "src/**.h", "extern/json11/json11.cpp", "extern/imgui/**.cpp", "builtin/**.wren", "builtin/**.glsl", "src/config.json" }
         includedirs {
             "src", "extern/wrenly/src", "extern/filesentry/include",
             "extern", "extern/assimp/include", "extern/SDL/include",
@@ -89,6 +89,9 @@ workspace "playground"
             links { "wren_static" }
             libdirs { "extern/wren/lib/Release" }
         project "engine"
+            postbuildcommands {
+                "{COPY} ../../src/config.json ../../bin/"
+            }
         --This should be enabled once all VC warnings get fixed:
         --flags { "FatalWarnings" } // This should be enabled once all VC warnings get fixed
         --[[

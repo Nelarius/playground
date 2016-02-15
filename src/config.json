@@ -2,9 +2,9 @@
 {
     "frameRate": 60.0,
     "window": {
-        "width": 1200,
-        "height": 800,
-        "name": "Clock example",
+        "width": 1600,
+        "height": 1000,
+        "name": "Playground engine",
         "opengl": {
             "major": 3,
             "minor": 1,

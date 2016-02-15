@@ -7,4 +7,4 @@
 	url = https://github.com/nelarius/filesentry
 [submodule "extern/wren"]
 	path = extern/wren
-	url = https://github.com/munificent/wren
+	url = https://github.com/Nelarius/wren
