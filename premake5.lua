@@ -105,8 +105,8 @@ workspace "playground"
             }
             links { "SDL2", "assimp", "glew32", "opengl32"  }
             libdirs { 
-                "extern/SDL/VisualC/Win32/Release", "extern/assimp/build/code/Release", 
-                "extern/glew-1.13.0/lib/Release/Win32"
+                "extern/SDL/lib", "extern/assimp/lib",
+                "extern/glew-1.13.0/lib"
             }
             postbuildcommands {
                 "copy ..\\..\\src\\config.json ..\\..\\bin",
