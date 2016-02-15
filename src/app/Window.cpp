@@ -1,5 +1,6 @@
 #include "app/Window.h"
 #include "utils/Assert.h"
+#include "utils/Log.h"
 #include <GL/glew.h>
 #include <SDL.h>
 #include <SDL_opengl.h>
@@ -8,6 +9,76 @@
 
 using pg::Window;
 using pg::WindowSettings;
+
+#ifdef DEBUG
+void GLAPIENTRY debugCallback(GLenum source,
+    GLenum type,
+    GLuint id,
+    GLenum severity,
+    GLsizei length,
+    const GLchar* message,
+    const void* userParam) {
+    std::string debugTypeStr{};
+    switch (type) {
+    case GL_DEBUG_TYPE_ERROR:
+        debugTypeStr = "GL_DEBUG_TYPE_ERROR";
+        break;
+    case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR:
+        debugTypeStr = "GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR";
+        break;
+    case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR:
+        debugTypeStr = "GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR";
+        break;
+    case GL_DEBUG_TYPE_PORTABILITY:
+        debugTypeStr = "GL_DEBUG_TYPE_PORTABILITY";
+        break;
+    case GL_DEBUG_TYPE_PERFORMANCE:
+        debugTypeStr = "GL_DEBUG_TYPE_PERFORMANCE";
+        break;
+    case GL_DEBUG_TYPE_OTHER:
+        debugTypeStr = "GL_DEBUG_TYPE_OTHER";
+        break;
+    case GL_DEBUG_TYPE_MARKER:
+        debugTypeStr = "GL_DEBUG_TYPE_MARKER";
+        break;
+    case GL_DEBUG_TYPE_PUSH_GROUP:
+        debugTypeStr = "GL_DEBUG_TYPE_PUSH_GROUP";
+        break;
+    case GL_DEBUG_TYPE_POP_GROUP:
+        debugTypeStr = "GL_DEBUG_TYPE_POP_GROUP";
+        break;
+    }
+    std::string debugSourceStr{};
+    switch (source) {
+    case GL_DEBUG_SOURCE_API:
+        debugSourceStr = "GL_DEBUG_SOURCE_API";
+        break;
+    case GL_DEBUG_SOURCE_WINDOW_SYSTEM:
+        debugSourceStr = "GL_DEBUG_SOURCE_WINDOW_SYSTEM";
+        break;
+    case GL_DEBUG_SOURCE_SHADER_COMPILER:
+        debugSourceStr = "GL_DEBUG_SOURCE_SHADER_COMPILER";
+        break;
+    case GL_DEBUG_SOURCE_THIRD_PARTY:
+        debugSourceStr = "GL_DEBUG_SOURCE_THIRD_PARTY";
+        break;
+    case GL_DEBUG_SOURCE_APPLICATION:
+        debugSourceStr = "GL_DEBUG_SOURCE_APPLICATION";
+        break;
+    case GL_DEBUG_SOURCE_OTHER:
+        debugSourceStr = "GL_DEBUG_SOURCE_OTHER";
+        break;
+    }
+
+    switch (severity) {
+    case GL_DEBUG_SEVERITY_HIGH:
+    case GL_DEBUG_SEVERITY_MEDIUM:
+    case GL_DEBUG_SEVERITY_LOW:
+        LOG_DEBUG << debugSourceStr << ", " << debugTypeStr << ": " << message;
+        break;
+    }
+}
+#endif
 
 Window::Window()
     : window_(nullptr),
@@ -36,6 +107,9 @@ void Window::initialize_() {
 void Window::initializeSDL_() {
     SDL_Init(SDL_INIT_EVERYTHING);
 
+#ifdef DEBUG
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_DEBUG_FLAG);
+#endif
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, glMajor_);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, glMinor_);
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
