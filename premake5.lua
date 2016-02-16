@@ -155,7 +155,7 @@ workspace "playground"
         filter "configurations:Debug"
             debugdir "bin"
             links { "UnitTest++" }
-            libdirs { "extern/unittest++/build/Debug" }
+            libdirs { "extern/unittest++/lib/Debug" }
         filter "configurations:Release"
             links { "UnitTest++" }
-            libdirs { "extern/unittest++/build/Release" }
+            libdirs { "extern/unittest++/lib/Release" }
