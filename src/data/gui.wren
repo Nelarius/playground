@@ -3,16 +3,27 @@ import "builtin/array" for NumberArray
 import "builtin/ringbuffer" for NumberRingBuffer
 import "builtin/math" for Math
 import "builtin/vector" for Vec2
+import "builtin/mouse" for Mouse
 import "builtin/entity" for EntityManager
+import "builtin/systems" for Pick3d
 import "builtin/utils" for ResourceHandle
+import "builtin/event" for EventManager
 
 var activate = Fn.new {
+    EventManager.listenToMouseUp(entity, "Left")
     var cubeFile = ResourceHandle.new("data/cube.obj")
     System.print("cubeFile = %(cubeFile)")
 }
 
 var deactivate = Fn.new {
     //
+}
+
+var onMouseUp = Fn.new {
+    var ent = Pick3d.castCameraRay(Mouse.x, Mouse.y)
+    if (ent.isValid()) {
+        System.print("%(ent)")
+    }
 }
 
 var pi = 3.1415927

@@ -44,6 +44,8 @@ void GameState::activate() {
     // this is a dirty hack to get ScriptSystem bound to Wren
     // I really need a way to set the bytes of a foreign object in a better way....
     Locator<system::ScriptSystem>::set(systems_.system<system::ScriptSystem>().get());
+    Locator<system::PickingSystem>::set(systems_.system<system::PickingSystem>().get());
+    Locator<system::RenderSystem>::set(systems_.system<system::RenderSystem>().get());
 
     // the full capacity of the systems are used in parsing, so the systems must be configured and ready to go!
     WorldIO world(context_);

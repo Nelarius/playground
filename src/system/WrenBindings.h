@@ -15,6 +15,7 @@ void bindQuaternionModule();
 void bindEntityModule();
 void bindComponentModule();
 void bindUtilsModule();
+void bindSystemsModule();
 
 }
 }

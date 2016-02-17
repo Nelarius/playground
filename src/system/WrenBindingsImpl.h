@@ -98,5 +98,8 @@ void hadamard4f(WrenVM* vm);
 void plus4f(WrenVM* vm);
 void minus4f(WrenVM* vm);
 
+// systems
+void castCameraRay(WrenVM* vm);
+
 }
 }

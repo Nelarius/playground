@@ -244,5 +244,13 @@ void bindUtilsModule() {
     .endModule();
 }
 
+void bindSystemsModule() {
+    wrenly::beginModule("builtin/systems")
+        .beginClass("Pick3d")
+            .bindCFunction(true, "castCameraRay(_,_)", wren::castCameraRay)
+        .endClass()
+    .endModule();
+}
+
 }   // wren
 }   // pg

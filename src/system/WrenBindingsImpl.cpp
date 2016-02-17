@@ -6,6 +6,7 @@
 #include "manager/ShaderManager.h"
 #include "opengl/VertexArrayObjectFactory.h"
 #include "system/ScriptSystem.h"
+#include "system/PickingSystem.h"
 #include "system/WrenBindingsImpl.h"
 #include "ecs/Include.h"
 #include "utils/Locator.h"
@@ -42,6 +43,12 @@ inline void returnVec4fValue(WrenVM* vm, const pg::math::Vec4f& result) {
     wrenGetVariable(vm, "builtin/vector", "Vec4", 0);
     void* data = wrenSetSlotNewForeign(vm, 0, 0, sizeof(pg::math::Vec4f));
     memcpy(data, (void*)&result, sizeof(pg::math::Vec4f));
+}
+
+inline void returnEntityValue(WrenVM* vm, pg::ecs::Entity& result) {
+    wrenGetVariable(vm, "builtin/entity", "Entity", 0);
+    void* data = wrenSetSlotNewForeign(vm, 0, 0, sizeof(pg::ecs::Entity));
+    memcpy(data, (void*)&result, sizeof(pg::ecs::Entity));
 }
 
 }
@@ -532,6 +539,26 @@ void minus4f(WrenVM* vm) {
     const math::Vec4f* rhs = (const math::Vec4f*)wrenGetSlotForeign(vm, 1);
     math::Vec4f res = lhs->operator-(*rhs);
     returnVec4fValue(vm, res);
+}
+
+/***
+*       ____         __
+*      / __/_ _____ / /____ __ _  ___
+*     _\ \/ // (_-</ __/ -_)  ' \(_-<
+*    /___/\_, /___/\__/\__/_/_/_/___/
+*        /___/
+*/
+
+// Pick3d
+void castCameraRay(WrenVM* vm) {
+    ecs::EntityManager* entities = Locator<ecs::EntityManager>::get();
+    ecs::EventManager* events = Locator<ecs::EventManager>::get();
+    system::PickingSystem* pick3d = Locator<system::PickingSystem>::get();
+    int x = int(wrenGetSlotDouble(vm, 1));
+    int y = int(wrenGetSlotDouble(vm, 2));
+    ecs::Entity res = pick3d->rayCast(*entities, *events, x, y);
+    wrenGetVariable(vm, "builtin/entity", "Entity", 0);
+    //returnEntityValue(vm, res);
 }
 
 }   // wren

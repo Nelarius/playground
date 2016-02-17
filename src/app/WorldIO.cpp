@@ -35,6 +35,7 @@ void WorldIO::read(
     wren::bindRingBufferModule();
     wren::bindImguiModule();
     wren::bindUtilsModule();
+    wren::bindSystemsModule();
 
     auto json = pg::fileToString("data/scene.json");
     std::string error{ "" };
