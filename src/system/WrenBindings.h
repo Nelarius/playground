@@ -4,6 +4,7 @@
 
 namespace pg {
 namespace wren {
+
 // this namespace generates the Wren scripting language interface
 void bindMathModule();
 void bindImguiModule();
@@ -13,5 +14,7 @@ void bindRingBufferModule();
 void bindQuaternionModule();
 void bindEntityModule();
 void bindComponentModule();
+void bindUtilsModule();
+
 }
 }

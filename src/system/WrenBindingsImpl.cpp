@@ -2,6 +2,9 @@
 #include "app/MouseEvents.h"
 #include "component/Include.h"
 #include "math/Vector.h"
+#include "manager/MeshManager.h"
+#include "manager/ShaderManager.h"
+#include "opengl/VertexArrayObjectFactory.h"
 #include "system/ScriptSystem.h"
 #include "system/WrenBindingsImpl.h"
 #include "ecs/Include.h"
@@ -120,6 +123,43 @@ void hasPointLight(WrenVM* vm) {
     wrenSetSlotBool(vm, 0, e->has<component::PointLight>());
 }
 
+void assignTransform(WrenVM* vm) {
+    ecs::Entity* e = (ecs::Entity*)wrenGetSlotForeign(vm, 0);
+    const component::Transform* t = (const component::Transform*)wrenGetSlotForeign(vm, 1);
+    e->assign<component::Transform>(t->position, t->rotation, t->scale);
+}
+
+void assignRenderable(WrenVM* vm) {
+    ecs::Entity* e = (ecs::Entity*)wrenGetSlotForeign(vm, 0);
+    const WrenRenderable* r = (const WrenRenderable*)wrenGetSlotForeign(vm, 1);
+
+    pg::opengl::BufferObject* buffer = Locator<pg::MeshManager>::get()->get(r->model.cString());
+    pg::opengl::Program* shader = Locator<pg::ShaderManager>::get()->get(r->shader.cString());
+
+    std::unordered_map<std::string, float> uniforms{};
+    uniforms.emplace("specColor_r", r->specularColor.r);
+    uniforms.emplace("specColor_g", r->specularColor.g);
+    uniforms.emplace("specColor_b", r->specularColor.b);
+    uniforms.emplace("ambientColor_r", r->ambientColor.r);
+    uniforms.emplace("ambientColor_g", r->ambientColor.g);
+    uniforms.emplace("ambientColor_b", r->ambientColor.b);
+    uniforms.emplace("baseColor_r", r->baseColor.r);
+    uniforms.emplace("baseColor_g", r->baseColor.g);
+    uniforms.emplace("baseColor_b", r->baseColor.b);
+    system::Material mat;
+    mat.type = system::MaterialType::Specular;
+    mat.uniforms = uniforms;
+    opengl::VertexArrayObjectFactory factory{ buffer, shader };
+    factory.addStandardAttribute(opengl::VertexAttribute::Vertex);
+    factory.addStandardAttribute(opengl::VertexAttribute::Normal);
+    auto vao = factory.getVao();
+
+    e->assign<component::Renderable>(buffer, shader, vao, mat);
+
+    const auto& bb = Locator<MeshManager>::get()->getBoundingBox(r->model.cString());
+    e->assign<math::AABox>(bb.min, bb.max);
+}
+
 /***
 *       ____     __  _ __       __  ___
 *      / __/__  / /_(_) /___ __/  |/  /__ ____  ___ ____ ____ ____
@@ -129,8 +169,6 @@ void hasPointLight(WrenVM* vm) {
 */
 
 void createEntity(WrenVM* vm) {
-    //ecs::Entity entity = Locator<ecs::EntityManager>::get()->create();
-    //wrenSetSlotDouble(vm, 0, double(entity.id().index()));
     ecs::Entity entity = Locator<ecs::EntityManager>::get()->create();
     wrenGetVariable(vm, "builtin/entity", "Entity", 0);
     void* data = wrenSetSlotNewForeign(vm, 0, 0, sizeof(ecs::Entity));

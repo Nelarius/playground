@@ -1,11 +1,21 @@
 #pragma once
 
+#include "utils/StringId.h"
 extern "C" {
 #include <wren.h>
 }
 
 namespace pg {
 namespace wren {
+
+struct WrenRenderable {
+    StringId model;
+    StringId shader;
+    float shininess;
+    math::Vec3f baseColor;
+    math::Vec3f ambientColor;
+    math::Vec3f specularColor;
+};
 
 // NumberArray
 void arrayPushBack(WrenVM*);
@@ -15,11 +25,13 @@ void arrayAt(WrenVM*);
 void set(WrenVM*);
 void entityIndex(WrenVM*);
 void entityVersion(WrenVM*);
-void setTransform(WrenVM*);
 void hasTransform(WrenVM*);
 void hasRenderable(WrenVM*);
 void hasCamera(WrenVM*);
 void hasPointLight(WrenVM*);
+void assignTransform(WrenVM*);
+void assignRenderable(WrenVM*);
+void setTransform(WrenVM*);
 void createEntity(WrenVM*);
 void entityCount(WrenVM*);
 void listenToKeyDown(WrenVM*);

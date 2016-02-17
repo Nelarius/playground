@@ -34,6 +34,7 @@ void WorldIO::read(
     wren::bindNumberArrayModule();
     wren::bindRingBufferModule();
     wren::bindImguiModule();
+    wren::bindUtilsModule();
 
     auto json = pg::fileToString("data/scene.json");
     std::string error{ "" };
@@ -137,7 +138,7 @@ void WorldIO::read(
                 "import \"builtin/entity\" for Entity\n"
                 "var entity = Entity.new()\n"
                 );
-            wrenly::Method set = vm.method("main", "entity", "set(_)");
+            wrenly::Method set = vm.method("main", "entity", "set_(_)");
             set(int(entity.id().index()));
             wrenly::Result res = vm.executeModule(mod);
             if (res == wrenly::Result::Success) {

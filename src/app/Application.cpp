@@ -77,9 +77,11 @@ void Application::run() {
 
 void Application::initialize_() {
     /*
-     * Add managers to the locators
+     * Add the resource managers to the locators.
+     * This is so that we can access the managers from C-style free functions.
      **/
     Locator<MeshManager>::set(&context_.meshManager);
+    Locator<ShaderManager>::set(&context_.shaderManager);
     Locator<TextFileManager>::set(&context_.textFileManager);
 
     /*

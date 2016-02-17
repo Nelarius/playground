@@ -16,9 +16,8 @@ struct Renderable {
     opengl::BufferObject* vbo;
     opengl::Program* shader;
     opengl::VertexArrayObject vao;
-    //std::unordered_map<std::string, float>  uniforms;
     system::Material material;
 };
 
-}   //namespace component
-}   //namespace ce
+}
+}

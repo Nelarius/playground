@@ -5,6 +5,7 @@
 #include "component/Include.h"
 #include "imgui/imgui.h"
 #include "utils/RingBuffer.h"
+#include "utils/StringId.h"
 #include "utils/Random.h"
 #include "system/WrenBindingsImpl.h"
 #include <cmath>
@@ -190,7 +191,9 @@ void bindEntityModule() {
             .bindCFunction(false, "hasRenderable()", wren::hasRenderable)
             .bindCFunction(false, "hasCamera()", wren::hasCamera)
             .bindCFunction(false, "hasPointLight()", wren::hasPointLight)
-            .bindCFunction(false, "set(_)", wren::set)
+            .bindCFunction(false, "assignTransform(_)", wren::assignTransform)
+            .bindCFunction(false, "assignRenderable(_)", wren::assignRenderable)
+            .bindCFunction(false, "set_(_)", wren::set)
             .bindCFunction(false, "index", wren::entityIndex)
             .bindCFunction(false, "version", wren::entityVersion)
             .bindCFunction(false, "transform=(_)", wren::setTransform)
@@ -224,7 +227,21 @@ void bindComponentModule() {
     wrenly::beginModule("builtin/component")
         .bindClass<component::Transform, math::Vec3f, math::Quatf, math::Vec3f>("Transform")
         .endClass()
+        .bindClass<WrenRenderable, StringId, StringId>("Renderable")
+            .bindSetter<decltype(WrenRenderable::shininess), &WrenRenderable::shininess>(false, "shininess=(_)")
+            .bindSetter<decltype(WrenRenderable::ambientColor), &WrenRenderable::ambientColor>(false, "ambientColor=(_)")
+            .bindSetter<decltype(WrenRenderable::ambientColor), &WrenRenderable::ambientColor>(false, "ambientColor=(_)")
+            .bindSetter<decltype(WrenRenderable::specularColor), &WrenRenderable::specularColor>(false, "specularColor=(_)")
+        .endClass()
    .endModule();
+}
+
+void bindUtilsModule() {
+    wrenly::beginModule("builtin/utils")
+        .bindClass<StringId, const char*>("ResourceHandle")
+            .bindMethod<decltype(&StringId::cString), &StringId::cString>(false, "toString")
+        .endClass()
+    .endModule();
 }
 
 }   // wren

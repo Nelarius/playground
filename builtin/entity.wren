@@ -1,19 +1,25 @@
 
 foreign class Entity {
     construct new() {}
+
     // this method is meant to be called externally
-    foreign set( id )
-    foreign transform=( t )
+    foreign set_( id )
+
+    foreign index
+    foreign version
 
     foreign isValid()
     foreign destroy()
     foreign invalidate()
-    foreign index
-    foreign version
+
     foreign hasTransform()
     foreign hasRenderable()
     foreign hasCamera()
     foreign hasPointLight()
+    foreign transform=( t )
+
+    foreign assignTransform( t )
+    foreign assignRenderable( r )
 }
 
 var createEntity = Fn.new {
