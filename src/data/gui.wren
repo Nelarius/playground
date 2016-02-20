@@ -10,7 +10,7 @@ import "builtin/utils" for ResourceHandle
 import "builtin/event" for EventManager
 
 var activate = Fn.new {
-    EventManager.listenToMouseUp(entity, "Left")
+    EventManager.listenToMouseDown(entity, "Left")
     var cubeFile = ResourceHandle.new("data/cube.obj")
     System.print("cubeFile = %(cubeFile)")
 }
@@ -19,10 +19,11 @@ var deactivate = Fn.new {
     //
 }
 
-var onMouseUp = Fn.new {
+var onMouseDown = Fn.new { |button|
     var ent = Pick3d.castCameraRay(Mouse.x, Mouse.y)
-    if (ent.isValid()) {
-        System.print("%(ent)")
+    System.print("HIT = %(ent.isValid())")
+    if ( ent.isValid()) {
+        System.print("entity.id = %(ent.index)")
     }
 }
 
@@ -46,9 +47,9 @@ var update = Fn.new { | dt |
         Imgui.treePop()
     }
     var node2 = Fn.new {
-        //Imgui.plotArray( "asdf", a, 10, 0, graphSize )
         Imgui.plotRingBuffer( "noise", r, graphSize )
     }
     Imgui.treeNode( "graph node", node2 )
     Imgui.end()
 }
+
