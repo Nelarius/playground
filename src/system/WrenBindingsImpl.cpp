@@ -558,7 +558,7 @@ void castCameraRay(WrenVM* vm) {
     int y = int(wrenGetSlotDouble(vm, 2));
     ecs::Entity res = pick3d->rayCast(*entities, *events, x, y);
     wrenGetVariable(vm, "builtin/entity", "Entity", 0);
-    //returnEntityValue(vm, res);
+    returnEntityValue(vm, res);
 }
 
 }   // wren
