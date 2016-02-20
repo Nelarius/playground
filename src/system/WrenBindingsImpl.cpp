@@ -204,7 +204,7 @@ void listenToKeyUp(WrenVM* vm) {
 
 void listenToMouseDown(WrenVM* vm) {
     ecs::Entity* entity = (ecs::Entity*)wrenGetSlotForeign(vm, 1);
-    Locator<system::ScriptSystem>::get()->listenToKeyDown(wrenGetSlotString(vm, 2), entity);
+    Locator<system::ScriptSystem>::get()->listenToMouseDown(wrenGetSlotString(vm, 2), entity);
 }
 
 void listenToMousePressed(WrenVM* vm) {
