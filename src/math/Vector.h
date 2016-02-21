@@ -35,6 +35,11 @@ struct Vector2 {
     Vector2& operator=(Vector2&&) = default;
     ~Vector2() = default;
 
+    template<typename D>
+    Vector2<D> cast() const {
+        return Vector2<D>{ D(x), D(y) };
+    }
+
     T norm() const {
         return sqrt(x*x + y*y);
     }
@@ -121,6 +126,11 @@ struct Vector3 {
     Vector3& operator=(const Vector3&) = default;
     Vector3& operator=(Vector3&&) = default;
     ~Vector3() = default;
+
+    template<typename D>
+    Vector3<D> cast() const {
+        return Vector3<D>{ D(x), D(y), D(z) };
+    }
 
     T norm() const {
         return sqrt(x*x + y*y + z*z);
@@ -222,6 +232,11 @@ struct Vector4 {
     Vector4& operator=(Vector4&&) = default;
     ~Vector4() = default;
 
+    template<typename D>
+    Vector4<D> cast() const {
+        return Vector4<D>{ D(x), D(y), D(z), D(w) };
+    }
+
     operator Vector3<T>() const {
         return Vector3<T> { data[0], data[1], data[2] };
     }
@@ -291,6 +306,9 @@ Vector4<T> operator*(T scale, const Vector4<T>& rhs) {
 using Vec2f = Vector2<float>;
 using Vec3f = Vector3<float>;
 using Vec4f = Vector4<float>;
+using Vec2d = Vector2<double>;
+using Vec3d = Vector3<double>;
+using Vec4d = Vector4<double>;
 using Vec2i = Vector2<int>;
 using Vec3i = Vector3<int>;
 using Vec4i = Vector4<int>;

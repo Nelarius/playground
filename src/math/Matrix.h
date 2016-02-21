@@ -238,10 +238,10 @@ struct Matrix4 {
     static Matrix4<T> rotation(const Quaternion<T>& q) {
         T s = T(2.0) / q.norm();
         return Matrix4<T> {
-            1 - s*(q.v.y*q.v.y + q.v.z*q.v.z), s*(q.v.x*q.v.y - q.w*q.v.z), s*(q.v.x*q.v.z + q.w*q.v.y), T(0.0),
-                s*(q.v.x*q.v.y + q.w*q.v.z), 1 - s*(q.v.x*q.v.x + q.v.z*q.v.z), s*(q.v.y*q.v.z - q.w*q.v.x), T(0.0),
-                s*(q.v.x*q.v.z - q.w*q.v.y), s*(q.v.y*q.v.z + q.w*q.v.x), 1 - s*(q.v.x*q.v.x + q.v.y*q.v.y), T(0.0),
-                T(0.0), T(0.0), T(0.0), T(1.0)
+            1 - s*(q.v.y*q.v.y + q.v.z*q.v.z),  s*(q.v.x*q.v.y - q.w*q.v.z),        s*(q.v.x*q.v.z + q.w*q.v.y),        T(0.0),
+            s*(q.v.x*q.v.y + q.w*q.v.z),        1 - s*(q.v.x*q.v.x + q.v.z*q.v.z),  s*(q.v.y*q.v.z - q.w*q.v.x),        T(0.0),
+            s*(q.v.x*q.v.z - q.w*q.v.y),        s*(q.v.y*q.v.z + q.w*q.v.x),        1 - s*(q.v.x*q.v.x + q.v.y*q.v.y),  T(0.0),
+            T(0.0),                             T(0.0),                             T(0.0),                             T(1.0)
         };
     }
 
@@ -394,6 +394,9 @@ Matrix4<T> operator*(T val, const Matrix4<T>& m) {
 using Matrix2f = Matrix2<float>;
 using Matrix3f = Matrix3<float>;
 using Matrix4f = Matrix4<float>;
+using Matrix2d = Matrix2<double>;
+using Matrix3d = Matrix3<double>;
+using Matrix4d = Matrix4<double>;
 
 }   // math
 }   // pg

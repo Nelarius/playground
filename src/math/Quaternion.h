@@ -36,6 +36,11 @@ public:
         w(w)
     {}
 
+    template<typename D>
+    Quaternion<D> cast() const {
+        return Quaternion<D>{ D(v.x), D(v.y), D(v.z), D(w) };
+    }
+
     operator Vector4<T>() const {
         return Vector4<T> {v.x, v.y, v.z, w};
     }
@@ -105,6 +110,7 @@ Quaternion<T> operator*(T lhs, const Quaternion<T>& rhs) {
 }
 
 using Quatf = Quaternion<float>;
+using Quatd = Quaternion<double>;
 
 }   // math
 }   // pg

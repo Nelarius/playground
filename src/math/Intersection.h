@@ -10,26 +10,27 @@
 namespace pg {
 namespace math {
 
-inline bool rayIntersectsAABox(Ray& ray, const AABox& aabb, const Vec3f& aabbPos, const Quatf& aabbQuat, const Vec3f& aabbScale) {
+inline bool rayIntersectsAABox(int id, Ray& ray, const AABox& aabb, const Vec3f& aabbPos, const Quatf& aabbQuat, const Vec3f& aabbScale) {
+    // for calculating the transformed coordinate system
+
+    float n = 2.f / aabbQuat.norm();
     // the transform matrix's scale numbers have to be one!
-    float tmin = 0.0f;
+    float tmin = -std::numeric_limits<float>::max();
     float tmax = std::numeric_limits<float>::max();
 
     const float Epsilon{ 0.001f };
-    Vec3f delta = aabbPos - ray.origin;
+    Vec3f delta = (aabbPos - ray.origin).cast<float>();
 
-    Vec3f min = aabbScale.hadamard(aabb.min);
-    Vec3f max = aabbScale.hadamard(aabb.max);
+    Vec3f min = aabbScale.hadamard(aabb.min).cast<float>();
+    Vec3f max = aabbScale.hadamard(aabb.max).cast<float>();
     const Quatf& q = aabbQuat;
-    const Vec3f& s = aabbScale;
     // test intersection with the 2 planes perpendicular to the OBB's x axis
     {
         Vec3f xaxis{
-            1.f - 2.f*(q.v.y*q.v.y + q.v.z*q.v.z),
-            2.f*(q.v.x*q.v.y + q.w*q.v.z),
-            2.f*(q.v.x*q.v.z - q.w*q.v.y)
+            1.f - n*(q.v.y*q.v.y + q.v.z*q.v.z),
+            n*(q.v.x*q.v.y + q.w*q.v.z),
+            n*(q.v.x*q.v.z - q.w*q.v.y)
         };
-        xaxis.normalize();
         float e = xaxis.dot(delta);
         float f = ray.direction.dot(xaxis);
         float invF = 1.f / f;
@@ -58,7 +59,7 @@ inline bool rayIntersectsAABox(Ray& ray, const AABox& aabb, const Vec3f& aabbPos
         }
         else {
             // here, the ray is almost parallel to the planes
-            // here we check whether the ray is on the inside or outside of the face
+            // we check whether the ray is on the inside or outside of the two boundary planes
             if (-e - xaxis.x*min.x > 0.f || -e - xaxis.x * max.x < 0.f) {
                 return false;
             }
@@ -66,11 +67,10 @@ inline bool rayIntersectsAABox(Ray& ray, const AABox& aabb, const Vec3f& aabbPos
 
         {
             Vec3f yaxis{
-                2.f*(q.v.x*q.v.y - q.w*q.v.z),
-                1.f - 2.f*(q.v.x*q.v.x + q.v.z*q.v.z),
-                2.f*(q.v.y*q.v.z + q.w*q.v.x)
+                n*(q.v.x*q.v.y - q.w*q.v.z),
+                1.f - n*(q.v.x*q.v.x + q.v.z*q.v.z),
+                n*(q.v.y*q.v.z + q.w*q.v.x)
             };
-            yaxis.normalize();
             float e = yaxis.dot(delta);
             float f = ray.direction.dot(yaxis);
             float invF = 1.f / f;
@@ -101,11 +101,10 @@ inline bool rayIntersectsAABox(Ray& ray, const AABox& aabb, const Vec3f& aabbPos
 
         {
             Vec3f zaxis{
-                2.f*(q.v.x*q.v.z + q.w*q.v.y),
-                2.f*(q.v.y*q.v.z - q.w*q.v.x),
-                1.f - 2.f*(q.v.x*q.v.x + q.v.y*q.v.y)
+                n*(q.v.x*q.v.z + q.w*q.v.y),
+                n*(q.v.y*q.v.z - q.w*q.v.x),
+                1.f - n*(q.v.x*q.v.x + q.v.y*q.v.y)
             };
-            zaxis.normalize();
             float e = zaxis.dot(delta);
             float f = ray.direction.dot(zaxis);
             float invF = 1.f / f;
@@ -134,7 +133,7 @@ inline bool rayIntersectsAABox(Ray& ray, const AABox& aabb, const Vec3f& aabbPos
             }
         }
 
-        ray.t = tmin;
+        ray.t = float(tmin);
         return true;
     }
 }
