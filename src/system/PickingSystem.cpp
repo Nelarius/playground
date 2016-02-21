@@ -42,8 +42,8 @@ ecs::Entity PickingSystem::rayCast(ecs::EntityManager& entities, ecs::EventManag
     float near = cameraEntity_.component<component::Camera>()->nearPlane;
     float ntan = near * tan(halfFov);
     math::Vec3f pixelCoord{
-        ntan * (float(x) * 2.f / context_.window->width() - 1.f),
-        ntan * ar * (1.f - float(y) * 2.f / context_.window->height()),
+        ntan * ar * (float(x) * 2.f / context_.window->width() - 1.f),
+        ntan * (1.f - float(y) * 2.f / context_.window->height()),
         -near
     };
 

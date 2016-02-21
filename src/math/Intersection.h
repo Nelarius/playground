@@ -10,7 +10,7 @@
 namespace pg {
 namespace math {
 
-inline bool rayIntersectsAABox(int id, Ray& ray, const AABox& aabb, const Vec3f& aabbPos, const Quatf& aabbQuat, const Vec3f& aabbScale) {
+inline bool rayIntersectsAABox(Ray& ray, const AABox& aabb, const Vec3f& aabbPos, const Quatf& aabbQuat, const Vec3f& aabbScale) {
     // for calculating the transformed coordinate system
 
     float n = 2.f / aabbQuat.norm();
