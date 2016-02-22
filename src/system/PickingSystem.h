@@ -14,7 +14,7 @@ class EntityManager;
 
 namespace system {
 
-class PickingSystem : public ecs::System<PickingSystem>, public ecs::Receiver {
+class PickingSystem : public ecs::System, public ecs::Receiver {
 public:
     PickingSystem() = delete;
     explicit PickingSystem(Context& context);

@@ -7,7 +7,7 @@
 namespace pg {
 namespace system {
 
-class UiSystem : public ecs::System<UiSystem> {
+class UiSystem : public ecs::System {
 public:
     UiSystem() = delete;
     explicit UiSystem(Context& context);

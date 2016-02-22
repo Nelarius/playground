@@ -9,7 +9,7 @@ namespace pg {
 namespace system {
 
 UiSystem::UiSystem(Context& context)
-    : System<UiSystem>(),
+    : System(),
     display_(false)
 {}
 

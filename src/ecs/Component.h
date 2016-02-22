@@ -1,25 +1,30 @@
 
 #pragma once
 
+#include <type_traits>
 #include <cstdint>
 
 namespace pg {
 namespace ecs {
+namespace detail {
 
-class BaseComponent {
-protected:
-    static uint32_t familyCounter_;
-};
+inline uint32_t& componentId() {
+    static uint32_t id{ 0u };
+    return id;
+}
 
 template<typename T>
-class Component : public BaseComponent {
-public:
-    static uint32_t family() {
-        static uint32_t f{ familyCounter_++ };
-        return f;
-    }
-};
+uint32_t getComponentIdImpl() {
+    static uint32_t id = ++componentId();
+    return id;
+}
 
-}   // namespace ecs
-}   // namespace ce
+}   // detail
 
+template<typename C>
+uint32_t getComponentId() {
+    return detail::getComponentIdImpl<std::decay_t<C>>();
+}
+
+}
+}

@@ -6,6 +6,7 @@
 #include "SimpleSignal.h"
 #include "utils/Assert.h"
 #include "utils/Log.h"
+#include <type_traits>
 #include <unordered_map>    // faster key access than map, slower for iteration
 #include <vector>
 #include <cstdint>
@@ -16,20 +17,39 @@ using SignalContainer = pg::Container<EventSignal>;
 
 namespace pg {
 namespace ecs {
+namespace detail {
 
-class BaseEvent {
-protected:
-    static uint32_t familyCounter_;
-};
+inline uint32_t& eventId() {
+    static uint32_t id{ 0u };
+    return id;
+}
+
+template<typename T>
+uint32_t getEventIdImpl() {
+    static uint32_t id = ++eventId();
+    return id;
+}
+
+}   // detail
 
 template<typename E>
-class Event : public BaseEvent {
-public:
-    static uint32_t family() {
-        static uint32_t f{ familyCounter_++ };
-        return f;
-    }
-};
+uint32_t getEventId() {
+    return detail::getEventIdImpl<std::decay<E>>();
+}
+
+//class BaseEvent {
+//protected:
+//    static uint32_t familyCounter_;
+//};
+//
+//template<typename E>
+//class Event : public BaseEvent {
+//public:
+//    static uint32_t family() {
+//        static uint32_t f{ familyCounter_++ };
+//        return f;
+//    }
+//};
 
 class EventManager;
 
@@ -92,7 +112,7 @@ private:
 template<typename E, typename S>
 void EventManager::subscribe(S& system) {
     Receiver& receiver = static_cast<Receiver&>(system);
-    const uint32_t family = Event<E>::family();
+    const uint32_t family = getEventId<E>();
     PG_ASSERT(!receiver.isConnected_(family));
     accommodate_(family);
     std::size_t connection = signals_[family].connect([&system](const void* event) -> void {
@@ -104,7 +124,7 @@ void EventManager::subscribe(S& system) {
 template<typename E, typename S>
 void EventManager::unsubscribe(S& system) {
     Receiver& receiver = static_cast<Receiver&> (system);
-    const uint32_t family = Event<E>::family();
+    const uint32_t family = getEventId<E>();
     PG_ASSERT(receiver.isConnected_(family));
     signals_[family].disconnect(receiver.connection_(family));
     receiver.disconnect_(family);
@@ -112,7 +132,7 @@ void EventManager::unsubscribe(S& system) {
 
 template<typename E, typename... Args>
 void EventManager::emit(Args&&... args) {
-    const unsigned family = Event<E>::family();
+    const unsigned family = getEventId<E>();
     accommodate_(family);
     E event{ std::forward<Args>(args)... };
     signals_[family].emit(&event);

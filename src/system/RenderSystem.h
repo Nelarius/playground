@@ -13,7 +13,7 @@
 namespace pg {
 namespace system {
 
-class RenderSystem : public ecs::System< RenderSystem >, public ecs::Receiver {
+class RenderSystem : public ecs::System, public ecs::Receiver {
 public:
     RenderSystem() = delete;
     explicit RenderSystem(Context& context);

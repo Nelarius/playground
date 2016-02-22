@@ -21,7 +21,7 @@ namespace pg {
 namespace system {
 
 RenderSystem::RenderSystem(Context& context)
-    : System< RenderSystem >(),
+    : System(),
     cameraEntity_{},
     lightEntity_{},
     defaultProjection_{},

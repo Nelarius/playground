@@ -19,7 +19,7 @@ namespace pg {
 namespace system {
 
 PickingSystem::PickingSystem(Context& context)
-    : System<PickingSystem>(),
+    : System(),
     cameraEntity_{},
     context_{ context } {}
 
