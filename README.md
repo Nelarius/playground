@@ -4,16 +4,7 @@ A small, experimental, data-driven, entity-component-based, and Wren-scriptable 
 
 ## Building
 
-The build system uses premake5, although some dependencies have to be built separately before buiding the engine iteslf. All dependencies are included in the `extern/` folder. SDL, Assimp, UnitTest++, and GLEW have to be built first. Currently, only the Visual Studio build has actually been tested, although full Linux and OSX support is possible, in theory.
-
-The submodules that have to be built have been modified in such a way, that all `build/` folders are ignored.
-
-### Visual Studio
-
-* SDL can be built by building the solution in `VisualC/`.
-* Assimp can be built by first generating the solution via CMake. IMPORTANT: remove library suffixes in the configuration stage, we don't want the compiler's name in the library. Premake links with the shared library.
-* Glew: build the solution in the `vc14/` folder. Premake links with the shared library.
-* CMake, then build the solution. Premake links with the static library.
+Build using premake5. Dependency binaries are provided for the Visual C++ compiler. Currently, only the `Wren` dependency has to built separately, due to the changing nature of the project.
 
 ## Organization
 
@@ -101,6 +92,10 @@ The camera component is used for rendering the renderable components.
 
 ## Scripting interface
 
+A flexible scripting system is under development. Hotswapping of Wren scripts while the engine is running is currently supported.
+
+You need to import everything you use, except for `Entity`. This gets done by the engine when the script is executed.
+
 See the `builtin` folder the Wren modules, and the `src/data` folder for actual script files. It's very, very minimal for now. For example, here's a WASD movement script:
 
 ```js
@@ -155,19 +150,60 @@ var update = Fn.new { | dt |
 }
 ```
 
-You need to import everything you use, except for `Entity`. This gets done by the engine when the script is executed.
+#### Mouse Events
+
+Here's how you handle mouse presses:
+
+```js
+var activate = Fn.new {
+    EventManager.listenToMouseDown(entity, "Left")
+}
+
+var onMouseDown = Fn.new { |button|
+    // do stuff
+}
+```
+
+Currently valid mouse button events to subscribe to are `Left, Middle, Right`.
+
+#### Keyboard events
+
+Here are the currently valid keyboard events to subscribe to:
+
+```
+KeyNull, KeyReturn, KeyEscape, KeyBackspace, KeyTab, KeySpace, KeyExclaim, KeyQuoteDouble, KeyHash, KeyPercent, KeyDollar, KeyAmpersand,
+KeyA, KeyB, ..., Key1, Key2, ..., KeyF1, KeyF2, ...
+```
+
+#### Systems
+
+##### 3d Picking
+
+Cast a camera ray from a screen coordinate, and get the entity that the ray struck.
+
+```js
+import "builtin/systems" for Pick3d
+import "builtin/mouse" for Mouse
+
+// returns an entity
+var e = Pick3d.castCameraRay(Mouse.x, Mouse.y)
+if (e.isValid()) {
+    // do magic here
+}
+
+```
 
 ## Dependencies
-* SDL2
+
+* SDL2 (zlib license)
   * for windowing and OpenGL access
-* Assimp
+* Assimp (BSD license)
   * model asset import
-* GLEW
-* Wren
+* GLEW (MIT, BSD license)
+* Wren (MIT license)
   * scripting language
 * Wrenly
   * C++ language bindings for Wren
 * Filesentry
   * file system state change monitoring
   * used to reload files at runtime
-
