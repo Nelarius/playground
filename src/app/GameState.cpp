@@ -43,9 +43,9 @@ void GameState::activate() {
     // NOTICE
     // this is a dirty hack to get ScriptSystem bound to Wren
     // I really need a way to set the bytes of a foreign object in a better way....
-    Locator<system::ScriptSystem>::set(systems_.system<system::ScriptSystem>().get());
-    Locator<system::PickingSystem>::set(systems_.system<system::PickingSystem>().get());
-    Locator<system::RenderSystem>::set(systems_.system<system::RenderSystem>().get());
+    Locator<system::ScriptSystem>::set(dynamic_cast<system::ScriptSystem*>(systems_.system<system::ScriptSystem>()));
+    Locator<system::PickingSystem>::set(dynamic_cast<system::PickingSystem*>(systems_.system<system::PickingSystem>()));
+    Locator<system::RenderSystem>::set(dynamic_cast<system::RenderSystem*>(systems_.system<system::RenderSystem>()));
 
     // the full capacity of the systems are used in parsing, so the systems must be configured and ready to go!
     WorldIO world(context_);
@@ -53,7 +53,7 @@ void GameState::activate() {
 
     keyboard_.registerKeyDownCallback(Keycode::KeyF1,
         [this]() -> void {
-        auto ui = this->systems_.system< system::UiSystem >();
+        auto ui = dynamic_cast<system::UiSystem*>(this->systems_.system< system::UiSystem >());
         ui->toggleDisplay();
     });
     keyboard_.registerKeyDownCallback(Keycode::KeyP,
@@ -63,7 +63,7 @@ void GameState::activate() {
 
     mouse_.registerMouseDownCallback(MouseButton::Left,
         [this]() -> void {
-        auto pick = this->systems_.system<system::PickingSystem>();
+        auto pick = dynamic_cast<system::PickingSystem*>(this->systems_.system<system::PickingSystem>());
         auto coords = mouse_.getMouseCoords();
         ecs::Entity target = pick->rayCast(entities_, events_, coords.x, coords.y);
         if (target.isValid()) {
