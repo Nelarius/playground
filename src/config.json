@@ -14,6 +14,6 @@
             "multisampleSamples": 4
         }
     },
-    "dataPrefix": "data",
+    "dataPrefix": "example",
     "builtinPrefix": "builtin"
 }
