@@ -71,7 +71,7 @@ void DebugRenderSystem::update(ecs::EntityManager& entities, ecs::EventManager& 
 
     // create rendering state
     auto* shader = context_.shaderManager.get("basic");
-    auto* vbo = context_.meshManager.get("data/cube.obj");
+    auto* vbo = context_.meshManager.get("builtin/cube.obj");
 
     opengl::VertexArrayObjectFactory factory{ vbo, shader };
     factory.addAttribute("vertex", 3, GL_FLOAT, GL_FALSE, 24);    // skip the normals
