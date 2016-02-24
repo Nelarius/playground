@@ -313,7 +313,7 @@ public:
 
         template<typename C>
         void view() {
-            componentIndices_.push_back(getComponentId<C>());
+            componentIndices_.push_back(detail::getComponentId<C>());
         }
         /**
          * @brief Filter the viewed entities based on component type.
@@ -496,7 +496,7 @@ EntityManager::View EntityManager::join() {
 
 template<typename C>
 void EntityManager::accommodateComponent_() {
-    const unsigned family = getComponentId<C>();
+    const unsigned family = detail::getComponentId<C>();
     while (family >= componentPools_.size()) {
         componentPools_.emplace_back(new MemoryArena<C>(ArenaSize_));
     }
@@ -505,7 +505,7 @@ void EntityManager::accommodateComponent_() {
 template<typename C, typename... Args>
 ComponentHandle<C> EntityManager::assign_(Id id, Args&&... args) {
     PG_ASSERT(isValid_(id));
-    const int family = getComponentId<C>();
+    const int family = detail::getComponentId<C>();
     accommodateComponent_<C>(); // create a new component pool, if not already done
     new (componentPools_[family]->newCapacity(id.index())) C{ std::forward<Args>(args)... };
 
@@ -525,7 +525,7 @@ template<typename C>
 void EntityManager::remove_(Id id) {
     PG_ASSERT(isValid_(id));
     eventDispatcher_.emit<ComponentRemovedEvent<C>>(Entity{ this, id }, ComponentHandle<C>{ this, id });
-    const int family = getComponentId<C>();
+    const int family = detail::getComponentId<C>();
     const uint32_t index = id.index();
     componentPools_[family]->destroy(index);
     componentMasks_[index].reset(family);
@@ -534,14 +534,14 @@ void EntityManager::remove_(Id id) {
 template<typename C>
 C* EntityManager::component_(Id id) {
     PG_ASSERT(isValid_(id));
-    const unsigned family = getComponentId<C>();
+    const unsigned family = detail::getComponentId<C>();
     return static_cast<C*>(componentPools_[family]->at(id.index()));
 }
 
 template<typename C>
 bool EntityManager::hasComponent_(Id id) const {
     PG_ASSERT(isValid_(id));
-    const unsigned family = getComponentId<C>();
+    const unsigned family = detail::getComponentId<C>();
     return componentMasks_[id.index()].test(family);
 }
 

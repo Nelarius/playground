@@ -15,16 +15,16 @@ inline uint32_t& componentId() {
 
 template<typename T>
 uint32_t getComponentIdImpl() {
-    static uint32_t id = ++componentId();
+    static uint32_t id = componentId()++;
     return id;
 }
-
-}   // detail
 
 template<typename C>
 uint32_t getComponentId() {
     return detail::getComponentIdImpl<std::decay_t<C>>();
 }
+
+}   // detail
 
 }
 }
