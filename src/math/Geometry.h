@@ -20,6 +20,15 @@ struct Line {
 struct AABox {
     Vec3f min;
     Vec3f max;
+
+    inline Vec3f center() const {
+        return 0.5f * (min + max);
+    }
+};
+
+struct Sphere {
+    Vec3f center;
+    float radius;
 };
 
 }

@@ -10,6 +10,29 @@
 namespace pg {
 namespace math {
 
+inline bool rayIntersectsSphere(Ray& ray, const Sphere& sphere) {
+    Vec3f oc = ray.origin - sphere.center;
+    float loc = ray.direction.dot(oc);
+    float ocNorm = oc.norm();
+    float discriminant = loc*loc - ocNorm*ocNorm + sphere.radius*sphere.radius;
+    // no real solution exists, no intersection
+    if (discriminant < 0.f) {
+        return false;
+    }
+    // two solutions exist, take the smaller one
+    else if (discriminant > 0.f) {
+        float discriminantSqrt = sqrt(discriminant);
+        float d1 = -loc + discriminantSqrt;
+        float d2 = -loc - discriminantSqrt;
+        ray.t = std::min(d1, d2);
+        return true;
+    }
+    
+    // only one solution exists
+    ray.t = -loc;
+    return true;
+}
+
 inline bool rayIntersectsAABox(Ray& ray, const AABox& aabb, const Vec3f& aabbPos, const Quatf& aabbQuat, const Vec3f& aabbScale) {
     // for calculating the transformed coordinate system
 
@@ -19,10 +42,10 @@ inline bool rayIntersectsAABox(Ray& ray, const AABox& aabb, const Vec3f& aabbPos
     float tmax = std::numeric_limits<float>::max();
 
     const float Epsilon{ 0.001f };
-    Vec3f delta = (aabbPos - ray.origin).cast<float>();
+    Vec3f delta = (aabbPos - ray.origin);
 
-    Vec3f min = aabbScale.hadamard(aabb.min).cast<float>();
-    Vec3f max = aabbScale.hadamard(aabb.max).cast<float>();
+    Vec3f min = aabbScale.hadamard(aabb.min);
+    Vec3f max = aabbScale.hadamard(aabb.max);
     const Quatf& q = aabbQuat;
     // test intersection with the 2 planes perpendicular to the OBB's x axis
     {
