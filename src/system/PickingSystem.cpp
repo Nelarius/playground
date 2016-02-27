@@ -56,6 +56,7 @@ ecs::Entity PickingSystem::rayCast(ecs::EntityManager& entities, ecs::EventManag
     events.emit<RenderDebugLine>(eye, pixelCoord * 50.f, 5.f);
 
     math::Ray ray{ eye, pixelCoord, std::numeric_limits<float>::max() };
+    math::Ray testRay{ eye, pixelCoord, std::numeric_limits<float>::max() };
     bool result = false;
 
     float smallest = std::numeric_limits<float>::max();
@@ -64,15 +65,21 @@ ecs::Entity PickingSystem::rayCast(ecs::EntityManager& entities, ecs::EventManag
     for (ecs::Entity entity : entities.join<component::Transform, math::AABox>()) {
         auto transform = entity.component<component::Transform>();
         auto aabb = entity.component<math::AABox>();
+        math::Vec3f min = aabb->min.hadamard(transform->scale) + transform->position;
+        math::Vec3f max = aabb->max.hadamard(transform->scale) + transform->position;
+        math::Vec3f center = 0.5f * (min + max);
+        math::Sphere sphere{ center, (center - min).norm() };
 
-        result = math::rayIntersectsAABox(
-            ray,
-            *aabb,
-            transform->position, transform->rotation, transform->scale
-            );
-        if (ray.t < smallest) {
-            smallest = ray.t;
-            target = entity;
+        if (math::rayIntersectsSphere(testRay, sphere)) {
+            result = math::rayIntersectsAABox(
+                ray,
+                *aabb,
+                transform->position, transform->rotation, transform->scale
+                );
+            if (ray.t < smallest) {
+                smallest = ray.t;
+                target = entity;
+            }
         }
     }
     return target;
