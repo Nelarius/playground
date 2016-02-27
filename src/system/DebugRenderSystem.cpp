@@ -9,6 +9,24 @@ namespace {
 // TODO: this needs to be exposed in a public API
 const std::size_t MaxDebugLines = 1000u;
 
+const float cubePoints[] = {
+    -0.500000, -0.500000,  0.500000,    // 0
+    0.500000, -0.500000,  0.500000,     // 1
+    -0.500000,  0.500000,  0.500000,    // 2
+    0.500000,  0.500000,  0.500000,     // 3
+    -0.500000,  0.500000, -0.500000,    // 4
+    0.500000,  0.500000, -0.500000,     // 5
+    -0.500000, -0.500000, -0.500000,    // 6
+    0.500000, -0.500000, -0.500000      // 7
+};
+
+const GLuint cubeLines[] = {
+    0u, 2u, 2u, 4u, 4u, 6u, 6u, 0u,
+    0u, 1u, 1u, 3u, 3u, 2u, 2u, 0u,
+    6u, 7u, 7u, 5u, 5u, 4u, 4u, 6u,
+    7u, 1u, 1u, 3u, 3u, 5u, 5u, 7u
+};
+
 }
 
 namespace pg {
@@ -30,6 +48,32 @@ DebugRenderSystem::DebugRenderSystem(Context& context)
     opengl::VertexArrayObjectFactory fact{ &lineBuffer_, context_.shaderManager.get("basic") };
     fact.addStandardAttribute(opengl::VertexAttribute::Vertex);
     lineBufferArray_ = fact.getVao();
+
+    // generate cube objects
+    cubeVbo_ = 0u;
+    glGenBuffers(1, &cubeVbo_);
+    PG_ASSERT(cubeVbo_);
+    GLint old;
+    glGetIntegerv(GL_ARRAY_BUFFER_BINDING, &old);
+    glBindBuffer(GL_ARRAY_BUFFER, cubeVbo_);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(cubePoints), cubePoints, GL_STATIC_DRAW);
+    opengl::Program* basicShader = context_.shaderManager.get("basic");
+    basicShader->use();
+    glGenVertexArrays(1, &cubeVao_);
+    glGetIntegerv(GL_ARRAY_BUFFER, &old);
+    glBindVertexArray(cubeVao_);
+    PG_ASSERT(cubeVao_);
+    GLint index = glGetAttribLocation(basicShader->object(), "vertex");
+    glVertexAttribPointer(index, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    glEnableVertexAttribArray(index);
+    glBindVertexArray(cubeVao_);
+    basicShader->stopUsing();
+    glBindBuffer(GL_ARRAY_BUFFER, old);
+}
+
+DebugRenderSystem::~DebugRenderSystem() {
+    glDeleteBuffers(1, &cubeVbo_);
+    glDeleteVertexArrays(1, &cubeVao_);
 }
 
 void DebugRenderSystem::configure(ecs::EventManager& events) {
@@ -71,11 +115,6 @@ void DebugRenderSystem::update(ecs::EntityManager& entities, ecs::EventManager& 
 
     // create rendering state
     auto* shader = context_.shaderManager.get("basic");
-    auto* vbo = context_.meshManager.get("builtin/cube.obj");
-
-    opengl::VertexArrayObjectFactory factory{ vbo, shader };
-    factory.addAttribute("vertex", 3, GL_FLOAT, GL_FALSE, 24);    // skip the normals
-    auto vao = factory.getVao();
 
     {
         opengl::UseProgram use{ *shader };
@@ -91,16 +130,20 @@ void DebugRenderSystem::update(ecs::EntityManager& entities, ecs::EventManager& 
                 math::Vec3f max = t->scale.hadamard(bb->max);
                 math::Vec3f center = 0.5f * (min + max);
                 math::Vec3f scale{ max.x - min.x, max.y - min.y, max.z - min.z };
-                math::Matrix4f S = math::Matrix4f::scale(scale);              // scale to current model dimensions
-                math::Matrix4f R = math::Matrix4f::rotation(t->rotation);     // rotate to world coords
+                math::Matrix4f S = math::Matrix4f::scale(scale);                // scale to current model dimensions
+                math::Matrix4f R = math::Matrix4f::rotation(t->rotation);       // rotate to world coords
                 math::Matrix4f Tl = math::Matrix4f::translation(center);        // translate to local coords
                 math::Matrix4f Tw = math::Matrix4f::translation(t->position);   // translate to world coords
                 math::Matrix4f TRS = Tw * R  * Tl * S;
 
                 shader->setUniform("model", TRS);
                 {
-                    opengl::UseArray array(vao);
-                    glDrawArrays(GL_LINES, 0, vbo->count() / vao.elementsPerIndex());
+                    GLint old;
+                    glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &old);
+                    glBindVertexArray(cubeVao_);
+                    //glDrawArrays(GL_LINES, 0, vbo->count() / vao.elementsPerIndex());
+                    glDrawElements(GL_LINES, 32, GL_UNSIGNED_INT, cubeLines);
+                    glBindVertexArray(old);
                 }
             }
         }

@@ -18,6 +18,7 @@ class DebugRenderSystem : public ecs::System, public ecs::Receiver {
 public:
     DebugRenderSystem() = delete;
     explicit DebugRenderSystem(Context& context);
+    virtual ~DebugRenderSystem();
     void configure(ecs::EventManager&) override;
     void update(ecs::EntityManager&, ecs::EventManager&, float) override;
     void receive(const ecs::ComponentAssignedEvent<component::Camera>&);
@@ -36,6 +37,8 @@ private:
 
     bool    showLines_;
     bool    showBoxes_;
+    GLuint  cubeVbo_;
+    GLuint  cubeVao_;
 };
 
 }
