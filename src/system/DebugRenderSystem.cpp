@@ -141,7 +141,6 @@ void DebugRenderSystem::update(ecs::EntityManager& entities, ecs::EventManager& 
                     GLint old;
                     glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &old);
                     glBindVertexArray(cubeVao_);
-                    //glDrawArrays(GL_LINES, 0, vbo->count() / vao.elementsPerIndex());
                     glDrawElements(GL_LINES, 32, GL_UNSIGNED_INT, cubeLines);
                     glBindVertexArray(old);
                 }
