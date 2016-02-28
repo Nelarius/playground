@@ -51,10 +51,25 @@ inline void returnEntityValue(WrenVM* vm, pg::ecs::Entity& result) {
     memcpy(data, (void*)&result, sizeof(pg::ecs::Entity));
 }
 
+inline void returnTransformValue(WrenVM* vm, pg::component::Transform& result) {
+    wrenGetVariable(vm, "builtin/component", "Transform", 0);
+    void* data = wrenSetSlotNewForeign(vm, 0, 0, sizeof(pg::component::Transform));
+    memcpy(data, (void*)&result, sizeof(pg::component::Transform));
+}
+
+inline void returnRenderableValue(WrenVM* vm, pg::wren::WrenRenderable& result) {
+    wrenGetVariable(vm, "builtin/component", "Renderable", 0);
+    void* data = wrenSetSlotNewForeign(vm, 0, 0, sizeof(pg::wren::WrenRenderable));
+    memcpy(data, (void*)&result, sizeof(pg::wren::WrenRenderable));
+}
+
 }
 
 namespace pg {
 namespace wren {
+
+using component::Transform;
+using component::Renderable;
 
 /***
  *       _  __           __           ___
@@ -165,6 +180,16 @@ void assignRenderable(WrenVM* vm) {
 
     const auto& bb = Locator<MeshManager>::get()->getBoundingBox(r->model.cString());
     e->assign<math::AABox>(bb.min, bb.max);
+}
+
+void getTransform(WrenVM* vm) {
+    const ecs::Entity* entity = (const ecs::Entity*)wrenGetSlotForeign(vm, 0);
+    if (entity->has<Transform>()) {
+        returnTransformValue(vm, *entity->component<Transform>());
+    }
+    else {
+        LOG_INFO << "Script error: entity " << entity->id().index() << " doesn't have a transform component";
+    }
 }
 
 /***
@@ -440,6 +465,11 @@ void axis(WrenVM* vm) {
     returnVec3fValue(vm, res);
 }
 
+void getQuatReal(WrenVM* vm) {
+    const math::Quatf* q = (const math::Quatf*)wrenGetSlotForeign(vm, 0);
+    returnVec3fValue(vm, q->v);
+}
+
 /***
  *       ___  _           __        ______
  *      / _ \(_)__  ___ _/ /  __ __/ _/ _/__ ____
@@ -559,6 +589,29 @@ void castCameraRay(WrenVM* vm) {
     ecs::Entity res = pick3d->rayCast(*entities, *events, x, y);
     wrenGetVariable(vm, "builtin/entity", "Entity", 0);
     returnEntityValue(vm, res);
+}
+
+/***
+*       ______                                             __
+*      / ____/___  ____ ___  ____  ____  ____  ___  ____  / /______
+*     / /   / __ \/ __ `__ \/ __ \/ __ \/ __ \/ _ \/ __ \/ __/ ___/
+*    / /___/ /_/ / / / / / / /_/ / /_/ / / / /  __/ / / / /_(__  )
+*    \____/\____/_/ /_/ /_/ .___/\____/_/ /_/\___/_/ /_/\__/____/
+*                        /_/
+*/
+void getTransformPosition(WrenVM* vm) {
+    const Transform* t = (const Transform*)wrenGetSlotForeign(vm, 0);
+    returnVec3fValue(vm, t->position);
+}
+
+void getTransformRotation(WrenVM* vm) {
+    const Transform* t = (const Transform*)wrenGetSlotForeign(vm, 0);
+    returnQuatValue(vm, t->rotation);
+}
+
+void getTransformScale(WrenVM* vm) {
+    const Transform* t = (const Transform*)wrenGetSlotForeign(vm, 0);
+    returnVec3fValue(vm, t->scale);
 }
 
 }   // wren

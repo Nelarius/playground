@@ -10,6 +10,7 @@ foreign class Quat {
     foreign angle()     // returns angle in radians
     foreign multiply( rhs ) // returns the result as a new Quaternion
 
+    foreign v
     foreign v=( rhs )
     foreign w
     foreign w=( rhs )

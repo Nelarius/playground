@@ -32,6 +32,7 @@ void hasPointLight(WrenVM*);
 void assignTransform(WrenVM*);
 void assignRenderable(WrenVM*);
 void setTransform(WrenVM*);
+void getTransform(WrenVM*);
 void createEntity(WrenVM*);
 void entityCount(WrenVM*);
 void listenToKeyDown(WrenVM*);
@@ -82,6 +83,7 @@ void conjugate(WrenVM* vm);
 void inverse(WrenVM* vm);
 void multiply(WrenVM* vm);
 void axis(WrenVM* vm);
+void getQuatReal(WrenVM* vm);
 
 // Ringbuffer
 void ringBufferPushBack(WrenVM*);
@@ -100,6 +102,11 @@ void minus4f(WrenVM* vm);
 
 // systems
 void castCameraRay(WrenVM* vm);
+
+// components
+void getTransformPosition(WrenVM* vm);
+void getTransformRotation(WrenVM* vm);
+void getTransformScale(WrenVM* vm);
 
 }
 }

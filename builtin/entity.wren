@@ -16,6 +16,7 @@ foreign class Entity {
     foreign hasRenderable()
     foreign hasCamera()
     foreign hasPointLight()
+    foreign transform
     foreign transform=( t )
 
     foreign assignTransform( t )

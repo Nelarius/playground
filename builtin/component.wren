@@ -1,6 +1,12 @@
 
 foreign class Transform {
     construct new( position, rotation, scale ) {}
+    foreign position
+    foreign position=( p )
+    foreign rotation
+    foreign rotation=( r )
+    foreign scale
+    foreign scale=( s )
 }
 
 foreign class Renderable {

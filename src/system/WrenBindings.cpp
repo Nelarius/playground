@@ -167,6 +167,7 @@ void bindQuaternionModule() {
         .bindClass< math::Quatf, float, float, float, float >( "Quat" )
             // properties
             .bindSetter< decltype(math::Quatf::v), &math::Quatf::v >( false, "v=(_)")
+            .bindCFunction(false, "v", wren::getQuatReal)
             .bindGetter< decltype(math::Quatf::w), &math::Quatf::w >( false, "w" )
             .bindSetter< decltype(math::Quatf::w), &math::Quatf::w >( false, "w=(_)" )
             // methods
@@ -196,6 +197,7 @@ void bindEntityModule() {
             .bindCFunction(false, "set_(_)", wren::set)
             .bindCFunction(false, "index", wren::entityIndex)
             .bindCFunction(false, "version", wren::entityVersion)
+            .bindCFunction(false, "transform", wren::getTransform)
             .bindCFunction(false, "transform=(_)", wren::setTransform)
         .endClass()
         .beginClass("EntityManager")
@@ -226,6 +228,12 @@ void bindEntityModule() {
 void bindComponentModule() {
     wrenly::beginModule("builtin/component")
         .bindClass<component::Transform, math::Vec3f, math::Quatf, math::Vec3f>("Transform")
+            .bindCFunction(false, "position", wren::getTransformPosition)
+            .bindCFunction(false, "rotation", wren::getTransformRotation)
+            .bindCFunction(false, "scale", wren::getTransformScale)
+            .bindSetter<decltype(component::Transform::position), &component::Transform::position>(false, "position=(_)")
+            .bindSetter<decltype(component::Transform::rotation), &component::Transform::rotation>(false, "rotation=(_)")
+            .bindSetter<decltype(component::Transform::scale), &component::Transform::scale>(false, "scale=(_)")
         .endClass()
         .bindClass<WrenRenderable, StringId, StringId>("Renderable")
             .bindSetter<decltype(WrenRenderable::shininess), &WrenRenderable::shininess>(false, "shininess=(_)")
