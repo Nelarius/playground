@@ -470,6 +470,21 @@ void getQuatReal(WrenVM* vm) {
     returnVec3fValue(vm, q->v);
 }
 
+void xaxis(WrenVM* vm) {
+    const math::Quatf* q = (const math::Quatf*)wrenGetSlotForeign(vm, 0);
+    returnVec3fValue(vm, q->xaxis());
+}
+
+void yaxis(WrenVM* vm) {
+    const math::Quatf* q = (const math::Quatf*)wrenGetSlotForeign(vm, 0);
+    returnVec3fValue(vm, q->yaxis());
+}
+
+void zaxis(WrenVM* vm) {
+    const math::Quatf* q = (const math::Quatf*)wrenGetSlotForeign(vm, 0);
+    returnVec3fValue(vm, q->zaxis());
+}
+
 /***
  *       ___  _           __        ______
  *      / _ \(_)__  ___ _/ /  __ __/ _/ _/__ ____

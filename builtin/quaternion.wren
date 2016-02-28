@@ -10,6 +10,10 @@ foreign class Quat {
     foreign angle()     // returns angle in radians
     foreign multiply( rhs ) // returns the result as a new Quaternion
 
+    foreign xaxis()     // returns the normalized axis as a Vec3
+    foreign yaxis()
+    foreign zaxis()
+
     foreign v
     foreign v=( rhs )
     foreign w

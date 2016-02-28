@@ -84,6 +84,9 @@ void inverse(WrenVM* vm);
 void multiply(WrenVM* vm);
 void axis(WrenVM* vm);
 void getQuatReal(WrenVM* vm);
+void xaxis(WrenVM* vm);
+void yaxis(WrenVM* vm);
+void zaxis(WrenVM* vm);
 
 // Ringbuffer
 void ringBufferPushBack(WrenVM*);

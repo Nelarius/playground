@@ -174,10 +174,13 @@ void bindQuaternionModule() {
             .bindMethod< decltype(&math::Quatf::norm), &math::Quatf::norm >( false, "norm()" )
             .bindMethod< decltype(&math::Quatf::normSquared), &math::Quatf::normSquared >( false, "normSquared()" )
             .bindMethod< decltype(&math::Quatf::angle), &math::Quatf::angle >( false, "angle()" )
-            .bindCFunction( false, "conjugate()", wren::conjugate )
-            .bindCFunction( false, "inverse()", wren::inverse )
-            .bindCFunction( false, "axis()", wren::axis )
-            .bindCFunction( false, "multiply(_)", wren::multiply )
+            .bindCFunction(false, "conjugate()", wren::conjugate )
+            .bindCFunction(false, "inverse()", wren::inverse )
+            .bindCFunction(false, "axis()", wren::axis )
+            .bindCFunction(false, "multiply(_)", wren::multiply )
+            .bindCFunction(false, "xaxis()", wren::xaxis)
+            .bindCFunction(false, "yaxis()", wren::yaxis)
+            .bindCFunction(false, "zaxis()", wren::zaxis)
         .endClass()
     .endModule();
 }

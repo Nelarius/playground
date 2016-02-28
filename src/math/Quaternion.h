@@ -100,6 +100,33 @@ public:
         return T(2.0 * acos(w));
     }
 
+    Vector3<T> xaxis() const {
+        T n = T(2.f) / norm();
+        return Vector3<T> {
+            1.f - n*(v.y*v.y + v.z*v.z),
+            n*(v.x*v.y + w*v.z),
+            n*(v.x*v.z - w*v.y)
+        };
+    }
+
+    Vector3<T> yaxis() const {
+        T n = T(2.f) / norm();
+        return Vector3<T> {
+            n*(v.x*v.y - w*v.z),
+            1.f - n*(v.x*v.x + v.z*v.z),
+            n*(v.y*v.z + w*v.x)
+        };
+    }
+
+    Vector3<T> zaxis() const {
+        T n = T(2.f) / norm();
+        return Vector3<T>{
+            n*(v.x*v.z + w*v.y),
+            n*(v.y*v.z - w*v.x),
+            1.f - n*(v.x*v.x + v.y*v.y)
+        };
+    }
+
     Vector3<T>  v{};    // the imaginary part
     T           w{ T(1.0) }; // the real part
 };
