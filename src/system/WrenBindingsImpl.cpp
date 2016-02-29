@@ -388,6 +388,15 @@ void plotRingBufferWithSize(WrenVM* vm) {
         );
 }
 
+void sliderFloat(WrenVM* vm) {
+    const char* label = wrenGetSlotString(vm, 1);
+    float value = float(wrenGetSlotDouble(vm, 2));
+    float min =   float(wrenGetSlotDouble(vm, 3));
+    float max =   float(wrenGetSlotDouble(vm, 4));
+    ImGui::SliderFloat(label, &value, min, max);
+    wrenSetSlotDouble(vm, 0, value);
+}
+
 void setTitleBar(WrenVM* vm) {
     uint32_t* bits = (uint32_t*)wrenGetSlotForeign(vm, 0);
     *bits &= ~ImGuiWindowFlags_NoTitleBar;

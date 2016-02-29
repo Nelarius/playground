@@ -82,6 +82,7 @@ void bindImguiModule() {
             .bindCFunction( true, "plotArray(_,_,_,_,_)", wren::plotNumberArrayWithOffsetAndSize )
             .bindCFunction( true, "plotRingBuffer(_,_)", wren::plotRingBuffer )
             .bindCFunction( true, "plotRingBuffer(_,_,_)", wren::plotRingBufferWithSize )
+            .bindCFunction( true, "sliderFloat(_,_,_,_)", wren::sliderFloat)
         .endClass();
 }
 

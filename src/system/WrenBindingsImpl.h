@@ -67,6 +67,7 @@ void plotNumberArrayWithOffset(WrenVM*);
 void plotNumberArrayWithOffsetAndSize(WrenVM*);
 void plotRingBuffer(WrenVM*);
 void plotRingBufferWithSize(WrenVM*);
+void sliderFloat(WrenVM*);
 
 // ImGuiWindowFlags functions
 void setTitleBar(WrenVM*);

@@ -43,6 +43,7 @@ class Imgui {
     foreign static plotArray( label, array, count, offset, size )
     foreign static plotRingBuffer( label, buffer )
     foreign static plotRingBuffer( label, buffer, size )
+    foreign static sliderFloat( label, value, min, max )    // returns the new value as a number
 
     static treeNode( name, body ) {
         if ( treeNode( name ) ) {
