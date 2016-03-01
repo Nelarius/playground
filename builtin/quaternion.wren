@@ -19,7 +19,3 @@ foreign class Quat {
     foreign w
     foreign w=( rhs )
 }
-
-var createQuaternion = Fn.new { | x, y, z, w |
-    return Quat.new( x, y, z, w )
-}

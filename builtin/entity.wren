@@ -23,10 +23,6 @@ foreign class Entity {
     foreign assignRenderable( r )
 }
 
-var createEntity = Fn.new {
-    return Entity.new()
-}
-
 class EntityManager {
     foreign static create() // returns the new entity
     foreign static entityCount

@@ -55,26 +55,3 @@ foreign class Vec4 {
     foreign minus( rhs )
     //foreign scale( s )
 }
-
-/*
- * These are creator objects for the C++ API to use in order to create foreign objects
- * and return them back to Wren
- */
-
-var createVec4 = Fn.new {
-    return Vec4.new(0.0, 0.0, 0.0, 0.0)
-}
-
-var createVec3 = Fn.new {
-    System.print("Creating a new Vec3!")
-    return Vec3.new(0.0, 0.0, 0.0)
-}
-
-var createVec2 = Fn.new {
-    return Vec2.new(0.0, 0.0)
-}
-
-var greet = Fn.new {
-    System.print("Hello, sir!")
-}
-
