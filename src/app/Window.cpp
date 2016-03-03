@@ -74,7 +74,7 @@ void GLAPIENTRY debugCallback(GLenum source,
     case GL_DEBUG_SEVERITY_HIGH:
     case GL_DEBUG_SEVERITY_MEDIUM:
     case GL_DEBUG_SEVERITY_LOW:
-        LOG_DEBUG << debugSourceStr << ", " << debugTypeStr << ": " << message;
+        LOG_WARNING << debugSourceStr << ", " << debugTypeStr << ": " << message;
         break;
     }
 }
@@ -146,6 +146,11 @@ void Window::initializeOpenGL_() {
 
     glDepthFunc(GL_LEQUAL);
     glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
+
+#ifdef DEBUG
+    glDebugMessageCallback(&debugCallback, nullptr);
+    glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+#endif
 
     std::cout << "OpenGL version: " << glGetString(GL_VERSION) << std::endl;
     std::cout << "GLSL version: " << glGetString(GL_SHADING_LANGUAGE_VERSION) << std::endl;
