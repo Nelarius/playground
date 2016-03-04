@@ -48,7 +48,7 @@ void mouseDy(WrenVM*);
 
 // Imgui
 struct ImGuiWindowFlag {
-    uint32_t flag{ 0u };
+    std::uint32_t flag{ 0u };
 };
 
 // ImGui functions
