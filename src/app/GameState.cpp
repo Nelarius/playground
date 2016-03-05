@@ -60,19 +60,6 @@ void GameState::activate() {
         [this]() -> void {
         this->requestStackPush_(states::Pause);
     });
-
-    mouse_.registerMouseDownCallback(MouseButton::Left,
-        [this]() -> void {
-        auto pick = dynamic_cast<system::PickingSystem*>(this->systems_.system<system::PickingSystem>());
-        auto coords = mouse_.getMouseCoords();
-        ecs::Entity target = pick->rayCast(entities_, events_, coords.x, coords.y);
-        if (target.isValid()) {
-            LOG_DEBUG << "HIT";
-        }
-        else {
-            LOG_DEBUG << "MISS";
-        }
-    });
 }
 
 bool GameState::update(float dt) {
