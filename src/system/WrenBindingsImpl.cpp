@@ -134,7 +134,7 @@ void assignRenderable(WrenVM* vm) {
     e->assign<component::Renderable>(buffer, shader, vao, mat);
 
     const auto& bb = Locator<MeshManager>::get()->getBoundingBox(r->model.cString());
-    e->assign<math::AABox>(bb.min, bb.max);
+    e->assign<math::AABoxf>(bb.min, bb.max);
 }
 
 void getTransform(WrenVM* vm) {

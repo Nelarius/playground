@@ -9,7 +9,7 @@
 
 namespace {
 
-/*inline pg::math::Ray generateCameraRay(const pg::math::Vec3f& cameraPos, const pg::component::Camera& camera, int x, int y) {
+/*inline pg::math::Rayf generateCameraRay(const pg::math::Vec3f& cameraPos, const pg::component::Camera& camera, int x, int y) {
     //
 }*/
 
@@ -55,20 +55,20 @@ ecs::Entity PickingSystem::rayCast(ecs::EntityManager& entities, ecs::EventManag
 
     events.emit<RenderDebugLine>(eye, pixelCoord * 50.f, 5.f);
 
-    math::Ray ray{ eye, pixelCoord, std::numeric_limits<float>::max() };
-    math::Ray testRay{ eye, pixelCoord, std::numeric_limits<float>::max() };
+    math::Rayf ray{ eye, pixelCoord, std::numeric_limits<float>::max() };
+    math::Rayf testRay{ eye, pixelCoord, std::numeric_limits<float>::max() };
     bool result = false;
 
     float smallest = std::numeric_limits<float>::max();
     ecs::Entity target{};
 
-    for (ecs::Entity entity : entities.join<component::Transform, math::AABox>()) {
+    for (ecs::Entity entity : entities.join<component::Transform, math::AABoxf>()) {
         auto transform = entity.component<component::Transform>();
-        auto aabb = entity.component<math::AABox>();
+        auto aabb = entity.component<math::AABoxf>();
         math::Vec3f min = aabb->min.hadamard(transform->scale) + transform->position;
         math::Vec3f max = aabb->max.hadamard(transform->scale) + transform->position;
         math::Vec3f center = 0.5f * (min + max);
-        math::Sphere sphere{ center, (center - min).norm() };
+        math::Spheref sphere{ center, (center - min).norm() };
 
         if (math::rayIntersectsSphere(testRay, sphere)) {
             result = math::rayIntersectsAABox(

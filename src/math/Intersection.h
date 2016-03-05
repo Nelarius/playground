@@ -10,7 +10,7 @@
 namespace pg {
 namespace math {
 
-inline bool rayIntersectsSphere(Ray& ray, const Sphere& sphere) {
+inline bool rayIntersectsSphere(Rayf& ray, const Spheref& sphere) {
     Vec3f oc = ray.origin - sphere.center;
     float loc = ray.direction.dot(oc);
     float ocNorm = oc.norm();
@@ -27,13 +27,13 @@ inline bool rayIntersectsSphere(Ray& ray, const Sphere& sphere) {
         ray.t = std::min(d1, d2);
         return true;
     }
-    
+
     // only one solution exists
     ray.t = -loc;
     return true;
 }
 
-inline bool rayIntersectsAABox(Ray& ray, const AABox& aabb, const Vec3f& aabbPos, const Quatf& aabbQuat, const Vec3f& aabbScale) {
+inline bool rayIntersectsAABox(Rayf& ray, const AABoxf& aabb, const Vec3f& aabbPos, const Quatf& aabbQuat, const Vec3f& aabbScale) {
     // for calculating the transformed coordinate system
 
     float n = 2.f / aabbQuat.norm();

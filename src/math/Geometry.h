@@ -5,31 +5,39 @@
 namespace pg {
 namespace math {
 
+template<typename T>
 struct Ray {
-    Vec3f origin;
-    Vec3f direction;
-    float t;
+    Vector3<T> origin;
+    Vector3<T> direction;
+    T t;
 };
 
+template<typename T>
 struct Line {
-    Vec3f origin;
-    Vec3f end;
+    Vector3<T> origin;
+    Vector3<T> end;
 };
 
-// Axis-aligned box
+template<typename T>
 struct AABox {
-    Vec3f min;
-    Vec3f max;
+    Vector3<T> min;
+    Vector3<T> max;
 
-    inline Vec3f center() const {
-        return 0.5f * (min + max);
+    inline Vector3<T> center() const {
+        return T(0.5) * (min + max);
     }
 };
 
+template<typename T>
 struct Sphere {
-    Vec3f center;
-    float radius;
+    Vector3<T> center;
+    T radius;
 };
+
+using Rayf = Ray<float>;
+using Linef = Line<float>;
+using AABoxf = AABox<float>;
+using Spheref = Sphere<float>;
 
 }
 }

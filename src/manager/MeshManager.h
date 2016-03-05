@@ -35,7 +35,7 @@ public:
     * @param file
     * @returns The bounding box corresponding to the given file name.
     */
-    math::AABox getBoundingBox(const std::string& file) const;
+    math::AABoxf getBoundingBox(const std::string& file) const;
     /**
      * @brief Clear all elements.
      */
@@ -48,7 +48,7 @@ public:
 private:
     mutable Container< opengl::BufferObject >                           buffer_{};
     mutable std::unordered_map< std::string, opengl::BufferObject* >    resources_{};
-    mutable std::unordered_map< std::string, math::AABox >              boxes_{};
+    mutable std::unordered_map< std::string, math::AABoxf >             boxes_{};
 };
 
 }

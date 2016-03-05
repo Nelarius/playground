@@ -30,7 +30,7 @@ private:
     Context&                    context_;
     ecs::Entity                 cameraEntity_;
     math::Matrix4f              defaultProjection_;
-    std::vector<math::Line>     debugLines_;
+    std::vector<math::Linef>    debugLines_;
     std::vector<float>          lineLifeTimes_;
     opengl::BufferObject        lineBuffer_;
     opengl::VertexArrayObject   lineBufferArray_;

@@ -17,8 +17,7 @@
 namespace pg {
 
 WorldIO::WorldIO(Context& context)
-    : context_(context)
-{}
+    : context_(context) {}
 
 void WorldIO::read(
     const std::string& file,
@@ -106,7 +105,7 @@ void WorldIO::read(
             opengl::VertexArrayObjectFactory factory{ buffer, shader };
             entity.assign< component::Renderable >(buffer, shader, vao, mat);
             const auto& bb = context_.meshManager.getBoundingBox(contents["model"].string_value());
-            entity.assign<math::AABox>(bb.min, bb.max);
+            entity.assign<math::AABoxf>(bb.min, bb.max);
         }   //renderable
 
         if (!pointLight.is_null()) {

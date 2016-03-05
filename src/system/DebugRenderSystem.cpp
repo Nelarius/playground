@@ -123,9 +123,9 @@ void DebugRenderSystem::update(ecs::EntityManager& entities, ecs::EventManager& 
         if (showBoxes_) {
             /// BOUNDING BOXES
             ///////////////////////////////////////////////////////////
-            for (ecs::Entity entity : entities.join< component::Transform, math::AABox >()) {
+            for (ecs::Entity entity : entities.join< component::Transform, math::AABoxf >()) {
                 auto t = entity.component< component::Transform >();
-                auto bb = entity.component<math::AABox>();
+                auto bb = entity.component<math::AABoxf>();
                 math::Vec3f min = t->scale.hadamard(bb->min);
                 math::Vec3f max = t->scale.hadamard(bb->max);
                 math::Vec3f center = 0.5f * (min + max);
@@ -183,7 +183,7 @@ void DebugRenderSystem::receive(const ShowDebugBoxes& event) {
 
 void DebugRenderSystem::receive(const RenderDebugLine& line) {
     if (debugLines_.size() < MaxDebugLines) {
-        debugLines_.push_back(math::Line{ line.start, line.end });
+        debugLines_.push_back(math::Linef{ line.start, line.end });
         lineLifeTimes_.push_back(line.lifeTime);
     }
     else {

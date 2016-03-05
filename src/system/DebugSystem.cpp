@@ -13,13 +13,13 @@ void DebugSystem::configure(ecs::EventManager& events) {
     events.subscribe<ecs::ComponentAssignedEvent<component::Camera>>(*this);
     events.subscribe<ecs::ComponentAssignedEvent<component::Transform>>(*this);
     events.subscribe<ecs::ComponentAssignedEvent<component::Renderable>>(*this);
-    events.subscribe<ecs::ComponentAssignedEvent<math::AABox>>(*this);
+    events.subscribe<ecs::ComponentAssignedEvent<math::AABoxf>>(*this);
     events.subscribe<ecs::ComponentAssignedEvent<component::PointLight>>(*this);
     events.subscribe<ecs::ComponentAssignedEvent<component::Script>>(*this);
     events.subscribe<ecs::ComponentRemovedEvent<component::Camera>>(*this);
     events.subscribe<ecs::ComponentRemovedEvent<component::Transform>>(*this);
     events.subscribe<ecs::ComponentRemovedEvent<component::Renderable>>(*this);
-    events.subscribe<ecs::ComponentRemovedEvent<math::AABox>>(*this);
+    events.subscribe<ecs::ComponentRemovedEvent<math::AABoxf>>(*this);
     events.subscribe<ecs::ComponentRemovedEvent<component::PointLight>>(*this);
     events.subscribe<ecs::ComponentRemovedEvent< component::Script>>(*this);
 }
@@ -46,7 +46,7 @@ void DebugSystem::receive(const ecs::ComponentAssignedEvent< component::Renderab
     LOG_DEBUG << "Renderable component assigned to Entity " << event.entity.id().index() << "." << event.entity.id().version();
 }
 
-void DebugSystem::receive(const ecs::ComponentAssignedEvent< math::AABox >& event) {
+void DebugSystem::receive(const ecs::ComponentAssignedEvent< math::AABoxf >& event) {
     LOG_DEBUG << "BoundingBox component assigned to Entity " << event.entity.id().index() << "." << event.entity.id().version();
 }
 
@@ -70,7 +70,7 @@ void DebugSystem::receive(const ecs::ComponentRemovedEvent< component::Renderabl
     LOG_DEBUG << "Renderable component removed from Entity " << event.entity.id().index() << "." << event.entity.id().version();
 }
 
-void DebugSystem::receive(const ecs::ComponentRemovedEvent< math::AABox >& event) {
+void DebugSystem::receive(const ecs::ComponentRemovedEvent< math::AABoxf >& event) {
     LOG_DEBUG << "BoundingBox component removed from Entity " << event.entity.id().index() << "." << event.entity.id().version();
 }
 
