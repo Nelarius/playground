@@ -88,7 +88,11 @@ const char* toString(pg::Keycode key) {
     return keymapInstance().at(key).c_str();
 }
 
-pg::Keycode toEnum(std::string str) {
+pg::Keycode toEnum(std::string str)  {
+    if (!keymapInstance().contains(str)) {
+        LOG_ERROR << "Key " << str << " doesn't exist.";
+        return pg::Keycode::NonExisting;
+    }
     return keymapInstance().at(str);
 }
 

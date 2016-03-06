@@ -32,6 +32,14 @@ public:
         return it->second;
     }
 
+    bool contains(const std::string& str) const {
+        const auto it = toValueMap_.find(str);
+        if (it != toValueMap_.end()) {
+            return true;
+        }
+        return false;
+    }
+
 private:
     std::map<T, std::string>    toStringMap_{};
     std::map<std::string, T>    toValueMap_{};
