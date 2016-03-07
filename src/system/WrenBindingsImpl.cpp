@@ -274,7 +274,8 @@ void bulletText(WrenVM* vm) {
 }
 
 void button(WrenVM* vm) {
-    ImGui::Button((const char*)wrenGetSlotString(vm, 1));
+    bool pressed = ImGui::Button((const char*)wrenGetSlotString(vm, 1));
+    wrenSetSlotBool(vm, 0, pressed);
 }
 
 void buttonSized(WrenVM* vm) {
