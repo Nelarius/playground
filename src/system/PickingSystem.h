@@ -24,7 +24,7 @@ public:
     void update(ecs::EntityManager&, ecs::EventManager&, float) override;
 
     // cast a ray from mouse coordinates
-    ecs::Entity rayCast(ecs::EntityManager&, ecs::EventManager&, int x, int y);
+    ecs::Entity rayCast(ecs::EntityManager&, ecs::EventManager&, float x, float y);
 
 private:
     ecs::Entity cameraEntity_;

@@ -7,14 +7,6 @@
 #include "math/Quaternion.h"
 #include "utils/Log.h"
 
-namespace {
-
-/*inline pg::math::Rayf generateCameraRay(const pg::math::Vec3f& cameraPos, const pg::component::Camera& camera, int x, int y) {
-    //
-}*/
-
-}
-
 namespace pg {
 namespace system {
 
@@ -35,28 +27,15 @@ void PickingSystem::update(ecs::EntityManager& entities, ecs::EventManager& even
     // do nothing
 }
 
-ecs::Entity PickingSystem::rayCast(ecs::EntityManager& entities, ecs::EventManager& events, int x, int y) {
-    math::Vec3f eye = cameraEntity_.component<component::Transform>()->position;
-    float halfFov = 0.5f * cameraEntity_.component<component::Camera>()->verticalFov;
-    float ar = float(context_.window->width()) / context_.window->height();
-    float near = cameraEntity_.component<component::Camera>()->nearPlane;
-    float ntan = near * tan(halfFov);
-    math::Vec3f pixelCoord{
-        ntan * ar * (float(x) * 2.f / context_.window->width() - 1.f),
-        ntan * (1.f - float(y) * 2.f / context_.window->height()),
-        -near
-    };
+ecs::Entity PickingSystem::rayCast(ecs::EntityManager& entities, ecs::EventManager& events, float x, float y) {
+    auto camera = cameraEntity_.component<component::Camera>();
+    auto cameraTransform = cameraEntity_.component<component::Transform>();
+    float aspectRatio = float(context_.window->width()) / context_.window->height();
+    math::Frustumf frustum{ camera->verticalFov, aspectRatio, camera->nearPlane, camera->farPlane };
+    math::Rayf ray = math::generateCameraRay(cameraTransform->position, cameraTransform->rotation, frustum, x, y);
+    math::Rayf testRay = ray;
 
-    //auto cameraRay = generateCameraRay(eye, *cameraEntity_.component<component::Camera>(), x, y);
-
-    auto temp = math::Matrix4f::rotation(cameraEntity_.component<component::Transform>()->rotation) * math::Vec4f(pixelCoord, 1.f);
-    pixelCoord = math::Vec3f(temp.x, temp.y, temp.z);
-    pixelCoord.normalize();
-
-    events.emit<RenderDebugLine>(eye, pixelCoord * 50.f, 5.f);
-
-    math::Rayf ray{ eye, pixelCoord, std::numeric_limits<float>::max() };
-    math::Rayf testRay{ eye, pixelCoord, std::numeric_limits<float>::max() };
+    events.emit<RenderDebugLine>(ray.origin, ray.direction * 50.f, 5.f);
     bool result = false;
 
     float smallest = std::numeric_limits<float>::max();

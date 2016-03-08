@@ -565,8 +565,8 @@ void castCameraRay(WrenVM* vm) {
     ecs::EntityManager* entities = Locator<ecs::EntityManager>::get();
     ecs::EventManager* events = Locator<ecs::EventManager>::get();
     system::PickingSystem* pick3d = Locator<system::PickingSystem>::get();
-    int x = int(wrenGetSlotDouble(vm, 1));
-    int y = int(wrenGetSlotDouble(vm, 2));
+    float x = float(wrenGetSlotDouble(vm, 1));
+    float y = float(wrenGetSlotDouble(vm, 2));
     ecs::Entity res = pick3d->rayCast(*entities, *events, x, y);
     wrenGetVariable(vm, "builtin/entity", "Entity", 0);
     wrenly::setForeignSlotValue(vm, res);
