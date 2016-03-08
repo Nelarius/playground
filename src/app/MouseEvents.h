@@ -10,6 +10,8 @@
 
 namespace pg {
 
+struct Context;
+
 namespace ecs {
 class Entity;
 }
@@ -35,11 +37,16 @@ enum MouseButton {
  */
 class MouseEvents {
 public:
-    MouseEvents() = default;
+    MouseEvents() = delete;
+    explicit MouseEvents(Context& context);
     ~MouseEvents() = default;
 
+    /*math::Vec2i getMouseCoords() const;
+    math::Vec2i getMouseDelta() const;*/
+
     math::Vec2i getMouseCoords() const;
-    math::Vec2i getMouseDelta() const;
+    math::Vec2f getNormalizedMouseCoords() const;
+    math::Vec2f getMouseDelta() const;
 
     void registerMouseDownScriptCallback(std::string, ecs::Entity*);
     void registerMousePressedScriptCallback(std::string, ecs::Entity*);
@@ -74,10 +81,11 @@ private:
     void addToMap_(std::map<int, CallbackData>&, MouseButton, std::function<void()>);
     void addToMap_(std::map<int, CallbackData>&, MouseButton, ecs::Entity*);
 
-    std::map<int, CallbackData> mouseDownCallbacks_{};
-    std::map<int, CallbackData> mousePressedCallbacks_{};
-    std::map<int, CallbackData> mouseUpCallbacks_{};
-    system::ScriptSystem*      scriptSystem_{ nullptr };
+    std::map<int, CallbackData> mouseDownCallbacks_;
+    std::map<int, CallbackData> mousePressedCallbacks_;
+    std::map<int, CallbackData> mouseUpCallbacks_;
+    Context& context_;
+    system::ScriptSystem*      scriptSystem_;
 };
 
 }

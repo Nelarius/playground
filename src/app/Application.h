@@ -30,7 +30,7 @@ private:
     bool            running_{ false };
     Window          window_{};
     Context         context_{};
-    MouseEvents     mouse_{};
+    MouseEvents     mouse_{ context_ };
 
     AppStateStack   stateStack_{ context_ };
 };

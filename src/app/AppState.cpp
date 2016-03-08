@@ -8,7 +8,7 @@ using pg::AppStateStack;
 AppState::AppState(Context& context, AppStateStack& stack)
     : context_(context),
     keyboard_(),
-    mouse_(),
+    mouse_(context),
     stack_(stack)
 {}
 

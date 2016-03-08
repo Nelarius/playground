@@ -1,4 +1,5 @@
 #include "app/MouseEvents.h"
+#include "app/Context.h"
 #include "system/ScriptSystem.h"
 #include "utils/Log.h"
 #include "utils/StringBimap.h"
@@ -33,12 +34,29 @@ pg::MouseButton toEnum(std::string str) {
 
 namespace pg {
 
+MouseEvents::MouseEvents(Context& context)
+    : mouseDownCallbacks_{},
+    mousePressedCallbacks_{},
+    mouseUpCallbacks_{},
+    context_{ context },
+    scriptSystem_{ nullptr } {}
+
 math::Vec2i MouseEvents::getMouseCoords() const {
     return currentCoords_;
 }
 
-math::Vec2i MouseEvents::getMouseDelta() const {
-    return currentCoords_ - previousCoords_;
+math::Vec2f MouseEvents::getNormalizedMouseCoords() const {
+    return math::Vec2f{
+        2.f * currentCoords_.x / context_.window->width() - 1.f,
+        1.f - (2.f * currentCoords_.y / context_.window->height())
+    };
+}
+
+math::Vec2f MouseEvents::getMouseDelta() const {
+    return math::Vec2f{
+        float(currentCoords_.x - previousCoords_.x) / context_.window->width(),
+        - float(currentCoords_.y - previousCoords_.y) / context_.window->height()
+    };
 }
 
 void MouseEvents::handleEvent(const SDL_Event& event) {

@@ -205,22 +205,22 @@ void listenToMouseUp(WrenVM* vm) {
 }
 
 void mouseX(WrenVM* vm) {
-    math::Vec2i coords = Locator<MouseEvents>::get()->getMouseCoords();
+    math::Vec2f coords = Locator<MouseEvents>::get()->getNormalizedMouseCoords();
     wrenSetSlotDouble(vm, 0, double(coords.x));
 }
 
 void mouseY(WrenVM* vm) {
-    math::Vec2i coords = Locator<MouseEvents>::get()->getMouseCoords();
+    math::Vec2f coords = Locator<MouseEvents>::get()->getNormalizedMouseCoords();
     wrenSetSlotDouble(vm, 0, double(coords.y));
 }
 
 void mouseDx(WrenVM* vm) {
-    math::Vec2i coords = Locator<MouseEvents>::get()->getMouseDelta();
+    math::Vec2f coords = Locator<MouseEvents>::get()->getMouseDelta();
     wrenSetSlotDouble(vm, 0, double(coords.x));
 }
 
 void mouseDy(WrenVM* vm) {
-    math::Vec2i coords = Locator<MouseEvents>::get()->getMouseDelta();
+    math::Vec2f coords = Locator<MouseEvents>::get()->getMouseDelta();
     wrenSetSlotDouble(vm, 0, double(coords.y));
 }
 
