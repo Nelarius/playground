@@ -44,6 +44,38 @@ Ray<T> generateCameraRay(const Vector3<T>& eye, const Quaternion<T>& orientation
     eyeToPixel.normalize();
     return Ray<T>{ eye, eyeToPixel, std::numeric_limits<T>::max() };
 }
+
+/*
+ * The plane normal is calculated from the input points in a counter clockwise sense,
+ * according to the right hand rule.
+ **/
+template<typename T>
+class Plane {
+public:
+    Plane() = delete;
+    Plane(const Vector3<T>& p0, const Vector3<T>& p1, const Vector3<T>& p2)
+        : edge1_{ p1 - p0 },
+        edge2_{ p2 - p0 },
+        point_{ p0 },
+        normal_{ edge1_.cross(edge2_).normalized() } {}
+    ~Plane() = default;
+
+    const Vector3<T> point() const {
+        return point_;
+    }
+
+    const Vector3<T> normal() const {
+        return normal_;
+    }
+
+private:
+    Vector3<T> edge1_;
+    Vector3<T> edge2_;
+    Vector3<T> point_;
+    Vector3<T> normal_;
+};
+
+template<typename T>
 struct AABox {
     Vector3<T> min;
     Vector3<T> max;
@@ -61,6 +93,8 @@ struct Sphere {
 
 using Rayf = Ray<float>;
 using Linef = Line<float>;
+using Frustumf = Frustum<float>;
+using Planef = Plane<float>;
 using AABoxf = AABox<float>;
 using Spheref = Sphere<float>;
 

@@ -10,6 +10,12 @@
 namespace pg {
 namespace math {
 
+inline void rayIntersectsPlane(Rayf& ray, const Planef& plane) {
+    PG_ASSERT(plane.normal().norm() == 1.f);
+    float intersectParam = (plane.point() - ray.origin).dot(plane.normal()) / ray.direction.dot(plane.normal());
+    ray.t = intersectParam;
+}
+
 inline bool rayIntersectsSphere(Rayf& ray, const Spheref& sphere) {
     Vec3f oc = ray.origin - sphere.center;
     float loc = ray.direction.dot(oc);
