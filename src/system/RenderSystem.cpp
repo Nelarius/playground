@@ -113,5 +113,14 @@ void RenderSystem::setSpecularUniforms_(const math::Vec3f& pos, opengl::Program*
     p->setUniform("cameraPosition", pos);
 }
 
+CameraInfo RenderSystem::activeCameraInfo() const {
+    PG_ASSERT(cameraEntity_.isValid());
+    auto camera = cameraEntity_.component<component::Camera>();
+    auto transform = cameraEntity_.component<component::Transform>();
+    float aspectRatio = float(context_.window->width()) / context_.window->height();
+    math::Frustumf frustum{ camera->verticalFov, aspectRatio, camera->nearPlane, camera->farPlane };
+    return CameraInfo{ frustum, transform->position, transform->rotation };
+}
+
 }
 }

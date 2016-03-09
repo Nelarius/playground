@@ -6,12 +6,20 @@
 #include "system/Events.h"
 #include "app/Context.h"
 #include "opengl/Program.h"
+#include "math/Vector.h"
+#include "math/Quaternion.h"
 #include "math/Geometry.h"
 #include "opengl/BufferObject.h"
 #include <vector>
 
 namespace pg {
 namespace system {
+
+struct CameraInfo {
+    math::Frustumf frustum;
+    math::Vec3f position;
+    math::Quatf orientation;
+};
 
 class RenderSystem : public ecs::System, public ecs::Receiver {
 public:
@@ -22,6 +30,8 @@ public:
     void update(ecs::EntityManager&, ecs::EventManager&, float) override;
     void receive(const ecs::ComponentAssignedEvent<component::Camera>&);
     void receive(const ecs::ComponentAssignedEvent<component::PointLight>&);
+
+    CameraInfo activeCameraInfo() const;
 
 private:
 
