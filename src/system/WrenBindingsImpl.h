@@ -17,6 +17,10 @@ struct WrenRenderable {
     math::Vec3f specularColor;
 };
 
+// math lib
+void planeIntersection(WrenVM*);
+void generateCameraRay(WrenVM*);
+
 // NumberArray
 void arrayPushBack(WrenVM*);
 void arrayAt(WrenVM*);

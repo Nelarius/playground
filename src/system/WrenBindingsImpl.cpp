@@ -2,12 +2,15 @@
 #include "Wrenly.h"
 #include "app/MouseEvents.h"
 #include "component/Include.h"
+#include "math/Geometry.h"
+#include "math/Intersection.h"
 #include "math/Vector.h"
 #include "manager/MeshManager.h"
 #include "manager/ShaderManager.h"
 #include "opengl/VertexArrayObjectFactory.h"
 #include "system/ScriptSystem.h"
 #include "system/PickingSystem.h"
+#include "system/RenderSystem.h"
 #include "system/WrenBindingsImpl.h"
 #include "ecs/Include.h"
 #include "utils/Locator.h"
@@ -25,6 +28,31 @@ namespace wren {
 
 using component::Transform;
 using component::Renderable;
+
+/***
+*       __  ___     __  __     ___ __
+*      /  |/  /__ _/ /_/ /    / (_) /
+*     / /|_/ / _ `/ __/ _ \  / / / _ \
+*    /_/  /_/\_,_/\__/_//_/ /_/_/_.__/
+*
+*/
+
+void planeIntersection(WrenVM* vm) {
+    math::Rayf* ray = wrenly::getForeignSlotPtr<math::Rayf, 0>(vm);
+    const math::Planef* plane = wrenly::getForeignSlotPtr<math::Planef, 1>(vm);
+    math::rayIntersectsPlane(*ray, *plane);
+    // calculate intersection point
+    math::Vec3f xpoint = ray->origin + ray->direction * ray->t;
+    wrenly::setForeignSlotValue(vm, xpoint);
+}
+
+void generateCameraRay(WrenVM* vm) {
+    float x = float(wrenGetSlotDouble(vm, 1));
+    float y = float(wrenGetSlotDouble(vm, 2));
+    auto camera = Locator<system::RenderSystem>::get()->activeCameraInfo();
+    auto ray = math::generateCameraRay(camera.position, camera.orientation, camera.frustum, x, y);
+    wrenly::setForeignSlotValue(vm, ray);
+}
 
 /***
  *       _  __           __           ___

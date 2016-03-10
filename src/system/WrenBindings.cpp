@@ -1,6 +1,7 @@
 
 #include "math/Vector.h"
 #include "math/Quaternion.h"
+#include "math/Geometry.h"
 #include "ecs/Include.h"
 #include "component/Include.h"
 #include "imgui/imgui.h"
@@ -22,26 +23,42 @@ extern void set(WrenVM*);
 namespace ig = ImGui;
 
 void bindMathModule() {
-    wrenly::beginModule( "builtin/math" )
-        .beginClass( "Math" )
-            .bindFunction< decltype(static_cast<double(*)(double)>(&cos)), &cos     >( true, "cos(_)" )
-            .bindFunction< decltype(static_cast<double(*)(double)>(&sin)), &sin     >( true, "sin(_)" )
-            .bindFunction< decltype(static_cast<double(*)(double)>(&tan)), &tan     >( true, "tan(_)" )
-            .bindFunction< decltype(static_cast<double(*)(double)>(&acos)), &acos   >( true, "acos(_)" )
-            .bindFunction< decltype(static_cast<double(*)(double)>(&asin)), &asin   >( true, "asin(_)" )
-            .bindFunction< decltype(static_cast<double(*)(double)>(&atan)), &atan   >( true, "atan(_)" )
-            .bindFunction< decltype(static_cast<double(*)(double, double)>(&atan2)), &atan2 >( true, "atan2(_)" )
-            .bindFunction< decltype(static_cast<double(*)(double)>(&exp)), &exp     >( true, "exp(_)" )
-            .bindFunction< decltype(static_cast<double(*)(double)>(&log)), &log     >( true, "log(_)" )
-            .bindFunction< decltype(static_cast<double(*)(double, double)>(&pow)), &pow     >( true, "pow(_)" )
-            .bindFunction< decltype(static_cast<double(*)(double)>(&sqrt)), &sqrt   >( true, "sqrt(_)" )
-            .bindFunction< decltype(static_cast<double(*)(double)>(&cbrt)), &cbrt   >( true, "cbrt(_)" )
-            .bindFunction< decltype(static_cast<double(*)(double)>(&ceil)), &ceil   >( true, "ceil(_)" )
-            .bindFunction< decltype(static_cast<double(*)(double)>(&floor)), &floor >( true, "floor(_)" )
-            .bindFunction< decltype(static_cast<double(*)(double)>(&round)), &round >( true, "round(_)" )
-            .bindFunction< decltype(static_cast<double(*)(double)>(&abs)),  &abs    >( true, "abs(_)" )
-            .bindFunction< decltype(static_cast<double(*)(double, double)>(&pg::randd) ), static_cast<double(*)(double, double)>(&pg::randd) >( true, "rand(_,_)" )
-            .bindFunction< decltype(static_cast<double(*)(void)>(&pg::randd)), static_cast<double(*)(void)>(&pg::randd) >( true, "rand()" );
+    wrenly::beginModule("builtin/math")
+        .beginClass("Math")
+            .bindFunction< decltype(static_cast<double(*)(double)>(&cos)), &cos     >(true, "cos(_)")
+            .bindFunction< decltype(static_cast<double(*)(double)>(&sin)), &sin     >(true, "sin(_)")
+            .bindFunction< decltype(static_cast<double(*)(double)>(&tan)), &tan     >(true, "tan(_)")
+            .bindFunction< decltype(static_cast<double(*)(double)>(&acos)), &acos   >(true, "acos(_)")
+            .bindFunction< decltype(static_cast<double(*)(double)>(&asin)), &asin   >(true, "asin(_)")
+            .bindFunction< decltype(static_cast<double(*)(double)>(&atan)), &atan   >(true, "atan(_)")
+            .bindFunction< decltype(static_cast<double(*)(double, double)>(&atan2)), &atan2 >(true, "atan2(_)")
+            .bindFunction< decltype(static_cast<double(*)(double)>(&exp)), &exp     >(true, "exp(_)")
+            .bindFunction< decltype(static_cast<double(*)(double)>(&log)), &log     >(true, "log(_)")
+            .bindFunction< decltype(static_cast<double(*)(double, double)>(&pow)), &pow     >(true, "pow(_)")
+            .bindFunction< decltype(static_cast<double(*)(double)>(&sqrt)), &sqrt   >(true, "sqrt(_)")
+            .bindFunction< decltype(static_cast<double(*)(double)>(&cbrt)), &cbrt   >(true, "cbrt(_)")
+            .bindFunction< decltype(static_cast<double(*)(double)>(&ceil)), &ceil   >(true, "ceil(_)")
+            .bindFunction< decltype(static_cast<double(*)(double)>(&floor)), &floor >(true, "floor(_)")
+            .bindFunction< decltype(static_cast<double(*)(double)>(&round)), &round >(true, "round(_)")
+            .bindFunction< decltype(static_cast<double(*)(double)>(&abs)), &abs    >(true, "abs(_)")
+            .bindFunction< decltype(static_cast<double(*)(double, double)>(&pg::randd)), static_cast<double(*)(double, double)>(&pg::randd) >(true, "rand(_,_)")
+            .bindFunction< decltype(static_cast<double(*)(void)>(&pg::randd)), static_cast<double(*)(void)>(&pg::randd) >(true, "rand()")
+            .bindCFunction(true, "generateCameraRay(_,_)", wren::generateCameraRay)
+        .endClass()
+        .bindClass<math::Rayf, math::Vec3f, math::Vec3f>("Ray")
+            .bindGetter<decltype(math::Rayf::origin), &math::Rayf::origin>(false, "origin")
+            .bindSetter<decltype(math::Rayf::origin), &math::Rayf::origin>(false, "origin=(_)")
+            .bindGetter<decltype(math::Rayf::direction), &math::Rayf::direction>(false, "direction")
+            .bindSetter<decltype(math::Rayf::direction), &math::Rayf::direction>(false, "direction=(_)")
+            .bindGetter<decltype(math::Rayf::t), &math::Rayf::t>(false, "scalingParameter")
+            .bindSetter<decltype(math::Rayf::t), &math::Rayf::t>(false, "scalingParameter=(_)")
+            .bindCFunction(false, "planeIntersection(_)", wren::planeIntersection)
+        .endClass()
+        .bindClass<math::Planef, math::Vec3f, math::Vec3f, math::Vec3f>("Plane")
+            .bindMethod<decltype(&math::Planef::point), &math::Planef::point>(false, "point()")
+            .bindMethod<decltype(&math::Planef::normal), &math::Planef::normal>(false, "normal()")
+        .endClass()
+    .endModule();
 }
 
 void bindImguiModule() {
