@@ -46,6 +46,7 @@ void GameState::activate() {
     Locator<system::ScriptSystem>::set(dynamic_cast<system::ScriptSystem*>(systems_.system<system::ScriptSystem>()));
     Locator<system::PickingSystem>::set(dynamic_cast<system::PickingSystem*>(systems_.system<system::PickingSystem>()));
     Locator<system::RenderSystem>::set(dynamic_cast<system::RenderSystem*>(systems_.system<system::RenderSystem>()));
+    Locator<system::DebugRenderSystem>::set(dynamic_cast<system::DebugRenderSystem*>(systems_.system<system::DebugRenderSystem>()));
 
     // the full capacity of the systems are used in parsing, so the systems must be configured and ready to go!
     WorldIO world(context_);

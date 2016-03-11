@@ -6,3 +6,8 @@ foreign class Pick3d {
      */
     foreign static castCameraRay(x, y)
 }
+
+class DebugRenderer {
+    foreign static addDebugBox(position, scale, color)
+    foreign static addDebugBox(position, scale, color, lifeTime)
+}

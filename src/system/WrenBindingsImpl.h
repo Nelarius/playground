@@ -110,6 +110,8 @@ void minus4f(WrenVM* vm);
 
 // systems
 void castCameraRay(WrenVM* vm);
+void addStaticDebugBox(WrenVM* vm);
+void addTransientDebugBox(WrenVM* vm);
 
 // components
 void getTransformPosition(WrenVM* vm);

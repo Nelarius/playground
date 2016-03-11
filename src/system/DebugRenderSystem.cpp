@@ -6,8 +6,7 @@
 
 namespace {
 
-// TODO: this needs to be exposed in a public API
-const std::size_t MaxDebugLines = 1000u;
+const std::size_t MaxTransientElements = 500u;
 
 const float cubePoints[] = {
     -0.500000, -0.500000,  0.500000,    // 0
@@ -24,7 +23,17 @@ const GLuint cubeLines[] = {
     0u, 2u, 2u, 4u, 4u, 6u, 6u, 0u,
     0u, 1u, 1u, 3u, 3u, 2u, 2u, 0u,
     6u, 7u, 7u, 5u, 5u, 4u, 4u, 6u,
-    7u, 1u, 1u, 3u, 3u, 5u, 5u, 7u
+    7u, 1u, 1u, 3u, 3u, 5u, 5u, 7u,
+
+};
+
+const GLuint cubeTris[] = {
+    0u, 1u, 3u, 3u, 2u, 0u,
+    5u, 7u, 6u, 6u, 4u, 5u,
+    5u, 4u, 2u, 2u, 3u, 5u,
+    7u, 1u, 0u, 0u, 6u, 7u,
+    6u, 0u, 2u, 2u, 4u, 6u,
+    5u, 3u, 1u, 1u, 7u, 5u
 };
 
 }
@@ -35,16 +44,21 @@ namespace system {
 DebugRenderSystem::DebugRenderSystem(Context& context)
     : context_{ context },
     defaultProjection_{},
-    debugLines_{},
+    staticDebugLines_{},
+    transientDebugLines_{},
     lineLifeTimes_{},
+    staticDebugBoxes_{},
+    transientDebugBoxes_{},
+    boxLifeTimes_{},
     lineBuffer_{ GL_ARRAY_BUFFER },
     lineBufferArray_{ 0 },
     showLines_{ false },
-    showBoxes_{ false } {
+    showBoundingBoxes_{ false },
+    showDebugBoxes_{ false } {
     defaultProjection_ = math::Matrix4f::perspective(70.0f, 1.5f, 0.1f, 100.0f);
 
     // set up the debug buffers and VAOs
-    lineBuffer_.dataStore(MaxDebugLines, 6 * sizeof(float), NULL, GL_STREAM_DRAW);
+    lineBuffer_.dataStore(MaxTransientElements, 6 * sizeof(float), NULL, GL_STREAM_DRAW);
     opengl::VertexArrayObjectFactory fact{ &lineBuffer_, context_.shaderManager.get("basic") };
     fact.addStandardAttribute(opengl::VertexAttribute::Vertex);
     lineBufferArray_ = fact.getVao();
@@ -79,22 +93,15 @@ DebugRenderSystem::~DebugRenderSystem() {
 void DebugRenderSystem::configure(ecs::EventManager& events) {
     events.subscribe<ecs::ComponentAssignedEvent<component::Camera>>(*this);
     events.subscribe<ShowDebugLines>(*this);
+    events.subscribe<ShowBoundingBoxes>(*this);
     events.subscribe<ShowDebugBoxes>(*this);
     events.subscribe<RenderDebugLine>(*this);
+    events.subscribe<RenderDebugBox>(*this);
 }
 
 void DebugRenderSystem::update(ecs::EntityManager& entities, ecs::EventManager& events, float dt) {
-    if (lineLifeTimes_.size() != 0u) {
-        for (std::size_t i = lineLifeTimes_.size() - 1u; i-- > 0u;) {
-            lineLifeTimes_[i] -= dt;
-            if (lineLifeTimes_[i] < 0.f) {
-                std::swap(lineLifeTimes_[i], lineLifeTimes_.back());
-                lineLifeTimes_.pop_back();
-                std::swap(debugLines_[i], debugLines_.back());
-                debugLines_.pop_back();
-            }
-        }
-    }
+    updateTransientElements_(lineLifeTimes_, transientDebugLines_, dt);
+    updateTransientElements_(boxLifeTimes_, transientDebugBoxes_, dt);
 
     math::Matrix4f cameraMatrix{ defaultProjection_ };
     if (cameraEntity_.isValid()) {
@@ -120,7 +127,7 @@ void DebugRenderSystem::update(ecs::EntityManager& entities, ecs::EventManager& 
         opengl::UseProgram use{ *shader };
         shader->setUniform("color", math::Vec3f{ 1.0f, 0.2f, 0.2f });
         shader->setUniform("camera", cameraMatrix);
-        if (showBoxes_) {
+        if (showBoundingBoxes_) {
             /// BOUNDING BOXES
             ///////////////////////////////////////////////////////////
             for (ecs::Entity entity : entities.join< component::Transform, math::AABoxf >()) {
@@ -150,12 +157,17 @@ void DebugRenderSystem::update(ecs::EntityManager& entities, ecs::EventManager& 
         if (showLines_) {
             /// LINES
             ///////////////////////////////////////////////////////////
-            const std::size_t LineCount = debugLines_.size();
+            const std::size_t LineCount = staticDebugLines_.size() + transientDebugLines_.size();
             math::Vec3f* lines = (math::Vec3f*)lineBuffer_.mapBufferRange(0, LineCount * 6u * sizeof(float), GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT);
-            for (unsigned i = 0u; i < 2u * LineCount; i += 2u) {
+            for (unsigned i = 0u; i < 2u * staticDebugLines_.size(); i += 2u) {
                 unsigned index = i / 2u;
-                lines[i] = debugLines_[index].origin;
-                lines[i + 1u] = debugLines_[index].end;
+                lines[i] = staticDebugLines_[index].origin;
+                lines[i + 1u] = staticDebugLines_[index].end;
+            }
+            for (auto i = staticDebugLines_.size(); i < 2u * LineCount; i += 2u) {
+                unsigned index = (i / 2u) - staticDebugLines_.size();
+                lines[i] = transientDebugLines_[index].origin;
+                lines[i + 1u] = transientDebugLines_[index].end;
             }
             lineBuffer_.unmapBuffer();
 
@@ -163,8 +175,25 @@ void DebugRenderSystem::update(ecs::EntityManager& entities, ecs::EventManager& 
             shader->setUniform("model", math::Matrix4f{});
             {
                 opengl::UseArray array(lineBufferArray_);
-                glDrawArrays(GL_LINES, 0, debugLines_.size());
+                glDrawArrays(GL_LINES, 0, LineCount);
             }
+        }
+
+        if (showDebugBoxes_) {
+            glBindBuffer(GL_ARRAY_BUFFER, cubeVbo_);
+            for (auto& box : staticDebugBoxes_) {
+                math::Matrix4f M = math::Matrix4f::translation(box.position) * math::Matrix4f::scale(box.scale);
+                shader->setUniform("model", M);
+                shader->setUniform("color", box.color);
+                glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, cubeTris);
+            }
+            for (auto& box : transientDebugBoxes_) {
+                math::Matrix4f M = math::Matrix4f::translation(box.position) * math::Matrix4f::scale(box.scale);
+                shader->setUniform("model", M);
+                shader->setUniform("color", box.color);
+                glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, cubeTris);
+            }
+            glBindBuffer(GL_ARRAY_BUFFER, 0);
         }
     }
 }
@@ -177,17 +206,38 @@ void DebugRenderSystem::receive(const ShowDebugLines& event) {
     showLines_ = event.show;
 }
 
+void DebugRenderSystem::receive(const ShowBoundingBoxes& event) {
+    showBoundingBoxes_ = event.show;
+}
+
 void DebugRenderSystem::receive(const ShowDebugBoxes& event) {
-    showBoxes_ = event.show;
+    showDebugBoxes_ = event.show;
 }
 
 void DebugRenderSystem::receive(const RenderDebugLine& line) {
-    if (debugLines_.size() < MaxDebugLines) {
-        debugLines_.push_back(math::Linef{ line.start, line.end });
-        lineLifeTimes_.push_back(line.lifeTime);
+    addDebugLine(line);
+}
+
+void DebugRenderSystem::receive(const RenderDebugBox& box) {
+    addDebugBox(box);
+}
+
+void DebugRenderSystem::addDebugLine(const RenderDebugLine& line) {
+    if (line.lifeTime == 0.f) {
+        staticDebugLines_.push_back(math::Linef{ line.start, line.end });
     }
     else {
-        LOG_INFO << "There are already " << debugLines_.size() << " debug lines. No more can be added!";
+        transientDebugLines_.push_back(math::Linef{ line.start, line.end });
+    }
+}
+
+void DebugRenderSystem::addDebugBox(const RenderDebugBox& box) {
+    if (box.lifeTime == 0.f) {
+        staticDebugBoxes_.push_back(box);
+    }
+    else {
+        transientDebugBoxes_.push_back(box);
+        boxLifeTimes_.push_back(box.lifeTime);
     }
 }
 

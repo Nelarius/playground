@@ -278,6 +278,10 @@ void bindSystemsModule() {
         .beginClass("Pick3d")
             .bindCFunction(true, "castCameraRay(_,_)", wren::castCameraRay)
         .endClass()
+        .beginClass("DebugRenderer")
+            .bindCFunction(true, "addDebugBox(_,_,_,_)", wren::addTransientDebugBox)
+            .bindCFunction(true, "addDebugBox(_,_,_)", wren::addStaticDebugBox)
+        .endClass()
     .endModule();
 }
 

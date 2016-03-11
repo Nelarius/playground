@@ -24,7 +24,8 @@ void UiSystem::toggleDisplay() {
 }
 
 void UiSystem::ui_(ecs::EventManager& events, float dt) {
-    static bool debugBoundingBoxes = false;
+    static bool boundingBoxes = false;
+    static bool debugBoxes = false;
     static bool debugLines = false;
 
     ImGui::Begin("System settings");
@@ -40,11 +41,12 @@ void UiSystem::ui_(ecs::EventManager& events, float dt) {
     }
 
     if (ImGui::TreeNode("Debug renderer")) {
-        ImGui::Checkbox("bounding box", &debugBoundingBoxes);
+        ImGui::Checkbox("bounding boxes", &boundingBoxes);
         ImGui::Checkbox("debug lines", &debugLines);
-        events.emit<system::ShowDebugBoxes>(debugBoundingBoxes);
+        ImGui::Checkbox("debug boxes", &debugBoxes);
+        events.emit<system::ShowBoundingBoxes>(boundingBoxes);
+        events.emit<system::ShowDebugBoxes>(debugBoxes);
         events.emit<system::ShowDebugLines>(debugLines);
-
         ImGui::TreePop();
     }
 

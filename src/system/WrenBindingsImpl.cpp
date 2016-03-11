@@ -8,6 +8,7 @@
 #include "manager/MeshManager.h"
 #include "manager/ShaderManager.h"
 #include "opengl/VertexArrayObjectFactory.h"
+#include "system/DebugRenderSystem.h"
 #include "system/ScriptSystem.h"
 #include "system/PickingSystem.h"
 #include "system/RenderSystem.h"
@@ -598,6 +599,23 @@ void castCameraRay(WrenVM* vm) {
     ecs::Entity res = pick3d->rayCast(*entities, *events, x, y);
     wrenGetVariable(vm, "builtin/entity", "Entity", 0);
     wrenly::setForeignSlotValue(vm, res);
+}
+
+void addStaticDebugBox(WrenVM* vm) {
+    auto* renderer = Locator<system::DebugRenderSystem>::get();
+    auto* position = wrenly::getForeignSlotPtr<math::Vec3f, 1>(vm);
+    auto* scale = wrenly::getForeignSlotPtr<math::Vec3f, 2>(vm);
+    auto* color = wrenly::getForeignSlotPtr<math::Vec3f, 3>(vm);
+    renderer->addDebugBox(system::RenderDebugBox{*position, *scale, *color, 0.f});
+}
+
+void addTransientDebugBox(WrenVM* vm) {
+    auto* renderer = Locator<system::DebugRenderSystem>::get();
+    auto* position = wrenly::getForeignSlotPtr<math::Vec3f, 1>(vm);
+    auto* scale = wrenly::getForeignSlotPtr<math::Vec3f, 2>(vm);
+    auto* color = wrenly::getForeignSlotPtr<math::Vec3f, 3>(vm);
+    float lifeTime = float(wrenGetSlotDouble(vm, 4));
+    renderer->addDebugBox(system::RenderDebugBox{ *position, *scale, *color, lifeTime });
 }
 
 /***
