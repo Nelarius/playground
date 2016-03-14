@@ -256,10 +256,10 @@ struct Vector4 {
 
     void normalize() {
         T n = T(1.0) / norm();
-        n*x;
-        n*y;
-        n*z;
-        n*w;
+        x *= n;
+        y *= n;
+        z *= n;
+        w *= n;
     }
 
     T dot(const Vector4<T>& rhs) const {

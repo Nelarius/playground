@@ -100,13 +100,16 @@ void ringBufferPushBack(WrenVM*);
 void hadamard2f(WrenVM* vm);
 void plus2f(WrenVM* vm);
 void minus2f(WrenVM* vm);
+void scale2f(WrenVM* vm);
 void cross3f(WrenVM* vm);
 void hadamard3f(WrenVM* vm);
 void plus3f(WrenVM* vm);
 void minus3f(WrenVM* vm);
+void scale3f(WrenVM* vm);
 void hadamard4f(WrenVM* vm);
 void plus4f(WrenVM* vm);
 void minus4f(WrenVM* vm);
+void scale4f(WrenVM* vm);
 
 // systems
 void castCameraRay(WrenVM* vm);

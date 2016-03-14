@@ -525,6 +525,13 @@ void minus2f(WrenVM* vm) {
     wrenly::setForeignSlotValue(vm, res);
 }
 
+void scale2f(WrenVM* vm) {
+    const math::Vec2f* v = wrenly::getForeignSlotPtr<math::Vec2f, 0>(vm);
+    float scale = float(wrenGetSlotDouble(vm, 1));
+    math::Vec2f res = v->operator*(scale);
+    wrenly::setForeignSlotValue(vm, res);
+}
+
 void cross3f(WrenVM* vm) {
     wrenEnsureSlots(vm, 2);
     const math::Vec3f* lhs = wrenly::getForeignSlotPtr<math::Vec3f, 0>(vm);
@@ -557,6 +564,13 @@ void hadamard3f(WrenVM* vm) {
     wrenly::setForeignSlotValue(vm, res);
 }
 
+void scale3f(WrenVM* vm) {
+    const math::Vec3f* v = wrenly::getForeignSlotPtr<math::Vec3f, 0>(vm);
+    float scale = float(wrenGetSlotDouble(vm, 1));
+    math::Vec3f res = v->operator*(scale);
+    wrenly::setForeignSlotValue(vm, res);
+}
+
 void hadamard4f(WrenVM* vm) {
     wrenEnsureSlots(vm, 2);
     const math::Vec4f* lhs = wrenly::getForeignSlotPtr<math::Vec4f, 0>(vm);
@@ -578,6 +592,13 @@ void minus4f(WrenVM* vm) {
     const math::Vec4f* lhs = wrenly::getForeignSlotPtr<math::Vec4f, 0>(vm);
     const math::Vec4f* rhs = wrenly::getForeignSlotPtr<math::Vec4f, 1>(vm);
     math::Vec4f res = lhs->operator-(*rhs);
+    wrenly::setForeignSlotValue(vm, res);
+}
+
+void scale4f(WrenVM* vm) {
+    const math::Vec4f* v = wrenly::getForeignSlotPtr<math::Vec4f, 0>(vm);
+    float scale = float(wrenGetSlotDouble(vm, 1));
+    math::Vec4f res = v->operator*(scale);
     wrenly::setForeignSlotValue(vm, res);
 }
 
