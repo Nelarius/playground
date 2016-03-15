@@ -186,9 +186,10 @@ void getTransform(WrenVM* vm) {
 
 void createEntity(WrenVM* vm) {
     ecs::Entity entity = Locator<ecs::EntityManager>::get()->create();
-    wrenGetVariable(vm, "builtin/entity", "Entity", 0);
+    /*wrenGetVariable(vm, "builtin/entity", "Entity", 0);
     void* data = wrenSetSlotNewForeign(vm, 0, 0, sizeof(ecs::Entity));
-    memcpy(data, (void*)&entity, sizeof(ecs::Entity));
+    memcpy(data, (void*)&entity, sizeof(ecs::Entity));*/
+    wrenly::setForeignSlotValue(vm, entity);
 }
 
 void entityCount(WrenVM* vm) {
