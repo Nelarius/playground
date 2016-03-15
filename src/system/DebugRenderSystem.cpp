@@ -154,17 +154,18 @@ void DebugRenderSystem::update(ecs::EntityManager& entities, ecs::EventManager& 
             }
         }
 
-        if (showLines_) {
+        const std::size_t LineCount = staticDebugLines_.size() + transientDebugLines_.size();
+        if (showLines_ && LineCount > 0u) {
             /// LINES
             ///////////////////////////////////////////////////////////
-            const std::size_t LineCount = staticDebugLines_.size() + transientDebugLines_.size();
+            lineBuffer_.bind();
             math::Vec3f* lines = (math::Vec3f*)lineBuffer_.mapBufferRange(0, LineCount * 6u * sizeof(float), GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT);
             for (unsigned i = 0u; i < 2u * staticDebugLines_.size(); i += 2u) {
                 unsigned index = i / 2u;
                 lines[i] = staticDebugLines_[index].origin;
                 lines[i + 1u] = staticDebugLines_[index].end;
             }
-            for (auto i = staticDebugLines_.size(); i < 2u * LineCount; i += 2u) {
+            for (auto i = 2u * staticDebugLines_.size(); i < 2u * LineCount; i += 2u) {
                 unsigned index = (i / 2u) - staticDebugLines_.size();
                 lines[i] = transientDebugLines_[index].origin;
                 lines[i + 1u] = transientDebugLines_[index].end;
@@ -177,6 +178,7 @@ void DebugRenderSystem::update(ecs::EntityManager& entities, ecs::EventManager& 
                 opengl::UseArray array(lineBufferArray_);
                 glDrawArrays(GL_LINES, 0, LineCount);
             }
+            lineBuffer_.unbind();
         }
 
         if (showDebugBoxes_) {
