@@ -9,6 +9,7 @@ foreign class Vec2 {
 
     foreign norm()
     foreign normSquared()
+    foreign normalize() // normalizes the vector in place
     foreign dot( rhs )
     foreign hadamard( rhs )
     foreign plus( rhs )
@@ -27,12 +28,13 @@ foreign class Vec3 {
     foreign z=( rhs )
     foreign norm()
     foreign normSquared()
+    foreign normalize()
     foreign dot( rhs )
     foreign cross( rhs )    // returns the result
     foreign hadamard( rhs ) // returns the result
     foreign plus( rhs )     // returns the result
     foreign minus( rhs )    // returns the result
-    //foreign scale( s )
+    foreign scale( s )
 }
 
 foreign class Vec4 {
@@ -49,9 +51,10 @@ foreign class Vec4 {
 
     foreign norm()
     foreign normSquared()
+    foreign normalize()
     foreign dot( rhs )
     foreign hadamard( rhs )
     foreign plus( rhs )
     foreign minus( rhs )
-    //foreign scale( s )
+    foreign scale( s )
 }

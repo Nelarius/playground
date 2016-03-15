@@ -10,4 +10,6 @@ foreign class Pick3d {
 class DebugRenderer {
     foreign static addDebugBox(position, scale, color)
     foreign static addDebugBox(position, scale, color, lifeTime)
+    foreign static addDebugLine(start, end, color)
+    foreign static addDebugLine(start, end, color, lifeTime)
 }

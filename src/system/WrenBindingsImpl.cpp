@@ -640,6 +640,21 @@ void addTransientDebugBox(WrenVM* vm) {
     renderer->addDebugBox(system::RenderDebugBox{ *position, *scale, *color, lifeTime });
 }
 
+void addStaticDebugLine(WrenVM* vm) {
+    const math::Vec3f* start = wrenly::getForeignSlotPtr<math::Vec3f, 1>(vm);
+    const math::Vec3f* end   = wrenly::getForeignSlotPtr<math::Vec3f, 2>(vm);
+    const math::Vec3f* color = wrenly::getForeignSlotPtr<math::Vec3f, 3>(vm);
+    Locator<system::DebugRenderSystem>::get()->addDebugLine(system::RenderDebugLine{ *start, *end, 0.f });
+}
+
+void addTransientDebugLine(WrenVM* vm) {
+    const math::Vec3f* start = wrenly::getForeignSlotPtr<math::Vec3f, 1>(vm);
+    const math::Vec3f* end = wrenly::getForeignSlotPtr<math::Vec3f, 2>(vm);
+    const math::Vec3f* color = wrenly::getForeignSlotPtr<math::Vec3f, 3>(vm);
+    float lifeTime = float(wrenGetSlotDouble(vm, 4));
+    Locator<system::DebugRenderSystem>::get()->addDebugLine(system::RenderDebugLine{ *start, *end, lifeTime });
+}
+
 /***
 *       ______                                             __
 *      / ____/___  ____ ___  ____  ____  ____  ___  ____  / /______

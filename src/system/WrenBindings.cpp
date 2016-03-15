@@ -287,6 +287,8 @@ void bindSystemsModule() {
         .beginClass("DebugRenderer")
             .bindCFunction(true, "addDebugBox(_,_,_,_)", wren::addTransientDebugBox)
             .bindCFunction(true, "addDebugBox(_,_,_)", wren::addStaticDebugBox)
+            .bindCFunction(true, "addDebugLine(_,_,_,_)", wren::addTransientDebugLine)
+            .bindCFunction(true, "addDebugLine(_,_,_)", wren::addStaticDebugLine)
         .endClass()
     .endModule();
 }
