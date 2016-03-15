@@ -27,6 +27,12 @@ class Assert {
         }
     }
 
+    static notNull(value) {
+        if (value == null) {
+            abortCurrentFiber("notNull")
+        }
+    }
+
     static succeed(callable) {
         var fiber = Fiber.new {
             callable.call()
