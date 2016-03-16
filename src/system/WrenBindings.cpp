@@ -197,6 +197,7 @@ void bindQuaternionModule() {
             // methods
             .bindMethod< decltype(&math::Quatf::norm), &math::Quatf::norm >( false, "norm()" )
             .bindMethod< decltype(&math::Quatf::normSquared), &math::Quatf::normSquared >( false, "normSquared()" )
+            .bindMethod< decltype(&math::Quatf::normalize), &math::Quatf::normalize>(false, "normalize()")
             .bindMethod< decltype(&math::Quatf::angle), &math::Quatf::angle >( false, "angle()" )
             .bindMethod<decltype(&math::Quatf::conjugate), &math::Quatf::conjugate>(false, "conjugate()")
             .bindMethod<decltype(&math::Quatf::inverse), &math::Quatf::inverse>(false, "inverse()")

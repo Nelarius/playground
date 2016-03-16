@@ -62,6 +62,21 @@ public:
         return v.normSquared() + w*w;
     }
 
+    Quaternion<T> normalized() const {
+        T n = T(1.0) / norm();
+        return Quaternion<T>{
+            v.x*n, v.y*n, v.z*n, w*n
+        };
+    }
+
+    void normalize() {
+        T n = T(1.0) / norm();
+        v.x *= n;
+        v.y *= n;
+        v.z *= n;
+        w *= n;
+    }
+
     Quaternion<T> operator*(const Quaternion& rhs) const {
         return Quaternion<T> {
             v.cross(rhs.v) + rhs.w*v + w*rhs.v,
