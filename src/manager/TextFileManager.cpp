@@ -16,7 +16,6 @@ TextFileManager::TextFileManager(Context& context)
 {}
 
 const std::string& TextFileManager::get(const std::string& file) const {
-    LOG_INFO << "TextFileManager fetching " << file;
     std::size_t uid = id(file);
     auto it = strings_.find(uid);
     if (it != strings_.end()) {
