@@ -106,7 +106,7 @@ void entityVersion(WrenVM* vm) {
 void setTransform(WrenVM* vm) {
     ecs::Entity* e = wrenly::getForeignSlotPtr<ecs::Entity, 0>(vm);
     component::Transform* t = wrenly::getForeignSlotPtr<Transform, 1>(vm);
-    *e->componentPointer< component::Transform >() = *t;
+    *e->rawPointer<Transform>() = *t;
 }
 
 void hasTransform(WrenVM* vm) {
@@ -169,7 +169,7 @@ void assignRenderable(WrenVM* vm) {
 void getTransform(WrenVM* vm) {
     const ecs::Entity* entity = wrenly::getForeignSlotPtr<ecs::Entity, 0>(vm);
     if (entity->has<Transform>()) {
-        wrenly::setForeignSlotValue(vm, *entity->component<Transform>());
+        wrenly::setForeignSlotPtr(vm, entity->rawPointer<Transform>());
     }
     else {
         LOG_INFO << "Script error: entity " << entity->id().index() << " doesn't have a transform component";
@@ -432,53 +432,9 @@ void unsetShowBorders(WrenVM* vm) {
  *
  */
 
-void conjugate(WrenVM* vm) {
-    wrenEnsureSlots(vm, 1);
-    const math::Quatf* q = wrenly::getForeignSlotPtr<math::Quatf, 0>(vm);
-    math::Quatf res = q->conjugate();
-    wrenly::setForeignSlotValue(vm, res);
-}
-
-void inverse(WrenVM* vm) {
-    wrenEnsureSlots(vm, 1);
-    const math::Quatf* q = wrenly::getForeignSlotPtr<math::Quatf, 0>(vm);
-    math::Quatf res = q->inverse();
-    wrenly::setForeignSlotValue(vm, res);
-}
-
-void multiply(WrenVM* vm) {
-    wrenEnsureSlots(vm, 2);
-    const math::Quatf* lhs = wrenly::getForeignSlotPtr<math::Quatf, 0>(vm);
-    const math::Quatf* rhs = wrenly::getForeignSlotPtr<math::Quatf, 1>(vm);
-    math::Quatf res = lhs->multiply(*rhs);
-    wrenly::setForeignSlotValue(vm, res);
-}
-
-void axis(WrenVM* vm) {
-    wrenEnsureSlots(vm, 1);
-    const math::Quatf* q = wrenly::getForeignSlotPtr<math::Quatf, 0>(vm);
-    math::Vec3f res = q->axis();
-    wrenly::setForeignSlotValue(vm, res);
-}
-
 void getQuatReal(WrenVM* vm) {
     const math::Quatf* q = wrenly::getForeignSlotPtr<math::Quatf, 0>(vm);
     wrenly::setForeignSlotValue(vm, q->v);
-}
-
-void xaxis(WrenVM* vm) {
-    const math::Quatf* q = wrenly::getForeignSlotPtr<math::Quatf, 0>(vm);
-    wrenly::setForeignSlotValue(vm, q->xaxis());
-}
-
-void yaxis(WrenVM* vm) {
-    const math::Quatf* q = wrenly::getForeignSlotPtr<math::Quatf, 0>(vm);
-    wrenly::setForeignSlotValue(vm, q->yaxis());
-}
-
-void zaxis(WrenVM* vm) {
-    const math::Quatf* q = wrenly::getForeignSlotPtr<math::Quatf, 0>(vm);
-    wrenly::setForeignSlotValue(vm, q->zaxis());
 }
 
 /***
@@ -530,38 +486,6 @@ void scale2f(WrenVM* vm) {
     const math::Vec2f* v = wrenly::getForeignSlotPtr<math::Vec2f, 0>(vm);
     float scale = float(wrenGetSlotDouble(vm, 1));
     math::Vec2f res = v->operator*(scale);
-    wrenly::setForeignSlotValue(vm, res);
-}
-
-void cross3f(WrenVM* vm) {
-    wrenEnsureSlots(vm, 2);
-    const math::Vec3f* lhs = wrenly::getForeignSlotPtr<math::Vec3f, 0>(vm);
-    const math::Vec3f* rhs = wrenly::getForeignSlotPtr<math::Vec3f, 1>(vm);
-    math::Vec3f res = lhs->cross(*rhs);
-    wrenly::setForeignSlotValue(vm, res);
-}
-
-void plus3f(WrenVM* vm) {
-    wrenEnsureSlots(vm, 2);
-    const math::Vec3f* lhs = wrenly::getForeignSlotPtr<math::Vec3f, 0>(vm);
-    const math::Vec3f* rhs = wrenly::getForeignSlotPtr<math::Vec3f, 1>(vm);
-    math::Vec3f res = lhs->operator+(*rhs);
-    wrenly::setForeignSlotValue(vm, res);
-}
-
-void minus3f(WrenVM* vm) {
-    wrenEnsureSlots(vm, 2);
-    const math::Vec3f* lhs = wrenly::getForeignSlotPtr<math::Vec3f, 0>(vm);
-    const math::Vec3f* rhs = wrenly::getForeignSlotPtr<math::Vec3f, 1>(vm);
-    math::Vec3f res = lhs->operator-(*rhs);
-    wrenly::setForeignSlotValue(vm, res);
-}
-
-void hadamard3f(WrenVM* vm) {
-    wrenEnsureSlots(vm, 2);
-    const math::Vec3f* lhs = wrenly::getForeignSlotPtr<math::Vec3f, 0>(vm);
-    const math::Vec3f* rhs = wrenly::getForeignSlotPtr<math::Vec3f, 1>(vm);
-    math::Vec3f res = lhs->hadamard(*rhs);
     wrenly::setForeignSlotValue(vm, res);
 }
 
@@ -665,17 +589,17 @@ void addTransientDebugLine(WrenVM* vm) {
 */
 void getTransformPosition(WrenVM* vm) {
     const Transform* t = wrenly::getForeignSlotPtr<Transform, 0>(vm);
-    wrenly::setForeignSlotValue(vm, t->position);
+    wrenly::setForeignSlotPtr(vm, const_cast<math::Vec3f*>(&t->position));
 }
 
 void getTransformRotation(WrenVM* vm) {
     const Transform* t = wrenly::getForeignSlotPtr<Transform, 0>(vm);
-    wrenly::setForeignSlotValue(vm, t->rotation);
+    wrenly::setForeignSlotPtr(vm, const_cast<math::Quatf*>(&t->rotation));
 }
 
 void getTransformScale(WrenVM* vm) {
     const Transform* t = wrenly::getForeignSlotPtr<Transform, 0>(vm);
-    wrenly::setForeignSlotValue(vm, t->scale);
+    wrenly::setForeignSlotPtr(vm, const_cast<math::Vec3f*>(&t->scale));
 }
 
 }   // wren

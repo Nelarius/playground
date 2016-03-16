@@ -55,8 +55,8 @@ struct Vector2 {
 
     void normalize() {
         T n = T(1.0) / norm();
-        n*x;
-        n*y;
+        x *= n;
+        y *= n;
     }
 
     T dot(const Vector2<T>& rhs) const {

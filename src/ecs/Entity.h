@@ -105,7 +105,7 @@ public:
     ComponentHandle<C> component() const;
 
     template<typename C>
-    C* componentPointer() const;
+    C* rawPointer() const;
     /**
      * @brief Check if this entity has an assigned component of type C.
      * @return True, if component of type C has been assigned, false otherwise.
@@ -466,7 +466,7 @@ bool Entity::has() const {
 }
 
 template<typename C>
-C* Entity::componentPointer() const {
+C* Entity::rawPointer() const {
     PG_ASSERT(isValid());
     return manager_->component_<C>(id_);
 }
