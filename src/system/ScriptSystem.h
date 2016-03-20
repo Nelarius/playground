@@ -4,7 +4,7 @@
 #include "ecs/Include.h"
 #include "component/Include.h"
 #include "system/Events.h"
-#include "Wrenly.h"
+#include "Wren++.h"
 #include <unordered_map>
 #include <set>
 #include <cstdlib>

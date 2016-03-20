@@ -507,17 +507,15 @@ ComponentHandle<C> EntityManager::assign_(Id id, Args&&... args) {
     PG_ASSERT(isValid_(id));
     const int family = detail::getComponentId<C>();
     accommodateComponent_<C>(); // create a new component pool, if not already done
-    new (componentPools_[family]->newCapacity(id.index())) C{ std::forward<Args>(args)... };
 
     if (componentMasks_[id.index()].test(family)) {
         // if there already is a component, then log it and return the existing component
         LOG_ERROR << "Tried to assign a component on top of an already existing one!";
         return ComponentHandle<C>{ this, id };
     }
-
-    eventDispatcher_.emit<ComponentAssignedEvent<C>>(Entity{ this, id }, ComponentHandle<C>{ this, id });
-
+    new (componentPools_[family]->newCapacity(id.index())) C{ std::forward<Args>(args)... };
     componentMasks_[id.index()].set(family);
+    eventDispatcher_.emit<ComponentAssignedEvent<C>>(Entity{ this, id }, ComponentHandle<C>{ this, id });
     return ComponentHandle<C>{ this, id };
 }
 
@@ -545,5 +543,5 @@ bool EntityManager::hasComponent_(Id id) const {
     return componentMasks_[id.index()].test(family);
 }
 
-}   // namespace ecs
-}   // namespace pg
+}
+}

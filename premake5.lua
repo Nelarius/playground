@@ -48,18 +48,18 @@ workspace "playground"
             files { "extern/filesentry/source/FileWatcherLinux.cpp" }
 
     --[[
-                      __    
- _    _________ ___  / /_ __
-| |/|/ / __/ -_) _ \/ / // /
-|__,__/_/  \__/_//_/_/\_, / 
-                     /___/  
+  _      __               __    __ 
+ | | /| / /______ ___  __/ /___/ /_
+ | |/ |/ / __/ -_) _ \/_  __/_  __/
+ |__/|__/_/  \__/_//_/ /_/   /_/   
+                                   
 --]]
-    project "wrenly"
+    project "wrenpp"
         kind "StaticLib"
         language "C++"
         targetdir "lib"
-        files { "extern/wrenly/src/**.cpp", "extern/wrenly/src/**.h"  }
-        includedirs { "extern/wrenly/src", "extern/wren/src/include" }
+        files { "extern/wrenpp/src/**.cpp", "extern/wrenpp/src/**.h"  }
+        includedirs { "extern/wrenpp/src", "extern/wren/src/include" }
         filter "configurations:Release"
             defines { "NDEBUG" }
 
@@ -74,10 +74,10 @@ workspace "playground"
         kind "ConsoleApp"
         language "C++"
         targetdir "bin"
-        links { "wrenly", "filesentry" }
-        files { "src/**.cpp", "src/**.h", "extern/json11/json11.cpp", "extern/imgui/**.cpp", "builtin/**.wren", "builtin/**.glsl", "src/config.json" }
+        links { "wrenpp", "filesentry" }
+        files { "src/**.cpp", "src/**.h", "extern/json11/json11.cpp", "extern/imgui/**.cpp", "data/**.wren", "data/**.glsl", "src/config.json" }
         includedirs {
-            "src", "extern/wrenly/src", "extern/filesentry/include",
+            "src", "extern/wrenpp/src", "extern/filesentry/include",
             "extern", "extern/assimp/include", "extern/SDL/include",
             "extern/wren/src/include", "extern/glew-1.13.0/include"
         }
@@ -104,7 +104,8 @@ workspace "playground"
         configuration "vs*"
             defines { "_CRT_SECURE_NO_WARNINGS" } -- This is to turn off warnings about 'localtime'
             prebuildcommands {
-                "if not exist \"..\\..\\bin\\builtin\" mkdir ..\\..\\bin\\builtin"
+                "if not exist \"..\\..\\bin\\pg\" mkdir ..\\..\\bin\\pg",
+                "if not exist \"..\\..\\bin\\glsl\" mkdir ..\\..\\bin\\glsl"
             }
             links { "SDL2", "assimp", "glew32", "opengl32"  }
             libdirs { 
@@ -117,8 +118,12 @@ workspace "playground"
             -- exlcude *.wren files from build, just copy them to the correct directory
             filter "files:**.wren or **.glsl"
                 --buildmessage "Copying %{file.relpath}..."
-                buildcommands { "copy ..\\..\\builtin\\%{file.name} ..\\..\\bin\\builtin" }
-                buildoutputs { "..\\..\\bin\\builtin\\%{file.name}" }
+                buildcommands { "copy ..\\..\\data\\wren\\%{file.name} ..\\..\\bin\\pg" }
+                buildoutputs { "..\\..\\bin\\pg\\%{file.name}" }
+            project "engine"
+            filter "files:**.glsl"
+                buildcommands { "copy ..\\..\\data\\glsl\\{%file.name} ..\\..\\bin\\glsl" }
+                buildoutputs { "..\\..\\bin\\glsl%{file.name}" }
             project "engine"
         --[[
    __  ___     __       ____ __   

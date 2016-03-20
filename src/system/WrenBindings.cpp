@@ -1,4 +1,5 @@
 
+#include "Wren++.h"
 #include "math/Vector.h"
 #include "math/Quaternion.h"
 #include "math/Geometry.h"
@@ -23,7 +24,7 @@ extern void set(WrenVM*);
 namespace ig = ImGui;
 
 void bindMathModule() {
-    wrenly::beginModule("builtin/math")
+    wrenpp::beginModule("builtin/math")
         .beginClass("Math")
             .bindFunction< decltype(static_cast<double(*)(double)>(&cos)), &cos     >(true, "cos(_)")
             .bindFunction< decltype(static_cast<double(*)(double)>(&sin)), &sin     >(true, "sin(_)")
@@ -62,7 +63,7 @@ void bindMathModule() {
 }
 
 void bindImguiModule() {
-    wrenly::beginModule( "builtin/imgui" )
+    wrenpp::beginModule( "builtin/imgui" )
         .bindClass< wren::ImGuiWindowFlag >( "ImguiFlag" )
             .bindCFunction( false, "setTitleBar()", wren::setTitleBar )
             .bindCFunction( false, "unsetTitleBar()", wren::unsetTitleBar )
@@ -104,7 +105,7 @@ void bindImguiModule() {
 }
 
 void bindNumberArrayModule() {
-    wrenly::beginModule( "builtin/array" )
+    wrenpp::beginModule( "builtin/array" )
         .bindClass< std::vector<float> >( "NumberArray" )
             .bindCFunction( false, "pushBack(_)", wren::arrayPushBack )
             .bindCFunction( false, "at(_)", wren::arrayAt )
@@ -112,7 +113,7 @@ void bindNumberArrayModule() {
 }
 
 void bindRingBufferModule() {
-    wrenly::beginModule( "builtin/ringbuffer" )
+    wrenpp::beginModule( "builtin/ringbuffer" )
         .bindClass< RingBuffer<float>, std::size_t >( "NumberRingBuffer" )
             // element access
             .bindMethod< decltype((float&(RingBuffer<float>::*)(std::size_t))&RingBuffer<float>::at), &RingBuffer<float>::at >( false, "at(_)" )
@@ -131,7 +132,7 @@ void bindRingBufferModule() {
 }
 
 void bindVectorModule() {
-    wrenly::beginModule( "builtin/vector" )
+    wrenpp::beginModule( "builtin/vector" )
         .bindClass< math::Vec3f, float, float, float >( "Vec3" )
             // properties
             .bindGetter< decltype(math::Vec3f::x), &math::Vec3f::x >( false, "x" )
@@ -187,7 +188,7 @@ void bindVectorModule() {
 }
 
 void bindQuaternionModule() {
-    wrenly::beginModule( "builtin/quaternion" )
+    wrenpp::beginModule( "builtin/quaternion" )
         .bindClass< math::Quatf, float, float, float, float >( "Quat" )
             // properties
             .bindSetter< decltype(math::Quatf::v), &math::Quatf::v >( false, "v=(_)")
@@ -211,7 +212,7 @@ void bindQuaternionModule() {
 }
 
 void bindEntityModule() {
-    wrenly::beginModule("builtin/entity")
+    wrenpp::beginModule("builtin/entity")
         .bindClass< ecs::Entity >("Entity")
             .bindMethod<decltype(&ecs::Entity::isValid), &ecs::Entity::isValid>(false, "isValid()")
             .bindMethod<decltype(&ecs::Entity::destroy), &ecs::Entity::destroy>(false, "destroy()")
@@ -233,7 +234,7 @@ void bindEntityModule() {
             .bindCFunction(true, "entityCount", wren::entityCount)
         .endClass()
     .endModule();
-    wrenly::beginModule("builtin/event")
+    wrenpp::beginModule("builtin/event")
         .beginClass("EventManager")
             .bindCFunction(true, "listenToKeyDown(_,_)", wren::listenToKeyDown)
             .bindCFunction(true, "listenToKeyPressed(_,_)", wren::listenToKeyPressed)
@@ -243,7 +244,7 @@ void bindEntityModule() {
             .bindCFunction(true, "listenToMouseUp(_,_)", wren::listenToMouseUp)
         .endClass()
     .endModule();
-    wrenly::beginModule("builtin/mouse")
+    wrenpp::beginModule("builtin/mouse")
         .beginClass("Mouse")
             .bindCFunction(true, "x", wren::mouseX)
             .bindCFunction(true, "y", wren::mouseY)
@@ -254,7 +255,7 @@ void bindEntityModule() {
 }
 
 void bindComponentModule() {
-    wrenly::beginModule("builtin/component")
+    wrenpp::beginModule("builtin/component")
         .bindClass<component::Transform, math::Vec3f, math::Quatf, math::Vec3f>("Transform")
             .bindCFunction(false, "position", wren::getTransformPosition)
             .bindCFunction(false, "rotation", wren::getTransformRotation)
@@ -273,7 +274,7 @@ void bindComponentModule() {
 }
 
 void bindUtilsModule() {
-    wrenly::beginModule("builtin/utils")
+    wrenpp::beginModule("builtin/utils")
         .bindClass<StringId, const char*>("ResourceHandle")
             .bindMethod<decltype(&StringId::cString), &StringId::cString>(false, "toString")
         .endClass()
@@ -281,7 +282,7 @@ void bindUtilsModule() {
 }
 
 void bindSystemsModule() {
-    wrenly::beginModule("builtin/systems")
+    wrenpp::beginModule("builtin/systems")
         .beginClass("Pick3d")
             .bindCFunction(true, "castCameraRay(_,_)", wren::castCameraRay)
         .endClass()

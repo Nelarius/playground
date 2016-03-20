@@ -1,7 +1,5 @@
 #pragma once
 
-#include "Wrenly.h"
-
 namespace pg {
 namespace wren {
 

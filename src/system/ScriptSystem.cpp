@@ -58,27 +58,23 @@ void ScriptSystem::update(ecs::EntityManager& entities, ecs::EventManager& event
                     continue;
                 }
 
-                wrenly::Wren vm;
+                wrenpp::VM vm;
                 vm.executeString(
                     "import \"builtin/entity\" for Entity\n"
                     "var entity = Entity.new()\n"
                     );
-                auto set = vm.method("main", "entity", "set(_)");
-                set(int(entity.id().index()));
-                wrenly::Result res = vm.executeString(context_.textFileManager.get(id));
-                if (res != wrenly::Result::Success) {
+                {
+                    auto set = vm.method("main", "entity", "set_(_)");
+                    set(int(entity.id().index()));
+                }
+                wrenpp::Result res = vm.executeString(context_.textFileManager.get(id));
+                if (res != wrenpp::Result::Success) {
                     continue;
                 }
                 entity.remove< component::Script >();
-                auto activate = vm.method("main", "activate", "call()");
-                auto deactivate = vm.method("main", "deactivate", "call()");
-                auto update = vm.method("main", "update", "call(_)");
                 entity.assign< component::Script >(
                     id,
-                    std::move(vm),
-                    activate,
-                    deactivate,
-                    update
+                    std::move(vm)
                     );
             }
         }

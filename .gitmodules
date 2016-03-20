@@ -1,10 +1,10 @@
 
-[submodule "wrenly"]
-	path = extern/wrenly
-	url = https://github.com/nelarius/wrenly
 [submodule "filesentry"]
 	path = extern/filesentry
 	url = https://github.com/nelarius/filesentry
 [submodule "extern/wren"]
 	path = extern/wren
 	url = https://github.com/Nelarius/wren
+[submodule "extern/wrenpp"]
+	path = extern/wrenpp
+	url = https://github.com/Nelarius/wrenpp

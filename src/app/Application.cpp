@@ -6,7 +6,7 @@
 #include "utils/Log.h"
 #include "utils/Locator.h"
 #include "utils/StringId.h"
-#include "Wrenly.h"
+#include "Wren++.h"
 #include "json11/json11.hpp"
 #include <SDL_timer.h>
 #include <string>
@@ -121,7 +121,7 @@ void Application::initialize_() {
     /*
      * Initialize Wren state
      * */
-    wrenly::Wren::loadModuleFn = [this](const char* mod) -> char* {
+    wrenpp::VM::loadModuleFn = [this](const char* mod) -> char* {
         std::string path(mod);
         path += ".wren";
         const std::string& source = this->context_.textFileManager.get(path);
@@ -131,7 +131,7 @@ void Application::initialize_() {
         memcpy(buffer, source.c_str(), source.size());
         return buffer;
     };
-    wrenly::Wren::writeFn = [](WrenVM* vm, const char* text) -> void {
+    wrenpp::VM::writeFn = [](WrenVM* vm, const char* text) -> void {
         LOG_INFO << text;
     };
 

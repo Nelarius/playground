@@ -11,7 +11,7 @@
 #include "utils/Log.h"
 #include "utils/Assert.h"
 #include "utils/File.h"
-#include "Wrenly.h"
+#include "Wren++.h"
 #include "system/WrenBindings.h"
 
 namespace pg {
@@ -133,27 +133,23 @@ void WorldIO::read(
         if (!wrenScript.is_null()) {
             auto mod = wrenScript.string_value();
             auto path = mod + ".wren";
-            wrenly::Wren vm;
+            wrenpp::VM vm;
             vm.executeString(
                 "import \"builtin/entity\" for Entity\n"
                 "var entity = Entity.new()\n"
                 );
-            wrenly::Method set = vm.method("main", "entity", "set_(_)");
-            set(int(entity.id().index()));
-            wrenly::Result res = vm.executeModule(mod);
-            if (res == wrenly::Result::Success) {
-                auto activate = vm.method("main", "activate", "call()");
-                auto deactivate = vm.method("main", "deactivate", "call()");
-                auto update = vm.method("main", "update", "call(_)");
+            {
+                wrenpp::Method set = vm.method("main", "entity", "set_(_)");
+                set(int(entity.id().index()));
+            }
+            wrenpp::Result res = vm.executeModule(mod);
+            if (res == wrenpp::Result::Success) {
                 entity.assign< component::Script >(
                     context_.textFileManager.id(path),
-                    std::move(vm),
-                    activate,
-                    deactivate,
-                    update
-                    );
+                    std::move(vm)
+                );
             }
-            else if (res == wrenly::Result::CompileError) {
+            else if (res == wrenpp::Result::CompileError) {
                 LOG_ERROR << "Entity(" << entity.id().index() << ", " << entity.id().version() << "): there was an error when compiling " << mod << " module.";
             }
             else {
