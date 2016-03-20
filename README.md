@@ -171,11 +171,14 @@ Currently valid mouse button events to subscribe to are `Left, Middle, Right`.
 Here are the currently valid keyboard events to subscribe to:
 
 ```
-KeyNull, KeyReturn, KeyEscape, KeyBackspace, KeyTab, KeySpace, KeyExclaim, KeyQuoteDouble, KeyHash, KeyPercent, KeyDollar, KeyAmpersand,
+KeyNull, KeyReturn, KeyEscape, KeyBackspace, KeyTab, KeySpace, 
+KeyExclaim, KeyQuoteDouble, KeyHash, KeyPercent, KeyDollar, KeyAmpersand,
 KeyA, KeyB, ..., Key1, Key2, ..., KeyF1, KeyF2, ...
 ```
 
 #### Systems
+
+All systems are defined in `systems.wren`.
 
 ##### 3d Picking
 
@@ -190,7 +193,18 @@ var e = Pick3d.castCameraRay(Mouse.x, Mouse.y)
 if (e.isValid()) {
     // do magic here
 }
+```
 
+##### Debug renderer
+
+Add debug rendering primitives. Currently provided debug rendering primitives are the cube and line. Debug rendering primitives can be either static, or you can give them a life time, after which they will disappear. Debug rendering primitives can also be given a color.
+
+```js
+import "builtin/systems" for DebugRenderer
+
+// add a debug box with a position, scale, and color
+// the lifetime, in seconds, is an optional fourth parameter
+DebugRenderer.addDebugBox(Vec3.new(0.0, 0.0, 0.0), Vec3.new(1.0, 1.0, 1.0), Vec3.new(0.8, 0.2, 0.2))
 ```
 
 ## Dependencies
