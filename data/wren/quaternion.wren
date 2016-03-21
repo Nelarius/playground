@@ -4,6 +4,7 @@ foreign class Quat {
 
     foreign norm()
     foreign normSquared()
+    foreign normalize() // normalizes the quaternion in place
     foreign conjugate() // returns the result as a new Quaternion
     foreign inverse()   // returns the result as a new quaternion
     foreign axis()      // returns axis as Vec3

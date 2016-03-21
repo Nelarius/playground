@@ -60,7 +60,7 @@ void ScriptSystem::update(ecs::EntityManager& entities, ecs::EventManager& event
 
                 wrenpp::VM vm;
                 vm.executeString(
-                    "import \"builtin/entity\" for Entity\n"
+                    "import \"pg/entity\" for Entity\n"
                     "var entity = Entity.new()\n"
                     );
                 {

@@ -135,7 +135,7 @@ void WorldIO::read(
             auto path = mod + ".wren";
             wrenpp::VM vm;
             vm.executeString(
-                "import \"builtin/entity\" for Entity\n"
+                "import \"pg/entity\" for Entity\n"
                 "var entity = Entity.new()\n"
                 );
             {

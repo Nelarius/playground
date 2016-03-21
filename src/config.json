@@ -14,6 +14,5 @@
             "multisampleSamples": 4
         }
     },
-    "dataPrefix": "example",
-    "builtinPrefix": "builtin"
+    "shaderPrefix": "glsl"
 }

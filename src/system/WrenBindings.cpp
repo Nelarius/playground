@@ -24,7 +24,7 @@ extern void set(WrenVM*);
 namespace ig = ImGui;
 
 void bindMathModule() {
-    wrenpp::beginModule("builtin/math")
+    wrenpp::beginModule("pg/math")
         .beginClass("Math")
             .bindFunction< decltype(static_cast<double(*)(double)>(&cos)), &cos     >(true, "cos(_)")
             .bindFunction< decltype(static_cast<double(*)(double)>(&sin)), &sin     >(true, "sin(_)")
@@ -63,7 +63,7 @@ void bindMathModule() {
 }
 
 void bindImguiModule() {
-    wrenpp::beginModule( "builtin/imgui" )
+    wrenpp::beginModule( "pg/imgui" )
         .bindClass< wren::ImGuiWindowFlag >( "ImguiFlag" )
             .bindCFunction( false, "setTitleBar()", wren::setTitleBar )
             .bindCFunction( false, "unsetTitleBar()", wren::unsetTitleBar )
@@ -105,7 +105,7 @@ void bindImguiModule() {
 }
 
 void bindNumberArrayModule() {
-    wrenpp::beginModule( "builtin/array" )
+    wrenpp::beginModule( "pg/array" )
         .bindClass< std::vector<float> >( "NumberArray" )
             .bindCFunction( false, "pushBack(_)", wren::arrayPushBack )
             .bindCFunction( false, "at(_)", wren::arrayAt )
@@ -113,7 +113,7 @@ void bindNumberArrayModule() {
 }
 
 void bindRingBufferModule() {
-    wrenpp::beginModule( "builtin/ringbuffer" )
+    wrenpp::beginModule( "pg/ringbuffer" )
         .bindClass< RingBuffer<float>, std::size_t >( "NumberRingBuffer" )
             // element access
             .bindMethod< decltype((float&(RingBuffer<float>::*)(std::size_t))&RingBuffer<float>::at), &RingBuffer<float>::at >( false, "at(_)" )
@@ -132,7 +132,7 @@ void bindRingBufferModule() {
 }
 
 void bindVectorModule() {
-    wrenpp::beginModule( "builtin/vector" )
+    wrenpp::beginModule( "pg/vector" )
         .bindClass< math::Vec3f, float, float, float >( "Vec3" )
             // properties
             .bindGetter< decltype(math::Vec3f::x), &math::Vec3f::x >( false, "x" )
@@ -188,7 +188,7 @@ void bindVectorModule() {
 }
 
 void bindQuaternionModule() {
-    wrenpp::beginModule( "builtin/quaternion" )
+    wrenpp::beginModule( "pg/quaternion" )
         .bindClass< math::Quatf, float, float, float, float >( "Quat" )
             // properties
             .bindSetter< decltype(math::Quatf::v), &math::Quatf::v >( false, "v=(_)")
@@ -212,7 +212,7 @@ void bindQuaternionModule() {
 }
 
 void bindEntityModule() {
-    wrenpp::beginModule("builtin/entity")
+    wrenpp::beginModule("pg/entity")
         .bindClass< ecs::Entity >("Entity")
             .bindMethod<decltype(&ecs::Entity::isValid), &ecs::Entity::isValid>(false, "isValid()")
             .bindMethod<decltype(&ecs::Entity::destroy), &ecs::Entity::destroy>(false, "destroy()")
@@ -234,7 +234,7 @@ void bindEntityModule() {
             .bindCFunction(true, "entityCount", wren::entityCount)
         .endClass()
     .endModule();
-    wrenpp::beginModule("builtin/event")
+    wrenpp::beginModule("pg/event")
         .beginClass("EventManager")
             .bindCFunction(true, "listenToKeyDown(_,_)", wren::listenToKeyDown)
             .bindCFunction(true, "listenToKeyPressed(_,_)", wren::listenToKeyPressed)
@@ -244,7 +244,7 @@ void bindEntityModule() {
             .bindCFunction(true, "listenToMouseUp(_,_)", wren::listenToMouseUp)
         .endClass()
     .endModule();
-    wrenpp::beginModule("builtin/mouse")
+    wrenpp::beginModule("pg/mouse")
         .beginClass("Mouse")
             .bindCFunction(true, "x", wren::mouseX)
             .bindCFunction(true, "y", wren::mouseY)
@@ -255,7 +255,7 @@ void bindEntityModule() {
 }
 
 void bindComponentModule() {
-    wrenpp::beginModule("builtin/component")
+    wrenpp::beginModule("pg/component")
         .bindClass<component::Transform, math::Vec3f, math::Quatf, math::Vec3f>("Transform")
             .bindCFunction(false, "position", wren::getTransformPosition)
             .bindCFunction(false, "rotation", wren::getTransformRotation)
@@ -274,7 +274,7 @@ void bindComponentModule() {
 }
 
 void bindUtilsModule() {
-    wrenpp::beginModule("builtin/utils")
+    wrenpp::beginModule("pg/utils")
         .bindClass<StringId, const char*>("ResourceHandle")
             .bindMethod<decltype(&StringId::cString), &StringId::cString>(false, "toString")
         .endClass()
@@ -282,7 +282,7 @@ void bindUtilsModule() {
 }
 
 void bindSystemsModule() {
-    wrenpp::beginModule("builtin/systems")
+    wrenpp::beginModule("pg/systems")
         .beginClass("Pick3d")
             .bindCFunction(true, "castCameraRay(_,_)", wren::castCameraRay)
         .endClass()

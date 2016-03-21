@@ -81,6 +81,8 @@ workspace "playground"
             "extern", "extern/assimp/include", "extern/SDL/include",
             "extern/wren/src/include", "extern/glew-1.13.0/include"
         }
+        --This should be enabled once all VC warnings get fixed:
+        --flags { "FatalWarnings" } // This should be enabled once all VC warnings get fixed
         filter "configurations:Debug"
             debugdir "bin"
             links { "wren_static_d" }
@@ -92,8 +94,6 @@ workspace "playground"
             postbuildcommands {
                 "{COPY} ../../src/config.json ../../bin/"
             }
-        --This should be enabled once all VC warnings get fixed:
-        --flags { "FatalWarnings" } // This should be enabled once all VC warnings get fixed
         --[[
   _   ___               __  ______          ___    
  | | / (_)__ __ _____ _/ / / __/ /___ _____/ (_)__ 
@@ -116,7 +116,7 @@ workspace "playground"
                 "copy ..\\..\\src\\config.json ..\\..\\bin",
             }
             -- exlcude *.wren files from build, just copy them to the correct directory
-            filter "files:**.wren or **.glsl"
+            filter "files:**.wren"
                 --buildmessage "Copying %{file.relpath}..."
                 buildcommands { "copy ..\\..\\data\\wren\\%{file.name} ..\\..\\bin\\pg" }
                 buildoutputs { "..\\..\\bin\\pg\\%{file.name}" }
@@ -135,17 +135,20 @@ workspace "playground"
         configuration "gmake"
             -- Mac and Linux support go here
             prebuildcommands {
-                "mkdir -p ../../bin/data",
-                "mkdir -p ../../bin/builtin"
+                "mkdir -p ../../bin/pg",
+                "mkdir -p ../../bin/glsl"
             }
             postbuildcommands {
                 "cp ../../config.json ../../bin",
                 "cp -rf ../../src/data ../../bin"
             }
-            filter "files:**.wren or **.glsl"
-                buildcommands { "cp ../../builtin/%{file.name} ../../bin/builtin" }
-                buildoutputs { "../../bin/builtin/%{file.name}" }
+            filter "files:**.wren"
+                buildcommands { "cp ../../data/wren/%{file.name} ../../bin/pg" }
+                buildoutputs { "../../bin/pg/%{file.name}" }
             project "engine"
+            filter "files:**.glsl"
+                buildcommands { "cp ../../data/glsl/%{file.name} ../../bin/glsl" }
+                buildoutputs { "../../bin/glsl/%{file.name}" }
 
     -- This requires that the engine is split out into a DLL and the main application is its own executable
     -- Then the test application can just be linked with the engine
