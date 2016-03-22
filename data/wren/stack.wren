@@ -1,6 +1,6 @@
 
 class Stack {
-    new {
+    construct new() {
         _list = []
         _position = 0
     }

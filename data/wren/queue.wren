@@ -2,7 +2,7 @@
 import "pg/stack" for Stack
 
 class Queue {
-    new {
+    construct new() {
         _inbox = new Stack
         _outbox = new Stack
     }
