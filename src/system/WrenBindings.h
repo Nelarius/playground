@@ -5,6 +5,7 @@ namespace wren {
 
 // this namespace generates the Wren scripting language interface
 void bindMathModule();
+void bindRandomModule();
 void bindImguiModule();
 void bindVectorModule();
 void bindNumberArrayModule();

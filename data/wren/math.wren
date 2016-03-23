@@ -26,9 +26,6 @@ class Math {
     // other functions
     foreign static abs( x )
 
-    // random numbers
-    foreign static rand( a, b )
-
     // x and y are normalized mouse coordinates
     // they're provided by the Mouse class
     foreign static generateCameraRay(x, y) // returns the camera ray

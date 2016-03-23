@@ -5,9 +5,15 @@
 
 namespace pg {
 
-/// \brief Seed the generator with a random sequence drawn from the system's random device.
-/// The underlying generator is the new Park-Miller minimum standard linear congruential generator.
+
+/// The underlying generator is the new Park-Miller minimum standard linear 
+/// congruential generator from 1993, which is slightly faster than
+/// the original version.
+
+// seed the generator with a non-deterministic seed provided by the operating system
 void randomize();
+
+void seed(unsigned int seed);
 
 /// \brief Get a random int32 in [ a, b ].
 std::int32_t randi(std::int32_t a, std::int32_t b);

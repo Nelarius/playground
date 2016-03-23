@@ -42,7 +42,6 @@ void bindMathModule() {
             .bindFunction< decltype(static_cast<double(*)(double)>(&floor)), &floor >(true, "floor(_)")
             .bindFunction< decltype(static_cast<double(*)(double)>(&round)), &round >(true, "round(_)")
             .bindFunction< decltype(static_cast<double(*)(double)>(&abs)), &abs    >(true, "abs(_)")
-            .bindFunction< decltype(static_cast<double(*)(double, double)>(&pg::randd)), static_cast<double(*)(double, double)>(&pg::randd) >(true, "rand(_,_)")
             .bindFunction< decltype(static_cast<double(*)(void)>(&pg::randd)), static_cast<double(*)(void)>(&pg::randd) >(true, "rand()")
             .bindCFunction(true, "generateCameraRay(_,_)", wren::generateCameraRay)
         .endClass()
@@ -60,6 +59,17 @@ void bindMathModule() {
             .bindMethod<decltype(&math::Planef::normal), &math::Planef::normal>(false, "normal()")
         .endClass()
     .endModule();
+}
+
+void bindRandomModule() {
+    wrenpp::beginModule("pg/random")
+        .beginClass("Random")
+            .bindFunction<decltype(&randomize), &randomize>(true, "randomize()")
+            .bindFunction<decltype(&seed), &seed>(true, "seed(_)")
+            .bindFunction<decltype(&randi), &randi>(true, "int(_,_)")
+            .bindFunction<decltype(static_cast<double(*)(double, double)>(&randd)), static_cast<double(*)(double, double)>(&randd)>(true, "real(_,_)")
+            .bindFunction<decltype(static_cast<double(*)()>(&randd)), static_cast<double(*)()>(&randd)>(true, "real()")
+        .endClass();
 }
 
 void bindImguiModule() {

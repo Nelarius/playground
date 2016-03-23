@@ -3,12 +3,10 @@ import "pg/stack" for Stack
 
 class Queue {
     construct new() {
-        _inbox = new Stack
-        _outbox = new Stack
+        _inbox = Stack.new()
+        _outbox = Stack.new()
     }
 
-    // this seems to cause a seg fault
-    // isEmpty { return _inbox.isEmpty && _outbox.isEmpty }
     isEmpty { _inbox.isEmpty && _outbox.isEmpty }
 
     enqueue( val ) {

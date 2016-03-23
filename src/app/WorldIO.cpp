@@ -27,6 +27,7 @@ void WorldIO::read(
     // bind the scripting API so that Wren can find the methods
     wren::bindVectorModule();
     wren::bindMathModule();
+    wren::bindRandomModule();
     wren::bindQuaternionModule();
     wren::bindEntityModule();
     wren::bindComponentModule();

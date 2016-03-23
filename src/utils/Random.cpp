@@ -7,7 +7,7 @@
 
 namespace {
 
-std::minstd_rand& global_urng() {
+std::minstd_rand& globalUniformRng() {
     static std::minstd_rand u;
     return u;
 }
@@ -18,19 +18,23 @@ namespace pg {
 
 void randomize() {
     std::random_device rd{};
-    global_urng().seed(rd());
+    globalUniformRng().seed(rd());
+}
+
+void seed(unsigned int s) {
+    globalUniformRng().seed(s);
 }
 
 std::int32_t randi(std::int32_t a, std::int32_t b) {
     static std::uniform_int_distribution<> d{};
-    using parm_t = decltype(d)::param_type;
-    return d(global_urng(), parm_t{ a, b });
+    using Distribution = decltype(d)::param_type;
+    return d(globalUniformRng(), Distribution{ a, b });
 }
 
 float randf(float a, float b) {
-    static std::uniform_real_distribution<> d{};
-    using parm_t = decltype(d)::param_type;
-    return float(d(global_urng(), parm_t{ a, b }));
+    static std::uniform_real_distribution<float> d{};
+    using Distribution = decltype(d)::param_type;
+    return d(globalUniformRng(), Distribution{ a, b });
 }
 
 float randf() {
@@ -38,9 +42,9 @@ float randf() {
 }
 
 double randd(double a, double b) {
-    static std::uniform_real_distribution<> d{};
-    using parm_t = decltype(d)::param_type;
-    return d(global_urng(), parm_t{ a, b });
+    static std::uniform_real_distribution<double> d{};
+    using Distribution = decltype(d)::param_type;
+    return d(globalUniformRng(), Distribution{ a, b });
 }
 
 double randd() {
