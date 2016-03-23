@@ -14,7 +14,7 @@ foreign class Vec2 {
     foreign hadamard( rhs )
     foreign plus( rhs )
     foreign minus( rhs )
-    //foreign scale( s )
+    foreign scale( s )
 }
 
 foreign class Vec3 {

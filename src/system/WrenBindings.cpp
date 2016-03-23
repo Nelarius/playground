@@ -160,7 +160,7 @@ void bindVectorModule() {
             .bindMethod< decltype(&math::Vec3f::operator-), &math::Vec3f::operator- >(false, "minus(_)")
             .bindMethod< decltype(&math::Vec3f::cross), &math::Vec3f::cross>(false, "cross(_)")
             .bindMethod< decltype(&math::Vec3f::hadamard), &math::Vec3f::hadamard>(false, "hadamard(_)")
-            .bindCFunction( false, "scale(_)", wren::scale3f)
+            .bindMethod< decltype(&math::Vec3f::operator*), &math::Vec3f::operator*>(false, "scale(_)")
         .endClass()
         .bindClass< math::Vec2f, float, float >( "Vec2" )
             .bindGetter< decltype(math::Vec2f::x), &math::Vec2f::x >( false, "x" )
@@ -174,7 +174,7 @@ void bindVectorModule() {
             .bindMethod< decltype(&math::Vec2f::hadamard), &math::Vec2f::hadamard>(false, "hadamard(_)")
             .bindMethod< decltype(&math::Vec2f::operator+), &math::Vec2f::operator+ >(false, "plus(_)")
             .bindMethod< decltype(&math::Vec2f::operator-), &math::Vec2f::operator- >(false, "minus(_)")
-            .bindCFunction(false, "scale(_)", wren::scale2f)
+            .bindMethod< decltype(&math::Vec2f::operator*), &math::Vec2f::operator*>(false, "scale(_)")
         .endClass()
         .bindClass< math::Vec4f, float, float, float, float >( "Vec4" )
             .bindGetter< decltype(math::Vec4f::x), &math::Vec4f::x >( false, "x" )
@@ -192,7 +192,7 @@ void bindVectorModule() {
             .bindMethod< decltype(&math::Vec4f::hadamard), &math::Vec4f::hadamard>(false, "hadamard(_)")
             .bindMethod< decltype(&math::Vec4f::operator+), &math::Vec4f::operator+ >(false, "plus(_)")
             .bindMethod< decltype(&math::Vec4f::operator-), &math::Vec4f::operator- >(false, "minus(_)")
-            .bindCFunction(false, "scale(_)", wren::scale4f)
+            .bindMethod< decltype(&math::Vec4f::operator*), &math::Vec4f::operator*>(false, "scale(_)")
         .endClass()
     .endModule();
 }
