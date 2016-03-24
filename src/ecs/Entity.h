@@ -18,11 +18,7 @@ namespace ecs {
 class EntityManager;
 
 /**
- * @class ComponentHandle
- * @author Muszynski Johann M
- * @date 23/07/15
- * @file Component.h
- * @brief A wrapper around a component instance.
+ * @brief A handle to a component instance in memory.
  * This handle will be invalidated if:
  * - the component is removed from the host entity
  * - the host entity is destroyed
@@ -120,10 +116,6 @@ protected:
 };
 
 /**
- * @class EntityCreatedEvent
- * @author Muszynski Johann M
- * @date 28/07/15
- * @file Entity.h
  * @brief Emitted when an entity is created.
  */
 struct EntityCreatedEvent {
@@ -131,10 +123,6 @@ struct EntityCreatedEvent {
 };
 
 /**
- * @class EntityDestroyedEvent
- * @author Muszynski Johann M
- * @date 28/07/15
- * @file Entity.h
  * @brief Emitted just before the entity is destroyed.
  */
 struct EntityDestroyedEvent {
@@ -142,10 +130,6 @@ struct EntityDestroyedEvent {
 };
 
 /**
- * @class ComponentAssignedEvent
- * @author Muszynski Johann M
- * @date 28/07/15
- * @file Entity.h
  * @brief Emitted when an entity is assigned to a component.
  */
 template<typename C>
@@ -155,10 +139,6 @@ struct ComponentAssignedEvent {
 };
 
 /**
- * @class ComponentRemovedEvent
- * @author Muszynski Johann M
- * @date 28/07/15
- * @file Entity.h
  * @brief Emitted just before the component is removed.
  */
 template<typename C>
@@ -167,18 +147,12 @@ struct ComponentRemovedEvent {
     ComponentHandle<C> component;
 };
 
-// this should be a run-time adjustable
-// to do so, EntityManager needs to use the Cheshire Cat pattern
-const uint32_t MaxComponents = 16u;
-const uint32_t MaskElements = MaxComponents + 1u;
+// In order to set the i:th bit, just do
+// mask_ |= 1u << i;
+using ComponentMask = std::uint32_t;
+const std::uint32_t MaxComponents = 31u;
 
 /**
- * @class EntityManager
- * @author Nelarius
- * @date 06/14/15
- * @file EntityManager.h
- * @brief
- *
  * This class is uncopyable because it should remain the sole owner of all the contained entities and components.
  */
 class EntityManager {
@@ -187,7 +161,7 @@ public:
      * @brief Initialize with the number of elements to store in one chunk in the pool.
      * @param poolSize The number of elements reserved in one chunk of memory. 64 by default.
      */
-    EntityManager(EventManager&, uint32_t arenaSize = 64);
+    EntityManager(EventManager&, std::uint32_t arenaSize = 64);
     ~EntityManager();
 
     EntityManager(const EntityManager&) = delete;
@@ -203,7 +177,7 @@ public:
     /**
      * @brief Get an valid entity for the given index.
      */
-    Entity get(uint32_t index);
+    Entity get(std::uint32_t index);
     /**
      * @brief Destroy all entities and components associated with this manager.
      */
@@ -214,10 +188,6 @@ public:
     std::size_t size() const;
 
     /**
-     * @class Iterator
-     * @author Muszynski Johann M
-     * @date 24/07/15
-     * @file Entity.h
      * @brief An iterator over entities with specific components.
      * Performance note: this should only be used in range-based loops.
      * This way, only two iterators are created, and we minimize the overhead
@@ -228,13 +198,13 @@ public:
         Iterator(EntityManager* owner, std::uint32_t index)
             : owner_(owner),
             index_(index),
-            componentIndices_()
-        {}
-        Iterator(EntityManager* owner, std::uint32_t index, std::vector<uint32_t>&& components)
+            mask_{ 0u } {}
+
+        Iterator(EntityManager* owner, std::uint32_t index, ComponentMask mask)
             : owner_(owner),
             index_(index),
-            componentIndices_(std::move(components))
-        {}
+            mask_{ mask } {}
+
         Iterator() = delete;
         Iterator(const Iterator&) = default;
         Iterator(Iterator&&) = default;
@@ -254,56 +224,42 @@ public:
          * @brief If the current index is invalid, or the components aren't present, skip forward to the next valid entity.
          */
         void skip() {
-            const uint32_t stop = owner_->componentMasks_.size();
+            const std::uint32_t stop = owner_->componentMasks_.size();
             while (index_ < stop && skipIndex_(index_)) {
                 index_++;
             }
         }
 
     private:
-        inline bool indexContainsComponents_(uint32_t index) const {
-            if (componentIndices_.size() == 0u) {
-                return true;
-            }
-            for (uint32_t i : componentIndices_) {
-                if (!owner_->componentMasks_[index].test(i)) {
-                    return false;
-                }
-            }
-            return true;
+        inline bool indexContainsComponents_(std::uint32_t index) const {
+            return (owner_->componentMasks_[index] & mask_) == mask_;
         }
-        inline bool indexIsValid_(uint32_t index) const {
-            if (owner_->componentMasks_[index].test(MaxComponents)) {
-                return false;
-            }
-            return true;
+
+        inline bool indexIsValid_(std::uint32_t index) const {
+            return !((owner_->componentMasks_[index] >> MaxComponents) & 1u);
         }
-        inline bool skipIndex_(uint32_t index) const {
+
+        inline bool skipIndex_(std::uint32_t index) const {
             if (index >= owner_->componentMasks_.size()) {
                 return false;
             }
             return !(indexIsValid_(index) && indexContainsComponents_(index));
         }
 
-        EntityManager*              owner_;
-        std::uint32_t               index_;
-        std::vector<std::uint32_t>  componentIndices_;
+        EntityManager* owner_;
+        std::uint32_t  index_;
+        ComponentMask  mask_;
     };
 
     /**
-     * @class View
-     * @author Muszynski Johann M
-     * @date 24/07/15
-     * @file Entity.h
      * @brief A view of entities containing none or more components.
      * Use this to get the iterators that you want.
      */
     class View {
     public:
         View(EntityManager* owner)
-            : owner_(owner),
-            componentIndices_()
-        {}
+            : owner_{ owner },
+            mask_{ 0u } {}
         View() = delete;
         ~View() = default;
         View(const View&) = default;
@@ -313,7 +269,8 @@ public:
 
         template<typename C>
         void view() {
-            componentIndices_.push_back(detail::getComponentId<C>());
+            PG_ASSERT(detail::getComponentId<C>() < MaxComponents);
+            mask_ |= 1u << detail::getComponentId<C>();
         }
         /**
          * @brief Filter the viewed entities based on component type.
@@ -324,23 +281,19 @@ public:
             view<C1>();
             view<C2, Components...>();  // recursive!
         }
-        /**
-         * @brief Return an iterator to the beginning of the view.
-         * @return
-         * Note that by calling this method, the view is returned to the unfiltered state.
-         */
+
         Iterator begin() {
-            Iterator it{ owner_, 0u, std::move(componentIndices_) };
+            Iterator it{ owner_, 0u, mask_ };
             it.skip();
             return it;
         }
         Iterator end() { return Iterator(owner_, owner_->componentMasks_.size()); }
 
     private:
-        EntityManager*          owner_;
+        EntityManager*  owner_;
         // these elements index into EntityManager::componentPools_ and 
         // the component masks in EntityManager::componentMasks_
-        std::vector<uint32_t>   componentIndices_;
+        ComponentMask   mask_;
     };
 
     /**
@@ -363,7 +316,7 @@ private:
 
     void destroy_(Id id);
     bool isValid_(Id id) const;
-    void accommodateEntity_(uint32_t index);
+    void accommodateEntity_(std::uint32_t index);
 
     // move template code out so that this file is still human-readable
     template<typename C>
@@ -379,13 +332,13 @@ private:
     template<typename C>
     bool hasComponent_(Id id) const;
 
-    const uint32_t                              ArenaSize_{ 64 };
-    uint32_t                                    indexCounter_{ 0u };
-    std::vector<std::unique_ptr<BaseArena>>     componentPools_{};
-    std::vector<std::bitset<MaskElements>>      componentMasks_{};
-    std::vector<uint32_t>                       entityVersions_{};
-    std::vector<uint32_t>                       freeList_{};
-    EventManager&                               eventDispatcher_;
+    const std::uint32_t                      ArenaSize_{ 64 };
+    std::uint32_t                            indexCounter_{ 0u };
+    std::vector<std::unique_ptr<BaseArena>>  componentPools_{};
+    std::vector<ComponentMask>               componentMasks_{};
+    std::vector<std::uint32_t>               entityVersions_{};
+    std::vector<std::uint32_t>               freeList_{};
+    EventManager&                            eventDispatcher_;
 };
 
 /***
@@ -504,17 +457,18 @@ void EntityManager::accommodateComponent_() {
 
 template<typename C, typename... Args>
 ComponentHandle<C> EntityManager::assign_(Id id, Args&&... args) {
+    PG_ASSERT(detail::getComponentId<C>() < MaxComponents);
     PG_ASSERT(isValid_(id));
     const int family = detail::getComponentId<C>();
     accommodateComponent_<C>(); // create a new component pool, if not already done
 
-    if (componentMasks_[id.index()].test(family)) {
+    if ((componentMasks_[id.index()] >> family) & 1u) {
         // if there already is a component, then log it and return the existing component
         LOG_ERROR << "Tried to assign a component on top of an already existing one!";
         return ComponentHandle<C>{ this, id };
     }
     new (componentPools_[family]->newCapacity(id.index())) C{ std::forward<Args>(args)... };
-    componentMasks_[id.index()].set(family);
+    componentMasks_[id.index()] |= (1u << family);
     eventDispatcher_.emit<ComponentAssignedEvent<C>>(Entity{ this, id }, ComponentHandle<C>{ this, id });
     return ComponentHandle<C>{ this, id };
 }
@@ -524,9 +478,9 @@ void EntityManager::remove_(Id id) {
     PG_ASSERT(isValid_(id));
     eventDispatcher_.emit<ComponentRemovedEvent<C>>(Entity{ this, id }, ComponentHandle<C>{ this, id });
     const int family = detail::getComponentId<C>();
-    const uint32_t index = id.index();
+    const std::uint32_t index = id.index();
     componentPools_[family]->destroy(index);
-    componentMasks_[index].reset(family);
+    componentMasks_[index] &= ~(1u << family);
 }
 
 template<typename C>
@@ -539,8 +493,7 @@ C* EntityManager::component_(Id id) {
 template<typename C>
 bool EntityManager::hasComponent_(Id id) const {
     PG_ASSERT(isValid_(id));
-    const unsigned family = detail::getComponentId<C>();
-    return componentMasks_[id.index()].test(family);
+    return (componentMasks_[id.index()] >> detail::getComponentId<C>()) & 1u;
 }
 
 }

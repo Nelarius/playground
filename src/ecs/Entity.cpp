@@ -73,8 +73,12 @@ EntityManager::EntityManager(EventManager& eventManager, uint32_t arenaSize)
     componentMasks_(),
     entityVersions_(),
     freeList_(),
-    eventDispatcher_(eventManager)
-{}
+    eventDispatcher_(eventManager) {
+    componentPools_.reserve(ArenaSize_);
+    componentMasks_.reserve(ArenaSize_);
+    entityVersions_.reserve(ArenaSize_);
+    freeList_.reserve(ArenaSize_);
+}
 
 EntityManager::~EntityManager() {
     for (auto entity : join()) {
@@ -93,7 +97,7 @@ Entity EntityManager::create() {
         index = freeList_.back();
         freeList_.pop_back();
         version = entityVersions_[index];    // versions are incremented in destroy
-        componentMasks_[index].set(MaxComponents, false); // resets the last bit signalling that the entity is now valid
+        componentMasks_[index] &= ~(1u << MaxComponents);
     }
 
     Entity entity(this, Id(index, version));
@@ -125,15 +129,14 @@ void EntityManager::destroy_(Id id) {
     PG_ASSERT(isValid_(id));
     eventDispatcher_.emit<EntityDestroyedEvent>(Entity(this, id));
     uint32_t index = id.index();
-    auto& mask = componentMasks_[index];
+    ComponentMask mask = componentMasks_[index];
     // we need to call the destructor of each component
     for (uint32_t i = 0; i < componentPools_.size(); i++) {
-        if (mask.test(i)) {
+        if ((mask >> i) & 1u) {
             componentPools_[i]->destroy(index);
         }
     }
-    mask.reset();
-    mask.set(MaxComponents);   // this element tells the iterator to skip this entity
+    componentMasks_[index] = 1u << MaxComponents;  // set
     entityVersions_[index]++;
     freeList_.push_back(index);
 }
