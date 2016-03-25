@@ -92,7 +92,10 @@ workspace "playground"
             libdirs { "extern/wren/lib/Release" }
         project "engine"
             postbuildcommands {
-                "{COPY} ../../src/config.json ../../bin/"
+                "{COPY} ../../src/config.json %{cfg.targetdir}",
+                "{COPY} ../../extern/assimp/bin %{cfg.targetdir}",
+                "{COPY} ../../extern/glew-1.13.0/bin %{cfg.targetdir}",
+                "{COPY} ../../extern/SDL/bin %{cfg.targetdir}"
             }
         --[[
   _   ___               __  ______          ___    
