@@ -1,7 +1,7 @@
 
-#pragma once 
+#pragma once
 
-#include <unordered_map>
+#include "math/Vector.h"
 #include <string>
 
 namespace pg {
@@ -14,9 +14,11 @@ enum class MaterialType {
 };
 
 struct Material {
-    MaterialType                            type;
-    std::unordered_map<std::string, float>  uniforms;
+    math::Vec3f baseColor;
+    math::Vec3f ambientColor;
+    math::Vec3f specularColor;
+    float       shininess;
 };
 
-}   // system
-}   // pg
+}
+}

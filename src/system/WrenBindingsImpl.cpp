@@ -142,19 +142,7 @@ void assignRenderable(WrenVM* vm) {
     pg::opengl::BufferObject* buffer = Locator<pg::MeshManager>::get()->get(r->model.cString());
     pg::opengl::Program* shader = Locator<pg::ShaderManager>::get()->get(r->shader.cString());
 
-    std::unordered_map<std::string, float> uniforms{};
-    uniforms.emplace("specColor_r", r->specularColor.r);
-    uniforms.emplace("specColor_g", r->specularColor.g);
-    uniforms.emplace("specColor_b", r->specularColor.b);
-    uniforms.emplace("ambientColor_r", r->ambientColor.r);
-    uniforms.emplace("ambientColor_g", r->ambientColor.g);
-    uniforms.emplace("ambientColor_b", r->ambientColor.b);
-    uniforms.emplace("baseColor_r", r->baseColor.r);
-    uniforms.emplace("baseColor_g", r->baseColor.g);
-    uniforms.emplace("baseColor_b", r->baseColor.b);
-    system::Material mat;
-    mat.type = system::MaterialType::Specular;
-    mat.uniforms = uniforms;
+    system::Material mat{ r->baseColor, r->ambientColor, r->specularColor, r->shininess };
     opengl::VertexArrayObjectFactory factory{ buffer, shader };
     factory.addStandardAttribute(opengl::VertexAttribute::Vertex);
     factory.addStandardAttribute(opengl::VertexAttribute::Normal);

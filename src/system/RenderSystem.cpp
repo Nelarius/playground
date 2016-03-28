@@ -95,9 +95,13 @@ void RenderSystem::update(
                 * math::Matrix4f::scale(transform->scale)
                 );
             shader->setUniform("camera", cameraMatrix);
-            for (const auto& it : renderable->material.uniforms) {
+            /*for (const auto& it : renderable->material.uniforms) {
                 shader->setUniform(it.first.c_str(), it.second);
-            }
+            }*/
+            shader->setUniform("shininess", renderable->material.shininess);
+            shader->setUniform("base", renderable->material.baseColor);
+            shader->setUniform("ambient", renderable->material.ambientColor);
+            shader->setUniform("specularColor", renderable->material.specularColor);
             shader->setUniform("pointLight.position", lightPos);
             shader->setUniform("pointLight.intensity", lightIntensity);
             shader->setUniform("pointLight.attenuation", attenuation);

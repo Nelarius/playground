@@ -71,32 +71,28 @@ void WorldIO::read(
 
             if (!contents["material"].is_null()) {
                 auto specular = contents["material"].object_items();
-                std::unordered_map<std::string, float> uniforms{};
-                uniforms.emplace("shininess", float(specular["shininess"].number_value()));
-                auto scolor = specular["specularColor"].array_items();
-                math::Vec3f specColor(
-                    float(scolor[0].number_value()), float(scolor[1].number_value()), float(scolor[2].number_value())
-                    );
-                auto acolor = specular["ambientColor"].array_items();
-                math::Vec3f surfColor(
-                    float(acolor[0].number_value()), float(acolor[1].number_value()), float(acolor[2].number_value())
-                    );
-                auto bcolor = specular["baseColor"].array_items();
-                math::Vec3f baseColor(
-                    float(bcolor[0].number_value()), float(bcolor[1].number_value()), float(bcolor[2].number_value())
-                    );
-                uniforms.emplace("specColor_r", specColor.r);
-                uniforms.emplace("specColor_g", specColor.g);
-                uniforms.emplace("specColor_b", specColor.b);
-                uniforms.emplace("ambientColor_r", surfColor.r);
-                uniforms.emplace("ambientColor_g", surfColor.g);
-                uniforms.emplace("ambientColor_b", surfColor.b);
-                uniforms.emplace("baseColor_r", baseColor.r);
-                uniforms.emplace("baseColor_g", baseColor.g);
-                uniforms.emplace("baseColor_b", baseColor.b);
-
-                mat.type = system::MaterialType::Specular;
-                mat.uniforms = uniforms;
+                auto& scolor = specular["specularColor"].array_items();
+                math::Vec3f specularColor{
+                    float(scolor[0].number_value()),
+                    float(scolor[1].number_value()),
+                    float(scolor[2].number_value())
+                };
+                auto& bcolor = specular["baseColor"].array_items();
+                math::Vec3f baseColor{
+                    float(bcolor[0].number_value()),
+                    float(bcolor[1].number_value()),
+                    float(bcolor[2].number_value())
+                };
+                auto& acolor = specular["ambientColor"].array_items();
+                math::Vec3f ambientColor{
+                    float(acolor[0].number_value()),
+                    float(acolor[1].number_value()),
+                    float(acolor[2].number_value())
+                };
+                mat.ambientColor = ambientColor;
+                mat.baseColor = baseColor;
+                mat.specularColor = specularColor;
+                mat.shininess = float(specular["shininess"].number_value());
                 shader = context_.shaderManager.get("specular");
                 opengl::VertexArrayObjectFactory factory{ buffer, shader };
                 factory.addStandardAttribute(opengl::VertexAttribute::Vertex);

@@ -13,25 +13,15 @@ uniform struct PointLight {
 } pointLight;
 
 uniform float shininess;
-uniform float baseColor_r;
-uniform float baseColor_g;
-uniform float baseColor_b;
-uniform float ambientColor_r;
-uniform float ambientColor_g;
-uniform float ambientColor_b;
-uniform float specColor_r;
-uniform float specColor_g;
-uniform float specColor_b;
+uniform vec3 base;
+uniform vec3 ambient;
+uniform vec3 specularColor;
 
 // there needs to be an array of these lights, as well as a light count.
 
 out vec4 color;
 
 void main() {
-    vec3 specularColor = vec3( specColor_r, specColor_g, specColor_b );
-    vec3 ambient = vec3( ambientColor_r, ambientColor_g, ambientColor_b );
-    vec3 base = vec3( baseColor_r, baseColor_g, baseColor_b );
-
     vec3 eye = normalize( cameraPosition - fragPos );
     vec3 lightDir = pointLight.position - fragPos;
     float lightDist = length(lightDir);
