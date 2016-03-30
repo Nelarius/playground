@@ -13,16 +13,12 @@
 namespace pg {
 
 /**
- * @class MeshManager
- * @date 05/14/15
- * @file MeshManager.h
- * @brief This class manages the memory of mesh objects, stored internally as VertexBuffer objects.
  * This class parses mesh objects and creates the corresponding vertex buffer object.
  * Use this class to gain access to the vertex buffer object.
  */
 class MeshManager {
 public:
-    MeshManager() = default;
+    MeshManager();
     ~MeshManager() = default;
 
     /**
@@ -52,4 +48,3 @@ private:
 };
 
 }
-

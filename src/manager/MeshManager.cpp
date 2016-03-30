@@ -9,7 +9,66 @@
 #include <cmath>
 #include <limits>
 
+namespace {
+
+float cubeVertices[] = {
+    -1.000000f, -1.000000f, 1.000000f,
+    -1.000000f, 1.000000f, 1.000000f,
+    1.000000f, 1.000000f, 1.000000f,
+    1.000000f, -1.000000f, 1.000000f,
+    -1.000000f, -1.000000f, -1.000000f,
+    -1.000000f, 1.000000f, -1.000000f,
+    1.000000f, 1.000000f, -1.000000f,
+    1.000000f, -1.000000f, -1.000000f
+};
+
+float cubeNormals[] = {
+    0.577350f, 0.577350f, -0.577350f,
+    0.577350f, -0.577350f, -0.577350f,
+    -0.577350f, -0.577350f, -0.577350f,
+    -0.577350f, 0.577350f, -0.577350f,
+    0.577350f, 0.577350f, 0.577350f,
+    0.577350f, -0.577350f, 0.577350f,
+    -0.577350f, -0.577350f, 0.577350f,
+    -0.577350f, 0.577350f, 0.577350f
+};
+
+int cubeTris[] = {
+    4, 3, 2, 1,
+    1, 2, 6, 5,
+    7, 6, 2, 3,
+    4, 8, 7, 3,
+    5, 8, 4, 1,
+    5, 6, 7, 8
+};
+
+}
+
 namespace pg {
+
+MeshManager::MeshManager() {
+    buffer_.emplace<GLenum>(GL_ARRAY_BUFFER);
+    std::vector<float> cubeData;
+    for (int i = 0; i < 24; ++i) {
+        int index = cubeTris[i] - 1;
+        cubeData.push_back(cubeVertices[index*3]);
+        cubeData.push_back(cubeVertices[index * 3 + 1]);
+        cubeData.push_back(cubeVertices[index * 3 + 2]);
+        cubeData.push_back(cubeNormals[index * 3]);
+        cubeData.push_back(cubeNormals[index * 3 + 1]);
+        cubeData.push_back(cubeNormals[index * 3 + 2]);
+    }
+    buffer_[0].dataStore(cubeData.size(), sizeof(float), &cubeData[0], GL_STATIC_DRAW);
+    resources_.emplace("cube", &buffer_[0]);
+    //boxes_.emplace("cube", math::AABoxf{ math::Vec3f{-1.f, -1.f, -1.f}, math::Vec3f{1.f, 1.f, 1.f} );
+    boxes_.emplace(
+        "cube",
+            math::AABoxf{
+            math::Vec3f{ -1.f, -1.f, -1.f },
+            math::Vec3f{ 1.f, 1.f, 1.f }
+        }
+    );
+}
 
 opengl::BufferObject* MeshManager::get(const std::string& file) const {
     auto it = resources_.find(file);
@@ -17,8 +76,10 @@ opengl::BufferObject* MeshManager::get(const std::string& file) const {
     if (it != resources_.end()) {
         return it->second;
     }
-
-    PG_ASSERT(pg::fileExists(file));
+    else {
+        it = resources_.find("cube");
+        return it->second;
+    }
 
     Assimp::Importer importer;
     const aiScene* scene = importer.ReadFile(
@@ -90,7 +151,7 @@ opengl::BufferObject* MeshManager::get(const std::string& file) const {
         math::AABoxf{
             math::Vec3f{ minx, miny, minz },
             math::Vec3f{ maxx, maxy, maxz }
-    }
+        }
     );
 
     return vbo;
@@ -109,6 +170,5 @@ void MeshManager::clear() {
 std::size_t MeshManager::size() const {
     return resources_.size();
 }
-
 
 }

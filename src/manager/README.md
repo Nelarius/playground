@@ -4,13 +4,15 @@ The managers in the Playground engine hold various resources which are used duri
 
 ## Mesh manager
 
-Use mesh manager holds OpenGL buffer objects. When a mesh file is loaded, the data is sent to the GPU, and the mesh manager retains the object handle to that buffer object. The mesh manage ris simple to use. Just do 
+The mesh manager holds OpenGL buffer objects. When a mesh file is loaded, the data is sent to the GPU, and the mesh manager retains the object handle to that buffer object. The mesh manager is simple to use. Just do:
 
 ```cpp
 MeshManager models{};
 // if the cow hasn't yet been loaded, it will be now
 auto cow = models.get( "cow.obj" );
 ```
+
+By default, the mesh manager contains a unit cube, with the file name of "cube". The buffer object of the cube is returned if you try to get a file not in the manager.
 
 ## Shader manager
 
@@ -33,7 +35,6 @@ Get shaders by writing
 ```cpp
 auto specularShader = shaders.get( "specular_shader" );
 ```
-
 
 ## String manager
 
