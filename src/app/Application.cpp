@@ -159,6 +159,8 @@ void Application::initialize_() {
     context_.window = &window_;
     context_.imguiRenderer = new system::ImGuiRenderer(context_);
 
+    context_.meshManager.initialize();
+
     mouse_.registerMouseDownCallback(
         MouseButton::Left,
         [this]() -> void {

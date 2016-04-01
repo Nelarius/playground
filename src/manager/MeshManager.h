@@ -18,22 +18,23 @@ namespace pg {
  */
 class MeshManager {
 public:
-    MeshManager();
+    MeshManager() = default;
     ~MeshManager() = default;
 
+    // OpenGL needs to be initialized before this is called
+    void initialize();
+
     /**
-     * @brief
      * @param file The mesh file to get.
      */
     opengl::BufferObject*   get(const std::string& file) const;
     /**
-    * @brief
     * @param file
     * @returns The bounding box corresponding to the given file name.
     */
     math::AABoxf getBoundingBox(const std::string& file) const;
     /**
-     * @brief Clear all elements.
+     * Remove all the managed mesh objects from GPU and system memory.
      */
     void            clear();
     /**

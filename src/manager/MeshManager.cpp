@@ -12,61 +12,66 @@
 namespace {
 
 float cubeVertices[] = {
-    -1.000000f, -1.000000f, 1.000000f,
-    -1.000000f, 1.000000f, 1.000000f,
-    1.000000f, 1.000000f, 1.000000f,
-    1.000000f, -1.000000f, 1.000000f,
-    -1.000000f, -1.000000f, -1.000000f,
-    -1.000000f, 1.000000f, -1.000000f,
-    1.000000f, 1.000000f, -1.000000f,
-    1.000000f, -1.000000f, -1.000000f
+    -0.5f, -0.5f, 0.5f,
+    0.5f, -0.5f, 0.5f,
+    -0.5f, 0.5f, 0.5f,
+    0.5f, 0.5f, 0.5f,
+    -0.5f, 0.5f, -0.5f,
+    0.5f, 0.5f, -0.5f,
+    -0.5f, -0.5f, -0.5f,
+    0.5f, -0.5f, -0.5f
 };
 
 float cubeNormals[] = {
-    0.577350f, 0.577350f, -0.577350f,
-    0.577350f, -0.577350f, -0.577350f,
-    -0.577350f, -0.577350f, -0.577350f,
-    -0.577350f, 0.577350f, -0.577350f,
-    0.577350f, 0.577350f, 0.577350f,
-    0.577350f, -0.577350f, 0.577350f,
-    -0.577350f, -0.577350f, 0.577350f,
-    -0.577350f, 0.577350f, 0.577350f
+    0.f, 1.f, 0.f,
+    0.f, 0.f, -1.f,
+    0.f, -1.f, 0.f,
+    1.f, 0.f, 0.f,
+    -1.f, 0.f, 0.f
 };
 
-int cubeTris[] = {
-    4, 3, 2, 1,
-    1, 2, 6, 5,
-    7, 6, 2, 3,
-    4, 8, 7, 3,
-    5, 8, 4, 1,
-    5, 6, 7, 8
+// every other integer is a triangle index
+// and every other integer is a normal index
+int cubeIndices[] = {
+    1, 1, 2, 1, 3, 1,
+    3, 1, 2, 1, 4, 1,
+    3, 2, 4, 2, 5, 2,
+    5, 2, 4, 2, 6, 2,
+    5, 3, 6, 3, 7, 3,
+    7, 3, 6, 3, 8, 3,
+    7, 4, 8, 4, 1, 4,
+    1, 4, 8, 4, 2, 4,
+    2, 5, 8, 5, 4, 5,
+    4, 5, 8, 5, 6, 5,
+    7, 6, 1, 6, 5, 6,
+    5, 6, 1, 6, 3, 6
 };
 
 }
 
 namespace pg {
 
-MeshManager::MeshManager() {
+void MeshManager::initialize() {
     buffer_.emplace<GLenum>(GL_ARRAY_BUFFER);
     std::vector<float> cubeData;
-    for (int i = 0; i < 24; ++i) {
-        int index = cubeTris[i] - 1;
-        cubeData.push_back(cubeVertices[index*3]);
-        cubeData.push_back(cubeVertices[index * 3 + 1]);
-        cubeData.push_back(cubeVertices[index * 3 + 2]);
-        cubeData.push_back(cubeNormals[index * 3]);
-        cubeData.push_back(cubeNormals[index * 3 + 1]);
-        cubeData.push_back(cubeNormals[index * 3 + 2]);
+    for (int i = 0; i < 72; i += 2) {
+        int triIndex = cubeIndices[i] - 1;
+        int normIndex = cubeIndices[i + 1] - 1;
+        cubeData.push_back(cubeVertices[triIndex * 3]);
+        cubeData.push_back(cubeVertices[triIndex * 3 + 1]);
+        cubeData.push_back(cubeVertices[triIndex * 3 + 2]);
+        cubeData.push_back(cubeNormals[normIndex * 3]);
+        cubeData.push_back(cubeNormals[normIndex * 3 + 1]);
+        cubeData.push_back(cubeNormals[normIndex * 3 + 2]);
     }
     buffer_[0].dataStore(cubeData.size(), sizeof(float), &cubeData[0], GL_STATIC_DRAW);
     resources_.emplace("cube", &buffer_[0]);
-    //boxes_.emplace("cube", math::AABoxf{ math::Vec3f{-1.f, -1.f, -1.f}, math::Vec3f{1.f, 1.f, 1.f} );
     boxes_.emplace(
         "cube",
-            math::AABoxf{
-            math::Vec3f{ -1.f, -1.f, -1.f },
-            math::Vec3f{ 1.f, 1.f, 1.f }
-        }
+        math::AABoxf{
+        math::Vec3f{ -0.5f, -0.5f, -0.5f },
+        math::Vec3f{ 0.5f, 0.5f, 0.5f }
+    }
     );
 }
 
