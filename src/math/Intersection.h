@@ -3,6 +3,8 @@
 #include "math/Vector.h"
 #include "math/Matrix.h"
 #include "math/Geometry.h"
+#include "utils/Assert.h"
+#include <algorithm>
 #include <limits>
 #include <cmath>
 #include <utility>

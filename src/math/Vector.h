@@ -1,7 +1,6 @@
 
 #pragma once
 
-#include "utils/Log.h"
 #include <initializer_list>
 #include <cmath>
 

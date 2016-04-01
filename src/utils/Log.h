@@ -2,6 +2,8 @@
 #pragma once
 
 #include "utils/Assert.h"
+#include "math/Vector.h"
+#include "math/Quaternion.h"
 #include <sstream>
 #include <ctime>
 #include <cctype>   // for isspace
@@ -9,6 +11,11 @@
 #include <algorithm>
 
 namespace pg {
+
+std::ostream& operator<<(std::ostream&, const math::Vec2f&);
+std::ostream& operator<<(std::ostream&, const math::Vec3f&);
+std::ostream& operator<<(std::ostream&, const math::Vec4f&);
+std::ostream& operator<<(std::ostream&, const math::Quatf&);
 
 enum LogLevel {
     Inhibit = 0,
@@ -82,6 +89,7 @@ inline std::string NowTime() {
     std::string str(buffer);
     return str;
 }
+
 
 class Log {
 
