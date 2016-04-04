@@ -1,7 +1,7 @@
  #pragma once
 
-#include "utils/BasicStorage.h"
-#include "utils/Assert.h"
+#include "BasicStorage.h"
+#include "Assert.h"
 #include <limits>
 #include <cstdlib>
 #include <cstdint>
@@ -11,7 +11,7 @@ namespace pg {
 
 /*
  * An array whose elements are stored in contiguous blocks in memory.
- * Implements a ubset of std::vector features.
+ * Implements a subset of std::vector features.
  */
 template<typename T>
 class DynamicArray {
@@ -25,6 +25,7 @@ public:
     ~DynamicArray();
 
     using Iterator = T*;
+    using ConstIterator = const T*;
 
     struct ReverseIterator {
         ReverseIterator()                                   = delete;
@@ -76,6 +77,8 @@ public:
     // element access
     Iterator begin();
     Iterator end();
+    ConstIterator begin() const;
+    ConstIterator end() const;
     ReverseIterator rbegin();
     ReverseIterator rend();
     T& at(std::size_t);
@@ -89,9 +92,9 @@ public:
     T*  data();
 
     // modifiers
-    void pushBack(const T&);
+    std::size_t pushBack(const T&);
     template<typename... Args>
-    void emplaceBack(Args&&... args);
+    std::size_t emplaceBack(Args&&... args);
     void popBack();
     // Remove an element at index by swapping it with the last element and calling popBack().
     void swapAndRemove(std::size_t);
@@ -267,6 +270,18 @@ typename DynamicArray<T>::Iterator DynamicArray<T>::end() {
 }
 
 template<typename T>
+typename DynamicArray<T>::ConstIterator DynamicArray<T>::begin() const {
+    PG_ASSERT(storage_.capacity() != 0u);
+    return storage_.at(0);
+}
+
+template<typename T>
+typename DynamicArray<T>::ConstIterator DynamicArray<T>::end() const {
+    PG_ASSERT(storage_.capacity() != 0u);
+    return storage_.at(0) + size_;
+}
+
+template<typename T>
 typename DynamicArray<T>::ReverseIterator DynamicArray<T>::rbegin() {
     PG_ASSERT(storage_.capacity() != 0u);
     return ReverseIterator{ this, size_ - 1u };
@@ -295,18 +310,18 @@ void DynamicArray<T>::ensureCapacity_() {
 }
 
 template<typename T>
-void DynamicArray<T>::pushBack(const T& elem) {
+std::size_t DynamicArray<T>::pushBack(const T& elem) {
     ensureCapacity_();
     *storage_.at(size_) = elem;
-    size_++;
+    return size_++;
 }
 
 template<typename T>
 template<typename... Args>
-void DynamicArray<T>::emplaceBack(Args&&... args) {
+std::size_t DynamicArray<T>::emplaceBack(Args&&... args) {
     ensureCapacity_();
-    new (storage_.at(size_)) T(std::forward<Args>(args)...);
-    size_++;
+    new (storage_.at(size_)) T{ std::forward<Args>(args)... };
+    return size_++;
 }
 
 template<typename T>
