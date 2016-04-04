@@ -54,7 +54,9 @@ public:
     void registerMouseDownCallback(MouseButton button, std::function<void()>);
     void registerMousePressedCallback(MouseButton button, std::function<void()>);
     void registerMouseUpCallback(MouseButton button, std::function<void()>);
-    void handleEvent(const SDL_Event&);
+    // returns true if the event was handled here
+    // false otherwise
+    bool handleEvent(const SDL_Event&);
     void handleMousePressedCallbacks();
 
     void setScriptHandler(system::ScriptSystem&);

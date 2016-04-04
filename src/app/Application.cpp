@@ -33,13 +33,19 @@ void Application::run() {
 
     while (running_) {
         uint32_t start = SDL_GetTicks();
+        context_.imguiRenderer->newFrame(SDLTimeToPgTime(tdelta), mouse_.getMouseCoords().x, mouse_.getMouseCoords().y);
         /*
          * Handle events here
          * */
         SDL_Event event;
         while (SDL_PollEvent(&event)) {
-            mouse_.handleEvent(event);
-            stateStack_.handleEvent(event);
+            // there are only two events which are handled here
+            // mouse down and mouse up, which are passed to ImGui
+            // so isn't the mouse click then passed on to the script system?
+            // Because currently the GameState registers its own mouse handler with the script system
+            if (!(mouse_.handleEvent(event) && ImGui::IsMouseHoveringAnyWindow())) {
+                stateStack_.handleEvent(event);
+            }
         }
         /*
          * A state might have called quits
@@ -53,7 +59,6 @@ void Application::run() {
         * */
         mouse_.handleMousePressedCallbacks();
 
-        context_.imguiRenderer->newFrame(SDLTimeToPgTime(tdelta), mouse_.getMouseCoords().x, mouse_.getMouseCoords().y);
         context_.textFileManager.update();
         stateStack_.update(SDLTimeToPgTime(tdelta));
 

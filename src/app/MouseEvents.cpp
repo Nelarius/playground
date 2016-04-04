@@ -59,7 +59,7 @@ math::Vec2f MouseEvents::getMouseDelta() const {
     };
 }
 
-void MouseEvents::handleEvent(const SDL_Event& event) {
+bool MouseEvents::handleEvent(const SDL_Event& event) {
     if (event.type == SDL_MOUSEBUTTONDOWN) {
         auto it = mouseDownCallbacks_.find(event.button.button);
         if (it != mouseDownCallbacks_.end()) {
@@ -67,6 +67,7 @@ void MouseEvents::handleEvent(const SDL_Event& event) {
             for (ecs::Entity* entity : it->second.entities) {
                 scriptSystem_->onMouseDown(toString(MouseButton(it->first)), entity);
             }
+            return true;
         }
     }
     else if (event.type == SDL_MOUSEBUTTONUP) {
@@ -76,8 +77,10 @@ void MouseEvents::handleEvent(const SDL_Event& event) {
             for (ecs::Entity* entity : it->second.entities) {
                 scriptSystem_->onMouseUp(toString(MouseButton(it->first)), entity);
             }
+            return true;
         }
     }
+    return false;
 }
 
 void MouseEvents::handleMousePressedCallbacks() {
