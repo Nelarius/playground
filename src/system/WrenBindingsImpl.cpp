@@ -164,6 +164,27 @@ void getTransform(WrenVM* vm) {
     }
 }
 
+void getRenderable(WrenVM* vm) {
+    const ecs::Entity* entity = wrenpp::getSlotForeign<ecs::Entity, 0>(vm);
+    if (entity->has<Renderable>()) {
+        auto material = entity->component<component::Renderable>()->material;
+        wrenpp::setSlotForeignValue(vm, WrenRenderable{ 
+            StringId{""}, StringId{""}, material.shininess, material.baseColor, material.ambientColor, material.specularColor });
+    }
+    else {
+        LOG_INFO << "Script error: entity " << entity->id().index() << " doesn't have a transform component";
+    }
+}
+
+void setRenderable(WrenVM* vm) {
+    const ecs::Entity* entity = wrenpp::getSlotForeign<ecs::Entity, 0>(vm);
+    const WrenRenderable* wrenRenderable = wrenpp::getSlotForeign<WrenRenderable, 1>(vm);
+    component::Renderable* renderable = entity->rawPointer<component::Renderable>();
+    renderable->material.ambientColor = wrenRenderable->ambientColor;
+    renderable->material.baseColor = wrenRenderable->baseColor;
+    renderable->material.specularColor = wrenRenderable->specularColor;
+}
+
 /***
 *       ____     __  _ __       __  ___
 *      / __/__  / /_(_) /___ __/  |/  /__ ____  ___ ____ ____ ____

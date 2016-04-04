@@ -18,6 +18,8 @@ foreign class Entity {
     foreign hasPointLight()
     foreign transform
     foreign transform=( t )
+    foreign renderable
+    foreign renderable=( rhs )
 
     foreign assignTransform( t )
     foreign assignRenderable( r )

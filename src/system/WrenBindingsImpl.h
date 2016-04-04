@@ -37,6 +37,8 @@ void assignTransform(WrenVM*);
 void assignRenderable(WrenVM*);
 void setTransform(WrenVM*);
 void getTransform(WrenVM*);
+void getRenderable(WrenVM*);
+void setRenderable(WrenVM*);
 void createEntity(WrenVM*);
 void entityCount(WrenVM*);
 void listenToKeyDown(WrenVM*);

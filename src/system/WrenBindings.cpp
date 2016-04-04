@@ -238,6 +238,8 @@ void bindEntityModule() {
             .bindCFunction(false, "version", wren::entityVersion)
             .bindCFunction(false, "transform", wren::getTransform)
             .bindCFunction(false, "transform=(_)", wren::setTransform)
+            .bindCFunction(false, "renderable", wren::getRenderable)
+            .bindCFunction(false, "renderable=(_)", wren::setRenderable)
         .endClass()
         .beginClass("EntityManager")
             .bindCFunction(true, "create()", wren::createEntity)
@@ -276,9 +278,13 @@ void bindComponentModule() {
         .endClass()
         .bindClass<WrenRenderable, StringId, StringId>("Renderable")
             .bindSetter<decltype(WrenRenderable::shininess), &WrenRenderable::shininess>("shininess=(_)")
+            .bindGetter<decltype(WrenRenderable::shininess), &WrenRenderable::shininess>("shininess")
             .bindSetter<decltype(WrenRenderable::ambientColor), &WrenRenderable::ambientColor>("ambientColor=(_)")
-            .bindSetter<decltype(WrenRenderable::ambientColor), &WrenRenderable::ambientColor>("ambientColor=(_)")
+            .bindGetter<decltype(WrenRenderable::ambientColor), &WrenRenderable::ambientColor>("ambientColor")
+            .bindSetter<decltype(WrenRenderable::baseColor), &WrenRenderable::baseColor>("baseColor=(_)")
+            .bindGetter<decltype(WrenRenderable::baseColor), &WrenRenderable::baseColor>("baseColor")
             .bindSetter<decltype(WrenRenderable::specularColor), &WrenRenderable::specularColor>("specularColor=(_)")
+            .bindGetter<decltype(WrenRenderable::specularColor), &WrenRenderable::specularColor>("specularColor")
         .endClass()
    .endModule();
 }
