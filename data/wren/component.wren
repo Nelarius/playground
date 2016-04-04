@@ -12,6 +12,8 @@ foreign class Transform {
 foreign class Renderable {
     // construct with two resources: the model resource, and the shader resource
     construct new( model, shader ) {}
+    foreign shininess
+    foreign shininess=(value)
     foreign baseColor
     foreign baseColor=(color)
     foreign ambientColor
