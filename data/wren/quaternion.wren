@@ -1,3 +1,5 @@
+import "pg/math" for Math
+
 
 foreign class Quat {
     construct new( x, y, z, w ) {}
@@ -19,4 +21,14 @@ foreign class Quat {
     foreign v=( rhs )
     foreign w
     foreign w=( rhs )
+
+    // Create a quaternion representing the rotation between two axes
+    // The axes must be normalized
+    static fromAxes(axis1, axis2) {
+        var axis = axis1.cross(axis2)
+        axis.normalize()
+        var angle = 0.5 * Math.acos(axis1.dot(axis2))
+        var mul = Math.sin(angle)
+        return Quat.new(mul*axis.x, mul*axis.y, mul*axis.z, Math.cos(angle))
+    }
 }
