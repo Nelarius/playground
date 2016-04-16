@@ -6,6 +6,10 @@ foreign class Vec2 {
     foreign x=( rhs )
     foreign y
     foreign y=( rhs )
+    foreign i
+    foreign i=( rhs )
+    foreign j
+    foreign j=( rhs )
 
     foreign norm()
     foreign normSquared()
@@ -26,6 +30,13 @@ foreign class Vec3 {
     foreign y=( rhs )
     foreign z
     foreign z=( rhs )
+    foreign r
+    foreign r=( rhs )
+    foreign g
+    foreign g=( rhs )
+    foreign b
+    foreign b=( rhs )
+
     foreign norm()
     foreign normSquared()
     foreign normalize()
@@ -48,6 +59,14 @@ foreign class Vec4 {
     foreign z=( rhs )
     foreign w
     foreign w=( rhs )
+    foreign r
+    foreign r=( rhs )
+    foreign g
+    foreign g=( rhs )
+    foreign b
+    foreign b=( rhs )
+    foreign a
+    foreign a=( rhs )
 
     foreign norm()
     foreign normSquared()
