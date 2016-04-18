@@ -138,7 +138,10 @@ void Application::initialize_() {
         return buffer;
     };
     wrenpp::VM::writeFn = [](WrenVM* vm, const char* text) -> void {
-        LOG_INFO << text;
+        // this hack exists because Wren always prints an extra newline as a separate print statement.
+        if (text[0] != '\n') {
+            LOG_INFO << text;
+        }
     };
 
     /*
