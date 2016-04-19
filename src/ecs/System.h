@@ -58,7 +58,7 @@ public:
     System* add(Args&&... args);
 
     template<typename S>
-    System* system();
+    S& system();
 
     template<typename S>
     void configure();
@@ -82,9 +82,9 @@ System* SystemManager::add(Args&&... args) {
 }
 
 template<typename S>
-System* SystemManager::system() {
+S& SystemManager::system() {
     PG_ASSERT(detail::getSystemId<S>() < systems_.size());
-    return systems_[detail::getSystemId<S>()].get();
+    return (S&)(*systems_[detail::getSystemId<S>()].get());
 }
 
 template<typename S>
