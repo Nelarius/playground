@@ -38,6 +38,7 @@ class Imgui {
     foreign static button( label )
     foreign static button( label, size) // size is of type Vec2
     foreign static radioButton( label, active ) // WTF, how do I use this?
+    foreign static checkBox( label, active )
     foreign static plotArray( label, array, count )
     foreign static plotArray( label, array, count, offset )
     foreign static plotArray( label, array, count, offset, size )

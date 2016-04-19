@@ -68,6 +68,7 @@ void textColored(WrenVM*);
 void bulletText(WrenVM*);
 void button(WrenVM*);
 void buttonSized(WrenVM*);
+void checkBox(WrenVM*);
 void plotNumberArray(WrenVM*);
 void plotNumberArrayWithOffset(WrenVM*);
 void plotNumberArrayWithOffsetAndSize(WrenVM*);

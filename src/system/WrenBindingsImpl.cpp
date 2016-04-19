@@ -317,6 +317,13 @@ void button(WrenVM* vm) {
     wrenSetSlotBool(vm, 0, pressed);
 }
 
+void checkBox(WrenVM* vm) {
+    const char* label = wrenGetSlotString(vm, 1);
+    bool conditional = wrenGetSlotBool(vm, 2);
+    ImGui::Checkbox(label, &conditional);
+    wrenSetSlotBool(vm, 0, conditional);
+}
+
 void buttonSized(WrenVM* vm) {
     ImGui::Button(
         (const char*)wrenGetSlotString(vm, 1),
