@@ -15,10 +15,13 @@
 namespace pg {
 namespace system {
 
+using namespace component;
+using namespace math;
+
 struct CameraInfo {
-    math::Frustumf frustum;
-    math::Vec3f position;
-    math::Quatf orientation;
+    Frustumf frustum;
+    Vec3f position;
+    Quatf orientation;
 };
 
 class RenderSystem : public ecs::System, public ecs::Receiver {
@@ -28,21 +31,29 @@ public:
 
     void configure(ecs::EventManager&) override;
     void update(ecs::EntityManager&, ecs::EventManager&, float) override;
-    void receive(const ecs::ComponentAssignedEvent<component::Camera>&);
-    void receive(const ecs::ComponentAssignedEvent<component::PointLight>&);
+    void receive(const ecs::ComponentAssignedEvent<Camera>&);
+    void receive(const ecs::ComponentAssignedEvent<PointLight>&);
 
     CameraInfo activeCameraInfo() const;
 
 private:
 
+    struct DefaultState {
+        Matrix4f         projection;
+        DirectionalLight light;
+    };
+
     // camera position passed as parameter
-    void setSpecularUniforms_(const math::Vec3f&, opengl::Program*);
+    void setSpecularUniforms_(const Vec3f&, opengl::Program*);
 
     // render state entities
     ecs::Entity     cameraEntity_;
-    ecs::Entity     lightEntity_;   // for now the world shall have one light
+    ecs::Entity     lightEntity_;   // for now the world shall have one light and it shall be a directional light
+
     // render state math
-    math::Matrix4f  defaultProjection_;
+    Matrix4f  defaultProjection_;
+    DirectionalLight defaultLight_;
+    DefaultState defaultState_;
 
     Context& context_;
     bool    debug_;
