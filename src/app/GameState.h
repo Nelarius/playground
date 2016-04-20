@@ -1,4 +1,3 @@
-
 #pragma once
 
 #include "ecs/Include.h"
@@ -32,14 +31,6 @@ public:
     void render(float dt) override;
     bool update(float dt) override;
     bool handleEvent(const SDL_Event& event) override;
-
-private:
-    // FIELDS
-    // these could be possibly moved to AppState
-    ecs::EventManager   events_;
-    ecs::EntityManager  entities_;
-    ecs::SystemManager  systems_;
 };
 
 }
-

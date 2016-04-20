@@ -3,6 +3,7 @@
 
 #include <SDL_events.h>
 #include "app/Window.h"
+#include "ecs/Include.h"
 #include "system/ImGuiRenderer.h"
 #include "manager/MeshManager.h"
 #include "manager/ShaderManager.h"
@@ -10,6 +11,8 @@
 #include <vector>
 
 namespace pg {
+
+using namespace ecs;
 
 struct Mouse {
     Mouse() = default;
@@ -30,6 +33,10 @@ struct Context {
 
     /// @brief Get real-time input for the mouse.
     Mouse mouse()     const { return mouse_; }
+
+    EventManager  eventManager{};
+    EntityManager entityManager{ eventManager };
+    SystemManager systemManager{ eventManager, entityManager };
 
     MeshManager     meshManager{};
     ShaderManager   shaderManager{};
