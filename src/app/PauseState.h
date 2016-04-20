@@ -10,7 +10,7 @@ namespace pg {
 class PauseState : public AppState {
 public:
     PauseState(Context& context, AppStateStack& stack);
-    PauseState() = default;
+    PauseState() = delete;
     virtual ~PauseState() = default;
     void activate() override;
     void render(float dt) override;
