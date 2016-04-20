@@ -6,6 +6,7 @@
 #include "utils/Log.h"
 #include "utils/Locator.h"
 #include "utils/StringId.h"
+#include "system/WrenBindings.h"
 #include "Wren++.h"
 #include "json11/json11.hpp"
 #include <SDL_timer.h>
@@ -181,6 +182,19 @@ void Application::initialize_() {
         this->context_.imguiRenderer->mouseButtonReleased(SDL_BUTTON_LEFT);
     }
     );
+
+    // bind the scripting API so that Wren can find the methods
+    wren::bindVectorModule();
+    wren::bindMathModule();
+    wren::bindRandomModule();
+    wren::bindQuaternionModule();
+    wren::bindEntityModule();
+    wren::bindComponentModule();
+    wren::bindNumberArrayModule();
+    wren::bindRingBufferModule();
+    wren::bindImguiModule();
+    wren::bindUtilsModule();
+    wren::bindSystemsModule();
 }
 
 }

@@ -24,18 +24,6 @@ void WorldIO::read(
     ecs::EntityManager& entities,
     ecs::EventManager& events
     ) {
-    // bind the scripting API so that Wren can find the methods
-    wren::bindVectorModule();
-    wren::bindMathModule();
-    wren::bindRandomModule();
-    wren::bindQuaternionModule();
-    wren::bindEntityModule();
-    wren::bindComponentModule();
-    wren::bindNumberArrayModule();
-    wren::bindRingBufferModule();
-    wren::bindImguiModule();
-    wren::bindUtilsModule();
-    wren::bindSystemsModule();
 
     auto json = pg::fileToString("scene.json");
     std::string error{ "" };
