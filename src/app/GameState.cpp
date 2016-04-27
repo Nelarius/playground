@@ -55,7 +55,7 @@ void GameState::activate() {
         this->requestStackPush_(states::Pause);
     });
 
-    readScene(context_, "test.json");
+    readScene(context_, "scene.json");
 }
 
 bool GameState::update(float dt) {
