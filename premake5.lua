@@ -1,9 +1,4 @@
 
---[[
-    Use these like so:
-    premake5 vs2015 --wren=<location> --glew=<location> etc..
-]]
-
 workspace "playground"
     if _ACTION then
         location( "build/" .._ACTION )
@@ -91,12 +86,24 @@ workspace "playground"
             links { "wren_static" }
             libdirs { "extern/wren/lib/Release" }
         project "engine"
+            prebuildcommands {
+                "{MKDIR} %{cfg.targetdir}/pg",
+                "{MKDIR} %{cfg.targetdir}/glsl"
+            }
             postbuildcommands {
                 "{COPY} ../../src/config.json %{cfg.targetdir}",
                 "{COPY} ../../extern/assimp/bin %{cfg.targetdir}",
                 "{COPY} ../../extern/glew-1.13.0/bin %{cfg.targetdir}",
-                "{COPY} ../../extern/SDL/bin %{cfg.targetdir}"
+                "{COPY} ../../extern/SDL/bin %{cfg.targetdir}",
+                "{COPY} ../../src/config.json %{cfg.targetdir}"
             }
+            filter "files:**.wren"
+                --buildmessage "Copying %{file.relpath}..."
+                buildcommands { "{COPY} ../../data/wren/%{file.name} %{cfg.targetdir}/pg" }
+                buildoutputs { "%{cfg.targetdir}/pg/%{file.name}" }
+            filter "files:**glsl"
+                buildcommands { "{COPY} ../../data/glsl/%{file.name} %{cfg.targetdir}/glsl" }
+                buildoutputs { "%{cfg.targetdir}/glsl/%{file.name}" }
         --[[
   _   ___               __  ______          ___    
  | | / (_)__ __ _____ _/ / / __/ /___ _____/ (_)__ 
@@ -106,67 +113,8 @@ workspace "playground"
 --]]
         configuration "vs*"
             defines { "_CRT_SECURE_NO_WARNINGS" } -- This is to turn off warnings about 'localtime'
-            prebuildcommands {
-                "if not exist \"..\\..\\bin\\pg\" mkdir ..\\..\\bin\\pg",
-                "if not exist \"..\\..\\bin\\glsl\" mkdir ..\\..\\bin\\glsl"
-            }
             links { "SDL2", "assimp", "glew32", "opengl32"  }
             libdirs { 
                 "extern/SDL/lib", "extern/assimp/lib",
                 "extern/glew-1.13.0/lib"
             }
-            postbuildcommands {
-                "copy ..\\..\\src\\config.json ..\\..\\bin",
-            }
-            -- exlcude *.wren files from build, just copy them to the correct directory
-            filter "files:**.wren"
-                --buildmessage "Copying %{file.relpath}..."
-                buildcommands { "copy ..\\..\\data\\wren\\%{file.name} ..\\..\\bin\\pg" }
-                buildoutputs { "..\\..\\bin\\pg\\%{file.name}" }
-            project "engine"
-            filter "files:**.glsl"
-                buildcommands { "copy ..\\..\\data\\glsl\\{%file.name} ..\\..\\bin\\glsl" }
-                buildoutputs { "..\\..\\bin\\glsl%{file.name}" }
-            project "engine"
-        --[[
-   __  ___     __       ____ __   
-  /  |/  /__ _/ /_____ / _(_) /__ 
- / /|_/ / _ `/  '_/ -_) _/ / / -_)
-/_/  /_/\_,_/_/\_\\__/_//_/_/\__/ 
-                                  
---]]
-        configuration "gmake"
-            -- Mac and Linux support go here
-            prebuildcommands {
-                "mkdir -p ../../bin/pg",
-                "mkdir -p ../../bin/glsl"
-            }
-            postbuildcommands {
-                "cp ../../config.json ../../bin",
-                "cp -rf ../../src/data ../../bin"
-            }
-            filter "files:**.wren"
-                buildcommands { "cp ../../data/wren/%{file.name} ../../bin/pg" }
-                buildoutputs { "../../bin/pg/%{file.name}" }
-            project "engine"
-            filter "files:**.glsl"
-                buildcommands { "cp ../../data/glsl/%{file.name} ../../bin/glsl" }
-                buildoutputs { "../../bin/glsl/%{file.name}" }
-
-    -- This requires that the engine is split out into a DLL and the main application is its own executable
-    -- Then the test application can just be linked with the engine
-    project "test"
-        kind "ConsoleApp"
-        language "C++"
-        targetdir "bin"
-        files { "test/**.cpp", "src/utils/**.cpp", "src/ecs/**.cpp" }
-        includedirs { "src", "extern/unittest++", "extern" }
-        configuration "vs*"
-            defines { "_CRT_SECURE_NO_WARNINGS" } -- This is to turn off warnings about 'localtime'
-        filter "configurations:Debug"
-            debugdir "bin"
-            links { "UnitTest++" }
-            libdirs { "extern/unittest++/lib/Debug" }
-        filter "configurations:Release"
-            links { "UnitTest++" }
-            libdirs { "extern/unittest++/lib/Release" }
