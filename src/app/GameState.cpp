@@ -47,7 +47,7 @@ void GameState::activate() {
 
     keyboard_.registerKeyDownCallback(Keycode::KeyF1,
         [this]() -> void {
-        auto ui = this->context_.systemManager.system< system::UiSystem >();
+        auto& ui = this->context_.systemManager.system< system::UiSystem >();
         ui.toggleDisplay();
     });
     keyboard_.registerKeyDownCallback(Keycode::KeyP,
