@@ -87,7 +87,7 @@ void setShowBorders(WrenVM*);
 void unsetShowBorders(WrenVM*);
 
 // Quaternion
-void getQuatReal(WrenVM* vm);
+void getQuatImaginary(WrenVM* vm);
 
 // Ringbuffer
 void ringBufferPushBack(WrenVM*);

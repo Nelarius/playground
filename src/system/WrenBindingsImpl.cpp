@@ -448,9 +448,9 @@ void unsetShowBorders(WrenVM* vm) {
  *
  */
 
-void getQuatReal(WrenVM* vm) {
-    const math::Quatf* q = wrenpp::getSlotForeign<math::Quatf, 0>(vm);
-    wrenpp::setSlotForeignValue(vm, q->v);
+void getQuatImaginary(WrenVM* vm) {
+    math::Quatf* q = wrenpp::getSlotForeign<math::Quatf, 0>(vm);
+    wrenpp::setSlotForeignPtr(vm, &q->v);
 }
 
 /***
