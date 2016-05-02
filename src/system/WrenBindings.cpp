@@ -221,7 +221,7 @@ void bindQuaternionModule() {
         .bindClass< math::Quatf, float, float, float, float >( "Quat" )
             // properties
             .bindSetter< decltype(math::Quatf::v), &math::Quatf::v >( "v=(_)")
-            .bindCFunction(false, "v", wren::getQuatReal)
+            .bindCFunction(false, "v", wren::getQuatImaginary)
             .bindGetter< decltype(math::Quatf::w), &math::Quatf::w >( "w" )
             .bindSetter< decltype(math::Quatf::w), &math::Quatf::w >( "w=(_)" )
             // methods
