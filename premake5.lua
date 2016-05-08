@@ -86,10 +86,6 @@ workspace "playground"
             links { "wren_static" }
             libdirs { "extern/wren/lib/Release" }
         project "engine"
-            prebuildcommands {
-                "{MKDIR} %{cfg.targetdir}/pg",
-                "{MKDIR} %{cfg.targetdir}/glsl"
-            }
             postbuildcommands {
                 "{COPY} ../../src/config.json %{cfg.targetdir}",
                 "{COPY} ../../extern/assimp/bin %{cfg.targetdir}",
@@ -98,7 +94,6 @@ workspace "playground"
                 "{COPY} ../../src/config.json %{cfg.targetdir}"
             }
             filter "files:**.wren"
-                --buildmessage "Copying %{file.relpath}..."
                 buildcommands { "{COPY} ../../data/wren/%{file.name} %{cfg.targetdir}/pg" }
                 buildoutputs { "%{cfg.targetdir}/pg/%{file.name}" }
             filter "files:**glsl"
@@ -118,3 +113,7 @@ workspace "playground"
                 "extern/SDL/lib", "extern/assimp/lib",
                 "extern/glew-1.13.0/lib"
             }
+            prebuildcommands { 
+                "if not exist \"..\\..\\bin\\pg\" mkdir ..\\..\\bin\\pg", 
+                "if not exist \"..\\..\\bin\\glsl\" mkdir ..\\..\\bin\\glsl" 
+            } 
