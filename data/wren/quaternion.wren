@@ -31,4 +31,11 @@ foreign class Quat {
         var mul = Math.sin(angle)
         return Quat.new(mul*axis.x, mul*axis.y, mul*axis.z, Math.cos(angle))
     }
+
+    // Create a quaternion representing the rotation of angle about the axis axis
+    static fromAxisAngle(axis, angle) {
+        var s = Math.sin(0.5 * angle)
+        var u = axis.scale(s)
+        return Quat.new(u.x, u.y, u.z, Math.cos(0.5 * angle))
+    }
 }
