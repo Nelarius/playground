@@ -1,7 +1,5 @@
-
 #pragma once 
 
-//#include "utils/MemoryArena.h"
 #include "utils/Container.h"
 #include "SimpleSignal.h"
 #include "utils/Assert.h"
@@ -36,21 +34,6 @@ uint32_t getEventId() {
 }
 
 }   // detail
-
-
-//class BaseEvent {
-//protected:
-//    static uint32_t familyCounter_;
-//};
-//
-//template<typename E>
-//class Event : public BaseEvent {
-//public:
-//    static uint32_t family() {
-//        static uint32_t f{ familyCounter_++ };
-//        return f;
-//    }
-//};
 
 class EventManager;
 
@@ -139,5 +122,5 @@ void EventManager::emit(Args&&... args) {
     signals_[family].emit(&event);
 }
 
-}   // ecs
-}   // ce
+}
+}
