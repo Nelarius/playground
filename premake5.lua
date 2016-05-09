@@ -117,3 +117,21 @@ workspace "playground"
                 "if not exist \"..\\..\\bin\\pg\" mkdir ..\\..\\bin\\pg", 
                 "if not exist \"..\\..\\bin\\glsl\" mkdir ..\\..\\bin\\glsl" 
             } 
+
+    -- This requires that the engine is split out into a DLL and the main application is its own executable		
+    -- Then the test application can just be linked with the engine		
+    project "test"		
+        kind "ConsoleApp"		
+        language "C++"		
+        targetdir "bin"		
+        files { "test/**.cpp", "src/utils/**.cpp", "src/ecs/**.cpp" }		
+        includedirs { "src", "extern/unittest++", "extern" }		
+        configuration "vs*"		
+            defines { "_CRT_SECURE_NO_WARNINGS" } -- This is to turn off warnings about 'localtime'		
+        filter "configurations:Debug"		
+            debugdir "bin"		
+            links { "UnitTest++" }		
+            libdirs { "extern/unittest++/lib/Debug" }		
+        filter "configurations:Release"		
+            links { "UnitTest++" }		
+            libdirs { "extern/unittest++/lib/Release" }
