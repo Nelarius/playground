@@ -273,6 +273,7 @@ void bindEntityModule() {
             .bindCFunction(true, "listenToMouseDown(_,_)", wren::listenToMouseDown)
             .bindCFunction(true, "listenToMousePressed(_,_)", wren::listenToMousePressed)
             .bindCFunction(true, "listenToMouseUp(_,_)", wren::listenToMouseUp)
+            .bindCFunction(true, "listenToMouseScroll(_)", wren::listenToMouseScroll)
         .endClass()
     .endModule();
     wrenpp::beginModule("pg/mouse")

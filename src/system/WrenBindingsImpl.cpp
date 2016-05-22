@@ -243,6 +243,11 @@ void listenToMouseUp(WrenVM* vm) {
     Locator<system::ScriptSystem>::get()->listenToMouseUp(wrenGetSlotString(vm, 2), entity);
 }
 
+void listenToMouseScroll(WrenVM* vm) {
+    ecs::Entity* entity = wrenpp::getSlotForeign<ecs::Entity>(vm, 1);
+    Locator<system::ScriptSystem>::get()->listenToMouseScroll(entity);
+}
+
 void mouseX(WrenVM* vm) {
     math::Vec2f coords = Locator<MouseEvents>::get()->getNormalizedMouseCoords();
     wrenSetSlotDouble(vm, 0, double(coords.x));

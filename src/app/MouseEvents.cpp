@@ -38,6 +38,8 @@ MouseEvents::MouseEvents(Context& context)
     : mouseDownCallbacks_{},
     mousePressedCallbacks_{},
     mouseUpCallbacks_{},
+    mouseScrollCallbacks_{},
+    mouseScrollEntityCallbacks_{},
     context_{ context },
     scriptSystem_{ nullptr } {}
 
@@ -79,6 +81,15 @@ bool MouseEvents::handleEvent(const SDL_Event& event) {
             }
             return true;
         }
+    }
+    else if (event.type == SDL_MOUSEWHEEL) {
+        for (auto& callback : mouseScrollCallbacks_) {
+            callback(event.wheel.x, event.wheel.y);
+        }
+        for (auto* entity : mouseScrollEntityCallbacks_) {
+            scriptSystem_->onMouseScroll(event.wheel.x, event.wheel.y, entity);
+        }
+        return mouseScrollCallbacks_.size() || mouseScrollEntityCallbacks_.size();
     }
     return false;
 }
@@ -138,6 +149,14 @@ void MouseEvents::registerMousePressedCallback(MouseButton button, std::function
 
 void MouseEvents::registerMouseUpCallback(MouseButton button, std::function<void()> callback) {
     addToMap_(mouseUpCallbacks_, button, callback);
+}
+
+void MouseEvents::registerMouseScrollCallback(std::function<void(std::int32_t, std::int32_t)> callback) {
+    mouseScrollCallbacks_.push_back(callback);
+}
+
+void MouseEvents::registerMouseScrollScriptCallback(ecs::Entity* entity) {
+    mouseScrollEntityCallbacks_.push_back(entity);
 }
 
 void MouseEvents::setScriptHandler(system::ScriptSystem& system) {

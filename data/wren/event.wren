@@ -13,4 +13,6 @@ class EventManager {
     foreign static listenToMouseDown(entity, button)
     foreign static listenToMousePressed(entity, button)
     foreign static listenToMouseUp(entity, button)
+
+    foreign static listenToMouseScroll(entity)
 }

@@ -133,6 +133,11 @@ void ScriptSystem::onMouseUp(const char* str, ecs::Entity* entity) {
     callback(str);
 }
 
+void ScriptSystem::onMouseScroll(std::int32_t dx, std::int32_t dy, ecs::Entity* entity) {
+    auto callback = entity->component<component::Script>()->vm.method("main", "onMouseScroll", "call(_,_)");
+    callback(dx, dy);
+}
+
 void ScriptSystem::listenToKeyDown(std::string str, ecs::Entity* entity) {
     keyboardManager_.registerKeyDownScriptCallback(str, entity);
 }
@@ -155,6 +160,10 @@ void ScriptSystem::listenToMousePressed(std::string str, ecs::Entity* entity) {
 
 void ScriptSystem::listenToMouseUp(std::string str, ecs::Entity* entity) {
     mouseManager_.registerMouseUpScriptCallback(str, entity);
+}
+
+void ScriptSystem::listenToMouseScroll(ecs::Entity* entity) {
+    mouseManager_.registerMouseScrollScriptCallback(entity);
 }
 
 }

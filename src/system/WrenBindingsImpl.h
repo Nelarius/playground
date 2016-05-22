@@ -47,6 +47,7 @@ void listenToKeyUp(WrenVM*);
 void listenToMouseDown(WrenVM*);
 void listenToMousePressed(WrenVM*);
 void listenToMouseUp(WrenVM*);
+void listenToMouseScroll(WrenVM*);
 void mouseX(WrenVM*);
 void mouseY(WrenVM*);
 void mouseDx(WrenVM*);
