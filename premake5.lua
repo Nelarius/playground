@@ -22,6 +22,40 @@ workspace "playground"
     filter "action:gmake"
         buildoptions { "-std=gnu++14" }
 
+    group("external")
+--[[
+                    
+ _    _________ ___ 
+| |/|/ / __/ -_) _ \
+|__,__/_/  \__/_//_/
+                    
+--]]
+    project "wren"
+        language "C"
+        kind "StaticLib"
+        files { "extern/wren/src/vm/**.c" }
+        includedirs { "extern/wren/src/vm", "extern/wren/src/include" }
+        -- the engine has it's own random number library
+        -- meta module doesn't seem to have anything in it at the time of writing
+        defines { "WREN_OPT_META=0", "WREN_OPT_RANDOM=0" }
+        filter "action:vs*"
+            defines { "_CRT_SECURE_NO_WARNINGS" } -- This is to turn off warnings about the C standard lib on Visual C compilers
+
+--[[
+                        __    __ 
+ _    _________ ___  __/ /___/ /_
+| |/|/ / __/ -_) _ \/_  __/_  __/
+|__,__/_/  \__/_//_/ /_/   /_/   
+                                 
+--]]
+    project "wren++"
+        language "C++"
+        kind "StaticLib"
+        targetdir "lib"
+        files { "extern/wrenpp/src/**.cpp", "extern/wrenpp/src/**.h"  }
+        includedirs { "extern/wrenpp/src", "extern/wren/src/include" }
+        filter "configurations:Release"
+
     --[[
    ____ __                 __          
   / _(_) /__ ___ ___ ___  / /_______ __
@@ -42,22 +76,7 @@ workspace "playground"
         filter "system:linux"
             files { "extern/filesentry/source/FileWatcherLinux.cpp" }
 
-    --[[
-  _      __               __    __ 
- | | /| / /______ ___  __/ /___/ /_
- | |/ |/ / __/ -_) _ \/_  __/_  __/
- |__/|__/_/  \__/_//_/ /_/   /_/   
-                                   
---]]
-    project "wrenpp"
-        kind "StaticLib"
-        language "C++"
-        targetdir "lib"
-        files { "extern/wrenpp/src/**.cpp", "extern/wrenpp/src/**.h"  }
-        includedirs { "extern/wrenpp/src", "extern/wren/src/include" }
-        filter "configurations:Release"
-            defines { "NDEBUG" }
-
+    group "playground"
     --[[
                 _         
  ___ ___  ___ _(_)__  ___ 
@@ -69,7 +88,7 @@ workspace "playground"
         kind "ConsoleApp"
         language "C++"
         targetdir "bin"
-        links { "wrenpp", "filesentry" }
+        links { "wren", "wren++", "filesentry" }
         files { "src/**.cpp", "src/**.h", "extern/json11/json11.cpp", "extern/imgui/**.cpp", "data/**.wren", "data/**.glsl", "src/config.json" }
         includedirs {
             "src", "extern/wrenpp/src", "extern/filesentry/include",
@@ -78,27 +97,20 @@ workspace "playground"
         }
         --This should be enabled once all VC warnings get fixed:
         --flags { "FatalWarnings" } // This should be enabled once all VC warnings get fixed
-        filter "configurations:Debug"
-            debugdir "bin"
-            links { "wren_static_d" }
-            libdirs { "extern/wren/lib/Debug" }
-        filter "configurations:Release or Test"
-            links { "wren_static" }
-            libdirs { "extern/wren/lib/Release" }
-        project "engine"
-            postbuildcommands {
-                "{COPY} ../../src/config.json %{cfg.targetdir}",
-                "{COPY} ../../extern/assimp/bin %{cfg.targetdir}",
-                "{COPY} ../../extern/glew-1.13.0/bin %{cfg.targetdir}",
-                "{COPY} ../../extern/SDL/bin %{cfg.targetdir}",
-                "{COPY} ../../src/config.json %{cfg.targetdir}"
-            }
-            filter "files:**.wren"
-                buildcommands { "{COPY} ../../data/wren/%{file.name} %{cfg.targetdir}/pg" }
-                buildoutputs { "%{cfg.targetdir}/pg/%{file.name}" }
-            filter "files:**glsl"
-                buildcommands { "{COPY} ../../data/glsl/%{file.name} %{cfg.targetdir}/glsl" }
-                buildoutputs { "%{cfg.targetdir}/glsl/%{file.name}" }
+        links { "wren" }
+        postbuildcommands {
+            "{COPY} ../../src/config.json %{cfg.targetdir}",
+            "{COPY} ../../extern/assimp/bin %{cfg.targetdir}",
+            "{COPY} ../../extern/glew-1.13.0/bin %{cfg.targetdir}",
+            "{COPY} ../../extern/SDL/bin %{cfg.targetdir}",
+            "{COPY} ../../src/config.json %{cfg.targetdir}"
+        }
+        filter "files:**.wren"
+            buildcommands { "{COPY} ../../data/wren/%{file.name} %{cfg.targetdir}/pg" }
+            buildoutputs { "%{cfg.targetdir}/pg/%{file.name}" }
+        filter "files:**glsl"
+            buildcommands { "{COPY} ../../data/glsl/%{file.name} %{cfg.targetdir}/glsl" }
+            buildoutputs { "%{cfg.targetdir}/glsl/%{file.name}" }
         --[[
   _   ___               __  ______          ___    
  | | / (_)__ __ _____ _/ / / __/ /___ _____/ (_)__ 
@@ -116,22 +128,22 @@ workspace "playground"
             prebuildcommands { 
                 "if not exist \"..\\..\\bin\\pg\" mkdir ..\\..\\bin\\pg", 
                 "if not exist \"..\\..\\bin\\glsl\" mkdir ..\\..\\bin\\glsl" 
-            } 
+            }
 
     -- This requires that the engine is split out into a DLL and the main application is its own executable		
     -- Then the test application can just be linked with the engine		
-    project "test"		
-        kind "ConsoleApp"		
-        language "C++"		
-        targetdir "bin"		
-        files { "test/**.cpp", "src/utils/**.cpp", "src/ecs/**.cpp" }		
-        includedirs { "src", "extern/unittest++", "extern" }		
-        configuration "vs*"		
-            defines { "_CRT_SECURE_NO_WARNINGS" } -- This is to turn off warnings about 'localtime'		
-        filter "configurations:Debug"		
-            debugdir "bin"		
-            links { "UnitTest++" }		
-            libdirs { "extern/unittest++/lib/Debug" }		
-        filter "configurations:Release"		
-            links { "UnitTest++" }		
+    project "test"
+        kind "ConsoleApp"
+        language "C++"
+        targetdir "bin"
+        files { "test/**.cpp", "src/utils/**.cpp", "src/ecs/**.cpp" }
+        includedirs { "src", "extern/unittest++", "extern" }
+        configuration "vs*"
+            defines { "_CRT_SECURE_NO_WARNINGS" } -- This is to turn off warnings about 'localtime'
+        filter "configurations:Debug"
+            debugdir "bin"
+            links { "UnitTest++" }
+            libdirs { "extern/unittest++/lib/Debug" }
+        filter "configurations:Release"
+            links { "UnitTest++" }
             libdirs { "extern/unittest++/lib/Release" }
