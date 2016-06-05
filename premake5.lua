@@ -111,6 +111,8 @@ workspace "playground"
         filter "files:**glsl"
             buildcommands { "{COPY} ../../data/glsl/%{file.name} %{cfg.targetdir}/glsl" }
             buildoutputs { "%{cfg.targetdir}/glsl/%{file.name}" }
+        filter "configurations:Debug"
+            debugdir "bin"
         --[[
   _   ___               __  ______          ___    
  | | / (_)__ __ _____ _/ / / __/ /___ _____/ (_)__ 
@@ -118,7 +120,7 @@ workspace "playground"
  |___/_/___/\_,_/\_,_/_/ /___/\__/\_,_/\_,_/_/\___/
                                                    
 --]]
-        configuration "vs*"
+        filter "action:vs*"
             defines { "_CRT_SECURE_NO_WARNINGS" } -- This is to turn off warnings about 'localtime'
             links { "SDL2", "assimp", "glew32", "opengl32"  }
             libdirs { 
