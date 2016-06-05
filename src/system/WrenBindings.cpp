@@ -42,6 +42,8 @@ void bindMathModule() {
             .bindFunction< decltype(static_cast<double(*)(double)>(&floor)), &floor >(true, "floor(_)")
             .bindFunction< decltype(static_cast<double(*)(double)>(&round)), &round >(true, "round(_)")
             .bindFunction< decltype(static_cast<double(*)(double)>(&abs)), &abs    >(true, "abs(_)")
+            .bindFunction< decltype(static_cast<double(*)(double, double)>(&std::fmin)), &std::fmin >(true, "min(_,_)")
+            .bindFunction< decltype(static_cast<double(*)(double, double)>(&std::fmax)), &std::fmax>(true, "max(_,_)")
             .bindFunction< decltype(static_cast<double(*)(void)>(&pg::randd)), static_cast<double(*)(void)>(&pg::randd) >(true, "rand()")
             .bindCFunction(true, "generateCameraRay(_,_)", wren::generateCameraRay)
         .endClass()
@@ -233,9 +235,9 @@ void bindQuaternionModule() {
             .bindMethod<decltype(&math::Quatf::inverse), &math::Quatf::inverse>(false, "inverse()")
             .bindMethod<decltype(&math::Quatf::axis), &math::Quatf::axis>(false, "axis()")
             .bindMethod<decltype(&math::Quatf::multiply), &math::Quatf::multiply>(false, "multiply(_)")
-            .bindMethod<decltype(&math::Quatf::xaxis), &math::Quatf::xaxis>(false, "xaxis()")
-            .bindMethod<decltype(&math::Quatf::yaxis), &math::Quatf::yaxis>(false, "yaxis()")
-            .bindMethod<decltype(&math::Quatf::zaxis), &math::Quatf::zaxis>(false, "zaxis()")
+            .bindMethod<decltype(&math::Quatf::xaxis), &math::Quatf::xaxis>(false, "xaxis")
+            .bindMethod<decltype(&math::Quatf::yaxis), &math::Quatf::yaxis>(false, "yaxis")
+            .bindMethod<decltype(&math::Quatf::zaxis), &math::Quatf::zaxis>(false, "zaxis")
         .endClass()
     .endModule();
 }

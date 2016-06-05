@@ -13,14 +13,18 @@ foreign class Quat {
     foreign angle()     // returns angle in radians
     foreign multiply( rhs ) // returns the result as a new Quaternion
 
-    foreign xaxis()     // returns the normalized axis as a Vec3
-    foreign yaxis()
-    foreign zaxis()
+    foreign xaxis     // returns the normalized axis as a Vec3
+    foreign yaxis
+    foreign zaxis
 
     foreign v
     foreign v=( rhs )
     foreign w
     foreign w=( rhs )
+
+    static identity {
+        return Quat.new(0.0, 0.0, 0.0, 1.0)
+    }
 
     // Create a quaternion representing the rotation between two axes
     // The axes must be normalized
