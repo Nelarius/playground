@@ -6,7 +6,7 @@
  * The predicate must take two arguments (left, right) and must represent
  * the operation (left <= right).
  **/
-var bubbleSort = new Fn { |l, predicate|
+var bubbleSort = Fn.new { |l, predicate|
     var swap = new Fn { |l, i1, i2|
         var temp = l[i1]
         l[i1] = l[i2]
