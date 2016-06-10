@@ -11,7 +11,7 @@ foreign class Quat {
     foreign inverse()   // returns the result as a new quaternion
     foreign axis()      // returns axis as Vec3
     foreign angle()     // returns angle in radians
-    foreign multiply( rhs ) // returns the result as a new Quaternion
+    foreign *( rhs ) // returns the result as a new Quaternion
 
     foreign xaxis     // returns the normalized axis as a Vec3
     foreign yaxis
