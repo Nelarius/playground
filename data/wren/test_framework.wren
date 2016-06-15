@@ -50,7 +50,7 @@ class TestRunner {
             }
         }
         if (failedCount > 0) {
-            System.print("\n%(failedCount) tests out of %(_tests.count) failed.")
+            System.print("\n%(failedCount) out of %(_tests.count) tests failed.")
         } else {
             System.print("\n%(_tests.count) tests passed.")
         }
