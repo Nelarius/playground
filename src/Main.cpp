@@ -38,7 +38,6 @@ int main( int argc, char** argv ) {
 
         wrenpp::VM vm;
         vm.executeModule(wrenTest);
-        vm.executeString("testRunner.run()\n");
     }
     else {
         pg::Application app{};
