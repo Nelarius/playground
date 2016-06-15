@@ -12,6 +12,23 @@ The C/C++ source code is in `src/`. Some documentation exists within the `src` f
 
 External dependencies are in `extern`.
 
+## Testing
+
+C++ tests are implemented using UnitTest++, and are located in the `test/` folder.
+
+You can test Wren code using `test_framework.wren`.
+
+```js
+import "pg/test_framework" for testRunner
+import "pg/assert" for Assert
+
+testRunner.add("This should succeed", Fn.new {
+    Assert.isTrue(true)
+})
+```
+
+You can invoke this module using the playground engine with the `--test [moduleName]` option. Doing so will run all tests that have been added to the test runner.
+
 ## How it works
 
 The engine is based around an entity-component system. The components are simply structs containing data. The components live in contiguous arrays. The game engine logic is implemented in systems which iterate over any component arrays that it needs. Entities are merely handles that tie a number of components together.
