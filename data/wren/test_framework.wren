@@ -1,10 +1,16 @@
 import "pg/assert" for Assert
 
 class Test {
-    construct new( name, body ) {
+    construct new(name, fixture, body) {
         _name = name
+        _fixtureType = fixture
         _fiber = Fiber.new {
-            body.call()
+            if (_fixtureType != null) {
+                var fixture = _fixtureType.new()
+                body.call(fixture)
+            } else {
+                body.call()
+            }
         }
     }
 
@@ -24,18 +30,12 @@ class TestRunner {
         _tests = []
     }
 
-    add( name, body ) {
-        _tests.add(Test.new(name, body))
+    test(name, body) {
+        _tests.add(Test.new(name, null, body))
     }
 
-    test(name, body) {
-        var t = Test.new(name, body)
-        t.try()
-        if (t.error) {
-            System.print("Test \"%(name)\" failed with %(t.error)")
-        } else {
-            System.print("Test \"%(name)\" OK")
-        }
+    testFixture(name, fixtureType, body) {
+        _tests.add(Test.new(name, fixtureType, body))
     }
 
     run() {
