@@ -89,7 +89,8 @@ workspace "playground"
         language "C++"
         targetdir "bin"
         links { "wren", "wren++", "filesentry" }
-        files { "src/**.cpp", "src/**.h", "extern/json11/json11.cpp", "extern/imgui/**.cpp", "data/**.wren", "data/**.glsl", "src/config.json" }
+        files { "src/**.cpp", "src/**.h", "extern/imgui/**.cpp",
+        "data/**.wren", "data/**.glsl", "src/config.json" }
         includedirs {
             "src", "extern/wrenpp/src", "extern/filesentry/include",
             "extern", "extern/assimp/include", "extern/SDL/include",

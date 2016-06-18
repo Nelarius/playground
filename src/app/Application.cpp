@@ -3,12 +3,13 @@
 #include "app/PauseState.h"
 #include "utils/Assert.h"
 #include "utils/File.h"
+#include "utils/Json.h"
 #include "utils/Log.h"
 #include "utils/Locator.h"
 #include "utils/StringId.h"
 #include "system/WrenBindings.h"
 #include "Wren++.h"
-#include "json11/json11.hpp"
+#include "mm_json.h"
 #include <SDL_timer.h>
 #include <string>
 #include <cstdint>
@@ -93,30 +94,28 @@ void Application::initialize_() {
     /*
      * Initialize app state here
      * */
-    auto json = pg::fileToString("config.json");
-    std::string error{ "" };
-    auto obj = json11::Json::parse(json, error).object_items();
-    auto window = obj["window"].object_items();
-    auto opengl = window["opengl"].object_items();
-
-    targetDeltaTime = uint32_t(1.0f / obj["frameRate"].number_value());
-
+    JsonParser json("config.json");
     WindowSettings settings{};
-    settings.width = window["width"].int_value();
-    settings.height = window["height"].int_value();
-    settings.name = window["name"].string_value();
-    settings.glMajor = opengl["major"].int_value();
-    settings.glMinor = opengl["minor"].int_value();
-    settings.stencilBits = opengl["stencilBits"].int_value();
-    settings.depthBits = opengl["depthBits"].int_value();
-    settings.multisampleBuffer = opengl["multisampleBuffers"].int_value();
-    settings.multisampleSamples = opengl["multisampleSamples"].int_value();
+
+    JsonToken window = json.query("window");
+    settings.width = json.query(window, "width").as<int>();
+    settings.height = json.query(window, "height").as<int>();
+    settings.name = json.query(window, "name").as<const char*>();
+    JsonToken opengl = json.query(window, "opengl");
+    settings.glMajor = json.query(opengl, "major").as<int>();
+    settings.glMinor = json.query(opengl, "minor").as<int>();
+    settings.stencilBits = json.query(opengl, "stencilBits").as<int>();
+    settings.depthBits = json.query(opengl, "depthBits").as<int>();
+    settings.multisampleBuffer = json.query(opengl, "multisampleBuffer").as<int>();
+    settings.multisampleSamples = json.query(opengl, "multisampleSamples").as<int>();
 
     window_.initialize(settings);
 
-    std::string shaderPrefix = obj["shaderPrefix"].string_value();
+    targetDeltaTime = uint32_t(1.f / json.query("frameRate").as<int>());
+
+
+    std::string shaderPrefix = json.query("shaderPrefix").as<const char*>();
     LOG_DEBUG << "shaderPrefix: " << shaderPrefix;
-    std::string shaders = obj["builtinPrefix"].string_value();
 
     /*
      * Create app states here
