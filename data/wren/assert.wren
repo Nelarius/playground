@@ -27,6 +27,12 @@ class Assert {
         }
     }
 
+    static isNull(value) {
+        if (value != null) {
+            abortCurrentFiber("isNull")
+        }
+    }
+
     static notNull(value) {
         if (value == null) {
             abortCurrentFiber("notNull")
