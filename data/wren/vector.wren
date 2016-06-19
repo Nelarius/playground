@@ -19,6 +19,10 @@ foreign class Vec2 {
     foreign +( rhs )
     foreign -( rhs )
     foreign scale( s )
+
+    static identity {
+        return Vec2.new(1.0, 1.0)
+    }
 }
 
 foreign class Vec3 {
@@ -46,6 +50,10 @@ foreign class Vec3 {
     foreign +( rhs )     // returns the result
     foreign -( rhs )    // returns the result
     foreign scale( s )      // returns the result
+
+    static identity {
+        return Vec3.new(1.0, 1.0, 1.0)
+    }
 }
 
 foreign class Vec4 {
@@ -76,4 +84,8 @@ foreign class Vec4 {
     foreign +( rhs )
     foreign -( rhs )
     foreign scale( s )
+
+    static identity {
+        return Vec4.new(1.0, 1.0, 1.0, 1.0)
+    }
 }
