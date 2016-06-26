@@ -64,7 +64,7 @@ testRunner.test("Queue behaves as expected", Fn.new {
     Assert.isNull(queue.dequeue())
 })
 
-testRunner.test("Count remains zero while dequeueing empty wueue", Fn.new {
+testRunner.test("Count remains zero while dequeueing empty queue", Fn.new {
     var queue = Queue.new()
     Assert.isNull(queue.dequeue())
     Assert.isEqual(0, queue.count)
