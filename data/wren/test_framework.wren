@@ -44,7 +44,7 @@ class TestRunner {
             t.try()
             if (t.error) {
                 failedCount = failedCount + 1
-                System.write("\nTest\"%(t.name)\" failed with %(t.error)\n\n")
+                System.write("\nTest \"%(t.name)\" failed with %(t.error)\n\n")
             } else {
                 System.print("Test \"%(t.name)\" OK")
             }
