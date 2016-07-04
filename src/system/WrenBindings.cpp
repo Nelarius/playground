@@ -11,8 +11,8 @@
 #include "utils/Random.h"
 #include "system/WrenBindingsImpl.h"
 #include <cmath>
-#include <vector>
 #include <cstdlib>
+#include <vector>
 
 namespace pg {
 namespace wren {
@@ -59,6 +59,14 @@ void bindMathModule() {
         .bindClass<math::Planef, math::Vec3f, math::Vec3f, math::Vec3f>("Plane")
             .bindMethod<decltype(&math::Planef::point), &math::Planef::point>(false, "point()")
             .bindMethod<decltype(&math::Planef::normal), &math::Planef::normal>(false, "normal()")
+        .endClass()
+    .endModule();
+    wrenpp::beginModule("float")
+        .beginClass("Float64")
+            .bindCFunction(true, "max", wren::float64Max)
+            .bindCFunction(true, "min", wren::float64Min)
+            .bindCFunction(true, "lowest", wren::float64Lowest)
+            .bindCFunction(true, "epsilon", wren::float64Epsilon)
         .endClass()
     .endModule();
 }

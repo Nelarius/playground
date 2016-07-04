@@ -20,6 +20,10 @@ struct WrenRenderable {
 // math lib
 void planeIntersection(WrenVM*);
 void generateCameraRay(WrenVM*);
+void float64Max(WrenVM*);
+void float64Min(WrenVM*);
+void float64Lowest(WrenVM*);
+void float64Epsilon(WrenVM*);
 
 // NumberArray
 void arrayPushBack(WrenVM*);

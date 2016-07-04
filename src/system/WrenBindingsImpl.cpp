@@ -21,8 +21,9 @@
 extern "C" {
 #include <wren.h>
 }
-#include <vector>
 #include <cstdlib>
+#include <limits>
+#include <vector>
 
 namespace pg {
 namespace wren {
@@ -53,6 +54,22 @@ void generateCameraRay(WrenVM* vm) {
     auto camera = Locator<system::RenderSystem>::get()->activeCameraInfo();
     auto ray = math::generateCameraRay(camera.position, camera.orientation, camera.frustum, x, y);
     wrenpp::setSlotForeignValue(vm, 0, ray);
+}
+
+void float64Max(WrenVM* vm) {
+    wrenSetSlotDouble(vm, 0, std::numeric_limits<double>::max());
+}
+
+void float64Min(WrenVM* vm) {
+    wrenSetSlotDouble(vm, 0, std::numeric_limits<double>::min());
+}
+
+void float64Lowest(WrenVM* vm) {
+    wrenSetSlotDouble(vm, 0, std::numeric_limits<double>::lowest());
+}
+
+void float64Epsilon(WrenVM* vm) {
+    wrenSetSlotDouble(vm, 0, std::numeric_limits<double>::epsilon());
 }
 
 /***
