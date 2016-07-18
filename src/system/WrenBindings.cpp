@@ -61,7 +61,7 @@ void bindMathModule() {
             .bindMethod<decltype(&math::Planef::normal), &math::Planef::normal>(false, "normal()")
         .endClass()
     .endModule();
-    wrenpp::beginModule("float")
+    wrenpp::beginModule("pg/float")
         .beginClass("Float64")
             .bindCFunction(true, "max", wren::float64Max)
             .bindCFunction(true, "min", wren::float64Min)
