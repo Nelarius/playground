@@ -37,3 +37,6 @@ bin/
 
 # Shell scripts
 *.sh
+
+# Visual Studio Code
+.vscode
