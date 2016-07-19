@@ -99,7 +99,8 @@ void readScene(Context& context, const char* file) {
 
         JsonToken renderable = json.query(entity, "renderable");
         if (renderable) {
-            opengl::BufferObject* buffer = context.meshManager.get(json.query(renderable, "model").as<const char*>());
+            const char* modelName = json.query(renderable, "model").as<const char*>();
+            opengl::BufferObject* buffer = context.meshManager.get(modelName);
             opengl::Program* shader{ nullptr };
             opengl::VertexArrayObject vao{ 0 };
             system::Material mat;
@@ -130,6 +131,9 @@ void readScene(Context& context, const char* file) {
             factory.addStandardAttribute(opengl::VertexAttribute::Vertex);
             factory.addStandardAttribute(opengl::VertexAttribute::Normal);
             vao = factory.getVao();
+            newEntity.assign<component::Renderable>(buffer, shader, vao, mat);
+            const auto& boundingBox = context.meshManager.getBoundingBox(modelName);
+            newEntity.assign<math::AABoxf>(boundingBox.min, boundingBox.max);
         }
     }
 }
