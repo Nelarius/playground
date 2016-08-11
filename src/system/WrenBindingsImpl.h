@@ -20,6 +20,10 @@ struct WrenRenderable {
 // math lib
 void planeIntersection(WrenVM*);
 void generateCameraRay(WrenVM*);
+void float64Max(WrenVM*);
+void float64Min(WrenVM*);
+void float64Lowest(WrenVM*);
+void float64Epsilon(WrenVM*);
 
 // NumberArray
 void arrayPushBack(WrenVM*);
@@ -47,6 +51,7 @@ void listenToKeyUp(WrenVM*);
 void listenToMouseDown(WrenVM*);
 void listenToMousePressed(WrenVM*);
 void listenToMouseUp(WrenVM*);
+void listenToMouseScroll(WrenVM*);
 void mouseX(WrenVM*);
 void mouseY(WrenVM*);
 void mouseDx(WrenVM*);
@@ -87,7 +92,7 @@ void setShowBorders(WrenVM*);
 void unsetShowBorders(WrenVM*);
 
 // Quaternion
-void getQuatReal(WrenVM* vm);
+void getQuatImaginary(WrenVM* vm);
 
 // Ringbuffer
 void ringBufferPushBack(WrenVM*);

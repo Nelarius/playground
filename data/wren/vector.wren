@@ -15,10 +15,14 @@ foreign class Vec2 {
     foreign normSquared()
     foreign normalize() // normalizes the vector in place
     foreign dot( rhs )
-    foreign hadamard( rhs )
-    foreign plus( rhs )
-    foreign minus( rhs )
+    foreign *( rhs )
+    foreign +( rhs )
+    foreign -( rhs )
     foreign scale( s )
+
+    static identity {
+        return Vec2.new(1.0, 1.0)
+    }
 }
 
 foreign class Vec3 {
@@ -42,10 +46,14 @@ foreign class Vec3 {
     foreign normalize()
     foreign dot( rhs )
     foreign cross( rhs )    // returns the result
-    foreign hadamard( rhs ) // returns the result
-    foreign plus( rhs )     // returns the result
-    foreign minus( rhs )    // returns the result
-    foreign scale( s )
+    foreign *( rhs )    // returns the result
+    foreign +( rhs )     // returns the result
+    foreign -( rhs )    // returns the result
+    foreign scale( s )      // returns the result
+
+    static identity {
+        return Vec3.new(1.0, 1.0, 1.0)
+    }
 }
 
 foreign class Vec4 {
@@ -72,8 +80,12 @@ foreign class Vec4 {
     foreign normSquared()
     foreign normalize()
     foreign dot( rhs )
-    foreign hadamard( rhs )
-    foreign plus( rhs )
-    foreign minus( rhs )
+    foreign *( rhs )
+    foreign +( rhs )
+    foreign -( rhs )
     foreign scale( s )
+
+    static identity {
+        return Vec4.new(1.0, 1.0, 1.0, 1.0)
+    }
 }

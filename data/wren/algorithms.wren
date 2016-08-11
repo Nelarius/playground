@@ -1,3 +1,5 @@
+import "pg/test_framework" for testRunner
+import "pg/assert" for Assert
 
 /*
  * @brief Sort a list.
@@ -6,8 +8,8 @@
  * The predicate must take two arguments (left, right) and must represent
  * the operation (left <= right).
  **/
-var bubbleSort = new Fn { |l, predicate|
-    var swap = new Fn { |l, i1, i2|
+var bubbleSort = Fn.new { |l, predicate|
+    var swap = Fn.new { |l, i1, i2|
         var temp = l[i1]
         l[i1] = l[i2]
         l[i2] = temp
@@ -27,3 +29,16 @@ var bubbleSort = new Fn { |l, predicate|
         n = n-1
     }
 }
+
+testRunner.test("List sorting works", Fn.new {
+    var l = []
+    l.add(3)
+    l.add(1)
+    l.add(2)
+    bubbleSort.call(l, Fn.new { |left, right|
+        return left < right
+    })
+    Assert.isEqual(1, l[0])
+    Assert.isEqual(2, l[1])
+    Assert.isEqual(3, l[2])
+})

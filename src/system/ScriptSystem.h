@@ -8,6 +8,7 @@
 #include <unordered_map>
 #include <set>
 #include <cstdlib>
+#include <cstdint>
 
 namespace pg {
 
@@ -33,12 +34,14 @@ public:
     void onMouseDown(const char*, ecs::Entity*);
     void onMousePressed(const char*, ecs::Entity*);
     void onMouseUp(const char*, ecs::Entity*);
+    void onMouseScroll(std::int32_t dx, std::int32_t y, ecs::Entity*);
     void listenToKeyDown(std::string, ecs::Entity*);
     void listenToKeyPressed(std::string, ecs::Entity*);
     void listenToKeyUp(std::string, ecs::Entity*);
     void listenToMouseDown(std::string, ecs::Entity*);
     void listenToMousePressed(std::string, ecs::Entity*);
     void listenToMouseUp(std::string, ecs::Entity*);
+    void listenToMouseScroll(ecs::Entity*);
 
 private:
     // used to keep track of which scripts are currently in use

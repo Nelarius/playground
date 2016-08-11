@@ -81,10 +81,10 @@ opengl::BufferObject* MeshManager::get(const std::string& file) const {
     if (it != resources_.end()) {
         return it->second;
     }
-    else {
-        it = resources_.find("cube");
-        return it->second;
-    }
+    //else {
+    //    it = resources_.find("cube");
+    //    return it->second;
+    //}
 
     Assimp::Importer importer;
     const aiScene* scene = importer.ReadFile(
@@ -93,7 +93,11 @@ opengl::BufferObject* MeshManager::get(const std::string& file) const {
         aiProcess_GenSmoothNormals
         );
 
-    PG_ASSERT(scene);
+    if (!scene) {
+        it = resources_.find("cube");
+        PG_ASSERT(it != resources_.end());
+        return it->second;
+    }
 
     float minx = std::numeric_limits< float >::max();
     float maxx = std::numeric_limits< float >::min();
@@ -163,6 +167,7 @@ opengl::BufferObject* MeshManager::get(const std::string& file) const {
 }
 
 math::AABoxf MeshManager::getBoundingBox(const std::string& file) const {
+    LOG_DEBUG << "Getting bounding box for " << file;
     auto it = boxes_.find(file);
     PG_ASSERT(it != boxes_.end());
     return it->second;

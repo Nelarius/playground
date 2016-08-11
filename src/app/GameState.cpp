@@ -1,6 +1,6 @@
 #include "app/GameState.h"
 #include "app/AppStateStack.h"
-#include "app/WorldIO.h"
+#include "app/SceneIO.h"
 #include "system/DebugSystem.h"
 #include "system/RenderSystem.h"
 #include "system/ScriptSystem.h"
@@ -18,55 +18,50 @@
 namespace pg {
 
 GameState::GameState(Context& context, AppStateStack& stack)
-    : AppState(context, stack),
-    events_(),
-    entities_(events_),
-    systems_(events_, entities_) {
-    Locator< ecs::EntityManager >::set(&entities_);
-    Locator< ecs::EventManager >::set(&events_);
+    : AppState(context, stack) {
+    Locator< ecs::EntityManager >::set(&context_.entityManager);
+    Locator< ecs::EventManager >::set(&context_.eventManager);
     Locator<MouseEvents>::set(&mouse_); // the Wren script needs these
 }
 
 void GameState::activate() {
-    systems_.add< system::RenderSystem >(context_);
-    systems_.add<system::DebugRenderSystem>(context_);
-    systems_.add< system::PickingSystem >(context_);
-    systems_.add< system::DebugSystem >();
-    systems_.add< system::ScriptSystem >(context_, keyboard_, mouse_);
-    systems_.add< system::UiSystem >(context_);
-    systems_.configure< system::DebugSystem >();
-    systems_.configure< system::RenderSystem >();
-    systems_.configure<system::DebugRenderSystem>();
-    systems_.configure<system::PickingSystem>();
-    systems_.configure< system::ScriptSystem >();
+    context_.systemManager.add< system::RenderSystem >(context_);
+    context_.systemManager.add<system::DebugRenderSystem>(context_);
+    context_.systemManager.add< system::PickingSystem >(context_);
+    context_.systemManager.add< system::DebugSystem >();
+    context_.systemManager.add< system::ScriptSystem >(context_, keyboard_, mouse_);
+    context_.systemManager.add< system::UiSystem >(context_);
+    context_.systemManager.configure< system::DebugSystem >();
+    context_.systemManager.configure< system::RenderSystem >();
+    context_.systemManager.configure<system::DebugRenderSystem>();
+    context_.systemManager.configure<system::PickingSystem>();
+    context_.systemManager.configure< system::ScriptSystem >();
 
     // NOTICE
     // this is a dirty hack to get ScriptSystem bound to Wren
     // I really need a way to set the bytes of a foreign object in a better way....
-    Locator<system::ScriptSystem>::set(dynamic_cast<system::ScriptSystem*>(systems_.system<system::ScriptSystem>()));
-    Locator<system::PickingSystem>::set(dynamic_cast<system::PickingSystem*>(systems_.system<system::PickingSystem>()));
-    Locator<system::RenderSystem>::set(dynamic_cast<system::RenderSystem*>(systems_.system<system::RenderSystem>()));
-    Locator<system::DebugRenderSystem>::set(dynamic_cast<system::DebugRenderSystem*>(systems_.system<system::DebugRenderSystem>()));
-
-    // the full capacity of the systems are used in parsing, so the systems must be configured and ready to go!
-    WorldIO world(context_);
-    world.read("data/scene.json", entities_, events_);
+    Locator<system::ScriptSystem>::set(&context_.systemManager.system<system::ScriptSystem>());
+    Locator<system::PickingSystem>::set(&context_.systemManager.system<system::PickingSystem>());
+    Locator<system::RenderSystem>::set(&context_.systemManager.system<system::RenderSystem>());
+    Locator<system::DebugRenderSystem>::set(&context_.systemManager.system<system::DebugRenderSystem>());
 
     keyboard_.registerKeyDownCallback(Keycode::KeyF1,
         [this]() -> void {
-        auto ui = dynamic_cast<system::UiSystem*>(this->systems_.system< system::UiSystem >());
-        ui->toggleDisplay();
+        auto& ui = this->context_.systemManager.system< system::UiSystem >();
+        ui.toggleDisplay();
     });
     keyboard_.registerKeyDownCallback(Keycode::KeyP,
         [this]() -> void {
         this->requestStackPush_(states::Pause);
     });
+
+    readScene(context_, "scene.json");
 }
 
 bool GameState::update(float dt) {
     keyboard_.handleKeyPressedCallbacks();
     mouse_.handleMousePressedCallbacks();
-    systems_.update< system::ScriptSystem >(dt);
+    context_.systemManager.update< system::ScriptSystem >(dt);
     return false;
 }
 
@@ -81,9 +76,9 @@ bool GameState::handleEvent(const SDL_Event& event) {
 }
 
 void GameState::render(float dt) {
-    systems_.update< system::RenderSystem >(dt);
-    systems_.update<system::DebugRenderSystem>(dt);
-    systems_.update< system::UiSystem >(dt);
+    context_.systemManager.update< system::RenderSystem >(dt);
+    context_.systemManager.update<system::DebugRenderSystem>(dt);
+    context_.systemManager.update< system::UiSystem >(dt);
 }
 
 }

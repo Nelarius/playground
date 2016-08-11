@@ -25,6 +25,13 @@ class Math {
 
     // other functions
     foreign static abs( x )
+    foreign static min( a, b )
+    foreign static max( a, b )
+
+    // returns the value x constrained within minVal and maxVal, inclusively
+    static clamp(x, minVal, maxVal) {
+        return min(max(x, minVal), maxVal)
+    }
 
     // x and y are normalized mouse coordinates
     // they're provided by the Mouse class

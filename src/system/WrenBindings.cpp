@@ -11,8 +11,8 @@
 #include "utils/Random.h"
 #include "system/WrenBindingsImpl.h"
 #include <cmath>
-#include <vector>
 #include <cstdlib>
+#include <vector>
 
 namespace pg {
 namespace wren {
@@ -42,6 +42,8 @@ void bindMathModule() {
             .bindFunction< decltype(static_cast<double(*)(double)>(&floor)), &floor >(true, "floor(_)")
             .bindFunction< decltype(static_cast<double(*)(double)>(&round)), &round >(true, "round(_)")
             .bindFunction< decltype(static_cast<double(*)(double)>(&abs)), &abs    >(true, "abs(_)")
+            .bindFunction< decltype(static_cast<double(*)(double, double)>(&std::fmin)), &std::fmin >(true, "min(_,_)")
+            .bindFunction< decltype(static_cast<double(*)(double, double)>(&std::fmax)), &std::fmax>(true, "max(_,_)")
             .bindFunction< decltype(static_cast<double(*)(void)>(&pg::randd)), static_cast<double(*)(void)>(&pg::randd) >(true, "rand()")
             .bindCFunction(true, "generateCameraRay(_,_)", wren::generateCameraRay)
         .endClass()
@@ -57,6 +59,14 @@ void bindMathModule() {
         .bindClass<math::Planef, math::Vec3f, math::Vec3f, math::Vec3f>("Plane")
             .bindMethod<decltype(&math::Planef::point), &math::Planef::point>(false, "point()")
             .bindMethod<decltype(&math::Planef::normal), &math::Planef::normal>(false, "normal()")
+        .endClass()
+    .endModule();
+    wrenpp::beginModule("pg/float")
+        .beginClass("Float64")
+            .bindCFunction(true, "max", wren::float64Max)
+            .bindCFunction(true, "min", wren::float64Min)
+            .bindCFunction(true, "lowest", wren::float64Lowest)
+            .bindCFunction(true, "epsilon", wren::float64Epsilon)
         .endClass()
     .endModule();
 }
@@ -152,21 +162,21 @@ void bindVectorModule() {
             .bindSetter< decltype(math::Vec3f::y), &math::Vec3f::y >( "y=(_)" )
             .bindGetter< decltype(math::Vec3f::z), &math::Vec3f::z >( "z" )
             .bindSetter< decltype(math::Vec3f::z), &math::Vec3f::z >( "z=(_)" )
-            .bindGetter< decltype(math::Vec3f::x), &math::Vec3f::x >("r")
-            .bindSetter< decltype(math::Vec3f::x), &math::Vec3f::x >("r=(_)")
-            .bindGetter< decltype(math::Vec3f::y), &math::Vec3f::y >("g")
-            .bindSetter< decltype(math::Vec3f::y), &math::Vec3f::y >("g=(_)")
-            .bindGetter< decltype(math::Vec3f::z), &math::Vec3f::z >("b")
-            .bindSetter< decltype(math::Vec3f::z), &math::Vec3f::z >("b=(_)")
+            .bindGetter< decltype(math::Vec3f::x), &math::Vec3f::x >( "r" )
+            .bindSetter< decltype(math::Vec3f::x), &math::Vec3f::x >( "r=(_)" )
+            .bindGetter< decltype(math::Vec3f::y), &math::Vec3f::y >( "g" )
+            .bindSetter< decltype(math::Vec3f::y), &math::Vec3f::y >( "g=(_)" )
+            .bindGetter< decltype(math::Vec3f::z), &math::Vec3f::z >( "b" )
+            .bindSetter< decltype(math::Vec3f::z), &math::Vec3f::z >( "b=(_)" )
             // methods
             .bindMethod< decltype(&math::Vec3f::norm), &math::Vec3f::norm >( false, "norm()" )
             .bindMethod< decltype(&math::Vec3f::normalize), &math::Vec3f::normalize>(false, "normalize()")
             .bindMethod< decltype(&math::Vec3f::normSquared), &math::Vec3f::normSquared >( false, "normSquared()" )
             .bindMethod< decltype(&math::Vec3f::dot), &math::Vec3f::dot >( false, "dot(_)" )
-            .bindMethod< decltype(&math::Vec3f::operator+), &math::Vec3f::operator+ >(false, "plus(_)")
-            .bindMethod< decltype(&math::Vec3f::operator-), &math::Vec3f::operator- >(false, "minus(_)")
+            .bindMethod< decltype(&math::Vec3f::operator+), &math::Vec3f::operator+ >(false, "+(_)")
+            .bindMethod< decltype(&math::Vec3f::operator-), &math::Vec3f::operator- >(false, "-(_)")
             .bindMethod< decltype(&math::Vec3f::cross), &math::Vec3f::cross>(false, "cross(_)")
-            .bindMethod< decltype(&math::Vec3f::hadamard), &math::Vec3f::hadamard>(false, "hadamard(_)")
+            .bindMethod< decltype(&math::Vec3f::hadamard), &math::Vec3f::hadamard>(false, "*(_)")
             .bindMethod< decltype(&math::Vec3f::operator*), &math::Vec3f::operator*>(false, "scale(_)")
         .endClass()
         .bindClass< math::Vec2f, float, float >( "Vec2" )
@@ -182,9 +192,9 @@ void bindVectorModule() {
             .bindMethod< decltype(&math::Vec2f::normalize), &math::Vec2f::normalize>(false, "normalize()")
             .bindMethod< decltype(&math::Vec2f::normSquared), &math::Vec2f::normSquared >( false, "normSquared()" )
             .bindMethod< decltype(&math::Vec2f::dot), &math::Vec2f::dot >( false, "dot(_)" )
-            .bindMethod< decltype(&math::Vec2f::hadamard), &math::Vec2f::hadamard>(false, "hadamard(_)")
-            .bindMethod< decltype(&math::Vec2f::operator+), &math::Vec2f::operator+ >(false, "plus(_)")
-            .bindMethod< decltype(&math::Vec2f::operator-), &math::Vec2f::operator- >(false, "minus(_)")
+            .bindMethod< decltype(&math::Vec2f::hadamard), &math::Vec2f::hadamard>(false, "*(_)")
+            .bindMethod< decltype(&math::Vec2f::operator+), &math::Vec2f::operator+ >(false, "+(_)")
+            .bindMethod< decltype(&math::Vec2f::operator-), &math::Vec2f::operator- >(false, "-(_)")
             .bindMethod< decltype(&math::Vec2f::operator*), &math::Vec2f::operator*>(false, "scale(_)")
         .endClass()
         .bindClass< math::Vec4f, float, float, float, float >( "Vec4" )
@@ -208,9 +218,9 @@ void bindVectorModule() {
             .bindMethod< decltype(&math::Vec4f::normalize), &math::Vec4f::normalize>(false, "normalize()")
             .bindMethod< decltype(&math::Vec4f::normSquared), &math::Vec4f::normSquared >( false, "normSquared()" )
             .bindMethod< decltype(&math::Vec4f::dot), &math::Vec4f::dot >( false, "dot(_)" )
-            .bindMethod< decltype(&math::Vec4f::hadamard), &math::Vec4f::hadamard>(false, "hadamard(_)")
-            .bindMethod< decltype(&math::Vec4f::operator+), &math::Vec4f::operator+ >(false, "plus(_)")
-            .bindMethod< decltype(&math::Vec4f::operator-), &math::Vec4f::operator- >(false, "minus(_)")
+            .bindMethod< decltype(&math::Vec4f::hadamard), &math::Vec4f::hadamard>(false, "*(_)")
+            .bindMethod< decltype(&math::Vec4f::operator+), &math::Vec4f::operator+ >(false, "+(_)")
+            .bindMethod< decltype(&math::Vec4f::operator-), &math::Vec4f::operator- >(false, "-(_)")
             .bindMethod< decltype(&math::Vec4f::operator*), &math::Vec4f::operator*>(false, "scale(_)")
         .endClass()
     .endModule();
@@ -221,7 +231,7 @@ void bindQuaternionModule() {
         .bindClass< math::Quatf, float, float, float, float >( "Quat" )
             // properties
             .bindSetter< decltype(math::Quatf::v), &math::Quatf::v >( "v=(_)")
-            .bindCFunction(false, "v", wren::getQuatReal)
+            .bindCFunction(false, "v", wren::getQuatImaginary)
             .bindGetter< decltype(math::Quatf::w), &math::Quatf::w >( "w" )
             .bindSetter< decltype(math::Quatf::w), &math::Quatf::w >( "w=(_)" )
             // methods
@@ -232,10 +242,10 @@ void bindQuaternionModule() {
             .bindMethod<decltype(&math::Quatf::conjugate), &math::Quatf::conjugate>(false, "conjugate()")
             .bindMethod<decltype(&math::Quatf::inverse), &math::Quatf::inverse>(false, "inverse()")
             .bindMethod<decltype(&math::Quatf::axis), &math::Quatf::axis>(false, "axis()")
-            .bindMethod<decltype(&math::Quatf::multiply), &math::Quatf::multiply>(false, "multiply(_)")
-            .bindMethod<decltype(&math::Quatf::xaxis), &math::Quatf::xaxis>(false, "xaxis()")
-            .bindMethod<decltype(&math::Quatf::yaxis), &math::Quatf::yaxis>(false, "yaxis()")
-            .bindMethod<decltype(&math::Quatf::zaxis), &math::Quatf::zaxis>(false, "zaxis()")
+            .bindMethod<decltype(&math::Quatf::multiply), &math::Quatf::multiply>(false, "*(_)")
+            .bindMethod<decltype(&math::Quatf::xaxis), &math::Quatf::xaxis>(false, "xaxis")
+            .bindMethod<decltype(&math::Quatf::yaxis), &math::Quatf::yaxis>(false, "yaxis")
+            .bindMethod<decltype(&math::Quatf::zaxis), &math::Quatf::zaxis>(false, "zaxis")
         .endClass()
     .endModule();
 }
@@ -273,6 +283,7 @@ void bindEntityModule() {
             .bindCFunction(true, "listenToMouseDown(_,_)", wren::listenToMouseDown)
             .bindCFunction(true, "listenToMousePressed(_,_)", wren::listenToMousePressed)
             .bindCFunction(true, "listenToMouseUp(_,_)", wren::listenToMouseUp)
+            .bindCFunction(true, "listenToMouseScroll(_)", wren::listenToMouseScroll)
         .endClass()
     .endModule();
     wrenpp::beginModule("pg/mouse")

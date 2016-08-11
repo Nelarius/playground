@@ -329,6 +329,7 @@ void DynamicArray<T>::popBack() {
     if (size_ == 0u) {
         return;
     }
+    storage_.at(size_ - 1u)->~T();
     size_--;
 }
 

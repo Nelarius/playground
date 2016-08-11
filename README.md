@@ -2,15 +2,32 @@
 
 A small, experimental, data-driven, entity-component-based, and Wren-scriptable game engine. I'm using this project for learning how game engines work.
 
-## Building
+## Build
 
-Build using premake5. Dependency binaries are provided for the Visual C++ compiler. Currently, only the `Wren` dependency has to built separately, due to the changing nature of the project.
+Visual studio builds are supported via the `premake` build system. Build files are generated in the `build/<vs action>/` folder. Dependencies are included in the repository, so all you need to do is `premake5 vs2015`.
 
 ## Organization
 
-The C/C++ source code is in `src/`. Some documentation exists within the `src` folder for the contained modules. The engine depends on some data, such as scripting files and shader source. These are located in `builtin/`.
+The C/C++ source code is in `src/`. Some documentation exists within the `src` folder for the contained modules. The builtin Wren scripts that the engine uses are in `data/wren`. The shader source code is in `data/glsl`.
 
 External dependencies are in `extern`.
+
+## Testing
+
+C++ tests are implemented using UnitTest++, and are located in the `test/` folder.
+
+You can test Wren code using `test_framework.wren`.
+
+```js
+import "pg/test_framework" for testRunner
+import "pg/assert" for Assert
+
+testRunner.add("This should succeed", Fn.new {
+    Assert.isTrue(true)
+})
+```
+
+You can invoke this module using the playground engine with the `--test [moduleName]` option. Doing so will run all tests that have been added to the test runner.
 
 ## How it works
 
@@ -207,17 +224,5 @@ import "builtin/systems" for DebugRenderer
 DebugRenderer.addDebugBox(Vec3.new(0.0, 0.0, 0.0), Vec3.new(1.0, 1.0, 1.0), Vec3.new(0.8, 0.2, 0.2))
 ```
 
-## Dependencies
-
-* SDL2 (zlib license)
-  * for windowing and OpenGL access
-* Assimp (BSD license)
-  * model asset import
-* GLEW (MIT, BSD license)
-* Wren (MIT license)
-  * scripting language
-* Wrenly
-  * C++ language bindings for Wren
-* Filesentry
-  * file system state change monitoring
-  * used to reload files at runtime
+## Bizarre issues
+* Calling a constructor in a Wren script's `onMouseScroll` event handler causes a segfault due to the current fiber being null.

@@ -11,16 +11,20 @@ foreign class Quat {
     foreign inverse()   // returns the result as a new quaternion
     foreign axis()      // returns axis as Vec3
     foreign angle()     // returns angle in radians
-    foreign multiply( rhs ) // returns the result as a new Quaternion
+    foreign *( rhs ) // returns the result as a new Quaternion
 
-    foreign xaxis()     // returns the normalized axis as a Vec3
-    foreign yaxis()
-    foreign zaxis()
+    foreign xaxis     // returns the normalized axis as a Vec3
+    foreign yaxis
+    foreign zaxis
 
     foreign v
     foreign v=( rhs )
     foreign w
     foreign w=( rhs )
+
+    static identity {
+        return Quat.new(0.0, 0.0, 0.0, 1.0)
+    }
 
     // Create a quaternion representing the rotation between two axes
     // The axes must be normalized
@@ -30,5 +34,12 @@ foreign class Quat {
         var angle = 0.5 * Math.acos(axis1.dot(axis2))
         var mul = Math.sin(angle)
         return Quat.new(mul*axis.x, mul*axis.y, mul*axis.z, Math.cos(angle))
+    }
+
+    // Create a quaternion representing the rotation of angle about the axis axis
+    static fromAxisAngle(axis, angle) {
+        var s = Math.sin(0.5 * angle)
+        var u = axis.scale(s)
+        return Quat.new(u.x, u.y, u.z, Math.cos(0.5 * angle))
     }
 }

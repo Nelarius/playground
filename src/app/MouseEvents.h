@@ -7,6 +7,7 @@
 #include <utility>
 #include <unordered_map>
 #include <map>
+#include <cstdint>
 
 namespace pg {
 
@@ -51,9 +52,11 @@ public:
     void registerMouseDownScriptCallback(std::string, ecs::Entity*);
     void registerMousePressedScriptCallback(std::string, ecs::Entity*);
     void registerMouseUpScriptCallback(std::string, ecs::Entity*);
+    void registerMouseScrollScriptCallback(ecs::Entity*);
     void registerMouseDownCallback(MouseButton button, std::function<void()>);
     void registerMousePressedCallback(MouseButton button, std::function<void()>);
     void registerMouseUpCallback(MouseButton button, std::function<void()>);
+    void registerMouseScrollCallback(std::function<void(std::int32_t dx, std::int32_t dy)>);
     // returns true if the event was handled here
     // false otherwise
     bool handleEvent(const SDL_Event&);
@@ -86,6 +89,8 @@ private:
     std::map<int, CallbackData> mouseDownCallbacks_;
     std::map<int, CallbackData> mousePressedCallbacks_;
     std::map<int, CallbackData> mouseUpCallbacks_;
+    std::vector<std::function<void(std::int32_t, std::int32_t)>>   mouseScrollCallbacks_;
+    std::vector<ecs::Entity*>  mouseScrollEntityCallbacks_;
     Context& context_;
     system::ScriptSystem*      scriptSystem_;
 };
