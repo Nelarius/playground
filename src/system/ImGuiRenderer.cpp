@@ -1,8 +1,7 @@
 #include "app/Context.h"
 #include "system/ImGuiRenderer.h"
 #include "manager/ShaderManager.h"
-#include "opengl/VertexArrayObject.h"
-#include "opengl/VertexArrayObjectFactory.h"
+#include "opengl/VertexAttributes.h"
 #include "math/Matrix.h"
 #include "utils/Assert.h"
 #include "utils/Log.h"
@@ -21,7 +20,7 @@ namespace {
 // unfortunate global state
 pg::opengl::Program*            gShader{ nullptr };
 pg::opengl::BufferObject*       gVbo{ nullptr };
-pg::opengl::VertexArrayObject*  gVao{ nullptr };
+GLuint                          gVao{0u};
 pg::opengl::Texture*            gFont{ nullptr };
 
 void renderDrawLists(ImDrawData* drawData) {
@@ -72,7 +71,7 @@ void renderDrawLists(ImDrawData* drawData) {
             GL_STREAM_DRAW
             );
 
-        gVao->bind();
+        glBindVertexArray(gVao);
 
         for (int cmdIndex = 0; cmdIndex < commandList->CmdBuffer.size(); cmdIndex++) {
             const ImDrawCmd* pcmd = &commandList->CmdBuffer[cmdIndex];
@@ -97,7 +96,7 @@ void renderDrawLists(ImDrawData* drawData) {
             idxBuffer += pcmd->ElemCount;
         }
     }
-    gVao->unbind();
+    glBindVertexArray(0u);
     gShader->stopUsing();
     glUseProgram(last_program);
     glBindTexture(GL_TEXTURE_2D, last_texture);
@@ -135,7 +134,7 @@ ImGuiRenderer::~ImGuiRenderer() {
         ImGui::Shutdown();
         LOG_DEBUG2 << "Destructing global ImGuiRenderer resources";
         delete gVbo;
-        delete gVao;
+        glDeleteVertexArrays(1, &gVao);
         delete gFont;
     }
     LOG_DEBUG2 << "Done destructing ImGuiRenderer resources.";
@@ -217,16 +216,17 @@ void ImGuiRenderer::createDeviceObjects_() {
         gVbo = new opengl::BufferObject(GL_ARRAY_BUFFER);
     }
     if (!gVao) {
-        auto factory = opengl::VertexArrayObjectFactory{ gVbo, gShader };
-        // 2 * 4 bytes
-        factory.addAttribute("position", 2, GL_FLOAT, GL_FALSE, 20, 0);
-        // another 2 * 4 bytes
-        factory.addAttribute("uv", 2, GL_FLOAT, GL_FALSE, sizeof(ImDrawVert), 8);
-        // 4 * 1 byte
-        factory.addAttribute("color", 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof(ImDrawVert), 16);
-        // total size of ImDrawVert is 20 bytes ( I checked )
-        gVao = new opengl::VertexArrayObject(0);
-        *gVao = factory.getVao();
+        gVbo->bind();
+        glGenVertexArrays(1, &gVao);
+        glBindVertexArray(gVao);
+        glVertexAttribPointer(gShader->attribute("position"), 2, GL_FLOAT, GL_FALSE, 20, 0);
+        glEnableVertexAttribArray(gShader->attribute("position"));
+        glVertexAttribPointer(gShader->attribute("uv"), 2, GL_FLOAT, GL_FALSE, 20, (const void*)8u);
+        glEnableVertexAttribArray(gShader->attribute("uv"));
+        glVertexAttribPointer(gShader->attribute("color"), 4, GL_UNSIGNED_BYTE, GL_TRUE, 20, (const void*)16);
+        glEnableVertexAttribArray(gShader->attribute("color"));
+        glBindVertexArray(0u);
+        gVbo->unbind();
     }
     if (!gFont) {
         gFont = new opengl::Texture(GL_TEXTURE_2D);

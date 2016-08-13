@@ -61,7 +61,7 @@ private:
     std::vector<float>          boxLifeTimes_;
 
     opengl::BufferObject        lineBuffer_;
-    opengl::VertexArrayObject   lineBufferArray_;
+    opengl::VertexAttributes    lineBufferArray_;
 
     bool    showLines_;
     bool    showBoundingBoxes_;

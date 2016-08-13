@@ -7,7 +7,7 @@
 #include "math/Vector.h"
 #include "manager/MeshManager.h"
 #include "manager/ShaderManager.h"
-#include "opengl/VertexArrayObjectFactory.h"
+#include "opengl/VertexAttributes.h"
 #include "system/DebugRenderSystem.h"
 #include "system/ScriptSystem.h"
 #include "system/PickingSystem.h"
@@ -160,10 +160,13 @@ void assignRenderable(WrenVM* vm) {
     pg::opengl::Program* shader = Locator<pg::ShaderManager>::get()->get(r->shader.cString());
 
     system::Material mat{ r->baseColor, r->ambientColor, r->specularColor, r->shininess };
-    opengl::VertexArrayObjectFactory factory{ buffer, shader };
-    factory.addStandardAttribute(opengl::VertexAttribute::Vertex);
-    factory.addStandardAttribute(opengl::VertexAttribute::Normal);
-    auto vao = factory.getVao();
+
+    buffer->bind();
+    opengl::VertexAttributes vao({
+        {unsigned(shader->attribute("vertex")), opengl::AttributeType::Float, 3},
+        {unsigned(shader->attribute("normal")), opengl::AttributeType::Float, 3}
+    });
+    buffer->unbind();
 
     e->assign<component::Renderable>(buffer, shader, vao, mat);
 

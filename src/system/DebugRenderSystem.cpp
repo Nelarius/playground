@@ -1,6 +1,6 @@
 #include "system/DebugRenderSystem.h"
 #include "opengl/Use.h"
-#include "opengl/VertexArrayObjectFactory.h"
+#include "opengl/VertexAttributes.h"
 #include "app/Context.h"
 #include <GL/glew.h>
 
@@ -51,7 +51,7 @@ DebugRenderSystem::DebugRenderSystem(Context& context)
     transientDebugBoxes_{},
     boxLifeTimes_{},
     lineBuffer_{ GL_ARRAY_BUFFER },
-    lineBufferArray_{ 0 },
+    lineBufferArray_{},
     showLines_{ false },
     showBoundingBoxes_{ false },
     showDebugBoxes_{ false } {
@@ -59,9 +59,11 @@ DebugRenderSystem::DebugRenderSystem(Context& context)
 
     // set up the debug buffers and VAOs
     lineBuffer_.dataStore(MaxTransientElements, 6 * sizeof(float), NULL, GL_STREAM_DRAW);
-    opengl::VertexArrayObjectFactory fact{ &lineBuffer_, context_.shaderManager.get("basic") };
-    fact.addStandardAttribute(opengl::VertexAttribute::Vertex);
-    lineBufferArray_ = fact.getVao();
+    lineBuffer_.bind();
+    lineBufferArray_ = opengl::VertexAttributes{
+        {unsigned(context_.shaderManager.get("basic")->attribute("vertex")), opengl::AttributeType::Float, 3}
+    };
+    lineBuffer_.unbind();
 
     // generate cube objects
     cubeVbo_ = 0u;

@@ -2,7 +2,7 @@
 #define USE_H_INCLUDED
 
 #include "opengl/Program.h"
-#include "opengl/VertexArrayObject.h"
+#include "opengl/VertexAttributes.h"
 
 namespace pg {
 namespace opengl {
@@ -23,7 +23,7 @@ private:
 
 class UseArray {
 public:
-    UseArray(VertexArrayObject& array)
+    UseArray(VertexAttributes& array)
         :array_{ array } {
         array.bind();
     }
@@ -32,7 +32,7 @@ public:
         array_.unbind();
     }
 private:
-    VertexArrayObject&  array_;
+    VertexAttributes&  array_;
 };
 
 }

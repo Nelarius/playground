@@ -1,7 +1,7 @@
 #include "system/RenderSystem.h"
 #include "system/Material.h"
 #include "opengl/Use.h"
-#include "opengl/VertexArrayObjectFactory.h"
+#include "opengl/VertexAttributes.h"
 #include "component/Include.h"
 #include "utils/Log.h"
 #include "utils/Assert.h"
@@ -108,9 +108,9 @@ void RenderSystem::update(
             shader->setUniform("pointLight.intensity", lightIntensity);
             shader->setUniform("pointLight.attenuation", attenuation);
             shader->setUniform("pointLight.ambientCoefficient", ambientCoefficient);
-            renderable->vao.bind();
-            glDrawArrays(GL_TRIANGLES, 0, renderable->vbo->count() / renderable->vao.elementsPerIndex());
-            renderable->vao.unbind();
+            renderable->attributes.bind();
+            glDrawArrays(GL_TRIANGLES, 0, renderable->vbo->count() / renderable->attributes.elementsPerIndex());
+            renderable->attributes.unbind();
         }
     }
 }

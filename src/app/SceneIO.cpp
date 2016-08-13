@@ -4,7 +4,7 @@
 #include "ecs/Include.h"
 #include "manager/TextFileManager.h"
 #include "math/Vector.h"
-#include "opengl/VertexArrayObjectFactory.h"
+#include "opengl/VertexAttributes.h"
 #include "utils/Assert.h"
 #include "utils/Json.h"
 #include "utils/Log.h"
@@ -102,7 +102,6 @@ void readScene(Context& context, const char* file) {
             const char* modelName = json.query(renderable, "model").as<const char*>();
             opengl::BufferObject* buffer = context.meshManager.get(modelName);
             opengl::Program* shader{ nullptr };
-            opengl::VertexArrayObject vao{ 0 };
             system::Material mat;
 
             JsonToken material = json.query(renderable, "material");
@@ -126,11 +125,16 @@ void readScene(Context& context, const char* file) {
             mat.baseColor = baseColor;
             mat.specularColor = specularColor;
             mat.shininess = json.query(material, "shininess").as<float>();
+
             shader = context.shaderManager.get("specular");
-            opengl::VertexArrayObjectFactory factory{ buffer, shader };
-            factory.addStandardAttribute(opengl::VertexAttribute::Vertex);
-            factory.addStandardAttribute(opengl::VertexAttribute::Normal);
-            vao = factory.getVao();
+
+            buffer->bind();
+            opengl::VertexAttributes vao{
+                {unsigned(shader->attribute("vertex")), opengl::AttributeType::Float, 3},
+                {unsigned(shader->attribute("normal")), opengl::AttributeType::Float, 3}
+            };
+            buffer->unbind();
+
             newEntity.assign<component::Renderable>(buffer, shader, vao, mat);
             const auto& boundingBox = context.meshManager.getBoundingBox(modelName);
             newEntity.assign<math::AABoxf>(boundingBox.min, boundingBox.max);
