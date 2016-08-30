@@ -161,7 +161,7 @@ public:
      * @brief Initialize with the number of elements to store in one chunk in the pool.
      * @param poolSize The number of elements reserved in one chunk of memory. 64 by default.
      */
-    EntityManager(EventManager&, std::uint32_t arenaSize = 64);
+    EntityManager(EventManager&, std::uint32_t arenaSize = 128);
     ~EntityManager();
 
     EntityManager(const EntityManager&) = delete;
