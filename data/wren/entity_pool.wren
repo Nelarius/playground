@@ -1,3 +1,4 @@
+import "pg/assert" for Assert
 import "pg/queue" for Queue
 import "pg/entity" for EntityManager, Entity
 
