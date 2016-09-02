@@ -8,6 +8,9 @@
 #include "utils/Locator.h"
 #include "utils/StringId.h"
 #include "system/WrenBindings.h"
+#include "system/DebugDrawRenderer.h"
+#include "system/RenderSystem.h"
+#include "DebugDraw.hpp"
 #include "Wren++.h"
 #include "mm_json.h"
 #include <SDL_timer.h>
@@ -29,6 +32,9 @@ void Application::run() {
     StringId::setDatabase(&stringDb);
 
     initialize_();
+
+    DebugDrawRenderer debugDrawRenderer(context_);
+    dd::initialize(&debugDrawRenderer);
 
     running_ = true;
     uint32_t tdelta{ targetDeltaTime };
@@ -66,6 +72,7 @@ void Application::run() {
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         stateStack_.render(SDLTimeToPgTime(tdelta));
+        dd::flush(std::uint64_t(tdelta * 1000.f));
         context_.imguiRenderer->render();
 
         window_.display();
@@ -80,6 +87,8 @@ void Application::run() {
             SDL_Delay(targetDeltaTime - tdelta);
         }
     }
+
+    dd::shutdown();
 }
 
 void Application::initialize_() {

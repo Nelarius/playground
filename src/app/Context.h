@@ -8,7 +8,6 @@
 #include "manager/MeshManager.h"
 #include "manager/ShaderManager.h"
 #include "manager/TextFileManager.h"
-#include <vector>
 
 namespace pg {
 

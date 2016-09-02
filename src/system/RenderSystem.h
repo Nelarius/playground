@@ -22,6 +22,7 @@ struct CameraInfo {
     Frustumf frustum;
     Vec3f position;
     Quatf orientation;
+    float fov;
 };
 
 class RenderSystem : public ecs::System, public ecs::Receiver {

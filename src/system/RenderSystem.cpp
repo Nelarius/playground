@@ -125,7 +125,7 @@ CameraInfo RenderSystem::activeCameraInfo() const {
     auto transform = cameraEntity_.component<Transform>();
     float aspectRatio = float(context_.window->width()) / context_.window->height();
     Frustumf frustum{ camera->verticalFov, aspectRatio, camera->nearPlane, camera->farPlane };
-    return CameraInfo{ frustum, transform->position, transform->rotation };
+    return CameraInfo{ frustum, transform->position, transform->rotation, camera->verticalFov };
 }
 
 }
