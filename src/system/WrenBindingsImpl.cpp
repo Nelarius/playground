@@ -5,6 +5,7 @@
 #include "math/Geometry.h"
 #include "math/Intersection.h"
 #include "math/Vector.h"
+#include "math/Matrix.h"
 #include "manager/MeshManager.h"
 #include "manager/ShaderManager.h"
 #include "opengl/VertexAttributes.h"
@@ -18,6 +19,9 @@
 #include "utils/Assert.h"
 #include "utils/Log.h"
 #include "utils/RingBuffer.h"
+
+#include "DebugDraw.hpp"
+
 extern "C" {
 #include <wren.h>
 }
@@ -218,6 +222,12 @@ void createEntity(WrenVM* vm) {
     /*wrenGetVariable(vm, "builtin/entity", "Entity", 0);
     void* data = wrenSetSlotNewForeign(vm, 0, 0, sizeof(ecs::Entity));
     memcpy(data, (void*)&entity, sizeof(ecs::Entity));*/
+    wrenpp::setSlotForeignValue(vm, 0, entity);
+}
+
+void getEntity(WrenVM* vm) {
+    uint32_t index = uint32_t(wrenGetSlotDouble(vm, 1));
+    ecs::Entity entity = Locator<ecs::EntityManager>::get()->get(index);
     wrenpp::setSlotForeignValue(vm, 0, entity);
 }
 
@@ -463,6 +473,63 @@ void setShowBorders(WrenVM* vm) {
 void unsetShowBorders(WrenVM* vm) {
     std::uint32_t* bits = reinterpret_cast<std::uint32_t*>(wrenpp::getSlotForeign<ImGuiWindowFlag>(vm, 0));
     *bits &= ~ImGuiWindowFlags_ShowBorders;
+}
+
+/***
+*       ___      __             ___                    ___   ___  ____
+*      / _ \___ / /  __ _____ _/ _ \_______ __    __  / _ | / _ \/  _/
+*     / // / -_) _ \/ // / _ `/ // / __/ _ `/ |/|/ / / __ |/ ___// /
+*    /____/\__/_.__/\_,_/\_, /____/_/  \_,_/|__,__/ /_/ |_/_/  /___/
+*                       /___/
+*/
+
+void ddBox(WrenVM* vm) {
+    float* center = (float*)wrenpp::getSlotForeign<math::Vec3f>(vm, 1);
+    float* color = (float*)wrenpp::getSlotForeign<math::Vec3f>(vm, 2);
+    float* extents = (float*)wrenpp::getSlotForeign<math::Vec3f>(vm, 3);
+    dd::box(ddVec3{ center[0], center[1], center[2] }, ddVec3{ color[0], color[1], color[2] }, extents[0], extents[1], extents[2]);
+}
+
+void ddSphere(WrenVM* vm) {
+    float* center = (float*)wrenpp::getSlotForeign<math::Vec3f>(vm, 1);
+    float* color = (float*)wrenpp::getSlotForeign<math::Vec3f>(vm, 2);
+    float radius = float(wrenGetSlotDouble(vm, 3));
+    dd::sphere(ddVec3{ center[0], center[1], center[2] }, ddVec3{ color[0], color[1], color[2] }, radius);
+}
+
+void ddProjectedText(WrenVM* vm) {
+    using math::Vec3f;
+    using math::Matrix4f;
+    using component::Camera;
+    using component::Transform;
+    const char* str = wrenGetSlotString(vm, 1);
+    const Vec3f* pos = wrenpp::getSlotForeign<Vec3f>(vm, 2);
+    const Vec3f* color = wrenpp::getSlotForeign<Vec3f>(vm, 3);
+
+    const Entity* entity = wrenpp::getSlotForeign<Entity>(vm, 4);
+    if (entity->has<Camera>() && entity->has<Transform>()) {
+        const ComponentHandle<Camera> camera = entity->component<Camera>();
+        const ComponentHandle<Transform> transform = entity->component<Transform>();
+        Matrix4f view = Matrix4f::translation(transform->position)
+                      * Matrix4f::rotation(transform->rotation);
+        Matrix4f projection = Matrix4f::perspective(
+            camera->verticalFov,
+            1.6f,   // I really need to make the window AR globally available
+            camera->nearPlane, camera->farPlane
+        );
+
+        Matrix4f cameraMat = projection * view.inverse();
+        cameraMat = cameraMat.transpose();
+
+        dd::projectedText(
+            str,
+            ddVec3{ pos->x, pos->y, pos->z },
+            ddVec3{ color->r, color->g, color->b },
+            cameraMat.data, 0, 0, 1600, 1000);
+    }
+    else {
+        LOG_ERROR << "DebugDraw::projectedText> The camera entity does not contain both a camera and transform component.";
+    }
 }
 
 /***

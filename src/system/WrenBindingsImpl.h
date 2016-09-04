@@ -44,6 +44,7 @@ void getTransform(WrenVM*);
 void getRenderable(WrenVM*);
 void setRenderable(WrenVM*);
 void createEntity(WrenVM*);
+void getEntity(WrenVM*);
 void entityCount(WrenVM*);
 void listenToKeyDown(WrenVM*);
 void listenToKeyPressed(WrenVM*);
@@ -80,6 +81,11 @@ void plotNumberArrayWithOffsetAndSize(WrenVM*);
 void plotRingBuffer(WrenVM*);
 void plotRingBufferWithSize(WrenVM*);
 void sliderFloat(WrenVM*);
+
+// Debug draw API
+void ddBox(WrenVM*);
+void ddSphere(WrenVM*);
+void ddProjectedText(WrenVM* vm);
 
 // ImGuiWindowFlags functions
 void setTitleBar(WrenVM*);

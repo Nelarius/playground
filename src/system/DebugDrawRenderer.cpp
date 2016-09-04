@@ -2,8 +2,10 @@
 #include "app/Context.h"
 #include "utils/Assert.h"
 #include "utils/Log.h"
+#include "math/Matrix.h"
 
 #define DEBUG_DRAW_IMPLEMENTATION
+#define DEBUG_DRAW_MAT4X4_TYPE_DEFINED pg::math::Matrix4f4
 #include "DebugDraw.hpp"
 
 static const char * linePointVertShaderSrc = "\n"

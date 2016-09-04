@@ -26,6 +26,7 @@ foreign class Entity {
 }
 
 class EntityManager {
-    foreign static create() // returns the new entity
+    foreign static create()     // returns the new entity
+    foreign static get(index)   // returns the entity at a given index
     foreign static entityCount
 }

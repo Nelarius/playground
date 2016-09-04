@@ -272,6 +272,7 @@ void bindEntityModule() {
         .endClass()
         .beginClass("EntityManager")
             .bindCFunction(true, "create()", &wren::createEntity)
+            .bindCFunction(true, "get(_)", &wren::getEntity)
             .bindCFunction(true, "entityCount", &wren::entityCount)
         .endClass()
     .endModule();
@@ -337,6 +338,13 @@ void bindSystemsModule() {
             .bindCFunction(true, "addDebugBox(_,_,_)", &wren::addStaticDebugBox)
             .bindCFunction(true, "addDebugLine(_,_,_,_)", &wren::addTransientDebugLine)
             .bindCFunction(true, "addDebugLine(_,_,_)", &wren::addStaticDebugLine)
+        .endClass()
+    .endModule();
+    wrenpp::beginModule("pg/debug_draw")
+        .beginClass("DebugDraw")
+            .bindCFunction(true, "box(_,_,_)", &wren::ddBox)
+            .bindCFunction(true, "sphere(_,_,_)", &wren::ddSphere)
+            .bindCFunction(true, "projectedText(_,_,_,_)", &wren::ddProjectedText)
         .endClass()
     .endModule();
 }
