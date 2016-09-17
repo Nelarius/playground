@@ -1854,6 +1854,7 @@ void flushDebugVerts(const DrawMode mode, const bool depthEnabled)
     } // switch (mode)
 
     g_vertexBufferUsed = 0;
+    g_debugStringsCount = 0;
 }
 
 void pushPointVert(const DebugPoint & point)
