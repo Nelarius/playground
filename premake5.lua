@@ -52,7 +52,7 @@ workspace "playground"
         language "C++"
         kind "StaticLib"
         targetdir "lib"
-        files { "extern/wrenpp/src/**.cpp", "extern/wrenpp/src/**.h"  }
+        files { "extern/wrenpp/Wren++.cpp", "extern/wrenpp/Wren++.h" }
         includedirs { "extern/wrenpp/src", "extern/wren/src/include" }
         filter "configurations:Release"
 
@@ -92,7 +92,7 @@ workspace "playground"
         files { "src/**.cpp", "src/**.h", "extern/imgui/**.cpp",
         "data/**.wren", "data/**.glsl", "src/config.json" }
         includedirs {
-            "src", "extern/wrenpp/src", "extern/filesentry/include",
+            "src", "extern/wrenpp", "extern/filesentry/include",
             "extern", "extern/assimp/include", "extern/SDL/include",
             "extern/wren/src/include", "extern/glew-1.13.0/include"
         }
